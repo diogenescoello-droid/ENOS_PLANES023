@@ -1,0 +1,29 @@
+PARCHE PLATAFORMA ENOS 2.1 - BASE CONSOLIDADA VIVA
+
+Archivos incluidos:
+- dashboard.html
+- automatizacion.html
+- biblioteca.html
+
+Objetivo:
+Actualizar la plataforma para que apunte a la Base Consolidada Viva ENOS Guayas 2.1 en Google Sheets y a la descarga XLSX actualizada.
+
+Base viva:
+https://docs.google.com/spreadsheets/d/17CACZlzwOkxECeVdeqKbAXtis_vnMTmqbyj9qrM2Iu0/edit?usp=sharing
+
+Descarga XLSX actualizada:
+https://docs.google.com/spreadsheets/d/17CACZlzwOkxECeVdeqKbAXtis_vnMTmqbyj9qrM2Iu0/export?format=xlsx
+
+Dónde subir:
+Subir estos tres archivos a la raíz del repositorio ENOS_PLANES023/, reemplazando los archivos existentes.
+
+No subir dentro de docs/, assets/ ni otra carpeta.
+
+Después de subir:
+1. Esperar 1 minuto.
+2. Abrir https://diogenescoello-droid.github.io/ENOS_PLANES023/dashboard.html?rev=baseviva
+3. Probar botones: Abrir base consolidada viva y Descargar XLSX actualizada.
+4. Verificar permisos en Drive.
+
+Nota de seguridad:
+La base viva contiene información de formularios Kobo y debe mantenerse con permisos restringidos.
