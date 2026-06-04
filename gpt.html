@@ -7,13 +7,14 @@
 <link rel="stylesheet" href="assets/site.css">
 <script defer src="assets/site.js"></script>
 </head>
-<body data-help-title="Uso del GPT" data-help-text="Antes de pedir un plan, aporte o informe basado en Kobo, confirme solicitante, territorio, archivo y filtro de registros." data-help-steps="Abra el GPT cuando tenga matriz, archivo o evidencia para analizar.||Indique solicitante, institución, rol, producto y territorio.||Si la matriz contiene varios cantones o Mesas Técnicas, especifique qué registros usar y cuáles excluir.||Los GAD provinciales y cantonales remiten planes; GAD parroquiales y Mesas Técnicas aportan insumos.||Revise siempre el borrador generado antes de usarlo institucionalmente.">
+<body data-help-title="Uso del GPT" data-help-text="El GPT ayuda a redactar, pero no reemplaza la validación técnica." data-help-steps="Abra el GPT solo cuando tenga un archivo, matriz o evidencia para analizar.||Cargue el archivo y use el prompt que corresponda.||Revise siempre el borrador generado antes de usarlo institucionalmente.||Los aportes de Mesas Técnicas alimentan el Plan del GAD; no son planes independientes.">
 <header class="topbar">
   <div class="container nav">
     <a class="logo" href="index.html"><span class="logo-badge">EN</span><span>ENOS Guayas 2.1</span></a>
     <nav class="menu">
       <a href="index.html">Inicio</a>
-      <a href="instituciones.html">Responsables y MTT</a>
+      <a href="instituciones.html">Responsables, MTT y GT</a>
+      <a href="grupos.html">Grupos de Trabajo</a>
       <a href="ejes.html">Ejes del plan</a>
       <a href="cartografia.html">Cartografía</a>
       <a href="dashboard.html">Dashboard</a>
@@ -26,92 +27,15 @@
   </div>
 </header>
 
-<section class="hero">
-  <div class="container">
-    <span class="kicker">Asistente técnico</span>
-    <h1>GPT para transformar matrices y archivos en borradores técnicos</h1>
-    <p class="lead">El GPT no debe elaborar planes con una matriz completa sin filtrar. Antes de generar un producto técnico, debe confirmar quién solicita, para qué territorio, qué archivo se usará y qué registros deben incluirse o excluirse.</p>
-    <div class="btns">
-      <a class="btn blue" href="https://chatgpt.com/g/g-6a1db50eb650819185c06255c6850509-asistente-tecnico-enos-guayas-2-0" target="_blank">Abrir GPT Técnico ENOS</a>
-      <a class="btn light" href="biblioteca.html">Ver biblioteca técnica</a>
-    </div>
-  </div>
-</section>
+<section class="hero"><div class="container"><span class="kicker">Asistente técnico</span><h1>GPT para transformar matrices y archivos en borradores técnicos</h1><p class="lead">El GPT no monitorea carpetas por sí solo. Sirve para analizar archivos cargados, estructurar aportes y generar borradores para revisión técnica.</p><div class="btns"><a class="btn blue" href="https://chatgpt.com/g/g-6a1db50eb650819185c06255c6850509-asistente-tecnico-enos-guayas-2-0" target="_blank">Abrir GPT Técnico ENOS</a><a class="btn light" href="docs/insumos_sprea/Formato_referencial_plan_accion_cantonal_provincial.docx">Formato referencial SPREA</a><a class="btn light" href="docs/Plantillas_maestras_ENOS_Guayas_2_0.xlsx">Plantilla maestra</a></div></div></section>
+<section class="section"><div class="container grid-2">
+ <div class="card copy"><h3>Prompt: Plan de Acción GAD</h3><p id="promptPlan">Con base en los archivos cargados, genera un borrador del Plan de Acción ENOS para el GAD provincial o cantonal correspondiente, organizado por los ejes: conocimiento del riesgo, monitoreo y alerta, prevención y mitigación, preparación y respuesta, recuperación y seguimiento. Incluye resumen ejecutivo, escenarios, brechas, acciones priorizadas, responsables, medios de verificación, decisiones requeridas y anexos sugeridos. Indica claramente qué información falta.</p><button class="btn" onclick="copyText('promptPlan')">Copiar prompt</button></div>
+ <div class="card copy"><h3>Prompt: Aporte de Mesa Técnica</h3><p id="promptMTT">Analiza los archivos cargados y genera un aporte técnico de Mesa Técnica para integrarlo al Plan de Acción ENOS del GAD. Identifica el eje del plan al que corresponde, escenario sectorial, capacidades disponibles, brechas, acciones recomendadas, responsable institucional, prioridad y medios de verificación. No lo presentes como plan institucional independiente.</p><button class="btn" onclick="copyText('promptMTT')">Copiar prompt</button></div>
+ <div class="card copy"><h3>Prompt: Matriz de brechas</h3><p id="promptBrechas">Construye una matriz de brechas con columnas: territorio, eje del plan, amenaza, elemento expuesto, capacidad existente, brecha identificada, prioridad, responsable, acción recomendada, plazo, medio de verificación y decisión requerida.</p><button class="btn" onclick="copyText('promptBrechas')">Copiar prompt</button></div>
+ <div class="card copy"><h3>Prompt: Resumen ejecutivo</h3><p id="promptResumen">Convierte esta información en un resumen ejecutivo para autoridad. Debe responder: qué ocurre, dónde ocurre, qué está expuesto, cuál es la brecha, qué decisión se requiere, qué acción se recomienda y quién debe intervenir.</p><button class="btn" onclick="copyText('promptResumen')">Copiar prompt</button></div>
+</div></section>
 
-<section class="section">
-  <div class="container">
-    <div class="alert card">
-      <h2>Regla obligatoria antes de trabajar matrices Kobo</h2>
-      <p>La matriz exportada desde Kobo puede contener respuestas de varios GAD, parroquias, Mesas Técnicas e instituciones. Por eso, el GPT debe solicitar y confirmar los datos de control antes de redactar un plan, aporte o informe.</p>
-      <div class="grid-2">
-        <div>
-          <h3>El GPT debe preguntar primero</h3>
-          <ul>
-            <li>Solicitante e institución.</li>
-            <li>Rol dentro del proceso.</li>
-            <li>Producto requerido.</li>
-            <li>Provincia, cantón y parroquia.</li>
-            <li>Mesa Técnica o sector, si aplica.</li>
-            <li>Archivo o matriz cargada.</li>
-            <li>Registros a incluir y excluir.</li>
-          </ul>
-        </div>
-        <div>
-          <h3>Regla institucional</h3>
-          <ul>
-            <li>GAD provinciales y cantonales elaboran/remiten planes.</li>
-            <li>GAD parroquiales aportan información territorial.</li>
-            <li>Mesas Técnicas e instituciones aportan insumos sectoriales.</li>
-            <li>No mezclar registros de otros territorios o actores.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container grid-2">
-    <div class="card copy">
-      <h3>Prompt: Arranque obligatorio</h3>
-      <p id="promptArranque">Antes de elaborar el producto técnico, necesito confirmar los datos de control para no mezclar registros de otros territorios o actores. Solicítame: solicitante, institución o instancia, rol, producto requerido, provincia, cantón, parroquia si aplica, Mesa Técnica o sector si aplica, archivo/matriz a usar, filtro obligatorio de registros, registros a excluir y nivel de uso del producto.</p>
-      <button class="btn" onclick="copyText('promptArranque')">Copiar prompt</button>
-    </div>
-
-    <div class="card copy">
-      <h3>Prompt: Plan de Acción GAD filtrado</h3>
-      <p id="promptPlan">Elabora un borrador del Plan de Acción ENOS para el GAD provincial o cantonal indicado. Usa únicamente los registros de la matriz que correspondan al territorio definido por el solicitante: provincia, cantón y parroquia si aplica. Excluye registros de otros cantones, provincias, parroquias, instituciones o Mesas Técnicas no pertinentes. Organiza el producto por los cinco ejes: conocimiento del riesgo, monitoreo y alerta, prevención y mitigación, preparación y respuesta, recuperación y seguimiento. No inventes datos; si falta información, declárala como brecha.</p>
-      <button class="btn" onclick="copyText('promptPlan')">Copiar prompt</button>
-    </div>
-
-    <div class="card copy">
-      <h3>Prompt: Aporte de Mesa Técnica</h3>
-      <p id="promptMTT">Analiza los archivos cargados y genera un aporte técnico de Mesa Técnica para integrarlo al Plan de Acción ENOS del GAD correspondiente. Usa únicamente registros del sector, institución o Mesa Técnica indicada. Identifica eje del plan, escenario sectorial, capacidades disponibles, brechas, acciones recomendadas, responsable institucional, prioridad y medios de verificación. No lo presentes como plan institucional independiente.</p>
-      <button class="btn" onclick="copyText('promptMTT')">Copiar prompt</button>
-    </div>
-
-    <div class="card copy">
-      <h3>Prompt: Aporte GAD Parroquial</h3>
-      <p id="promptParroquial">Genera un aporte territorial de GAD Parroquial para alimentar el Plan de Acción ENOS del GAD Cantonal o Provincial correspondiente. Usa únicamente registros de la parroquia indicada. Organiza puntos críticos, necesidades comunitarias, población vulnerable, rutas, capacidades locales, observaciones territoriales y acciones sugeridas. No lo presentes como plan formal de remisión directa a la Coordinación Zonal.</p>
-      <button class="btn" onclick="copyText('promptParroquial')">Copiar prompt</button>
-    </div>
-
-    <div class="card copy">
-      <h3>Prompt: Matriz de brechas</h3>
-      <p id="promptBrechas">Construye una matriz de brechas usando solo los registros filtrados para el territorio, institución o Mesa Técnica indicada. Usa columnas: territorio, eje del plan, amenaza, elemento expuesto, capacidad existente, brecha identificada, prioridad, responsable, acción recomendada, plazo, medio de verificación y decisión requerida.</p>
-      <button class="btn" onclick="copyText('promptBrechas')">Copiar prompt</button>
-    </div>
-
-    <div class="card copy">
-      <h3>Prompt: Resumen ejecutivo</h3>
-      <p id="promptResumen">Convierte la información filtrada en un resumen ejecutivo para autoridad. Debe responder: quién solicita, qué territorio se analiza, qué ocurre, dónde ocurre, qué está expuesto, cuáles son las brechas, qué decisión se requiere, qué acción se recomienda y quién debe intervenir. No incluyas datos personales innecesarios.</p>
-      <button class="btn" onclick="copyText('promptResumen')">Copiar prompt</button>
-    </div>
-  </div>
-</section>
-
-
-<footer class="footer"><div class="container">ENOS Guayas 2.1 · GAD provinciales y cantonales remiten planes; GAD parroquiales, Mesas Técnicas e instituciones aportan insumos sectoriales. Recursos sensibles con acceso restringido.</div></footer>
+<footer class="footer"><div class="container">ENOS Guayas 2.1 · GAD provinciales y cantonales remiten planes; GAD parroquiales, Mesas Técnicas, Grupos de Trabajo e instituciones aportan insumos sectoriales. Recursos sensibles con acceso restringido.</div></footer>
 <div class="toast"></div>
 </body>
 </html>
