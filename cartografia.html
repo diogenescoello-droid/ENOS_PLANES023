@@ -1,16 +1,73 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cartografía | ENOS Guayas 2.1</title>
-<link rel="stylesheet" href="assets/site.css">
-<script defer src="assets/site.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cartografía | ENOS Guayas 2.1</title>
+  <link rel="stylesheet" href="assets/site.css">
+  <script defer src="assets/site.js"></script>
 </head>
-<body data-help-title="Cartografía guiada" data-help-text="No publique capas sensibles sin revisión técnica." data-help-steps="Abra el visor ArcGIS para revisar o cargar capas de trabajo.||Use F07 para registrar aportes cartográficos y dejar trazabilidad.||Use Google Earth/KMZ para visualización rápida de rutas, puntos y zonas.||Valide formato, proyección, atributos y pertinencia antes de publicar una capa.">
+
+<body
+  data-help-title="Cartografía guiada"
+  data-help-text="Use la cartografía para priorizar escenarios, validar aportes territoriales y construir insumos técnicos para los Planes de Acción ENOS."
+  data-help-steps="Abra el visor ArcGIS de Riesgos Zonal para revisar escenarios, capas y territorios priorizados.||Use Google Earth o el KMZ base para visualizar rutas, puntos críticos, zonas expuestas y elementos operativos.||Registre aportes cartográficos mediante F07 o F11, dejando trazabilidad del origen, responsable y uso previsto.||Valide formato, proyección, atributos, pertinencia y sensibilidad antes de publicar una capa.">
+
+<script>
+  /*
+    CONFIGURACIÓN DE ENLACES CARTOGRÁFICOS
+
+    Pendiente:
+    - Reemplazar URL_ARCGIS_RIESGOS_ZONAL con el enlace real del visor ArcGIS Riesgos Zonal.
+    - El enlace de Google Earth ya está colocado.
+  */
+
+  const URL_ARCGIS_RIESGOS_ZONAL = "PEGA_AQUI_EL_LINK_DEL_VISOR_RIESGOS_ZONAL";
+  const URL_GOOGLE_EARTH_ENOS = "https://earth.google.com/earth/d/1FN-JQLdUzfxbABJKH3GPmdS57EZeHe4h?usp=sharing";
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const arcgisBtn = document.getElementById("btn-arcgis-riesgos-zonal");
+    const earthBtn = document.getElementById("btn-google-earth-enos");
+
+    if (arcgisBtn) {
+      if (
+        URL_ARCGIS_RIESGOS_ZONAL &&
+        !URL_ARCGIS_RIESGOS_ZONAL.includes("PEGA_AQUI")
+      ) {
+        arcgisBtn.href = URL_ARCGIS_RIESGOS_ZONAL;
+      } else {
+        arcgisBtn.href = "#";
+        arcgisBtn.addEventListener("click", function (event) {
+          event.preventDefault();
+          alert("Falta pegar el enlace del visor ArcGIS Riesgos Zonal en cartografia.html.");
+        });
+      }
+    }
+
+    if (earthBtn) {
+      if (
+        URL_GOOGLE_EARTH_ENOS &&
+        !URL_GOOGLE_EARTH_ENOS.includes("PEGA_AQUI")
+      ) {
+        earthBtn.href = URL_GOOGLE_EARTH_ENOS;
+      } else {
+        earthBtn.href = "#";
+        earthBtn.addEventListener("click", function (event) {
+          event.preventDefault();
+          alert("Falta pegar el enlace compartido del proyecto Google Earth. Mientras tanto use el botón Descargar KMZ base.");
+        });
+      }
+    }
+  });
+</script>
+
 <header class="topbar">
   <div class="container nav">
-    <a class="logo" href="index.html"><span class="logo-badge">EN</span><span>ENOS Guayas 2.1</span></a>
+    <a class="logo" href="index.html">
+      <span class="logo-badge">EN</span>
+      <span>ENOS Guayas 2.1</span>
+    </a>
+
     <nav class="menu">
       <a href="index.html">Inicio</a>
       <a href="instituciones.html">Responsables, MTT y GT</a>
@@ -27,22 +84,353 @@
   </div>
 </header>
 
-<section class="hero"><div class="container"><span class="kicker">Escenarios cartográficos</span><h1>ArcGIS, Google Earth y aportes geográficos para el Plan</h1><p class="lead">Los mapas se usan para priorizar escenarios, no solo para visualizar. Todo archivo recibido debe validarse antes de publicarse como capa oficial o de trabajo.</p><div class="notice"><strong>Regla:</strong> cualquier técnico puede proponer una capa; solo el equipo técnico valida y publica en el visor oficial.</div></div></section>
-<section class="section"><div class="container grid-2">
- <div class="card"><h3>🗺️ ArcGIS Online</h3><p class="muted">Abra el visor existente o inicie un mapa en blanco para cargar capas por periodo de actualización.</p><div class="btns"><a class="btn" href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=674af1befcfd4ae7bfbefdff918ebaf8" target="_blank">Abrir visor ENOS</a><a class="btn light" href="https://www.arcgis.com/apps/mapviewer/index.html" target="_blank">Abrir ArcGIS en blanco</a></div></div>
- <div class="card"><h3>🌍 Google Earth</h3><p class="muted">Use Google Earth como visor complementario para rutas, polígonos, puntos críticos y escenarios KMZ/KML.</p><div class="btns"><a class="btn" href="https://earth.google.com/web/" target="_blank">Abrir Google Earth</a><a class="btn light" href="docs/cartografia/ENOS_Guayas_2_1_Base_Google_Earth.kmz">Descargar KMZ base</a></div></div>
- <div class="card"><h3>📥 Aporte cartográfico institucional</h3><p class="muted">Registre el origen, responsable, cobertura, formato, restricciones y propósito del archivo.</p><div class="btns"><a class="btn" href="https://ee.kobotoolbox.org/x/0pXtskTZ" target="_blank">F07 Aportar cartografía</a><a class="btn light" href="docs/formularios/F11_XLSForm_propuesta_escenario_institucional_ENOS_Guayas_2_1.xlsx">Descargar F11 escenario</a></div></div>
- <div class="card"><h3>📁 Formatos aceptados</h3><p class="muted">KMZ/KML, SHP comprimido en ZIP, XLS/XLSX con coordenadas, CSV, GeoJSON, PDF o imagen como respaldo.</p><div class="btns"><a class="btn light" href="docs/cartografia/plantilla_capas_ENOS_Guayas_2_1.geojson">Plantilla GeoJSON</a><a class="btn light" href="docs/cartografia/plantilla_puntos_ENOS_Guayas_2_1.csv">Plantilla CSV</a></div></div>
-</div></section>
-<section class="section"><div class="container"><h2>Capas por eje del plan</h2><div class="table-wrap"><table><thead><tr><th>Eje</th><th>Capas sugeridas</th><th>Producto cartográfico</th></tr></thead><tbody>
-<tr><td>Conocimiento del riesgo</td><td>Amenazas, susceptibilidad, puntos críticos, población e infraestructura expuesta.</td><td>Escenario territorial priorizado.</td></tr>
-<tr><td>Monitoreo y alerta</td><td>Puntos de monitoreo, ríos, estaciones, novedades, zonas recurrentes.</td><td>Mapa de seguimiento y alerta.</td></tr>
-<tr><td>Prevención y mitigación</td><td>Obras preventivas, drenajes, desazolves, taludes, puentes y vías críticas.</td><td>Mapa de acciones preventivas.</td></tr>
-<tr><td>Preparación y respuesta</td><td>Alojamientos, rutas, centros de acopio, recursos, maquinaria y PMU.</td><td>Mapa operativo de respuesta.</td></tr>
-<tr><td>Recuperación y seguimiento</td><td>Acciones ejecutadas, brechas pendientes, zonas intervenidas y daños reportados.</td><td>Mapa de avance y recuperación.</td></tr>
-</tbody></table></div></div></section>
+<section class="hero">
+  <div class="container">
+    <span class="kicker">Escenarios cartográficos</span>
 
-<footer class="footer"><div class="container">ENOS Guayas 2.1 · GAD provinciales y cantonales remiten planes; GAD parroquiales, Mesas Técnicas, Grupos de Trabajo e instituciones aportan insumos sectoriales. Recursos sensibles con acceso restringido.</div></footer>
+    <h1>ArcGIS, Google Earth y aportes geográficos para el Plan de Acción ENOS</h1>
+
+    <p class="lead">
+      La cartografía permite identificar puntos críticos, infraestructura expuesta, rutas,
+      alojamientos, zonas susceptibles, capacidades operativas y escenarios priorizados para
+      la construcción de los Planes de Acción de los GAD provinciales y cantonales.
+    </p>
+
+    <div class="notice">
+      <strong>Regla técnica:</strong>
+     es de Acción de los GAD provinciales y cantonales.
+    </p>
+
+    <div class="notice">
+      <strong cualquier GAD, Mesa Técnica, Grupo de Trabajo o institución puede proponer información
+      cartográfica; sin embargo, solo las capas revisadas y validadas técnicamente deben
+      incorporarse al visor oficial o a los productos de planificación.
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container grid-2">
+
+    <div class="card">
+      <h3>🗺️ Visor ArcGIS Riesgos Zonal</h3>
+      <p class="muted">
+        Abra el visor cartográfico correcto para revisar capas de amenaza, exposición,
+        puntos críticos, infraestructura esencial, capacidades territoriales y escenarios
+        priorizados para ENOS.
+      </p>
+
+      <div class="btns">
+        <a
+          id="btn-arcgis-riesgos-zonal"
+          class="btn"
+          href="#"
+          target="_blank"
+          rel="noopener">
+          Abrir visor Riesgos Zonal
+        </a>
+
+        <a
+          class="btn light"
+          href="https://www.arcgis.com/apps/mapviewer/index.html"
+          target="_blank"
+          rel="noopener">
+          Abrir ArcGIS en blanco
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🌍 Google Earth / KMZ operativo</h3>
+      <p class="muted">
+        Use Google Earth para visualizar rutas, puntos críticos, zonas expuestas,
+        polígonos de intervención, alojamientos temporales, recursos operativos y
+        escenarios de trabajo.
+      </p>
+
+      <div class="btns">
+        <a
+          id="btn-google-earth-enos"
+          class="btn"
+          href="#"
+          target="_blank"
+          rel="noopener">
+          Abrir proyecto Google Earth
+        </a>
+
+        <a
+          class="btn light"
+          href="docs/cartografia/ENOS_Guayas_2_1_Base_Google_Earth.kmz">
+          Descargar KMZ base
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📥 Aporte cartográfico institucional</h3>
+      <p class="muted">
+        Registre el origen, responsable, cobertura, formato, restricciones,
+        periodicidad de actualización y propósito del archivo cartográfico.
+      </p>
+
+      <div class="btns">
+        <a
+          class="btn"
+          href="https://ee.kobotoolbox.org/x/0pXtskTZ"
+          target="_blank"
+          rel="noopener">
+          F07 Aportar cartografía
+        </a>
+
+        <a
+          class="btn light"
+          href="docs/formularios/F11_XLSForm_propuesta_escenario_institucional_ENOS_Guayas_2_1.xlsx">
+          Descargar F11 escenario
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📁 Formatos aceptados</h3>
+      <p class="muted">
+        Se aceptan archivos KMZ/KML, SHP comprimido en ZIP, XLS/XLSX con coordenadas,
+        CSV, GeoJSON, PDF o imagen como respaldo técnico.
+      </p>
+
+      <div class="btns">
+        <a
+          class="btn light"
+          href="docs/cartografia/plantilla_capas_ENOS_Guayas_2_1.geojson">
+          Plantilla GeoJSON
+        </a>
+
+        <a
+          class="btn light"
+          href="docs/cartografia/plantilla_puntos_ENOS_Guayas_2_1.csv">
+          Plantilla CSV
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>Uso cartográfico por responsable operativo</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Actor / instancia</th>
+            <th>Uso de la cartografía</th>
+            <th>Producto esperado</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>GAD Provincial</td>
+            <td>
+              Identifica escenarios provinciales, red vial, infraestructura estratégica,
+              zonas susceptibles, capacidades y brechas territoriales.
+            </td>
+            <td>
+              Insumo cartográfico para el Plan Provincial de Acción ENOS.
+            </td>
+          </tr>
+
+          <tr>
+            <td>GAD Cantonal</td>
+            <td>
+              Prioriza sectores urbanos y rurales, puntos críticos, población expuesta,
+              rutas, alojamientos, recursos y obras preventivas.
+            </td>
+            <td>
+              Insumo cartográfico para el Plan Cantonal de Acción ENOS.
+            </td>
+          </tr>
+
+          <tr>
+            <td>GAD Parroquial</td>
+            <td>
+              Aporta información comunitaria sobre puntos críticos, necesidades,
+              rutas locales, zonas recurrentes de afectación y población vulnerable.
+            </td>
+            <td>
+              Aporte territorial para el plan cantonal o provincial.
+            </td>
+          </tr>
+
+          <tr>
+            <td>Mesas Técnicas de Trabajo</td>
+            <td>
+              Generan y validan insumos sectoriales de salud, educación, seguridad,
+              vialidad, agua, saneamiento, asistencia humanitaria, producción y ambiente.
+            </td>
+            <td>
+              Capas o reportes sectoriales para integrar al Plan del GAD.
+            </td>
+          </tr>
+
+          <tr>
+            <td>Grupos de Trabajo</td>
+            <td>
+              Levantan información operativa específica: EDAN, rutas, alojamientos,
+              logística, maquinaria, comunicación del riesgo, recuperación y seguimiento.
+            </td>
+            <td>
+              Fichas, matrices, mapas operativos y evidencias de intervención.
+            </td>
+          </tr>
+
+          <tr>
+            <td>Coordinación Zonal SNGR</td>
+            <td>
+              Acompaña, revisa consistencia técnica, consolida seguimiento y verifica
+              trazabilidad de los insumos usados en los planes.
+            </td>
+            <td>
+              Control zonal, semaforización, trazabilidad y soporte técnico.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>Capas por eje del Plan de Acción</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Eje</th>
+            <th>Capas sugeridas</th>
+            <th>Producto cartográfico</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Conocimiento del riesgo</td>
+            <td>
+              Amenazas, susceptibilidad, puntos críticos, población expuesta,
+              infraestructura expuesta, eventos históricos, zonas recurrentes.
+            </td>
+            <td>Escenario territorial priorizado.</td>
+          </tr>
+
+          <tr>
+            <td>Monitoreo y alerta</td>
+            <td>
+              Puntos de monitoreo, estaciones, ríos, drenajes, reportes comunitarios,
+              niveles de activación y zonas bajo vigilancia.
+            </td>
+            <td>Mapa de seguimiento y alerta.</td>
+          </tr>
+
+          <tr>
+            <td>Prevención y mitigación</td>
+            <td>
+              Obras preventivas, drenajes, limpieza de cauces, desazolves,
+              taludes, puentes, vías críticas y acciones de reducción de riesgo.
+            </td>
+            <td>Mapa de acciones preventivas.</td>
+          </tr>
+
+          <tr>
+            <td>Preparación y respuesta</td>
+            <td>
+              Alojamientos temporales, rutas de evacuación, puntos seguros,
+              centros de acopio, recursos, maquinaria, PMU y zonas de concentración.
+            </td>
+            <td>Mapa operativo de respuesta.</td>
+          </tr>
+
+          <tr>
+            <td>Recuperación y seguimiento</td>
+            <td>
+              Acciones ejecutadas, brechas pendientes, zonas intervenidas,
+              daños reportados, rehabilitación de servicios y necesidades persistentes.
+            </td>
+            <td>Mapa de avance y recuperación.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>Criterios mínimos de validación cartográfica</h2>
+
+    <div class="grid-3">
+      <div class="card">
+        <h3>1. Origen</h3>
+        <p class="muted">
+          Todo archivo debe indicar institución responsable, técnico que remite,
+          fecha de levantamiento, fuente y propósito de uso.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>2. Formato</h3>
+        <p class="muted">
+          El archivo debe estar en formato legible y usable: KMZ, KML, SHP ZIP,
+          GeoJSON, CSV, XLS/XLSX con coordenadas o PDF como respaldo.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>3. Coordenadas</h3>
+        <p class="muted">
+          Debe verificarse sistema de referencia, coordenadas, ubicación real,
+          escala, cobertura territorial y consistencia con el escenario reportado.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>4. Sensibilidad</h3>
+        <p class="muted">
+          No deben publicarse datos personales, información sensible de seguridad,
+          infraestructura crítica o ubicación de población vulnerable sin revisión.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>5. Pertinencia</h3>
+        <p class="muted">
+          La capa debe contribuir al Plan de Acción, al seguimiento, a la priorización
+          o a la toma de decisiones territoriales.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>6. Trazabilidad</h3>
+        <p class="muted">
+          Cada capa debe relacionarse con un formulario, matriz, acta, informe,
+          responsable o código de control del proceso ENOS.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    ENOS Guayas 2.1 · GAD provinciales y cantonales remiten planes; GAD parroquiales,
+    Mesas Técnicas, Grupos de Trabajo e instituciones aportan insumos sectoriales.
+    Recursos sensibles con acceso restringido.
+  </div>
+</footer>
+
 <div class="toast"></div>
+
 </body>
 </html>
