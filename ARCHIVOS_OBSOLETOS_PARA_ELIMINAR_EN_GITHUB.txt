@@ -1,0 +1,29 @@
+ARCHIVOS OBSOLETOS O DUPLICADOS QUE CONVIENE ELIMINAR DEL REPOSITORIO
+
+Eliminar solo si existen en GitHub. No son necesarios para la versión limpia ENOS Guayas 2.1.
+
+1. Duplicados en raíz:
+- Plantillas_maestras_ENOS_Guayas_2_0.xlsx
+- Manual_uso_Plataforma_ENOS_Guayas_2_0.docx
+- matriz_maestra_enos_2_1.xlsx
+
+2. Duplicados en docs/:
+- docs/Manual_uso_Plataforma_ENOS_Guayas_2_0 (1).docx
+- docs/Plantillas_maestras_ENOS_Guayas_2_0 (1).xlsx
+- docs/lineamientos_GAD_ENOS_2026_2027.pdf.pdf
+- docs/resolucion_SNGR_126_2026.pdf.pdf
+
+3. Matriz antigua en docs/matrices/:
+- docs/matrices/Matriz_maestra_ENOS_Guayas_2_1_FINAL.xlsx
+
+4. Carpeta accidental en raíz, si existe:
+- insumos_sprea/
+
+5. Presentaciones pesadas en GitHub, si existen:
+- docs/insumos_sprea/Lineamientos_Parroquiales.pptx
+- docs/insumos_sprea/Lineamientos_Provinciales.pptx
+- docs/insumos_sprea/Lineamientos_Cantonales.pptx
+- docs/insumos_sprea/Presentacion_Lineamientos_Estrategicos_EL_NINO_2026_2027.pptx
+
+Motivo:
+La versión limpia usa Drive para presentaciones SPREA y GitHub solo para HTML, CSS, JS, documentos livianos, matrices, formularios y cartografía base.

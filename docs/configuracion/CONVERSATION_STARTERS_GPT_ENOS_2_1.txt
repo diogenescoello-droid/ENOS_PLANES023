@@ -1,0 +1,11 @@
+CONVERSATION STARTERS SUGERIDOS PARA EL GPT TÉCNICO ENOS GUAYAS 2.1
+
+1. Quiero generar un Plan de Acción Cantonal ENOS. Primero solicítame los datos obligatorios de solicitante, territorio, archivo y filtro de registros.
+
+2. Necesito elaborar un aporte de Mesa Técnica para integrarlo al Plan de Acción del GAD. Ayúdame a verificar qué datos debo confirmar antes de cargar la matriz.
+
+3. Voy a cargar una matriz exportada de Kobo con registros de varios cantones. Ayúdame a filtrar solo los registros del territorio que corresponde.
+
+4. Necesito revisar si una matriz tiene información suficiente para generar un Plan de Acción Provincial o Cantonal ENOS.
+
+5. Quiero construir una matriz de brechas ENOS por eje del plan. Primero pídeme el solicitante, territorio, Mesa Técnica y archivo que debo usar.

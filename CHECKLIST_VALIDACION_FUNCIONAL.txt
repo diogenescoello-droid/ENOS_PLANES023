@@ -1,0 +1,38 @@
+CHECKLIST DE VALIDACIÓN FUNCIONAL ENOS GUAYAS 2.1
+
+1. Abrir la página principal:
+   https://diogenescoello-droid.github.io/Plan_Accion_ENOS02/
+
+2. Confirmar menú principal:
+   - Inicio
+   - Responsables y MTT
+   - Ejes
+   - Cartografía
+   - Dashboard
+   - Automatización
+   - GPT
+   - Biblioteca
+   - Acceso
+   - Validación
+
+3. Confirmar botones críticos:
+   - Manual: docs/Manual_uso_Plataforma_ENOS_Guayas_2_0.docx
+   - Plantilla: docs/Plantillas_maestras_ENOS_Guayas_2_0.xlsx
+   - Matriz: docs/matrices/matriz_maestra_enos_2_1.xlsx
+   - ArcGIS: https://arcg.is/iGSLu0
+   - Google Earth: proyecto ENOS compartido.
+   - F01-F08 Kobo/Enketo.
+   - F09, F10, F11 XLSForm.
+
+4. Confirmar textos corregidos:
+   - Las instituciones sectoriales no remiten planes independientes.
+   - Los GAD provinciales y cantonales elaboran/remiten planes.
+   - Los GAD parroquiales aportan información territorial.
+   - Las Mesas Técnicas aportan insumos sectoriales.
+   - Los botones Drive dicen Solicitar acceso al repositorio Drive.
+
+5. Validar manualmente:
+   - Burbujas flotantes.
+   - Botón ? Ayuda.
+   - Copiar prompt en módulo GPT.
+   - Descarga de archivos Office desde navegador.
