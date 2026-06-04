@@ -11,18 +11,17 @@
 <body
   data-help-title="Cartografía guiada"
   data-help-text="Use la cartografía para priorizar escenarios, validar aportes territoriales y construir insumos técnicos para los Planes de Acción ENOS."
-  data-help-steps="Abra el visor ArcGIS de Riesgos Zonal para revisar escenarios, capas y territorios priorizados.||Use Google Earth o el KMZ base para visualizar rutas, puntos críticos, zonas expuestas y elementos operativos.||Registre aportes cartográficos mediante F07 o F11, dejando trazabilidad del origen, responsable y uso previsto.||Valide formato, proyección, atributos, pertinencia y sensibilidad antes de publicar una capa.">
+  data-help-steps="Abra ArcGIS Online para revisar escenarios, capas y territorios priorizados.||Use Google Earth o el KMZ base para visualizar rutas, puntos críticos, zonas expuestas y elementos operativos.||Registre aportes cartográficos mediante F07 o F11, dejando trazabilidad del origen, responsable y uso previsto.||Valide formato, proyección, atributos, pertinencia y sensibilidad antes de publicar una capa.">
 
 <script>
   /*
     CONFIGURACIÓN DE ENLACES CARTOGRÁFICOS
 
-    Pendiente:
-    - Reemplazar URL_ARCGIS_RIESGOS_ZONAL con el enlace real del visor ArcGIS Riesgos Zonal.
-    - El enlace de Google Earth ya está colocado.
+    El enlace de ArcGIS está temporalmente configurado para abrir ArcGIS Online en blanco.
+    Cuando tengas el visor definitivo de Riesgos Zonal, reemplaza la URL por el enlace real del webmap.
   */
 
-  const URL_ARCGIS_RIESGOS_ZONAL = "PEGA_AQUI_EL_LINK_DEL_VISOR_RIESGOS_ZONAL";
+  const URL_ARCGIS_RIESGOS_ZONAL = "https://www.arcgis.com/apps/mapviewer/index.html";
   const URL_GOOGLE_EARTH_ENOS = "https://earth.google.com/earth/d/1FN-JQLdUzfxbABJKH3GPmdS57EZeHe4h?usp=sharing";
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -30,33 +29,11 @@
     const earthBtn = document.getElementById("btn-google-earth-enos");
 
     if (arcgisBtn) {
-      if (
-        URL_ARCGIS_RIESGOS_ZONAL &&
-        !URL_ARCGIS_RIESGOS_ZONAL.includes("PEGA_AQUI")
-      ) {
-        arcgisBtn.href = URL_ARCGIS_RIESGOS_ZONAL;
-      } else {
-        arcgisBtn.href = "#";
-        arcgisBtn.addEventListener("click", function (event) {
-          event.preventDefault();
-          alert("Falta pegar el enlace del visor ArcGIS Riesgos Zonal en cartografia.html.");
-        });
-      }
+      arcgisBtn.href = URL_ARCGIS_RIESGOS_ZONAL;
     }
 
     if (earthBtn) {
-      if (
-        URL_GOOGLE_EARTH_ENOS &&
-        !URL_GOOGLE_EARTH_ENOS.includes("PEGA_AQUI")
-      ) {
-        earthBtn.href = URL_GOOGLE_EARTH_ENOS;
-      } else {
-        earthBtn.href = "#";
-        earthBtn.addEventListener("click", function (event) {
-          event.preventDefault();
-          alert("Falta pegar el enlace compartido del proyecto Google Earth. Mientras tanto use el botón Descargar KMZ base.");
-        });
-      }
+      earthBtn.href = URL_GOOGLE_EARTH_ENOS;
     }
   });
 </script>
@@ -98,11 +75,7 @@
 
     <div class="notice">
       <strong>Regla técnica:</strong>
-     es de Acción de los GAD provinciales y cantonales.
-    </p>
-
-    <div class="notice">
-      <strong cualquier GAD, Mesa Técnica, Grupo de Trabajo o institución puede proponer información
+      cualquier GAD, Mesa Técnica, Grupo de Trabajo o institución puede proponer información
       cartográfica; sin embargo, solo las capas revisadas y validadas técnicamente deben
       incorporarse al visor oficial o a los productos de planificación.
     </div>
@@ -113,21 +86,21 @@
   <div class="container grid-2">
 
     <div class="card">
-      <h3>🗺️ Visor ArcGIS Riesgos Zonal</h3>
+      <h3>🗺️ ArcGIS Online / Riesgos Zonal</h3>
       <p class="muted">
-        Abra el visor cartográfico correcto para revisar capas de amenaza, exposición,
-        puntos críticos, infraestructura esencial, capacidades territoriales y escenarios
-        priorizados para ENOS.
+        Abra ArcGIS Online para revisar o construir el visor cartográfico de riesgos zonales,
+        capas de amenaza, exposición, puntos críticos, infraestructura esencial, capacidades
+        territoriales y escenarios priorizados para ENOS.
       </p>
 
       <div class="btns">
         <a
           id="btn-arcgis-riesgos-zonal"
           class="btn"
-          href="#"
+          href="https://www.arcgis.com/apps/mapviewer/index.html"
           target="_blank"
           rel="noopener">
-          Abrir visor Riesgos Zonal
+          Abrir ArcGIS Online
         </a>
 
         <a
@@ -152,7 +125,7 @@
         <a
           id="btn-google-earth-enos"
           class="btn"
-          href="#"
+          href="https://earth.google.com/earth/d/1FN-JQLdUzfxbABJKH3GPmdS57EZeHe4h?usp=sharing"
           target="_blank"
           rel="noopener">
           Abrir proyecto Google Earth
