@@ -1,11 +1,11 @@
 {
   "links": {
     "gpt": "https://chatgpt.com/g/g-6a1db50eb650819185c06255c6850509-asistente-tecnico-enos-guayas-2-0",
-    "arcgis_viewer": "https://www.arcgis.com/apps/mapviewer/index.html?webmap=674af1befcfd4ae7bfbefdff918ebaf8",
+    "arcgis_viewer": "https://arcg.is/iGSLu0",
     "arcgis_blank": "https://www.arcgis.com/apps/mapviewer/index.html",
-    "earth": "https://earth.google.com/web/",
+    "earth": "https://earth.google.com/earth/d/1FN-JQLdUzfxbABJKH3GPmdS57EZeHe4h?usp=sharing",
     "drive_sprea": "https://drive.google.com/drive/folders/1pNIz_uzRD-woScEwm046HzYLo4VdLkwo?usp=sharing",
-    "drive_raiz": "https://drive.google.com/drive/folders/1PufT2DXEN7XaR2LLjz382mevOI8rMcJK?usp=sharing",
+    "drive_raiz": "https://drive.google.com/drive/folders/1ds-CAg0pr66nzyz_PWBLKdN3s_kP6216?usp=drive_link",
     "kobo_f01": "https://ee.kobotoolbox.org/x/XuixUrMH",
     "kobo_f02": "https://ee.kobotoolbox.org/x/HxbqyITN",
     "kobo_f03": "https://ee.kobotoolbox.org/x/BMR6RaE1",
@@ -13,8 +13,6 @@
     "kobo_f05": "https://ee.kobotoolbox.org/x/lgXrZHzb",
     "kobo_f06": "https://ee.kobotoolbox.org/x/NL8gKLLD",
     "kobo_f07": "https://ee.kobotoolbox.org/x/0pXtskTZ",
-    "kobo_f08": "https://ee.kobotoolbox.org/x/QBy4RiZJ",
-    "kobo_f09_file": "docs/formularios/F09_XLSForm_validacion_boton_por_boton_Plataforma_ENOS_Guayas_2_1.xlsx",
     "kobo_f10_file": "docs/formularios/F10_XLSForm_solicitud_acceso_institucional_ENOS_Guayas_2_1.xlsx",
     "kobo_f11_file": "docs/formularios/F11_XLSForm_propuesta_escenario_institucional_ENOS_Guayas_2_1.xlsx",
     "matriz": "docs/matrices/Matriz_maestra_ENOS_Guayas_2_1_FINAL.xlsx",
@@ -29,7 +27,10 @@
     "base_territorial": "docs/identificacion_provincias_cantones_parroquias_ENOS.pdf",
     "kmz": "docs/cartografia/ENOS_Guayas_2_1_Base_Google_Earth.kmz",
     "geojson": "docs/cartografia/plantilla_capas_ENOS_Guayas_2_1.geojson",
-    "csv": "docs/cartografia/plantilla_puntos_ENOS_Guayas_2_1.csv"
+    "csv": "docs/cartografia/plantilla_puntos_ENOS_Guayas_2_1.csv",
+    "base_viva": "https://docs.google.com/spreadsheets/d/17CACZlzwOkxECeVdeqKbAXtis_vnMTmqbyj9qrM2Iu0/edit?usp=sharing",
+    "base_viva_export_xlsx": "https://docs.google.com/spreadsheets/d/17CACZlzwOkxECeVdeqKbAXtis_vnMTmqbyj9qrM2Iu0/export?format=xlsx",
+    "respaldos_drive": "https://drive.google.com/drive/folders/1ds-CAg0pr66nzyz_PWBLKdN3s_kP6216?usp=drive_link"
   },
   "estructura_operativa": {
     "responsables_remision": [
@@ -125,5 +126,9 @@
         "F11 Escenario"
       ]
     }
-  ]
+  ],
+  "respaldos": {
+    "fecha_limite_referencial": "2026-06-30T23:59:59-05:00",
+    "descripcion": "Cuenta regresiva referencial para subir respaldos técnicos y evidencias del proceso ENOS."
+  }
 }

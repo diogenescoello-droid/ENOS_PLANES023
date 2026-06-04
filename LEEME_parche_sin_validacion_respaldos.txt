@@ -1,0 +1,32 @@
+PARCHE ENOS 2.1 - SIN MÓDULO VALIDACIÓN + RESPALDOS CON CUENTA REGRESIVA
+
+Cambios aplicados:
+1. Se retira el enlace "Validación" del menú principal.
+2. Se incorpora el módulo "Respaldos" en el menú.
+3. Se agrega la página nueva: respaldos.html.
+4. Se agrega cuenta regresiva para carga de respaldos.
+5. Se mantienen los enlaces correctos:
+   - Base viva: https://docs.google.com/spreadsheets/d/17CACZlzwOkxECeVdeqKbAXtis_vnMTmqbyj9qrM2Iu0/edit?usp=sharing
+   - Descarga XLSX viva: https://docs.google.com/spreadsheets/d/17CACZlzwOkxECeVdeqKbAXtis_vnMTmqbyj9qrM2Iu0/export?format=xlsx
+   - ArcGIS Riesgos Zonal: https://arcg.is/iGSLu0
+   - Google Earth ENOS: https://earth.google.com/earth/d/1FN-JQLdUzfxbABJKH3GPmdS57EZeHe4h?usp=sharing
+6. Se actualizan dashboard.html, automatizacion.html y biblioteca.html para base viva.
+
+Fecha referencial del contador:
+30 de junio de 2026, 23h59 (Ecuador).
+Si la fecha oficial cambia, editar el atributo data-countdown-target="2026-06-30T23:59:59-05:00" en:
+- index.html
+- dashboard.html
+- automatizacion.html
+- respaldos.html
+
+Archivos a subir/reemplazar en la raíz del repositorio ENOS_PLANES023/:
+- Todos los .html incluidos en este parche
+- assets/site.css
+- assets/site.js
+- data/config.json
+
+Acción adicional recomendada en GitHub:
+Eliminar validacion.html del repositorio si desea que ya no exista ninguna ruta pública de validación.
+
+No borrar carpetas docs/, assets/img/, docs/formularios/, docs/matrices/ ni docs/insumos_sprea/.

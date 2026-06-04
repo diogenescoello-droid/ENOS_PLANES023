@@ -18,4 +18,32 @@ function initCoach(){
   toggle.addEventListener('click',()=>panel.classList.contains('show')?hide():show()); panel.querySelector('.coach-close').addEventListener('click',hide); panel.querySelector('#coachPrev').addEventListener('click',()=>{idx=Math.max(0,idx-1);render()}); panel.querySelector('#coachNext').addEventListener('click',()=>{if(idx<steps.length-1){idx++;render()}else hide()});
   if(!localStorage.getItem('coachSeen:'+page)){setTimeout(show,700); setTimeout(()=>{if(panel.classList.contains('show')) hide()},12000)}
 }
-document.addEventListener('DOMContentLoaded',()=>{setActive();initCoach()});
+document.addEventListener('DOMContentLoaded',()=>{setActive();initCoach();initCountdowns()});
+
+function initCountdowns(){
+  document.querySelectorAll('[data-countdown-target]').forEach(box=>{
+    const targetRaw=box.dataset.countdownTarget;
+    const target=new Date(targetRaw);
+    const daysEl=box.querySelector('[data-countdown-days]');
+    const hoursEl=box.querySelector('[data-countdown-hours]');
+    const minEl=box.querySelector('[data-countdown-minutes]');
+    const secEl=box.querySelector('[data-countdown-seconds]');
+    if(isNaN(target.getTime())||!daysEl||!hoursEl||!minEl||!secEl){return;}
+    function pad(n){return String(n).padStart(2,'0')}
+    function tick(){
+      const diff=target.getTime()-Date.now();
+      if(diff<=0){daysEl.textContent='00';hoursEl.textContent='00';minEl.textContent='00';secEl.textContent='00';box.classList.add('expired');return;}
+      const totalSec=Math.floor(diff/1000);
+      const days=Math.floor(totalSec/86400);
+      const hours=Math.floor((totalSec%86400)/3600);
+      const mins=Math.floor((totalSec%3600)/60);
+      const secs=totalSec%60;
+      daysEl.textContent=String(days);
+      hoursEl.textContent=pad(hours);
+      minEl.textContent=pad(mins);
+      secEl.textContent=pad(secs);
+    }
+    tick();
+    setInterval(tick,1000);
+  });
+}
