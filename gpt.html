@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="assets/site.css">
 <script defer src="assets/site.js"></script>
 </head>
-<body data-help-title="Uso del GPT" data-help-text="El GPT ayuda a redactar, pero no reemplaza la revisión técnica." data-help-steps="Abra el GPT solo cuando tenga un archivo, matriz o evidencia para analizar.||Cargue el archivo y use el prompt que corresponda.||Revise siempre el borrador generado antes de usarlo institucionalmente.||Los aportes de Mesas Técnicas alimentan el Plan del GAD; no son planes independientes.">
+<body data-help-title="Uso del GPT" data-help-text="El GPT ayuda a redactar, pero no reemplaza la validación técnica." data-help-steps="Abra el GPT solo cuando tenga un archivo, matriz o evidencia para analizar.||Cargue el archivo y use el prompt que corresponda.||Revise siempre el borrador generado antes de usarlo institucionalmente.||Los aportes de Mesas Técnicas alimentan el Plan del GAD; no son planes independientes.">
 <header class="topbar">
   <div class="container nav">
     <a class="logo" href="index.html"><span class="logo-badge">EN</span><span>ENOS Guayas 2.1</span></a>
@@ -18,11 +18,12 @@
       <a href="ejes.html">Ejes del plan</a>
       <a href="cartografia.html">Cartografía</a>
       <a href="dashboard.html">Dashboard</a>
+      <a href="actualizacion.html">Actualización</a>
       <a href="automatizacion.html">Automatización</a>
       <a href="gpt.html">GPT</a>
       <a href="biblioteca.html">Biblioteca</a>
       <a href="acceso.html">Acceso</a>
-      <a href="respaldos.html">Respaldos</a>
+      <a href="validacion.html">Validación</a>
     </nav>
   </div>
 </header>
@@ -34,6 +35,8 @@
  <div class="card copy"><h3>Prompt: Matriz de brechas</h3><p id="promptBrechas">Construye una matriz de brechas con columnas: territorio, eje del plan, amenaza, elemento expuesto, capacidad existente, brecha identificada, prioridad, responsable, acción recomendada, plazo, medio de verificación y decisión requerida.</p><button class="btn" onclick="copyText('promptBrechas')">Copiar prompt</button></div>
  <div class="card copy"><h3>Prompt: Resumen ejecutivo</h3><p id="promptResumen">Convierte esta información en un resumen ejecutivo para autoridad. Debe responder: qué ocurre, dónde ocurre, qué está expuesto, cuál es la brecha, qué decisión se requiere, qué acción se recomienda y quién debe intervenir.</p><button class="btn" onclick="copyText('promptResumen')">Copiar prompt</button></div>
 </div></section>
+
+<section class="section"><div class="container"><div class="card"><h3>Paquete GPT desde base consolidada viva</h3><p class="muted">Use esta opción para actualizar la base y generar un bloque de texto listo para copiar al GPT, sin descargar la matriz manualmente.</p><div class="btns"><a class="btn blue" href="actualizacion.html">Actualizar base y preparar paquete GPT</a><a class="btn light" href="https://script.google.com/a/macros/gestionderiesgos.gob.ec/s/AKfycbyrdSNQnTAb1BMaNr85bDHjCBgmwLJWAaM3vIgR3arDOOhW_O6S4jqNXBiYy25barmP/exec?accion=actualizar_gpt" target="_blank" rel="noopener">Ejecutar directamente</a></div><div class="notice ok"><strong>Uso recomendado:</strong> llenar formularios Kobo, actualizar base, copiar paquete, pegar en GPT ENOS y revisar el borrador técnico antes de uso institucional.</div></div></div></section>
 
 <footer class="footer"><div class="container">ENOS Guayas 2.1 · GAD provinciales y cantonales remiten planes; GAD parroquiales, Mesas Técnicas, Grupos de Trabajo e instituciones aportan insumos sectoriales. Recursos sensibles con acceso restringido.</div></footer>
 <div class="toast"></div>

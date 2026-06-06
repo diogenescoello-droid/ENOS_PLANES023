@@ -1,0 +1,21 @@
+PARCHE ENOS GUAYAS 2.1 - ACTUALIZACION INMEDIATA Y PAQUETE GPT
+
+Archivos incluidos:
+- actualizacion.html
+- index.html
+- dashboard.html
+- automatizacion.html
+- gpt.html
+- demás HTML con menú actualizado hacia actualizacion.html
+
+Web App usado:
+https://script.google.com/a/macros/gestionderiesgos.gob.ec/s/AKfycbyrdSNQnTAb1BMaNr85bDHjCBgmwLJWAaM3vIgR3arDOOhW_O6S4jqNXBiYy25barmP/exec?accion=actualizar_gpt
+
+Subida a GitHub Pages:
+1. Abrir repositorio ENOS_PLANES023.
+2. Subir/reemplazar los HTML en la raíz del repositorio.
+3. Esperar que GitHub Pages publique.
+4. Abrir: https://diogenescoello-droid.github.io/ENOS_PLANES023/actualizacion.html
+5. Probar el botón Actualizar base y preparar paquete GPT.
+
+Nota: si Google pide inicio de sesión, usar cuenta autorizada del dominio gestionderiesgos.gob.ec.

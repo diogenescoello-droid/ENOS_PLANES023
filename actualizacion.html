@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Actualización | ENOS Guayas 2.1</title>
+<link rel="stylesheet" href="assets/site.css">
+<script defer src="assets/site.js"></script>
+<style>
+.sync-panel { border:1px solid rgba(0,75,95,.18); }
+.sync-countdown { font-size:34px; font-weight:800; color:#004b5f; letter-spacing:.5px; margin:10px 0; }
+.sync-small { font-size:13px; color:#64748b; }
+.sync-form { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:12px; }
+.sync-form input { padding:12px; border:1px solid #cbd5e1; border-radius:10px; min-width:240px; }
+.sync-steps li { margin-bottom:8px; }
+</style>
+</head>
+<body data-help-title="Actualización inmediata" data-help-text="Este módulo evita esperar la sincronización automática y prepara un paquete para el GPT técnico." data-help-steps="Primero llene los formularios Kobo.||Luego presione Actualizar base y preparar paquete GPT.||Copie el paquete generado por Apps Script.||Pegue el paquete en el GPT ENOS para generar o actualizar el plan.||Use esta opción para cortes oficiales, socialización y revisión urgente.">
+<header class="topbar">
+  <div class="container nav">
+    <a class="logo" href="index.html"><span class="logo-badge">EN</span><span>ENOS Guayas 2.1</span></a>
+    <nav class="menu">
+      <a href="index.html">Inicio</a>
+      <a href="instituciones.html">Responsables, MTT y GT</a>
+      <a href="grupos.html">Grupos de Trabajo</a>
+      <a href="ejes.html">Ejes del plan</a>
+      <a href="cartografia.html">Cartografía</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="actualizacion.html">Actualización</a>
+      <a href="automatizacion.html">Automatización</a>
+      <a href="gpt.html">GPT</a>
+      <a href="biblioteca.html">Biblioteca</a>
+      <a href="acceso.html">Acceso</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero"><div class="container"><span class="kicker">Sincronización inmediata · Kobo → Sheets → GPT</span><h1>Actualizar base consolidada y preparar paquete GPT</h1><p class="lead">Use este módulo cuando un técnico haya llenado formularios y no se desea esperar la próxima actualización automática. El botón ejecuta la actualización inmediata y entrega un texto listo para copiar al GPT ENOS.</p><div class="notice lock"><strong>Uso interno:</strong> la actualización ejecuta un Web App institucional de Google Apps Script. Si solicita inicio de sesión, use la cuenta autorizada del dominio institucional.</div></div></section>
+
+<section class="section"><div class="container grid-2">
+  <div class="card sync-panel"><h3>Actualización inmediata</h3><p class="muted">Ejecuta el ciclo completo: Kobo → hojas RAW → CONSOLIDADO_PLANES → DASHBOARD → SEGUIMIENTO_GAD → paquete GPT.</p><div class="btns"><a class="btn blue" href="https://script.google.com/a/macros/gestionderiesgos.gob.ec/s/AKfycbyrdSNQnTAb1BMaNr85bDHjCBgmwLJWAaM3vIgR3arDOOhW_O6S4jqNXBiYy25barmP/exec?accion=actualizar_gpt" target="_blank" rel="noopener">Actualizar base y preparar paquete GPT</a><a class="btn light" href="https://docs.google.com/spreadsheets/d/17CACZlzwOkxECeVdeqKbAXtis_vnMTmqbyj9qrM2Iu0/edit?usp=sharing" target="_blank" rel="noopener">Abrir base viva</a><a class="btn light" href="https://chatgpt.com/g/g-6a1db50eb650819185c06255c6850509-asistente-tecnico-enos-guayas-2-0" target="_blank" rel="noopener">Abrir GPT ENOS</a></div><div class="notice ok"><strong>Resultado esperado:</strong> se abrirá una pantalla con el paquete generado y el botón “Copiar paquete para GPT”.</div></div>
+  <div class="card sync-panel"><h3>Actualizar por cantón</h3><p class="muted">Use esta opción cuando quiera preparar un paquete filtrado, por ejemplo Playas, Daule, Durán o Lomas de Sargentillo.</p><form class="sync-form" action="https://script.google.com/a/macros/gestionderiesgos.gob.ec/s/AKfycbyrdSNQnTAb1BMaNr85bDHjCBgmwLJWAaM3vIgR3arDOOhW_O6S4jqNXBiYy25barmP/exec" method="get" target="_blank"><input type="hidden" name="accion" value="actualizar_gpt"><input type="text" name="canton" placeholder="Ejemplo: Playas"><button class="btn" type="submit">Actualizar y filtrar</button></form><p class="sync-small">El filtro no borra datos; solo limita el paquete que se copia al GPT.</p></div>
+</div></section>
+
+<section class="section"><div class="container grid-2">
+  <div class="card"><h3>Próxima actualización automática estimada</h3><div id="countdown" class="sync-countdown">--:--:--</div><p class="muted">El contador es referencial. La actualización automática depende del activador horario de Apps Script. Para cortes oficiales, socialización o revisión urgente, use el botón de actualización inmediata.</p></div>
+  <div class="card"><h3>Leyenda operativa</h3><p class="muted">La base consolidada viva se actualiza mediante sincronización programada Kobo → Google Sheets → CONSOLIDADO_PLANES → DASHBOARD. Durante la fase de socialización y aplicación, los cortes oficiales deberán actualizarse manualmente con el botón de esta página antes de descargar base, revisar indicadores o preparar un plan en GPT.</p><div class="code">Formulario Kobo lleno → botón Actualizar base y preparar paquete GPT → copiar paquete → pegar en GPT ENOS → revisar borrador técnico</div></div>
+</div></section>
+
+<section class="section"><div class="container"><div class="card"><h3>Ruta recomendada para el usuario autorizado</h3><ol class="clean sync-steps"><li>Verifique que el técnico haya enviado el formulario desde Kobo.</li><li>Presione <strong>Actualizar base y preparar paquete GPT</strong>.</li><li>Espere la pantalla de Apps Script y revise el número de registros incluidos.</li><li>Presione <strong>Copiar paquete para GPT</strong>.</li><li>Abra el GPT ENOS, pegue el paquete y solicite generación o actualización del Plan de Acción Territorial en formato SNGR.</li></ol></div></div></section>
+
+<footer class="footer"><div class="container">ENOS Guayas 2.1 · Actualización inmediata para uso interno y cortes técnicos. Recursos sensibles con acceso restringido.</div></footer>
+<div class="toast"></div>
+<script>
+(function() {
+  function pad(n) { return String(n).padStart(2,'0'); }
+  function tick() {
+    var now = new Date();
+    var next = new Date(now);
+    next.setMinutes(60,0,0);
+    var diff = Math.max(0, next - now);
+    var h = Math.floor(diff/3600000);
+    var m = Math.floor((diff%3600000)/60000);
+    var s = Math.floor((diff%60000)/1000);
+    var el = document.getElementById('countdown');
+    if (el) el.textContent = pad(h)+':'+pad(m)+':'+pad(s);
+  }
+  tick();
+  setInterval(tick,1000);
+})();
+</script>
+</body>
+</html>
