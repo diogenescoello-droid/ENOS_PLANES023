@@ -1,0 +1,35 @@
+CONFIGURACIÓN COMPLETA F01-F07 · APPS SCRIPT
+
+Propiedades del script requeridas:
+
+KOBO_BASE_URL = https://kf.kobotoolbox.org
+KOBO_TOKEN = TU_TOKEN_KOBO
+WEBAPP_KEY = CZ5_ENOS_2026
+
+F01_ASSET_UID = aDp2JK7VCK26q2QAKiVChQ
+F02_ASSET_UID = abcnTWDp9vCeQCeCjnubAe
+F03_ASSET_UID = a86WYnMJZA3XCNJ8tcjQb2
+F04_ASSET_UID = aZcJKkSCYBciexEAZP2PfA
+F05_ASSET_UID = am4xGEpRP85bXDuEbucPod
+F06_ASSET_UID = aJoE9gh8JgNAfY9froZ4gQ
+F07_ASSET_UID = aGBMqM63bGK9fLADxYfe4w
+
+URL públicas para el Dashboard BASE 01:
+
+F01 = https://ee.kobotoolbox.org/x/XuixUrMH
+F02 = https://ee.kobotoolbox.org/x/HxbqyITN
+F03 = https://ee.kobotoolbox.org/x/BMR6RaE1
+F04 = https://ee.kobotoolbox.org/x/xo3JtPm9
+F05 = https://ee.kobotoolbox.org/x/lgXrZHzb
+F06 = https://ee.kobotoolbox.org/x/NL8gKLLD
+F07 = https://ee.kobotoolbox.org/x/0pXtskTZ
+
+Pasos:
+1. Apps Script > Configuración del proyecto > Propiedades del script.
+2. Confirmar/agregar las propiedades F01_ASSET_UID a F07_ASSET_UID.
+3. Reemplazar Código.gs por el archivo AppsScript_CZ5_ENOS_F01_F07_COMPLETO.gs.txt.
+4. Guardar.
+5. Ejecutar testSyncAllLocal.
+6. Revisar que se creen/actualicen hojas RAW y BASE.
+7. Implementar > Administrar implementaciones > Editar > Versión nueva > Implementar.
+8. Abrir BASE_01_ECOSISTEMA_CZ5_F01_F07_CONECTADO.html.

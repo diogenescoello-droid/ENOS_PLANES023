@@ -1,78 +1,761 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Inicio | ENOS Guayas 2.1</title>
-<link rel="stylesheet" href="assets/site.css">
-<script defer src="assets/site.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BASE 01 · Ecosistema CZ5 ENOS F01-F07</title>
+  <style>
+    :root {
+      --azul:#083B66;
+      --azul-oscuro:#052A49;
+      --azul-medio:#0A527C;
+      --azul-claro:#E7F2FA;
+      --rojo:#C32026;
+      --amarillo:#F4C542;
+      --verde:#197A4B;
+      --borde:#D8E1EA;
+      --texto:#17212B;
+      --muted:#52606D;
+      --shadow:0 16px 38px rgba(8,59,102,.11);
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      font-family:"Segoe UI", Arial, sans-serif;
+      color:var(--texto);
+      background:linear-gradient(180deg,#F8FAFC 0%,#EEF3F7 100%);
+    }
+    header {
+      background:linear-gradient(135deg,var(--azul-oscuro),var(--azul),var(--azul-medio));
+      color:white;
+      border-bottom:6px solid var(--rojo);
+      padding:20px 24px 28px;
+    }
+    .wrap { max-width:1220px; margin:0 auto; }
+    .topline { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:18px; }
+    .brand { display:flex; align-items:center; gap:12px; font-size:13px; letter-spacing:.05em; text-transform:uppercase; opacity:.95; }
+    .mark { width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg,var(--rojo),#E34A4D); border:2px solid rgba(255,255,255,.38); display:grid; place-items:center; font-weight:900; }
+    .clock { background:rgba(255,255,255,.11); border:1px solid rgba(255,255,255,.28); padding:9px 12px; border-radius:999px; font-weight:800; font-size:13px; white-space:nowrap; }
+    h1 { margin:0; font-size:30px; line-height:1.15; }
+    .subtitle { margin:12px 0 0; font-size:15px; line-height:1.5; opacity:.95; max-width:980px; }
+    main { padding:24px; }
+    .shell { max-width:1220px; margin:0 auto; background:white; border:1px solid var(--borde); border-radius:24px; box-shadow:var(--shadow); overflow:hidden; }
+    .section { padding:22px; border-bottom:1px solid var(--borde); }
+    .section:last-child { border-bottom:none; }
+    h2 { margin:0 0 8px; color:var(--azul); font-size:20px; }
+    h3 { margin:0 0 8px; color:var(--azul); font-size:16px; }
+    h4 { margin:0 0 6px; color:var(--azul); font-size:14.5px; }
+    .lead { margin:0; color:var(--muted); font-size:14.5px; line-height:1.5; }
+    .actor-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:14px; margin-top:16px; }
+    .actor-card {
+      border:1px solid var(--borde); border-radius:20px; background:linear-gradient(180deg,#FFFFFF,#FAFCFE);
+      padding:16px; cursor:pointer; text-align:left; min-height:220px; display:flex; flex-direction:column; align-items:flex-start; gap:8px;
+      transition:.18s ease; font-family:inherit; white-space:normal !important;
+    }
+    .actor-card * { white-space:normal !important; overflow-wrap:break-word; max-width:100%; }
+    .actor-card:hover { transform:translateY(-2px); box-shadow:0 14px 25px rgba(8,59,102,.12); }
+    .actor-card.active { border-color:var(--rojo); box-shadow:0 0 0 4px rgba(195,32,38,.09); }
+    .actor-icon { width:40px; height:40px; border-radius:14px; background:var(--azul-claro); color:var(--azul); display:grid; place-items:center; font-weight:900; border:1px solid #BED8EA; }
+    .actor-card.active .actor-icon { background:var(--rojo); color:white; border-color:var(--rojo); }
+    .actor-card strong { display:block; color:var(--azul); font-size:15.5px; line-height:1.22; }
+    .actor-card p { margin:0; color:var(--muted); font-size:13px; line-height:1.42; }
+    .actor-card small { margin-top:auto; color:#718092; font-size:12px; line-height:1.35; }
+    .workspace { margin-top:18px; border:1px solid var(--borde); border-radius:22px; overflow:hidden; background:#FFFFFF; }
+    .workspace-head { background:linear-gradient(135deg,var(--azul),var(--azul-medio)); color:white; padding:18px 20px; display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
+    .workspace-head h3 { color:white; margin:0 0 6px; font-size:19px; }
+    .workspace-head p { margin:0; font-size:14px; opacity:.94; line-height:1.45; }
+    .badge { background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.28); border-radius:999px; padding:8px 11px; white-space:nowrap; font-weight:800; font-size:12.8px; }
+    .module-tabs { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; padding:14px; background:#F6F9FC; border-bottom:1px solid var(--borde); }
+    .tab { background:white; color:var(--azul); border:1px solid var(--borde); border-radius:14px; padding:11px 10px; font-weight:800; cursor:pointer; font-size:13px; min-height:46px; white-space:normal; line-height:1.25; }
+    .tab.active { background:var(--azul); color:white; border-color:var(--azul); }
+    .module { display:none; padding:18px; background:#FFFFFF; }
+    .module.show { display:block; }
+    .module-layout { display:grid; grid-template-columns:1.15fr .85fr; gap:16px; align-items:start; }
+    .forms-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
+    .form-card { border:1px solid var(--borde); border-radius:18px; background:#FBFCFE; padding:14px; min-height:160px; display:flex; flex-direction:column; gap:8px; }
+    .form-card p { margin:0; color:var(--muted); font-size:13px; line-height:1.4; }
+    .form-card .actions { margin-top:auto; }
+    .hint-box { border:1px solid #DCE8F0; background:#F8FBFD; border-radius:18px; padding:14px; }
+    .hint-box ul,.hint-box ol { margin:10px 0 0 20px; padding:0; color:var(--muted); font-size:13.5px; line-height:1.5; }
+    .actions { display:flex; flex-wrap:wrap; gap:9px; margin-top:14px; }
+    button,a.btn {
+      border:none; border-radius:13px; padding:10px 13px; font-weight:800; font-size:13.5px; cursor:pointer; text-decoration:none;
+      display:inline-flex; align-items:center; justify-content:center; gap:8px; transition:.18s ease; white-space:nowrap; font-family:inherit;
+    }
+    button:hover,a.btn:hover { transform:translateY(-1px); }
+    .btn-blue { background:var(--azul); color:white; box-shadow:0 10px 18px rgba(8,59,102,.18); }
+    .btn-red { background:var(--rojo); color:white; box-shadow:0 10px 18px rgba(195,32,38,.18); }
+    .btn-green { background:var(--verde); color:white; }
+    .btn-yellow { background:var(--amarillo); color:#2A2A2A; border:1px solid #E0B52E; }
+    .btn-soft { background:var(--azul-claro); color:var(--azul); border:1px solid #BCD8EA; }
+    .btn-outline { background:white; color:var(--azul); border:1px solid var(--borde); }
+    label { display:block; font-size:13px; font-weight:800; color:var(--azul); margin:12px 0 6px; }
+    input,textarea { width:100%; border:1px solid var(--borde); border-radius:13px; padding:10px 12px; font-family:inherit; font-size:14px; color:var(--texto); background:#FFFFFF; }
+    textarea { min-height:250px; resize:vertical; font-family:Consolas,"Courier New",monospace; font-size:12.5px; line-height:1.45; background:#F8FBFD; }
+    .status { display:flex; align-items:flex-start; gap:8px; padding:10px 12px; border-radius:14px; background:#F7FBFE; border:1px solid var(--borde); color:#405161; margin-top:12px; font-size:13px; line-height:1.42; }
+    .dot { width:10px; height:10px; border-radius:50%; background:var(--amarillo); flex:0 0 auto; margin-top:4px; }
+    .dot.ok { background:var(--verde); }
+    .dot.error { background:var(--rojo); }
+    .dashboard-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:14px; }
+    .kpi { border:1px solid var(--borde); border-radius:18px; background:linear-gradient(180deg,#FFFFFF,#FAFCFE); padding:15px; min-height:108px; }
+    .kpi span { color:var(--muted); font-size:12.5px; font-weight:800; text-transform:uppercase; letter-spacing:.03em; }
+    .kpi strong { display:block; color:var(--azul); font-size:30px; line-height:1; margin-top:10px; }
+    .kpi small { display:block; color:var(--muted); margin-top:8px; font-size:12.5px; line-height:1.3; }
+    .table-wrap { margin-top:14px; border:1px solid var(--borde); border-radius:18px; overflow:auto; max-height:390px; background:white; }
+    table { width:100%; border-collapse:collapse; min-width:1030px; font-size:13px; }
+    th { background:var(--azul); color:white; text-align:left; padding:10px; position:sticky; top:0; z-index:1; }
+    td { border-top:1px solid var(--borde); padding:9px 10px; vertical-align:top; }
+    tr:hover td { background:#F8FBFD; }
+    .chip { display:inline-flex; border-radius:999px; padding:5px 9px; font-size:12px; font-weight:800; background:#EAF2FA; color:var(--azul); border:1px solid #C5DAEA; }
+    .chip.ok { background:#EAF7F0; color:var(--verde); border-color:#CBE9D8; }
+    .chip.warn { background:#FFF6DF; color:#8A6200; border-color:#F2DB99; }
+    .chip.bad { background:#FDECEC; color:var(--rojo); border-color:#F3B6B8; }
+    .note { border:1px solid #F2DB99; background:#FFF8E6; color:#725100; border-radius:14px; padding:11px 12px; font-size:13px; line-height:1.42; margin-top:12px; }
+    .config { display:none; margin-top:14px; border:1px solid var(--borde); border-radius:18px; padding:14px; background:#FBFCFE; }
+    .config.show { display:block; }
+    .config-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .mini-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:14px; }
+    .mini-card { border:1px solid var(--borde); background:#FBFCFE; border-radius:16px; padding:13px; }
+    .mini-card strong { color:var(--azul); display:block; margin-bottom:5px; }
+    .mini-card p { margin:0; color:var(--muted); font-size:13px; line-height:1.38; }
+    .toast { position:fixed; right:22px; bottom:22px; background:var(--azul-oscuro); color:white; border-left:6px solid var(--amarillo); padding:14px 16px; border-radius:14px; box-shadow:0 16px 30px rgba(5,42,73,.25); display:none; max-width:460px; font-size:14px; line-height:1.42; z-index:80; }
+    .toast.show { display:block; }
+    @media(max-width:1060px) {
+      .module-tabs { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .module-layout { grid-template-columns:1fr; }
+      .forms-grid { grid-template-columns:1fr; }
+      .mini-grid { grid-template-columns:1fr; }
+      .config-grid { grid-template-columns:1fr; }
+      .dashboard-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media(max-width:720px) {
+      .topline { flex-direction:column; }
+      main { padding:14px; }
+      h1 { font-size:25px; }
+      .section { padding:18px; }
+      .workspace-head { flex-direction:column; }
+      .module-tabs { grid-template-columns:1fr; }
+      .dashboard-grid { grid-template-columns:1fr; }
+    }
+  </style>
 </head>
-<body data-help-title="Inicio guiado" data-help-text="Use esta ruta para evitar confundir herramientas con responsabilidades." data-help-steps="Seleccione si trabajará como GAD, GAD parroquial, Mesa Técnica, Grupo de Trabajo o Coordinación Zonal.||Revise el eje del plan que corresponde a su trabajo.||Abra los formularios, cartografía o GPT solo cuando tenga claro el producto esperado.||El objetivo final es alimentar o consolidar el Plan de Acción del GAD provincial/cantonal.">
-<header class="topbar">
-  <div class="container nav">
-    <a class="logo" href="index.html"><span class="logo-badge">EN</span><span>ENOS Guayas 2.1</span></a>
-    <nav class="menu">
-      <a href="index.html">Inicio</a>
-      <a href="instituciones.html">Responsables, MTT y GT</a>
-      <a href="grupos.html">Grupos de Trabajo</a>
-      <a href="ejes.html">Ejes del plan</a>
-      <a href="cartografia.html">Cartografía</a>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="actualizacion.html">Actualización</a>
-      <a href="automatizacion.html">Automatización</a>
-      <a href="gpt.html">GPT</a>
-      <a href="biblioteca.html">Biblioteca</a>
-      <a href="acceso.html">Acceso</a>
-      <a href="validacion.html">Validación</a>
-    </nav>
+<body>
+<header>
+  <div class="wrap">
+    <div class="topline">
+      <div class="brand"><div class="mark">GR</div><div>Secretaría Nacional de Gestión de Riesgos · Coordinación Zonal 5</div></div>
+      <div class="clock" id="clock">--:--</div>
+    </div>
+    <h1>BASE 01 · Ecosistema digital ENOS F01-F07</h1>
+    <p class="subtitle">
+      Seleccione su rol, llene los formularios asignados, actualice la base, copie el prompt, use el GPT para generar el plan de acción y registre el respaldo final en la carpeta de cierre de ciclo.
+    </p>
   </div>
 </header>
 
-<section class="hero">
-  <div class="container hero-grid">
-    <div>
-      <span class="kicker">Versión operativa 2.1 · GAD · Mesas Técnicas · Ejes · Trazabilidad</span>
-      <h1>Plataforma ENOS Guayas para construir, integrar y seguir Planes de Acción</h1>
-      <p class="lead">Ruta integrada para que GAD provinciales y cantonales estructuren sus planes, y para que GAD parroquiales, Mesas Técnicas, Grupos de Trabajo, instituciones sectoriales y Coordinación Zonal aporten información, escenarios, brechas y seguimiento.</p>
-      <div class="notice ok"><strong>Corrección institucional:</strong> las instituciones sectoriales no remiten planes independientes a la Coordinación Zonal. Sus aportes se integran al Plan de Acción del GAD provincial o cantonal, principalmente mediante Mesas Técnicas, COE y mecanismos territoriales.</div>
-      <div class="btns">
-        <a class="btn" href="instituciones.html">Entrar por responsable, MTT o GT</a>
-        <a class="btn secondary" href="ejes.html">Ver ejes del plan</a>
-        <a class="btn blue" href="https://chatgpt.com/g/g-6a1db50eb650819185c06255c6850509-asistente-tecnico-enos-guayas-2-0" target="_blank" rel="noopener">Abrir GPT técnico</a>
-        <a class="btn" href="actualizacion.html">Actualizar base y GPT</a>
-        <a class="btn warn" href="acceso.html">Solicitar acceso</a>
+<main>
+  <section class="shell">
+
+    <div class="section">
+      <h2>1. Seleccione el tipo de actor</h2>
+      <p class="lead">Cada actor ingresa a un espacio propio. La información se mantiene ordenada por código de caso, institución y formulario.</p>
+
+      <div class="actor-grid">
+        <button class="actor-card active" onclick="showActor('gad', this)">
+          <div class="actor-icon">GAD</div>
+          <strong>Gobierno Autónomo Descentralizado</strong>
+          <p>Levanta puntos críticos, infraestructura, acciones, preparación, capacidades y seguimiento.</p>
+          <small>Acceso recomendado para equipos municipales, parroquiales o provinciales.</small>
+        </button>
+
+        <button class="actor-card" onclick="showActor('mtt', this)">
+          <div class="actor-icon">MTT</div>
+          <strong>Mesa Técnica de Trabajo</strong>
+          <p>Registra información sectorial, cartografía, acciones, recursos y seguimiento del plan.</p>
+          <small>Acceso recomendado para instituciones sectoriales.</small>
+        </button>
+
+        <button class="actor-card" onclick="showActor('gt', this)">
+          <div class="actor-icon">GT</div>
+          <strong>Grupo Técnico</strong>
+          <p>Valida hallazgos, cartografía, capacidades, seguimiento y respaldos técnicos.</p>
+          <small>Acceso recomendado para equipos de análisis, campo y seguimiento.</small>
+        </button>
+
+        <button class="actor-card" onclick="showActor('cz', this)">
+          <div class="actor-icon">CZ5</div>
+          <strong>Coordinación Zonal 5</strong>
+          <p>Administra el flujo, actualiza la base, genera el prompt, revisa dashboard y verifica cierre.</p>
+          <small>Acceso de asistencia técnica y control operativo.</small>
+        </button>
       </div>
     </div>
-    <div class="panel">
-      <h2>Ruta correcta de trabajo</h2>
-      <p class="muted">La plataforma guía por responsabilidad institucional, eje del plan y producto esperado.</p>
-      <div class="code">GAD Provincial/Cantonal → integra aportes → formula Plan → remite a CZ<br>GAD Parroquial/MTT/Instituciones → levantan insumos → proponen escenarios → alimentan el Plan</div>
-    </div>
-  </div>
-</section>
-<section class="section"><div class="container">
-  <h2>¿Quién hace qué?</h2>
-  <div class="grid-4">
-    <div class="card"><h3>🏛️ GAD Cantonal</h3><span class="badge ok">Remite plan</span><p class="muted">Consolida aportes territoriales, Mesas Técnicas/Grupos de Trabajo, puntos críticos, capacidades, acciones y seguimiento.</p><a class="btn light" href="instituciones.html#gad_cantonal">Ver ruta</a></div>
-    <div class="card"><h3>🛣️ GAD Provincial</h3><span class="badge ok">Remite plan</span><p class="muted">Integra vialidad rural, puentes, maquinaria, cuencas, apoyo a cantones y acciones provinciales.</p><a class="btn light" href="instituciones.html#gad_provincial">Ver ruta</a></div>
-    <div class="card"><h3>🌾 GAD Parroquial</h3><span class="badge warn">Aporta insumos</span><p class="muted">Registra información comunitaria, población vulnerable, puntos críticos, necesidades y rutas locales.</p><a class="btn light" href="instituciones.html#gad_parroquial">Ver ruta</a></div>
-    <div class="card"><h3>🧩 Mesas Técnicas</h3><span class="badge warn">Aportan al plan</span><p class="muted">Salud, seguridad, educación, vialidad, agua, asistencia, ambiente, logística y medios de vida.</p><a class="btn light" href="instituciones.html#mesas_tecnicas">Ver MTT</a></div>
-    <div class="card"><h3>⚙️ Grupos de Trabajo</h3><span class="badge warn">Operativizan acciones</span><p class="muted">Organizan tareas específicas de preparación, evaluación de daños, necesidades, asistencia, logística, comunicación y recuperación.</p><a class="btn light" href="grupos.html">Ver GT</a></div>
-  </div>
-</div></section>
-<section class="section"><div class="container">
-  <h2>Flujo principal por ejes del Plan de Acción</h2>
-  <p class="muted">Cada eje integra herramientas específicas: Kobo, Drive, ArcGIS, Google Earth, GPT, dashboard y plantillas.</p>
-  <div class="flow">
-    <div class="step"><div class="step-num">1</div><h3>Conocimiento del riesgo</h3><p class="muted">Amenaza, exposición, vulnerabilidad, capacidades y brechas.</p><div class="tool-list"><span class="tool">F01</span><span class="tool">F02</span><span class="tool">F07</span></div></div>
-    <div class="step"><div class="step-num">2</div><h3>Monitoreo y alerta</h3><p class="muted">Puntos focales, salas de situación, boletines y flujo de información.</p><div class="tool-list"><span class="tool">F01</span><span class="tool">F06</span><span class="tool">Dashboard</span></div></div>
-    <div class="step"><div class="step-num">3</div><h3>Prevención y mitigación</h3><p class="muted">Acciones preventivas, obras, mantenimiento y reducción de exposición.</p><div class="tool-list"><span class="tool">F05</span><span class="tool">Evidencias</span><span class="tool">Matriz</span></div></div>
-    <div class="step"><div class="step-num">4</div><h3>Preparación y respuesta</h3><p class="muted">COE, MTT/GT, asistencia, alojamientos, recursos, rutas y protocolos.</p><div class="tool-list"><span class="tool">F03</span><span class="tool">F04</span><span class="tool">GPT</span></div></div>
-    <div class="step"><div class="step-num">5</div><h3>Recuperación y seguimiento</h3><p class="muted">Avance mensual, brechas pendientes y trazabilidad documental.</p><div class="tool-list"><span class="tool">F06</span><span class="tool">Dashboard</span><span class="tool">Código</span></div></div>
-  </div>
-</div></section>
 
-<footer class="footer"><div class="container">ENOS Guayas 2.1 · GAD provinciales y cantonales remiten planes; GAD parroquiales, Mesas Técnicas, Grupos de Trabajo e instituciones aportan insumos sectoriales. Recursos sensibles con acceso restringido.</div></footer>
-<div class="toast"></div>
+    <div class="section">
+      <div class="workspace" id="workspace">
+        <div class="workspace-head">
+          <div>
+            <h3 id="workspaceTitle">Área GAD</h3>
+            <p id="workspaceDesc">Llene los formularios asignados, manteniendo el mismo código de caso en cada registro.</p>
+          </div>
+          <div class="badge" id="workspaceBadge">Rol activo: GAD</div>
+        </div>
+
+        <div class="module-tabs">
+          <button class="tab active" onclick="showModule('datos', this)">1. Llenar datos</button>
+          <button class="tab" onclick="showModule('prompt', this)">2. Actualizar y prompt</button>
+          <button class="tab" onclick="showModule('gpt', this)">3. GPT y cierre</button>
+          <button class="tab" onclick="showModule('bibliografia', this)">4. Bibliografía</button>
+          <button class="tab" onclick="showModule('dashboard', this)">5. Dashboard</button>
+        </div>
+
+        <div class="module show" id="module-datos">
+          <div class="module-layout">
+            <div>
+              <h2>Formularios asignados</h2>
+              <p class="lead">Use el mismo código de caso en todos los formularios. No mezcle casos o instituciones.</p>
+              <div class="forms-grid" id="formsContainer"></div>
+            </div>
+            <div class="hint-box">
+              <h3>Cómo llenar sin errores</h3>
+              <ol>
+                <li>Defina un solo <strong>código de caso</strong> para el plan o expediente.</li>
+                <li>Use ese mismo código en F01 a F07.</li>
+                <li>Registre datos concretos y verificables.</li>
+                <li>Cuando exista evidencia, agregue archivo, foto o enlace.</li>
+              </ol>
+              <div class="note">El código de caso permite que el GPT lea únicamente la información del caso activo.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="module" id="module-prompt">
+          <div class="module-layout">
+            <div>
+              <h2>Actualizar base y preparar prompt</h2>
+              <p class="lead">Este módulo va antes de entrar al GPT. Actualiza Kobo, genera el paquete y copia el prompt técnico.</p>
+
+              <label for="codigoCaso">Código del caso / plan / expediente</label>
+              <input id="codigoCaso" value="playas_plan_001" placeholder="Ej.: PLAYAS-ENOS-2026-001" />
+
+              <div class="actions">
+                <button class="btn-red" onclick="syncAll()">Actualizar base F01-F07</button>
+                <button class="btn-blue" onclick="listCases()">Ver casos</button>
+                <button class="btn-yellow" onclick="generateAndCopy()">Generar y copiar prompt</button>
+              </div>
+
+              <div class="status" id="statusBox">
+                <span class="dot" id="statusDot"></span>
+                <span id="statusText">Listo. Actualice la base cuando existan nuevos registros de Kobo.</span>
+              </div>
+
+              <label for="promptOutput">Prompt GPT generado</label>
+              <textarea id="promptOutput" readonly placeholder="Aquí aparecerá el prompt GPT del caso seleccionado."></textarea>
+
+              <div class="actions">
+                <button class="btn-yellow" onclick="copyPrompt()">Copiar prompt</button>
+                <button class="btn-outline" onclick="clearPrompt()">Limpiar prompt</button>
+              </div>
+            </div>
+
+            <div class="hint-box">
+              <h3>Qué hace este módulo</h3>
+              <ul>
+                <li><strong>Actualizar base:</strong> sincroniza Kobo con Google Sheets.</li>
+                <li><strong>Ver casos:</strong> muestra casos disponibles y estado.</li>
+                <li><strong>Generar y copiar prompt:</strong> arma el paquete técnico para GPT.</li>
+              </ul>
+              <div class="note">No ingrese al GPT sin copiar primero el prompt. Ese bloque contiene la información estructurada del caso.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="module" id="module-gpt">
+          <div class="module-layout">
+            <div>
+              <h2>Usar GPT, descargar plan y cerrar ciclo</h2>
+              <p class="lead">Pegue el prompt copiado, permita que GPT revise suficiencia, genere el plan de acción en Word y cargue el respaldo final.</p>
+
+              <div class="mini-grid">
+                <div class="mini-card"><strong>1. Pegar prompt</strong><p>Ingrese al GPT y pegue el prompt generado.</p></div>
+                <div class="mini-card"><strong>2. Descargar plan</strong><p>Solicite el Word institucional, descárguelo y revise el contenido técnico.</p></div>
+                <div class="mini-card"><strong>3. Firmar y subir</strong><p>Firme el plan y súbalo a la carpeta de cierre de ciclo.</p></div>
+              </div>
+
+              <div class="actions">
+                <a class="btn btn-blue" href="https://chat.openai.com/" target="_blank" rel="noopener">Ingresar al GPT</a>
+                <button class="btn-soft" onclick="showModuleFromCode('prompt')">Volver al prompt</button>
+                <button class="btn-green" onclick="openCierre()">Abrir carpeta cierre de ciclo</button>
+              </div>
+            </div>
+
+            <div class="hint-box">
+              <h3>Cierre de ciclo</h3>
+              <ol>
+                <li>Descargue el plan generado en Word.</li>
+                <li>Revise formato, datos, conclusiones, recomendaciones y anexos.</li>
+                <li>Gestione firma o validación institucional.</li>
+                <li>Suba el documento firmado a la carpeta de cierre.</li>
+                <li>Actualice seguimiento mensual en F07.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <div class="module" id="module-bibliografia">
+          <div class="module-layout">
+            <div>
+              <h2>Bibliografía e insumos de apoyo</h2>
+              <p class="lead">Organiza cartografía, fuentes institucionales, capas y respaldos que acompañan el plan.</p>
+              <div class="mini-grid">
+                <div class="mini-card"><strong>Cartografía</strong><p>F03 alimenta mapas, capas, fuentes, formatos y limitaciones.</p></div>
+                <div class="mini-card"><strong>Insumos técnicos</strong><p>F01-F06 consolidan amenazas, infraestructura, acciones y capacidades.</p></div>
+                <div class="mini-card"><strong>Seguimiento</strong><p>F07 documenta avance mensual, evidencias y escalamiento.</p></div>
+              </div>
+              <div class="actions">
+                <button class="btn-outline" onclick="openBiblioteca()">Abrir biblioteca técnica</button>
+                <button class="btn-green" onclick="openCierre()">Abrir cierre de ciclo</button>
+              </div>
+            </div>
+
+            <div class="hint-box">
+              <h3>Enlaces rápidos</h3>
+              <label>Biblioteca técnica / insumos</label>
+              <input id="cfgBiblioInline" placeholder="https://drive.google.com/drive/folders/..." />
+              <label>Carpeta cierre de ciclo</label>
+              <input id="cfgCierreInline" placeholder="https://drive.google.com/drive/folders/..." />
+              <div class="actions">
+                <button class="btn-green" onclick="saveInlineFolders()">Guardar enlaces</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="module" id="module-dashboard">
+          <div class="module-layout">
+            <div>
+              <h2>Dashboard de control operativo</h2>
+              <p class="lead">Tablero de seguimiento: casos, registros, avance del paquete GPT y acceso al cierre de ciclo.</p>
+
+              <div class="actions">
+                <button class="btn-blue" onclick="pingWebApp()">Probar conexión</button>
+                <button class="btn-red" onclick="syncAll()">Sincronizar base F01-F07</button>
+                <button class="btn-soft" onclick="listCases()">Actualizar dashboard</button>
+                <button class="btn-green" onclick="openCierre()">Abrir cierre de ciclo</button>
+              </div>
+
+              <div class="dashboard-grid">
+                <div class="kpi"><span>Casos</span><strong id="kpiCasos">0</strong><small>Total de códigos de caso identificados.</small></div>
+                <div class="kpi"><span>Disponibles</span><strong id="kpiDisponibles">0</strong><small>Casos visibles o disponibles para GPT.</small></div>
+                <div class="kpi"><span>Registros</span><strong id="kpiRegistros">0</strong><small>Suma de registros asociados reportados.</small></div>
+                <div class="kpi"><span>Pendientes</span><strong id="kpiPendientes">0</strong><small>Casos sin estado disponible o con revisión pendiente.</small></div>
+              </div>
+
+              <div class="table-wrap" id="casesTableWrap" style="display:none;">
+                <table id="casesTable">
+                  <thead>
+                    <tr>
+                      <th>Código caso</th><th>Institución</th><th>Tipo usuario</th><th>Cantón</th><th>Formularios</th><th>Registros</th><th>Estado</th><th>Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="hint-box">
+              <h3>Configuración del ecosistema</h3>
+              <p class="lead">Los formularios F01-F07 ya están precargados. Configure solo biblioteca técnica y carpeta de cierre.</p>
+              <div class="config show" id="configBox">
+                <div class="config-grid">
+                  <div><label>Biblioteca técnica / insumos</label><input id="cfgBiblioteca" placeholder="https://drive.google.com/drive/folders/..." /></div>
+                  <div><label>Carpeta cierre de ciclo</label><input id="cfgCierre" placeholder="https://drive.google.com/drive/folders/..." /></div>
+                </div>
+                <div class="actions">
+                  <button class="btn-green" onclick="saveConfig()">Guardar configuración</button>
+                  <button class="btn-outline" onclick="openCierre()">Probar cierre</button>
+                </div>
+              </div>
+              <div class="note">Los asset_uid se configuran en Apps Script; las URL públicas están cargadas en este HTML.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const WEBAPP_URL = "https://script.google.com/a/macros/gestionderiesgos.gob.ec/s/AKfycbxOLAUWizV9w3jgfo8F4K4_u3pZzMLC-XQi4rT3-twpOz_XhnBvwS-BkLnNdA2R8eVM/exec";
+  const WEBAPP_KEY = "CZ5_ENOS_2026";
+  const FORM_DEFS = {
+  "F01": {
+    "uid": "aDp2JK7VCK26q2QAKiVChQ",
+    "url": "https://ee.kobotoolbox.org/x/XuixUrMH",
+    "title": "F01 - Punto crítico territorial",
+    "desc": "Identifica el caso, puntos críticos, amenazas, brechas, elementos expuestos y acciones iniciales.",
+    "actors": [
+      "gad",
+      "gt",
+      "cz"
+    ]
+  },
+  "F02": {
+    "uid": "abcnTWDp9vCeQCeCjnubAe",
+    "url": "https://ee.kobotoolbox.org/x/HxbqyITN",
+    "title": "F02 - Infraestructura esencial expuesta",
+    "desc": "Registra infraestructura expuesta, criticidad, vulnerabilidad, brechas y acciones requeridas.",
+    "actors": [
+      "gad",
+      "mtt",
+      "gt",
+      "cz"
+    ]
+  },
+  "F03": {
+    "uid": "a86WYnMJZA3XCNJ8tcjQb2",
+    "url": "https://ee.kobotoolbox.org/x/BMR6RaE1",
+    "title": "F03 - Aporte cartográfico institucional",
+    "desc": "Registra mapas, capas, KML, SHP, geoportales, fuentes, escala, confiabilidad y limitaciones.",
+    "actors": [
+      "gad",
+      "mtt",
+      "gt",
+      "cz"
+    ]
+  },
+  "F04": {
+    "uid": "aZcJKkSCYBciexEAZP2PfA",
+    "url": "https://ee.kobotoolbox.org/x/xo3JtPm9",
+    "title": "F04 - Acciones preventivas y mitigación",
+    "desc": "Registra acciones del plan, justificación técnica, responsables, indicadores, metas y verificación.",
+    "actors": [
+      "gad",
+      "mtt",
+      "gt",
+      "cz"
+    ]
+  },
+  "F05": {
+    "uid": "am4xGEpRP85bXDuEbucPod",
+    "url": "https://ee.kobotoolbox.org/x/lgXrZHzb",
+    "title": "F05 - Alojamientos, rutas y puntos seguros",
+    "desc": "Registra alojamientos temporales, rutas de evacuación, puntos seguros, capacidad y brechas.",
+    "actors": [
+      "gad",
+      "mtt",
+      "gt",
+      "cz"
+    ]
+  },
+  "F06": {
+    "uid": "aJoE9gh8JgNAfY9froZ4gQ",
+    "url": "https://ee.kobotoolbox.org/x/NL8gKLLD",
+    "title": "F06 - Capacidades y recursos",
+    "desc": "Registra personal, maquinaria, vehículos, equipos, disponibilidad, limitaciones y brechas.",
+    "actors": [
+      "gad",
+      "mtt",
+      "gt",
+      "cz"
+    ]
+  },
+  "F07": {
+    "uid": "aGBMqM63bGK9fLADxYfe4w",
+    "url": "https://ee.kobotoolbox.org/x/0pXtskTZ",
+    "title": "F07 - Seguimiento mensual del plan de acción",
+    "desc": "Registra avance mensual, porcentaje, nudos críticos, evidencias y necesidad de escalamiento.",
+    "actors": [
+      "gad",
+      "mtt",
+      "gt",
+      "cz"
+    ]
+  }
+};
+
+  const ACTOR_META = {
+    gad: {
+      title: "Área GAD",
+      badge: "Rol activo: GAD",
+      desc: "Levante información territorial, infraestructura, acciones, preparación, capacidades y seguimiento."
+    },
+    mtt: {
+      title: "Área MTT",
+      badge: "Rol activo: MTT",
+      desc: "Registre información sectorial, cartografía, acciones, recursos y seguimiento."
+    },
+    gt: {
+      title: "Área Grupo Técnico",
+      badge: "Rol activo: Grupo Técnico",
+      desc: "Valide información, cartografía, capacidades, seguimiento y respaldos técnicos."
+    },
+    cz: {
+      title: "Área Coordinación Zonal 5",
+      badge: "Rol activo: CZ5",
+      desc: "Administre el flujo, actualice la base, genere prompt, revise dashboard y verifique cierre documental."
+    }
+  };
+
+  let currentActor = "gad";
+
+  function updateClock(){
+    const now = new Date();
+    document.getElementById("clock").textContent = now.toLocaleString("es-EC", {
+      weekday:"short", year:"numeric", month:"short", day:"2-digit",
+      hour:"2-digit", minute:"2-digit", second:"2-digit"
+    });
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  function showActor(actor, element){
+    currentActor = actor;
+    document.querySelectorAll(".actor-card").forEach(card => card.classList.remove("active"));
+    element.classList.add("active");
+    const meta = ACTOR_META[actor];
+    document.getElementById("workspaceTitle").textContent = meta.title;
+    document.getElementById("workspaceDesc").textContent = meta.desc;
+    document.getElementById("workspaceBadge").textContent = meta.badge;
+    renderActorForms();
+    showModuleFromCode("datos");
+    document.getElementById("workspace").scrollIntoView({ behavior:"smooth", block:"start" });
+  }
+
+  function showModule(code, element){
+    document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+    if(element) element.classList.add("active");
+    document.querySelectorAll(".module").forEach(module => module.classList.remove("show"));
+    document.getElementById("module-" + code).classList.add("show");
+    if(code === "dashboard") listCases();
+  }
+
+  function showModuleFromCode(code){
+    const labels = { datos:"Llenar", prompt:"prompt", gpt:"GPT", bibliografia:"Bibliografía", dashboard:"Dashboard" };
+    const tabs = Array.from(document.querySelectorAll(".tab"));
+    const target = tabs.find(t => t.textContent.toLowerCase().includes(labels[code].toLowerCase()));
+    document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+    if(target) target.classList.add("active");
+    document.querySelectorAll(".module").forEach(module => module.classList.remove("show"));
+    document.getElementById("module-" + code).classList.add("show");
+    if(code === "dashboard") listCases();
+  }
+
+  function renderActorForms(){
+    const container = document.getElementById("formsContainer");
+    container.innerHTML = "";
+    Object.values(FORM_DEFS)
+      .filter(f => f.actors.includes(currentActor))
+      .forEach(f => container.appendChild(createFormCard(f)));
+  }
+
+  function createFormCard(form){
+    const div = document.createElement("div");
+    div.className = "form-card";
+    div.innerHTML = `
+      <h4>${escapeHtml(form.title)}</h4>
+      <p>${escapeHtml(form.desc)}</p>
+      <div class="actions">
+        <button class="btn-blue" onclick="openForm('${form.url}')">Abrir formulario</button>
+      </div>
+    `;
+    return div;
+  }
+
+  function openForm(url){ window.open(url, "_blank"); }
+
+  function openBiblioteca(){
+    const url = localStorage.getItem("CZ5_BIBLIOTECA_URL") || "";
+    if(!url){ toast("Configure primero la biblioteca técnica en Dashboard."); return; }
+    window.open(url, "_blank");
+  }
+
+  function openCierre(){
+    const url = localStorage.getItem("CZ5_CIERRE_URL") || "";
+    if(!url){ toast("Configure primero la carpeta de cierre de ciclo en Dashboard."); return; }
+    window.open(url, "_blank");
+  }
+
+  function saveConfig(){
+    localStorage.setItem("CZ5_BIBLIOTECA_URL", document.getElementById("cfgBiblioteca").value.trim());
+    localStorage.setItem("CZ5_CIERRE_URL", document.getElementById("cfgCierre").value.trim());
+    toast("Configuración guardada en este navegador.");
+  }
+
+  function saveInlineFolders(){
+    const biblio = document.getElementById("cfgBiblioInline").value.trim();
+    const cierre = document.getElementById("cfgCierreInline").value.trim();
+    if(biblio) localStorage.setItem("CZ5_BIBLIOTECA_URL", biblio);
+    if(cierre) localStorage.setItem("CZ5_CIERRE_URL", cierre);
+    toast("Enlaces guardados.");
+  }
+
+  function endpoint(action, extra={}){
+    const url = new URL(WEBAPP_URL);
+    url.searchParams.set("action", action);
+    url.searchParams.set("webapp_key", WEBAPP_KEY);
+    Object.keys(extra).forEach(k => {
+      if(extra[k] !== undefined && extra[k] !== null && String(extra[k]).trim() !== "") url.searchParams.set(k, extra[k]);
+    });
+    return url.toString();
+  }
+
+  async function callApi(action, extra={}){
+    const res = await fetch(endpoint(action, extra), { method:"GET", redirect:"follow" });
+    const text = await res.text();
+    try { return JSON.parse(text); }
+    catch(err) { throw new Error("Respuesta no JSON. Revise permisos/implementación del Web App. Inicio: " + text.slice(0, 180)); }
+  }
+
+  function setStatus(ok, text){
+    document.getElementById("statusText").textContent = text;
+    document.getElementById("statusDot").className = "dot " + (ok ? "ok" : "error");
+  }
+
+  async function pingWebApp(){
+    setStatus(false, "Probando conexión...");
+    try {
+      const data = await callApi("ping");
+      if(data.ok){
+        setStatus(true, "Conexión correcta: " + (data.message || "Web App activo") + " · " + (data.spreadsheet_name || ""));
+        toast("Web App activo.");
+      } else setStatus(false, data.message || "No se pudo validar conexión.");
+    } catch(err) { setStatus(false, err.message); toast("Error al probar conexión."); }
+  }
+
+  async function syncAll(){
+    setStatus(false, "Actualizando base F01-F07 desde Kobo...");
+    try {
+      const data = await callApi("syncAll");
+      if(data.ok){
+        const d = data.data || {};
+        setStatus(true, "Base actualizada. Procesados: " + d.procesados + " · omitidos: " + d.omitidos + " · errores: " + d.errores);
+        toast("Base F01-F07 actualizada.");
+        await listCases();
+      } else setStatus(false, data.message || "No se pudo actualizar.");
+    } catch(err) { setStatus(false, err.message); toast("Error al actualizar base."); }
+  }
+
+  async function listCases(){
+    try {
+      const data = await callApi("listCases");
+      if(!data.ok){ setStatus(false, data.message || "No se pudieron listar casos."); return; }
+      renderCases(data.casos || []);
+      updateDashboard(data.casos || []);
+      setStatus(true, "Dashboard actualizado. Casos disponibles: " + (data.total || 0));
+    } catch(err) { setStatus(false, err.message); toast("Error al actualizar dashboard."); }
+  }
+
+  function updateDashboard(cases){
+    const total = cases.length;
+    let disponibles = 0, registros = 0, pendientes = 0;
+    cases.forEach(c => {
+      const estado = String(c.estado_paquete || c.estado_registro || "");
+      const reg = Number(c.total_registros_repeat || c.total_puntos_riesgo || 0);
+      registros += isNaN(reg) ? 0 : reg;
+      if(estado.includes("DISPONIBLE") || estado.includes("enviado")) disponibles += 1;
+      else pendientes += 1;
+    });
+    document.getElementById("kpiCasos").textContent = total;
+    document.getElementById("kpiDisponibles").textContent = disponibles;
+    document.getElementById("kpiRegistros").textContent = registros;
+    document.getElementById("kpiPendientes").textContent = pendientes;
+  }
+
+  function renderCases(cases){
+    const wrap = document.getElementById("casesTableWrap");
+    const tbody = document.querySelector("#casesTable tbody");
+    tbody.innerHTML = "";
+    if(!cases.length){ wrap.style.display = "none"; return; }
+    cases.forEach(c => {
+      const registros = c.total_registros_repeat || c.total_puntos_riesgo || "0";
+      const formularios = c.formularios_origen || c.formulario || "";
+      const estado = c.estado_paquete || c.estado_registro || "";
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><strong>${escapeHtml(c.codigo_caso || "")}</strong></td>
+        <td>${escapeHtml(c.institucion_reporta || "")}</td>
+        <td>${escapeHtml(c.tipo_usuario || "")}</td>
+        <td>${escapeHtml(c.canton || "")}</td>
+        <td>${escapeHtml(formularios)}</td>
+        <td>${escapeHtml(registros)}</td>
+        <td><span class="chip ${String(estado).includes("DISPONIBLE") ? "ok" : String(estado).includes("pend") ? "bad" : "warn"}">${escapeHtml(estado)}</span></td>
+        <td><button class="btn-soft" onclick="selectCase('${escapeAttr(c.codigo_caso || "")}')">Seleccionar</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+    wrap.style.display = "block";
+  }
+
+  function selectCase(code){
+    document.getElementById("codigoCaso").value = code;
+    showModuleFromCode("prompt");
+    toast("Caso seleccionado: " + code);
+  }
+
+  async function generatePackage(){
+    const codigo = getCodigoCaso();
+    if(!codigo) return null;
+    setStatus(false, "Generando paquete GPT para " + codigo + "...");
+    const data = await callApi("generatePackage", { codigo_caso: codigo });
+    if(!data.ok){ setStatus(false, data.message || "No se pudo generar paquete."); throw new Error(data.message || "No se pudo generar paquete."); }
+    const resumen = "Paquete generado. Suficiencia: " + (data.clasificacion_suficiencia || "sin clasificar") +
+      " · puntos: " + (data.total_puntos_riesgo || 0) +
+      " · infra: " + (data.total_infraestructura || 0) +
+      " · acciones: " + (data.total_acciones || 0);
+    setStatus(true, resumen);
+    toast("Paquete GPT generado.");
+    return data;
+  }
+
+  async function getLastPrompt(){
+    const codigo = getCodigoCaso();
+    if(!codigo) return null;
+    setStatus(false, "Obteniendo prompt GPT...");
+    const data = await callApi("getLastPrompt", { codigo_caso: codigo });
+    if(!data.ok){ setStatus(false, data.message || "No se pudo obtener prompt."); throw new Error(data.message || "No se pudo obtener prompt."); }
+    document.getElementById("promptOutput").value = data.prompt_gpt || "";
+    setStatus(true, "Prompt cargado. Suficiencia: " + (data.clasificacion_suficiencia || "sin clasificar"));
+    toast("Prompt GPT cargado.");
+    return data.prompt_gpt || "";
+  }
+
+  async function generateAndCopy(){
+    try { await generatePackage(); await getLastPrompt(); await copyPrompt(); }
+    catch(err) { toast("No se pudo copiar el prompt: " + err.message); }
+  }
+
+  async function copyPrompt(){
+    const text = document.getElementById("promptOutput").value;
+    if(!text.trim()){ toast("No hay prompt para copiar. Primero genere el paquete."); return; }
+    try { await navigator.clipboard.writeText(text); toast("Prompt copiado. Ahora vaya al GPT y péguelo."); }
+    catch(err) { document.getElementById("promptOutput").select(); document.execCommand("copy"); toast("Prompt seleccionado/copiadο. Verifique el portapapeles."); }
+  }
+
+  function clearPrompt(){ document.getElementById("promptOutput").value = ""; setStatus(true, "Panel de prompt limpio."); }
+
+  function getCodigoCaso(){
+    const codigo = document.getElementById("codigoCaso").value.trim();
+    if(!codigo){ toast("Ingrese o seleccione un código de caso."); return ""; }
+    return codigo;
+  }
+
+  function toast(texto){
+    const t = document.getElementById("toast");
+    t.textContent = texto;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 4300);
+  }
+
+  function escapeHtml(value){ return String(value).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
+  function escapeAttr(value){ return escapeHtml(value).replaceAll("`","&#096;"); }
+
+  renderActorForms();
+</script>
 </body>
 </html>
