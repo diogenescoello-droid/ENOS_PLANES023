@@ -284,12 +284,19 @@
               </div>
 
               <label>Enlace del GPT institucional</label>
-              <input id="cfgGPTInline" placeholder="Pegue aquí el enlace del GPT si aún no está configurado" />
+              <input id="cfgGPTInline" placeholder="Pegue aquí el enlace exacto del GPT institucional: https://chatgpt.com/g/..." />
               <div class="actions">
-                <button class="btn-green" onclick="saveGPTInline()">Guardar enlace GPT</button>
-                <button class="btn-blue" onclick="openGPT()">Ingresar al GPT institucional</button>
-                <button class="btn-soft" onclick="showModuleFromCode('prompt')">Volver al prompt</button>
-                <button class="btn-green" onclick="openCierre()">Abrir carpeta cierre de ciclo</button>
+                <button class="btn-blue" onclick="saveAndOpenGPT()">Guardar y abrir GPT</button>
+              </div>
+
+              <div class="note">
+                Primero genere y copie el prompt en el módulo anterior. Luego pegue aquí el enlace del GPT institucional una sola vez y presione “Guardar y abrir GPT”. En adelante el navegador recordará el enlace.
+              </div>
+
+              <h3 style="margin-top:16px;">Cierre del ciclo</h3>
+              <p class="lead">Después de descargar y firmar el plan, use la carpeta de cierre configurada en el Dashboard.</p>
+              <div class="actions">
+                <button class="btn-green" onclick="openCierre()">Abrir carpeta de cierre</button>
               </div>
             </div>
 
@@ -599,9 +606,6 @@
   function normalizeGPTUrl(url){
     const value = String(url || "").trim();
     if(!value) return "";
-    if(value.startsWith("https://chatgpt.com/g/") || value.startsWith("https://chat.openai.com/g/")){
-      return value;
-    }
     return value;
   }
 
@@ -616,21 +620,27 @@
     toast("Enlace del GPT institucional guardado.");
   }
 
-  function openGPT(){
-    const inline = document.getElementById("cfgGPTInline");
-    if(inline && inline.value.trim()){
-      localStorage.setItem("CZ5_GPT_URL", normalizeGPTUrl(inline.value));
+  
+  function saveAndOpenGPT(){
+    const input = document.getElementById("cfgGPTInline");
+    const typed = input ? normalizeGPTUrl(input.value) : "";
+
+    if(typed){
+      localStorage.setItem("CZ5_GPT_URL", typed);
     }
 
-    const url = getGPTUrl();
+    const saved = getGPTUrl();
 
-    if(!url){
-      toast("Falta configurar el enlace exacto del GPT institucional. Pegue el enlace en este módulo o en Dashboard.");
-      showModuleFromCode("gpt");
+    if(!saved){
+      toast("Pegue primero el enlace exacto del GPT institucional. Debe iniciar con https://chatgpt.com/g/ o https://chat.openai.com/g/");
       return;
     }
 
-    window.open(url, "_blank", "noopener");
+    window.open(saved, "_blank", "noopener");
+  }
+
+function openGPT(){
+    saveAndOpenGPT();
   }
 
 function openBiblioteca(){
