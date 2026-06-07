@@ -191,6 +191,26 @@
       .module-tabs { grid-template-columns:1fr; }
       h1 { font-size:24px; }
     }
+  
+    /* Cierre simplificado: dashboard estable sin carpeta de cierre */
+    #module-dashboard,
+    #module-dashboard * {
+      box-sizing: border-box;
+    }
+    #module-dashboard .dashboard-only {
+      display:block !important;
+      width:100% !important;
+      max-width:100% !important;
+    }
+    #module-dashboard .table-wrap {
+      width:100% !important;
+      max-width:100% !important;
+      overflow-x:auto !important;
+    }
+    #module-dashboard table {
+      width:100% !important;
+    }
+
   </style>
 </head>
 <body>
@@ -226,7 +246,7 @@
         <div class="module-tabs">
           <button class="tab active" data-module="datos" onclick="showModule(this,'datos')">1. Llenar datos</button>
           <button class="tab" data-module="prompt" onclick="showModule(this,'prompt')">2. Actualizar y prompt</button>
-          <button class="tab" data-module="gpt" onclick="showModule(this,'gpt')">3. GPT y cierre</button>
+          <button class="tab" data-module="gpt" onclick="showModule(this,'gpt')">3. GPT y descarga</button>
           <button class="tab" data-module="bibliografia" onclick="showModule(this,'bibliografia')">4. Bibliografía</button>
           <button class="tab" data-module="dashboard" onclick="showModule(this,'dashboard')">5. Dashboard</button>
         </div>
@@ -294,30 +314,42 @@
         <div class="module" id="module-gpt">
           <div class="module-layout">
             <div>
-              <h2>GPT institucional y cierre de ciclo</h2>
-              <p class="lead">Ingrese al asistente técnico ENOS Guayas 2.0, pegue el prompt generado y produzca el plan de acción.</p>
+              <h2>GPT institucional y cierre práctico</h2>
+              <p class="lead">Ingrese al asistente técnico ENOS Guayas 2.0, pegue el prompt generado y descargue el plan de acción desde el GPT.</p>
 
               <div class="actions">
                 <button class="btn-blue" onclick="openGPT()">Ingresar al GPT institucional</button>
               </div>
 
-              <div class="note">Primero genere y copie el prompt en el módulo anterior. Luego presione “Ingresar al GPT institucional” y pegue el prompt dentro del asistente técnico ENOS Guayas 2.0.</div>
+              <div class="note">
+                Cierre del ciclo en esta plataforma: el usuario genera el plan con el GPT y descarga el archivo final. La firma, envío por Quipux, archivo institucional o socialización se gestionan fuera de esta página, según el procedimiento interno de cada institución.
+              </div>
 
-              <h3 style="margin-top:16px;">Cierre del ciclo</h3>
-              <p class="lead">Después de descargar y firmar el plan, use la carpeta de cierre configurada en el Dashboard.</p>
-              <div class="actions">
-                <button class="btn-green" onclick="openCierre()">Abrir carpeta de cierre</button>
+              <h3 style="margin-top:16px;">Flujo de cierre práctico</h3>
+              <div class="mini-grid">
+                <div class="mini-card">
+                  <strong>1. Generar</strong>
+                  <p>Pegue el prompt en el GPT institucional y solicite el plan de acción.</p>
+                </div>
+                <div class="mini-card">
+                  <strong>2. Revisar</strong>
+                  <p>Verifique datos, conclusiones, recomendaciones y responsabilidades antes de usarlo oficialmente.</p>
+                </div>
+                <div class="mini-card">
+                  <strong>3. Descargar</strong>
+                  <p>Descargue el archivo final desde el GPT en Word, PDF o el formato que corresponda.</p>
+                </div>
               </div>
             </div>
 
             <div class="hint-box">
-              <h3>Cierre de ciclo</h3>
+              <h3>Criterio operativo</h3>
               <ol>
-                <li>Descargue el plan generado en Word.</li>
-                <li>Revise formato, datos, conclusiones, recomendaciones y anexos.</li>
-                <li>Gestione firma o validación institucional.</li>
-                <li>Suba el documento firmado a la carpeta de cierre.</li>
-                <li>Actualice seguimiento mensual en F07.</li>
+                <li>La página no registra cierres administrativos.</li>
+                <li>No se exige carpeta de cierre de ciclo.</li>
+                <li>No se utiliza F08.</li>
+                <li>El cierre funcional es la descarga del plan desde el GPT.</li>
+                <li>La trazabilidad formal queda en los procedimientos institucionales externos.</li>
               </ol>
             </div>
           </div>
@@ -328,28 +360,24 @@
             <div>
               <h2>Bibliografía e insumos de apoyo</h2>
               <p class="lead">Organiza cartografía, fuentes institucionales, capas y respaldos que acompañan el plan.</p>
-
               <div class="mini-grid">
                 <div class="mini-card"><strong>Cartografía</strong><p>F03 alimenta mapas, capas, fuentes, formatos y limitaciones.</p></div>
                 <div class="mini-card"><strong>Insumos técnicos</strong><p>F01-F06 consolidan amenazas, infraestructura, acciones y capacidades.</p></div>
                 <div class="mini-card"><strong>Seguimiento</strong><p>F07 documenta avance mensual, evidencias y escalamiento.</p></div>
               </div>
-
               <div class="actions">
                 <button class="btn-outline" onclick="openBiblioteca()">Abrir biblioteca técnica</button>
-                <button class="btn-green" onclick="openCierre()">Abrir cierre de ciclo</button>
               </div>
             </div>
 
             <div class="hint-box">
-              <h3>Enlaces rápidos</h3>
+              <h3>Enlace rápido</h3>
               <label>Biblioteca técnica / insumos</label>
               <input id="cfgBiblioInline" placeholder="https://drive.google.com/drive/folders/..." />
-              <label>Carpeta cierre de ciclo</label>
-              <input id="cfgCierreInline" placeholder="https://drive.google.com/drive/folders/..." />
               <div class="actions">
-                <button class="btn-green" onclick="saveInlineFolders()">Guardar enlaces</button>
+                <button class="btn-green" onclick="saveInlineFolders()">Guardar biblioteca</button>
               </div>
+              <div class="note">La biblioteca es opcional. El cierre práctico se realiza mediante descarga directa del plan desde el GPT.</div>
             </div>
           </div>
         </div>
@@ -357,21 +385,35 @@
         <div class="module" id="module-dashboard">
           <div class="dashboard-only">
             <h2>Dashboard de control operativo</h2>
-            <p class="lead">Tablero de seguimiento: casos, registros, avance del paquete GPT y acceso al cierre de ciclo.</p>
+            <p class="lead">Tablero de seguimiento: casos, registros y disponibilidad del paquete GPT para elaboración del plan.</p>
 
             <div class="actions">
               <button class="btn-blue" onclick="pingWebApp()">Probar conexión</button>
               <button class="btn-red" onclick="syncAll()">Sincronizar base F01-F07</button>
               <button class="btn-soft" onclick="listCases()">Actualizar dashboard</button>
-              <button class="btn-green" onclick="openCierre()">Abrir cierre de ciclo</button>
-              <button class="btn-outline" onclick="toggleConfigPanel()">Configurar enlaces</button>
             </div>
 
             <div class="dashboard-grid">
-              <div class="kpi"><span>Casos</span><strong id="kpiCasos">0</strong><small>Total de códigos de caso identificados.</small></div>
-              <div class="kpi"><span>Disponibles</span><strong id="kpiDisponibles">0</strong><small>Casos visibles o disponibles para GPT.</small></div>
-              <div class="kpi"><span>Registros</span><strong id="kpiRegistros">0</strong><small>Suma de registros asociados reportados.</small></div>
-              <div class="kpi"><span>Pendientes</span><strong id="kpiPendientes">0</strong><small>Casos sin estado disponible o con revisión pendiente.</small></div>
+              <div class="kpi">
+                <span>Casos</span>
+                <strong id="kpiCasos">0</strong>
+                <small>Total de códigos de caso identificados.</small>
+              </div>
+              <div class="kpi">
+                <span>Disponibles</span>
+                <strong id="kpiDisponibles">0</strong>
+                <small>Casos visibles o disponibles para GPT.</small>
+              </div>
+              <div class="kpi">
+                <span>Registros</span>
+                <strong id="kpiRegistros">0</strong>
+                <small>Suma de registros asociados reportados.</small>
+              </div>
+              <div class="kpi">
+                <span>Pendientes</span>
+                <strong id="kpiPendientes">0</strong>
+                <small>Casos sin estado disponible o con revisión pendiente.</small>
+              </div>
             </div>
 
             <div class="table-wrap" id="casesTableWrap" style="display:none;">
@@ -392,27 +434,8 @@
               </table>
             </div>
 
-            <div class="config-panel hidden" id="configPanel">
-              <h3>Configuración operativa del ecosistema</h3>
-              <p class="lead">Los formularios F01-F07 ya están precargados. Configure aquí la biblioteca técnica y la carpeta de cierre de ciclo.</p>
-
-              <div class="config-grid">
-                <div>
-                  <label>Biblioteca técnica / insumos</label>
-                  <input id="cfgBiblioteca" placeholder="https://drive.google.com/drive/folders/..." />
-                </div>
-                <div>
-                  <label>Carpeta cierre de ciclo</label>
-                  <input id="cfgCierre" placeholder="https://drive.google.com/drive/folders/..." />
-                </div>
-              </div>
-
-              <div class="actions">
-                <button class="btn-green" onclick="saveConfig()">Guardar configuración</button>
-                <button class="btn-outline" onclick="openCierre()">Probar cierre</button>
-              </div>
-
-              <div class="note">Los asset_uid se configuran en Apps Script; las URL públicas están cargadas en este HTML. El botón GPT apunta directamente al asistente técnico ENOS Guayas 2.0.</div>
+            <div class="note" style="margin-top:16px;">
+              Cierre práctico: una vez generado el plan, el usuario debe ingresar al GPT institucional y descargar el archivo final. Esta página no administra firma, Quipux ni archivo documental.
             </div>
           </div>
         </div>
@@ -603,9 +626,7 @@
   }
 
   function openCierre(){
-    const url = localStorage.getItem("CZ5_CIERRE_URL") || "";
-    if(!url){ toast("Configure primero la carpeta de cierre de ciclo en Dashboard o Bibliografía."); return; }
-    window.open(url, "_blank", "noopener");
+    toast("Cierre práctico: descargue el archivo final directamente desde el GPT institucional.");
   }
 
   function toggleConfigPanel(){
