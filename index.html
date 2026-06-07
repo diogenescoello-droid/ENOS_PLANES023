@@ -283,14 +283,12 @@
                 <div class="mini-card"><strong>3. Firmar y subir</strong><p>Firme el plan y súbalo a la carpeta de cierre de ciclo.</p></div>
               </div>
 
-              <label>Enlace del GPT institucional</label>
-              <input id="cfgGPTInline" placeholder="Pegue aquí el enlace exacto del GPT institucional: https://chatgpt.com/g/..." />
               <div class="actions">
-                <button class="btn-blue" onclick="saveAndOpenGPT()">Guardar y abrir GPT</button>
+                <button class="btn-blue" onclick="openGPT()">Ingresar al GPT institucional</button>
               </div>
 
               <div class="note">
-                Primero genere y copie el prompt en el módulo anterior. Luego pegue aquí el enlace del GPT institucional una sola vez y presione “Guardar y abrir GPT”. En adelante el navegador recordará el enlace.
+                Primero genere y copie el prompt en el módulo anterior. Luego presione “Ingresar al GPT institucional” y pegue el prompt dentro del asistente técnico ENOS Guayas 2.0.
               </div>
 
               <h3 style="margin-top:16px;">Cierre del ciclo</h3>
@@ -381,14 +379,13 @@
                 <div class="config-grid">
                   <div><label>Biblioteca técnica / insumos</label><input id="cfgBiblioteca" placeholder="https://drive.google.com/drive/folders/..." /></div>
                   <div><label>Carpeta cierre de ciclo</label><input id="cfgCierre" placeholder="https://drive.google.com/drive/folders/..." /></div>
-                  <div><label>Enlace del GPT institucional</label><input id="cfgGPT" placeholder="https://chatgpt.com/g/..." /></div>
                 </div>
                 <div class="actions">
                   <button class="btn-green" onclick="saveConfig()">Guardar configuración</button>
                   <button class="btn-outline" onclick="openCierre()">Probar cierre</button>
                 </div>
               </div>
-              <div class="note">Los asset_uid se configuran en Apps Script; las URL públicas están cargadas en este HTML.</div>
+              <div class="note">Los asset_uid se configuran en Apps Script; las URL públicas están cargadas en este HTML. El botón GPT ya apunta directamente al asistente técnico ENOS Guayas 2.0.</div>
             </div>
           </div>
         </div>
@@ -404,6 +401,7 @@
 <script>
   const WEBAPP_URL = "https://script.google.com/a/macros/gestionderiesgos.gob.ec/s/AKfycbxOLAUWizV9w3jgfo8F4K4_u3pZzMLC-XQi4rT3-twpOz_XhnBvwS-BkLnNdA2R8eVM/exec";
   const WEBAPP_KEY = "CZ5_ENOS_2026";
+  const GPT_INSTITUCIONAL_URL = "https://chatgpt.com/g/g-6a1db50eb650819185c06255c6850509-asistente-tecnico-enos-guayas-2-0";
   const FORM_DEFS = {
   "F01": {
     "uid": "aDp2JK7VCK26q2QAKiVChQ",
@@ -537,17 +535,17 @@
   function loadSavedLinks(){
     const biblio = localStorage.getItem("CZ5_BIBLIOTECA_URL") || "";
     const cierre = localStorage.getItem("CZ5_CIERRE_URL") || "";
-    const gpt = localStorage.getItem("CZ5_GPT_URL") || "";
+    
 
     const cfgBiblioteca = document.getElementById("cfgBiblioteca");
     const cfgCierre = document.getElementById("cfgCierre");
-    const cfgGPT = document.getElementById("cfgGPT");
-    const cfgGPTInline = document.getElementById("cfgGPTInline");
+    
+    
 
     if(cfgBiblioteca) cfgBiblioteca.value = biblio;
     if(cfgCierre) cfgCierre.value = cierre;
-    if(cfgGPT) cfgGPT.value = gpt;
-    if(cfgGPTInline) cfgGPTInline.value = gpt;
+    
+    
   }
 
   renderActorForms();
@@ -600,7 +598,7 @@
 
   
   function getGPTUrl(){
-    return localStorage.getItem("CZ5_GPT_URL") || "";
+    return GPT_INSTITUCIONAL_URL;
   }
 
   function normalizeGPTUrl(url){
@@ -610,37 +608,16 @@
   }
 
   function saveGPTInline(){
-    const input = document.getElementById("cfgGPTInline");
-    const value = input ? normalizeGPTUrl(input.value) : "";
-    if(!value){
-      toast("Pegue primero el enlace exacto del GPT institucional.");
-      return;
-    }
-    localStorage.setItem("CZ5_GPT_URL", value);
-    toast("Enlace del GPT institucional guardado.");
+    openGPT();
   }
 
   
   function saveAndOpenGPT(){
-    const input = document.getElementById("cfgGPTInline");
-    const typed = input ? normalizeGPTUrl(input.value) : "";
-
-    if(typed){
-      localStorage.setItem("CZ5_GPT_URL", typed);
-    }
-
-    const saved = getGPTUrl();
-
-    if(!saved){
-      toast("Pegue primero el enlace exacto del GPT institucional. Debe iniciar con https://chatgpt.com/g/ o https://chat.openai.com/g/");
-      return;
-    }
-
-    window.open(saved, "_blank", "noopener");
+    openGPT();
   }
 
 function openGPT(){
-    saveAndOpenGPT();
+    window.open(GPT_INSTITUCIONAL_URL, "_blank", "noopener");
   }
 
 function openBiblioteca(){
@@ -658,8 +635,6 @@ function openBiblioteca(){
   function saveConfig(){
     localStorage.setItem("CZ5_BIBLIOTECA_URL", document.getElementById("cfgBiblioteca").value.trim());
     localStorage.setItem("CZ5_CIERRE_URL", document.getElementById("cfgCierre").value.trim());
-    const gptInput = document.getElementById("cfgGPT");
-    if(gptInput) localStorage.setItem("CZ5_GPT_URL", gptInput.value.trim());
     toast("Configuración guardada en este navegador.");
   }
 
@@ -668,8 +643,6 @@ function openBiblioteca(){
     const cierre = document.getElementById("cfgCierreInline").value.trim();
     if(biblio) localStorage.setItem("CZ5_BIBLIOTECA_URL", biblio);
     if(cierre) localStorage.setItem("CZ5_CIERRE_URL", cierre);
-    const gptInline = document.getElementById("cfgGPTInline");
-    if(gptInline && gptInline.value.trim()) localStorage.setItem("CZ5_GPT_URL", gptInline.value.trim());
     toast("Enlaces guardados.");
   }
 
@@ -876,17 +849,17 @@ function openBiblioteca(){
   function loadSavedLinks(){
     const biblio = localStorage.getItem("CZ5_BIBLIOTECA_URL") || "";
     const cierre = localStorage.getItem("CZ5_CIERRE_URL") || "";
-    const gpt = localStorage.getItem("CZ5_GPT_URL") || "";
+    
 
     const cfgBiblioteca = document.getElementById("cfgBiblioteca");
     const cfgCierre = document.getElementById("cfgCierre");
-    const cfgGPT = document.getElementById("cfgGPT");
-    const cfgGPTInline = document.getElementById("cfgGPTInline");
+    
+    
 
     if(cfgBiblioteca) cfgBiblioteca.value = biblio;
     if(cfgCierre) cfgCierre.value = cierre;
-    if(cfgGPT) cfgGPT.value = gpt;
-    if(cfgGPTInline) cfgGPTInline.value = gpt;
+    
+    
   }
 
   renderActorForms();
