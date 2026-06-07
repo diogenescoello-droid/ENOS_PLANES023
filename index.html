@@ -283,8 +283,11 @@
                 <div class="mini-card"><strong>3. Firmar y subir</strong><p>Firme el plan y súbalo a la carpeta de cierre de ciclo.</p></div>
               </div>
 
+              <label>Enlace del GPT institucional</label>
+              <input id="cfgGPTInline" placeholder="Pegue aquí el enlace del GPT si aún no está configurado" />
               <div class="actions">
-                <a class="btn btn-blue" href="https://chat.openai.com/" target="_blank" rel="noopener">Ingresar al GPT</a>
+                <button class="btn-green" onclick="saveGPTInline()">Guardar enlace GPT</button>
+                <button class="btn-blue" onclick="openGPT()">Ingresar al GPT institucional</button>
                 <button class="btn-soft" onclick="showModuleFromCode('prompt')">Volver al prompt</button>
                 <button class="btn-green" onclick="openCierre()">Abrir carpeta cierre de ciclo</button>
               </div>
@@ -371,6 +374,7 @@
                 <div class="config-grid">
                   <div><label>Biblioteca técnica / insumos</label><input id="cfgBiblioteca" placeholder="https://drive.google.com/drive/folders/..." /></div>
                   <div><label>Carpeta cierre de ciclo</label><input id="cfgCierre" placeholder="https://drive.google.com/drive/folders/..." /></div>
+                  <div><label>Enlace del GPT institucional</label><input id="cfgGPT" placeholder="https://chatgpt.com/g/..." /></div>
                 </div>
                 <div class="actions">
                   <button class="btn-green" onclick="saveConfig()">Guardar configuración</button>
@@ -522,7 +526,25 @@
     document.getElementById("workspaceTitle").textContent = meta.title;
     document.getElementById("workspaceDesc").textContent = meta.desc;
     document.getElementById("workspaceBadge").textContent = meta.badge;
-    renderActorForms();
+    
+  function loadSavedLinks(){
+    const biblio = localStorage.getItem("CZ5_BIBLIOTECA_URL") || "";
+    const cierre = localStorage.getItem("CZ5_CIERRE_URL") || "";
+    const gpt = localStorage.getItem("CZ5_GPT_URL") || "";
+
+    const cfgBiblioteca = document.getElementById("cfgBiblioteca");
+    const cfgCierre = document.getElementById("cfgCierre");
+    const cfgGPT = document.getElementById("cfgGPT");
+    const cfgGPTInline = document.getElementById("cfgGPTInline");
+
+    if(cfgBiblioteca) cfgBiblioteca.value = biblio;
+    if(cfgCierre) cfgCierre.value = cierre;
+    if(cfgGPT) cfgGPT.value = gpt;
+    if(cfgGPTInline) cfgGPTInline.value = gpt;
+  }
+
+  renderActorForms();
+  loadSavedLinks();
     showModuleFromCode("datos");
     document.getElementById("workspace").scrollIntoView({ behavior:"smooth", block:"start" });
   }
@@ -569,7 +591,49 @@
 
   function openForm(url){ window.open(url, "_blank"); }
 
-  function openBiblioteca(){
+  
+  function getGPTUrl(){
+    return localStorage.getItem("CZ5_GPT_URL") || "";
+  }
+
+  function normalizeGPTUrl(url){
+    const value = String(url || "").trim();
+    if(!value) return "";
+    if(value.startsWith("https://chatgpt.com/g/") || value.startsWith("https://chat.openai.com/g/")){
+      return value;
+    }
+    return value;
+  }
+
+  function saveGPTInline(){
+    const input = document.getElementById("cfgGPTInline");
+    const value = input ? normalizeGPTUrl(input.value) : "";
+    if(!value){
+      toast("Pegue primero el enlace exacto del GPT institucional.");
+      return;
+    }
+    localStorage.setItem("CZ5_GPT_URL", value);
+    toast("Enlace del GPT institucional guardado.");
+  }
+
+  function openGPT(){
+    const inline = document.getElementById("cfgGPTInline");
+    if(inline && inline.value.trim()){
+      localStorage.setItem("CZ5_GPT_URL", normalizeGPTUrl(inline.value));
+    }
+
+    const url = getGPTUrl();
+
+    if(!url){
+      toast("Falta configurar el enlace exacto del GPT institucional. Pegue el enlace en este módulo o en Dashboard.");
+      showModuleFromCode("gpt");
+      return;
+    }
+
+    window.open(url, "_blank", "noopener");
+  }
+
+function openBiblioteca(){
     const url = localStorage.getItem("CZ5_BIBLIOTECA_URL") || "";
     if(!url){ toast("Configure primero la biblioteca técnica en Dashboard."); return; }
     window.open(url, "_blank");
@@ -584,6 +648,8 @@
   function saveConfig(){
     localStorage.setItem("CZ5_BIBLIOTECA_URL", document.getElementById("cfgBiblioteca").value.trim());
     localStorage.setItem("CZ5_CIERRE_URL", document.getElementById("cfgCierre").value.trim());
+    const gptInput = document.getElementById("cfgGPT");
+    if(gptInput) localStorage.setItem("CZ5_GPT_URL", gptInput.value.trim());
     toast("Configuración guardada en este navegador.");
   }
 
@@ -592,6 +658,8 @@
     const cierre = document.getElementById("cfgCierreInline").value.trim();
     if(biblio) localStorage.setItem("CZ5_BIBLIOTECA_URL", biblio);
     if(cierre) localStorage.setItem("CZ5_CIERRE_URL", cierre);
+    const gptInline = document.getElementById("cfgGPTInline");
+    if(gptInline && gptInline.value.trim()) localStorage.setItem("CZ5_GPT_URL", gptInline.value.trim());
     toast("Enlaces guardados.");
   }
 
@@ -794,7 +862,25 @@
   function escapeHtml(value){ return String(value).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
   function escapeAttr(value){ return escapeHtml(value).replaceAll("`","&#096;"); }
 
+  
+  function loadSavedLinks(){
+    const biblio = localStorage.getItem("CZ5_BIBLIOTECA_URL") || "";
+    const cierre = localStorage.getItem("CZ5_CIERRE_URL") || "";
+    const gpt = localStorage.getItem("CZ5_GPT_URL") || "";
+
+    const cfgBiblioteca = document.getElementById("cfgBiblioteca");
+    const cfgCierre = document.getElementById("cfgCierre");
+    const cfgGPT = document.getElementById("cfgGPT");
+    const cfgGPTInline = document.getElementById("cfgGPTInline");
+
+    if(cfgBiblioteca) cfgBiblioteca.value = biblio;
+    if(cfgCierre) cfgCierre.value = cierre;
+    if(cfgGPT) cfgGPT.value = gpt;
+    if(cfgGPTInline) cfgGPTInline.value = gpt;
+  }
+
   renderActorForms();
+  loadSavedLinks();
 </script>
 </body>
 </html>
