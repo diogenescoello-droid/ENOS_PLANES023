@@ -359,25 +359,24 @@
           <div class="module-layout">
             <div>
               <h2>Bibliografía e insumos de apoyo</h2>
-              <p class="lead">Organiza cartografía, fuentes institucionales, capas y respaldos que acompañan el plan.</p>
+              <p class="lead">Acceso directo a normativa, lineamientos, cartografía, fuentes institucionales y respaldos técnicos que acompañan la construcción del plan.</p>
               <div class="mini-grid">
                 <div class="mini-card"><strong>Cartografía</strong><p>F03 alimenta mapas, capas, fuentes, formatos y limitaciones.</p></div>
                 <div class="mini-card"><strong>Insumos técnicos</strong><p>F01-F06 consolidan amenazas, infraestructura, acciones y capacidades.</p></div>
                 <div class="mini-card"><strong>Seguimiento</strong><p>F07 documenta avance mensual, evidencias y escalamiento.</p></div>
               </div>
               <div class="actions">
-                <button class="btn-outline" onclick="openBiblioteca()">Abrir biblioteca técnica</button>
+                <button class="btn-outline" onclick="openBiblioteca()">Abrir normativa y lineamientos</button>
               </div>
             </div>
 
             <div class="hint-box">
-              <h3>Enlace rápido</h3>
-              <label>Biblioteca técnica / insumos</label>
-              <input id="cfgBiblioInline" placeholder="https://drive.google.com/drive/folders/..." />
+              <h3>Repositorio técnico</h3>
+              <p class="lead">Este botón abre directamente la carpeta oficial de Drive con normativa, lineamientos e insumos de apoyo para la elaboración del plan.</p>
               <div class="actions">
-                <button class="btn-green" onclick="saveInlineFolders()">Guardar biblioteca</button>
+                <button class="btn-green" onclick="openBiblioteca()">Abrir carpeta Drive</button>
               </div>
-              <div class="note">La biblioteca es opcional. El cierre práctico se realiza mediante descarga directa del plan desde el GPT.</div>
+              <div class="note">El cierre práctico del ciclo se realiza mediante descarga directa del plan desde el GPT. La biblioteca queda como repositorio de consulta técnica.</div>
             </div>
           </div>
         </div>
@@ -450,6 +449,7 @@
   const WEBAPP_URL = "https://script.google.com/a/macros/gestionderiesgos.gob.ec/s/AKfycbxOLAUWizV9w3jgfo8F4K4_u3pZzMLC-XQi4rT3-twpOz_XhnBvwS-BkLnNdA2R8eVM/exec";
   const WEBAPP_KEY = "CZ5_ENOS_2026";
   const GPT_INSTITUCIONAL_URL = "https://chatgpt.com/g/g-6a1db50eb650819185c06255c6850509-asistente-tecnico-enos-guayas-2-0";
+  const BIBLIOTECA_TECNICA_URL = "https://drive.google.com/drive/folders/1ExV7zR5bBLWg6IAyPlYutJMen7YBZUnB?usp=sharing";
 
   const ACTORS = {
     gad: {
@@ -620,9 +620,7 @@
   }
 
   function openBiblioteca(){
-    const url = localStorage.getItem("CZ5_BIBLIOTECA_URL") || "";
-    if(!url){ toast("Configure primero la biblioteca técnica en Dashboard o Bibliografía."); return; }
-    window.open(url, "_blank", "noopener");
+    window.open(BIBLIOTECA_TECNICA_URL, "_blank", "noopener");
   }
 
   function openCierre(){
@@ -637,20 +635,23 @@
   }
 
   function saveConfig(){
-    const biblio = document.getElementById("cfgBiblioteca").value.trim();
-    const cierre = document.getElementById("cfgCierre").value.trim();
-    if(biblio) localStorage.setItem("CZ5_BIBLIOTECA_URL", biblio);
-    if(cierre) localStorage.setItem("CZ5_CIERRE_URL", cierre);
-    toast("Configuración guardada en este navegador.");
+    const biblio = document.getElementById("cfgBiblioteca")?.value.trim() || document.getElementById("cfgBiblioInline")?.value.trim() || "";
+    if(biblio){
+      localStorage.setItem("CZ5_BIBLIOTECA_URL", biblio);
+      toast("Biblioteca técnica guardada.");
+    } else {
+      toast("Pegue primero el enlace de la biblioteca técnica.");
+    }
   }
 
   function saveInlineFolders(){
-    const biblio = document.getElementById("cfgBiblioInline").value.trim();
-    const cierre = document.getElementById("cfgCierreInline").value.trim();
-    if(biblio) localStorage.setItem("CZ5_BIBLIOTECA_URL", biblio);
-    if(cierre) localStorage.setItem("CZ5_CIERRE_URL", cierre);
-    loadSavedLinks();
-    toast("Enlaces guardados.");
+    const biblio = document.getElementById("cfgBiblioInline")?.value.trim() || "";
+    if(biblio){
+      localStorage.setItem("CZ5_BIBLIOTECA_URL", biblio);
+      toast("Biblioteca técnica guardada.");
+      return;
+    }
+    toast("Pegue primero el enlace de la biblioteca técnica.");
   }
 
   function endpoint(action, extra={}){
@@ -922,17 +923,10 @@
 
   function loadSavedLinks(){
     const biblio = localStorage.getItem("CZ5_BIBLIOTECA_URL") || "";
-    const cierre = localStorage.getItem("CZ5_CIERRE_URL") || "";
-
     const cfgBiblioteca = document.getElementById("cfgBiblioteca");
-    const cfgCierre = document.getElementById("cfgCierre");
     const cfgBiblioInline = document.getElementById("cfgBiblioInline");
-    const cfgCierreInline = document.getElementById("cfgCierreInline");
-
     if(cfgBiblioteca) cfgBiblioteca.value = biblio;
-    if(cfgCierre) cfgCierre.value = cierre;
     if(cfgBiblioInline) cfgBiblioInline.value = biblio;
-    if(cfgCierreInline) cfgCierreInline.value = cierre;
   }
 
   renderActors();
