@@ -220,8 +220,8 @@
       <div class="brand"><div class="mark">CZ5</div><div>Secretaría Nacional de Gestión de Riesgos · Coordinación Zonal 5</div></div>
       <div class="clock" id="clock">--:--</div>
     </div>
-    <h1>BASE 01 · Ecosistema digital ENOS Guayas 2.0</h1>
-    <p class="subtitle">Ambiente operativo para levantamiento de información F01-F07, consolidación Kobo, generación de paquete GPT, elaboración de plan de acción y cierre de ciclo.</p>
+    <h1>BASE 01 · Ecosistema digital ENOS Zona 5</h1>
+    <p class="subtitle">Ambiente operativo para levantamiento de información F01-F07, consolidación Kobo, generación de paquete GPT, elaboración de plan de acción y cierre de ciclo, con alcance para Bolívar, Guayas, Los Ríos, Santa Elena y Galápagos.</p>
   </div>
 </header>
 
@@ -275,7 +275,7 @@
           <div class="module-layout">
             <div>
               <h2>Actualizar base y generar prompt GPT</h2>
-              <p class="lead">Sincronice Kobo, seleccione el caso y genere el prompt técnico para el asistente ENOS Guayas 2.0.</p>
+              <p class="lead">Sincronice Kobo, seleccione el caso y genere el prompt técnico para el asistente ENOS Zona 5.</p>
 
               <label>Código de caso</label>
               <input id="codigoCaso" placeholder="Ejemplo: ENOS-GYE-001" />
@@ -315,7 +315,7 @@
           <div class="module-layout">
             <div>
               <h2>GPT institucional y cierre práctico</h2>
-              <p class="lead">Ingrese al asistente técnico ENOS Guayas 2.0, pegue el prompt generado y descargue el plan de acción desde el GPT.</p>
+              <p class="lead">Ingrese al asistente técnico ENOS Zona 5, pegue el prompt generado y descargue el plan de acción desde el GPT.</p>
 
               <div class="actions">
                 <button class="btn-blue" onclick="openGPT()">Ingresar al GPT institucional</button>
@@ -586,7 +586,6 @@
         <p>${f.desc}</p>
         <div class="actions">
           <a class="btn btn-blue" href="${f.url}" target="_blank" rel="noopener">Abrir Kobo</a>
-          <button class="btn-outline" onclick="copyText('${f.uid}')">Copiar asset_uid</button>
         </div>
       `;
       grid.appendChild(card);
