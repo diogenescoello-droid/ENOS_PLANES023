@@ -221,7 +221,7 @@
       <div class="clock" id="clock">--:--</div>
     </div>
     <h1>BASE 01 · Ecosistema digital ENOS Zona 5</h1>
-    <p class="subtitle">Ambiente operativo para levantamiento de información F01-F07, consolidación Kobo, generación de paquete GPT, elaboración de plan de acción y cierre de ciclo, con alcance para Bolívar, Guayas, Los Ríos, Santa Elena y Galápagos.</p>
+    <p class="subtitle">Ambiente operativo para levantamiento de información F01-F07 en Bolívar, Guayas, Los Ríos, Santa Elena y Galápagos, consolidación Kobo, generación de paquete GPT, elaboración de plan de acción y cierre de ciclo.</p>
   </div>
 </header>
 
@@ -455,30 +455,30 @@
     gad: {
       title:"GAD municipal / parroquial",
       icon:"GAD",
-      desc:"Levanta puntos críticos, infraestructura expuesta, acciones preventivas, alojamientos y seguimiento territorial.",
+      desc:"Levanta información territorial, puntos críticos, infraestructura expuesta, aporte cartográfico, acciones preventivas, alojamientos, capacidades y seguimiento del plan.",
       badge:"Actor territorial",
-      note:"Uso recomendado para equipos municipales, cantonales o parroquiales."
+      note:"Uso recomendado para unidades de gestión de riesgos, planificación, catastro, obras públicas y equipos parroquiales o municipales."
     },
     mtt: {
       title:"Mesa Técnica de Trabajo",
       icon:"MTT",
-      desc:"Aporta datos sectoriales, infraestructura, capacidades, recursos y medidas de preparación.",
-      badge:"Actor sectorial",
-      note:"Uso recomendado para instituciones con competencia sectorial."
+      desc:"Aporta información sectorial, infraestructura, cartografía institucional, acciones, capacidades, recursos y seguimiento según su competencia.",
+      badge:"Implementación técnica sectorial",
+      note:"Uso recomendado para instituciones rectoras o sectoriales que integran las mesas técnicas."
     },
     gt: {
-      title:"Grupo Técnico",
+      title:"Grupos de Trabajo - Soporte Operativo",
       icon:"GT",
-      desc:"Aporta cartografía, análisis técnico, acciones de mitigación y validación de insumos.",
-      badge:"Soporte técnico",
-      note:"Uso recomendado para equipos técnicos institucionales."
+      desc:"Brindan soporte logístico, seguridad y control, movilización de recursos, telecomunicaciones, abastecimiento y apoyo de primera respuesta.",
+      badge:"Soporte operativo",
+      note:"Uso recomendado para Fuerzas Armadas, Policía Nacional, Bomberos, ECU 911, ANT, Cruz Roja, MSP, grupos voluntarios reconocidos y demás instituciones operativas."
     },
     cz: {
       title:"Coordinación Zonal 5 SNGR",
       icon:"CZ5",
-      desc:"Consolida, verifica, genera paquetes GPT, articula cierre de ciclo y seguimiento.",
-      badge:"Coordinación y trazabilidad",
-      note:"Uso para control operativo, calidad técnica y seguimiento."
+      desc:"Consolida, verifica, controla calidad, genera paquetes GPT, monitorea el total de planes y mantiene trazabilidad zonal.",
+      badge:"Administración y control zonal",
+      note:"Uso recomendado para seguimiento integral, suficiencia técnica, consolidación, generación de planes y control del ciclo."
     }
   };
 
@@ -488,21 +488,21 @@
       url:"https://ee.kobotoolbox.org/x/XuixUrMH",
       title:"F01 - Punto crítico territorial",
       desc:"Identifica caso, puntos críticos, amenazas, brechas, elementos expuestos y acciones iniciales.",
-      actors:["gad","gt","cz"]
+      actors:["gad","cz"]
     },
     F02: {
       uid:"abcnTWDp9vCeQCeCjnubAe",
       url:"https://ee.kobotoolbox.org/x/HxbqyITN",
       title:"F02 - Infraestructura esencial expuesta",
       desc:"Registra infraestructura expuesta, criticidad, vulnerabilidad, brechas y acciones requeridas.",
-      actors:["gad","mtt","gt","cz"]
+      actors:["gad","mtt","cz"]
     },
     F03: {
       uid:"a86WYnMJZA3XCNJ8tcjQb2",
       url:"https://ee.kobotoolbox.org/x/BMR6RaE1",
       title:"F03 - Aporte cartográfico institucional",
-      desc:"Registra capas, mapas, fuentes, formatos, cobertura y limitaciones cartográficas.",
-      actors:["gt","cz"]
+      desc:"Registra capas, mapas, fuentes, formatos, cobertura y limitaciones cartográficas aportadas por GAD, instituciones técnicas o CZ5.",
+      actors:["gad","mtt","cz"]
     },
     F04: {
       uid:"aZcJKkSCYBciexEAZP2PfA",
@@ -516,14 +516,14 @@
       url:"https://ee.kobotoolbox.org/x/lgXrZHzb",
       title:"F05 - Alojamientos, rutas y puntos seguros",
       desc:"Registra alojamientos temporales, rutas, puntos seguros, brechas y responsables.",
-      actors:["gad","mtt","cz"]
+      actors:["gad","mtt","gt","cz"]
     },
     F06: {
       uid:"aJoE9gh8JgNAfY9froZ4gQ",
       url:"https://ee.kobotoolbox.org/x/NL8gKLLD",
       title:"F06 - Capacidades y recursos",
       desc:"Registra recursos disponibles, capacidades institucionales, logística y brechas operativas.",
-      actors:["gad","mtt","cz"]
+      actors:["gad","mtt","gt","cz"]
     },
     F07: {
       uid:"aGBMqM63bGK9fLADxYfe4w",
@@ -576,6 +576,61 @@
   function renderActorForms(){
     const grid = document.getElementById("formsGrid");
     grid.innerHTML = "";
+
+    if(currentActor === "cz"){
+      grid.innerHTML = `
+        <div class="form-card">
+          <h4>Control zonal de planes</h4>
+          <p>Sincroniza la base F01-F07, actualiza casos y controla el avance del total de planes levantados en la Zona 5.</p>
+          <div class="actions">
+            <button class="btn-red" onclick="syncAll()">Sincronizar base F01-F07</button>
+            <button class="btn-soft" onclick="showModuleFromCode('dashboard')">Abrir dashboard</button>
+          </div>
+        </div>
+        <div class="form-card">
+          <h4>Generación de paquete GPT</h4>
+          <p>Selecciona un código de caso, genera el paquete técnico y prepara el prompt para elaboración o revisión del plan de acción.</p>
+          <div class="actions">
+            <button class="btn-blue" onclick="showModuleFromCode('prompt')">Generar prompt</button>
+            <button class="btn-green" onclick="openGPT()">Abrir GPT</button>
+          </div>
+        </div>
+        <div class="form-card">
+          <h4>Control de suficiencia técnica</h4>
+          <p>Revisa brechas de información, consistencia entre fichas, actores participantes y disponibilidad de evidencia para el plan.</p>
+          <div class="actions">
+            <button class="btn-soft" onclick="listCases()">Ver casos disponibles</button>
+          </div>
+        </div>
+        <div class="form-card">
+          <h4>Bibliografía e insumos</h4>
+          <p>Accede al repositorio técnico con normativa, lineamientos, cartografía, fuentes institucionales y respaldos para los planes.</p>
+          <div class="actions">
+            <button class="btn-green" onclick="openBiblioteca()">Abrir biblioteca técnica</button>
+          </div>
+        </div>
+        <div class="form-card" style="grid-column:1 / -1; min-height:auto;">
+          <h4>Acceso excepcional a fichas Kobo</h4>
+          <p>Uso subsidiario de la CZ5 solo para acompañamiento técnico, corrección, carga asistida o verificación. El levantamiento primario corresponde al actor territorial, sectorial u operativo competente.</p>
+        </div>
+      `;
+
+      Object.keys(FORM_DEFS).forEach(code => {
+        const f = FORM_DEFS[code];
+        const card = document.createElement("div");
+        card.className = "form-card";
+        card.innerHTML = `
+          <h4>${f.title}</h4>
+          <p>${f.desc}</p>
+          <div class="actions">
+            <a class="btn btn-outline" href="${f.url}" target="_blank" rel="noopener">Abrir Kobo</a>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      return;
+    }
+
     Object.keys(FORM_DEFS).forEach(code => {
       const f = FORM_DEFS[code];
       if(!f.actors.includes(currentActor)) return;
