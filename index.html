@@ -979,59 +979,176 @@ function setPromptStatus(message, ok){
   box.style.borderColor = ok ? '#bfe5ca' : '#f1d28b';
 }
 
-function construirPromptTecnico(codigoCaso){
-  const cfg = ACTOR_CONFIG[selectedActor] || ACTOR_CONFIG.GAD;
-  const formularios = (cfg.forms || []).join(', ');
-  return [
-    'INSTRUCCIÓN PARA GPT:',
-    'Actúa como asistente técnico ENOS Zona 5 de la Secretaría Nacional de Gestión de Riesgos.',
-    '',
-    'Construye una entrevista técnica progresiva y luego un plan de acción institucional para el caso indicado.',
-    '',
-    'DATOS DEL CASO:',
-    '- Código de caso: ' + codigoCaso,
-    '- Actor seleccionado en plataforma: ' + cfg.title.replace('Flujo operativo · ', ''),
-    '- Formularios aplicables para este actor: ' + formularios,
-    '',
-    'CRITERIO DE USO:',
-    '1. Usa únicamente información disponible del caso asociado al código indicado.',
-    '2. No inventes datos. Si falta información, declárala como brecha o pendiente de validación.',
-    '3. Diferencia amenaza, exposición, vulnerabilidad, infraestructura, capacidad, acción, responsable, plazo e indicador.',
-    '4. Verifica coherencia con los lineamientos ENOS 2026-2027 y estructura de plan de acción.',
-    '5. Si la información es suficiente, genera el plan de acción institucional.',
-    '6. Si es parcial, genera borrador con limitaciones explícitas y lista de insumos faltantes críticos.',
-    '',
-    'ESTRUCTURA ESPERADA:',
-    '- Antecedentes',
-    '- Objetivo general y específicos',
-    '- Alcance y limitaciones',
-    '- Metodología',
-    '- Insumos utilizados',
-    '- Caracterización territorial',
-    '- Análisis de amenazas, exposición, vulnerabilidad, infraestructura y capacidades',
-    '- Matriz de hallazgos',
-    '- Plan de acción',
-    '- Seguimiento mensual y cierre',
-    '- Conclusiones',
-    '- Recomendaciones',
-    '- Anexos'
-  ].join(String.fromCharCode(10));
+
+// VERSION_INDICE_MEMORIA_PROMPT_REAL_20260622_02
+const ENOS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzrkYS9YdRty2XD7DfIHi7b8_lUfu3-WLe-tLd4KE5RpfV_afiAjmEplxwrPpRS_iln/exec';
+const ENOS_WEBAPP_KEY = 'CZ5_ENOS_2026';
+
+function extraerCodigoCaso(valor){
+  let txt = String(valor || '').trim();
+  if(!txt) return '';
+
+  // Si por error se pegó un prompt completo, se extrae solo el código.
+  const patrones = [
+    /Código de caso:\s*([A-Za-z0-9_\-|\.]+)/i,
+    /Código solicitado:\s*([A-Za-z0-9_\-|\.]+)/i,
+    /codigo_caso["']?\s*[:=]\s*["']?([A-Za-z0-9_\-|\.]+)/i
+  ];
+
+  for(const patron of patrones){
+    const m = txt.match(patron);
+    if(m && m[1]) return m[1].trim();
+  }
+
+  // Si no es prompt, se limpia el valor como código.
+  txt = txt.split(/\s+/)[0].trim();
+  return txt;
 }
 
-function generarPromptGPT(){
+function obtenerActorPlataforma(){
+  const cfg = ACTOR_CONFIG[selectedActor] || ACTOR_CONFIG.GAD;
+  return cfg.title.replace('Flujo operativo · ', '');
+}
+
+function jsonpENOS(action, params){
+  return new Promise(function(resolve, reject){
+    if(!ENOS_WEBAPP_URL || ENOS_WEBAPP_URL.indexOf('script.google.com') === -1){
+      reject(new Error('No está configurada la URL del Web App de Apps Script.'));
+      return;
+    }
+
+    const callbackName = 'enosCallback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+    const url = new URL(ENOS_WEBAPP_URL);
+    url.searchParams.set('action', action);
+    url.searchParams.set('webapp_key', ENOS_WEBAPP_KEY);
+    url.searchParams.set('callback', callbackName);
+    url.searchParams.set('_t', Date.now());
+
+    Object.keys(params || {}).forEach(function(k){
+      url.searchParams.set(k, params[k]);
+    });
+
+    const script = document.createElement('script');
+    let finished = false;
+
+    const timeout = setTimeout(function(){
+      if(finished) return;
+      finished = true;
+      cleanup();
+      reject(new Error('Tiempo de espera agotado consultando Apps Script.'));
+    }, 45000);
+
+    function cleanup(){
+      clearTimeout(timeout);
+      try { delete window[callbackName]; } catch(e) { window[callbackName] = undefined; }
+      if(script && script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    window[callbackName] = function(response){
+      if(finished) return;
+      finished = true;
+      cleanup();
+      resolve(response);
+    };
+
+    script.onerror = function(){
+      if(finished) return;
+      finished = true;
+      cleanup();
+      reject(new Error('No se pudo conectar con Apps Script. Revise implementación y permisos del Web App.'));
+    };
+
+    script.src = url.toString();
+    document.body.appendChild(script);
+  });
+}
+
+function construirPromptDesdeRespuestaIndice(codigoCaso, response){
+  if(response && response.prompt) return response.prompt;
+
+  if(response && response.paquete){
+    return [
+      'INSTRUCCIÓN PARA GPT:',
+      'Actúa como asistente técnico ENOS Zona 5 de la Secretaría Nacional de Gestión de Riesgos.',
+      '',
+      'Usa únicamente la información contenida en el PAQUETE GPT CZ5 DEL CASO.',
+      '',
+      'DATOS DE CONTROL DE LA PLATAFORMA:',
+      '- Código solicitado: ' + codigoCaso,
+      '- Actor seleccionado: ' + obtenerActorPlataforma(),
+      '- Registros detectados: ' + (response.total_registros || response.total || ''),
+      '',
+      'PAQUETE GPT CZ5 DEL CASO:',
+      JSON.stringify(response.paquete, null, 2),
+      '',
+      'ESTRUCTURA ESPERADA:',
+      '- Antecedentes',
+      '- Objetivo general y específicos',
+      '- Alcance y limitaciones',
+      '- Metodología',
+      '- Insumos utilizados',
+      '- Caracterización territorial',
+      '- Análisis de amenazas, exposición, vulnerabilidad, infraestructura y capacidades',
+      '- Matriz de hallazgos',
+      '- Plan de acción',
+      '- Seguimiento mensual y cierre',
+      '- Conclusiones',
+      '- Recomendaciones',
+      '- Anexos'
+    ].join(String.fromCharCode(10));
+  }
+
+  throw new Error('Apps Script respondió, pero no devolvió prompt ni paquete GPT.');
+}
+
+async function generarPromptGPT(){
   const input = document.getElementById('codigoCasoInput');
   const output = document.getElementById('promptOutput');
-  const codigo = (input && input.value ? input.value : '').trim();
+  const codigo = extraerCodigoCaso(input && input.value ? input.value : '');
+
   if(!codigo){
     alert('Ingrese primero el código de caso.');
     if(input) input.focus();
     return;
   }
-  const prompt = construirPromptTecnico(codigo);
-  if(output) output.value = prompt;
-  try { localStorage.setItem('ENOS_ULTIMO_PROMPT_GPT', prompt); } catch(e) {}
-  copiarTextoSeguro(prompt);
-  setPromptStatus('Prompt generado para: ' + codigo, true);
+
+  if(input) input.value = codigo;
+  if(output) output.value = '';
+
+  setPromptStatus('Consultando INDICE_MEMORIA_ENOS para el caso: ' + codigo + ' ...', true);
+
+  try{
+    const response = await jsonpENOS('generatePromptFromIndex', {
+      codigo_caso: codigo,
+      actor: obtenerActorPlataforma()
+    });
+
+    if(!response || response.ok === false){
+      const msg = (response && (response.message || response.error)) || 'No se encontró el caso o Apps Script no devolvió respuesta válida.';
+      setPromptStatus(msg, false);
+      if(output) output.value = 'NO SE GENERÓ PROMPT.\n\n' + msg + '\n\nCódigo buscado: ' + codigo + '\n\nRevise que el caso exista en INDICE_MEMORIA_ENOS y que el Web App esté implementado como nueva versión.';
+      return;
+    }
+
+    const prompt = construirPromptDesdeRespuestaIndice(codigo, response);
+    if(!prompt || prompt.indexOf('PAQUETE GPT CZ5 DEL CASO') === -1){
+      setPromptStatus('La respuesta no contiene PAQUETE GPT CZ5 DEL CASO. No se usará plantilla genérica.', false);
+      if(output) output.value = JSON.stringify(response, null, 2);
+      return;
+    }
+
+    if(output) output.value = prompt;
+    try { localStorage.setItem('ENOS_ULTIMO_PROMPT_GPT', prompt); } catch(e) {}
+    copiarTextoSeguro(prompt);
+
+    const total = response.total_registros || response.total || (response.paquete && response.paquete.resumen_control ? response.paquete.resumen_control.total_registros_indice : '');
+    setPromptStatus('Prompt real generado desde INDICE_MEMORIA_ENOS para: ' + codigo + (total ? ' · Registros: ' + total : ''), true);
+
+  }catch(error){
+    const msg = error && error.message ? error.message : String(error);
+    setPromptStatus('Error consultando índice: ' + msg, false);
+    if(output) output.value = 'NO SE GENERÓ PROMPT.\n\nError consultando Apps Script / INDICE_MEMORIA_ENOS:\n' + msg + '\n\nCódigo buscado: ' + codigo;
+  }
 }
 
 function copiarTextoSeguro(texto){
@@ -1079,13 +1196,37 @@ function limpiarPrompt(){
   setPromptStatus('', true);
 }
 
-function verCasosDashboard(){
-  const tab = Array.from(document.querySelectorAll('.tab')).find(b => b.textContent.includes('Dashboard'));
-  if(tab) openTab('dashboard', tab);
+
+async function verCasosDashboard(){
+  setPromptStatus('Consultando casos disponibles desde INDICE_MEMORIA_ENOS...', true);
+  try{
+    const response = await jsonpENOS('listCases', {});
+    if(!response || response.ok === false){
+      setPromptStatus((response && (response.message || response.error)) || 'No se pudo listar casos.', false);
+      return;
+    }
+    const total = response.total_casos || (response.data ? response.data.length : 0);
+    setPromptStatus('Casos disponibles desde INDICE_MEMORIA_ENOS: ' + total, true);
+    const tab = Array.from(document.querySelectorAll('.tab')).find(b => b.textContent.includes('Dashboard'));
+    if(tab) openTab('dashboard', tab);
+  }catch(error){
+    setPromptStatus('Error consultando casos: ' + (error.message || error), false);
+  }
 }
 
-function actualizarBaseF01F07(){
-  setPromptStatus('La actualización de base se mantiene en el módulo Dashboard / Apps Script. En esta versión estable no se ejecuta desde este botón.', false);
+async function actualizarBaseF01F07(){
+  setPromptStatus('Reconstruyendo INDICE_MEMORIA_ENOS desde todas las hojas...', true);
+  try{
+    const response = await jsonpENOS('rebuildIndex', {});
+    if(!response || response.ok === false){
+      setPromptStatus((response && (response.message || response.error)) || 'No se pudo reconstruir el índice.', false);
+      return;
+    }
+    const total = response.total_registros || response.total || response.registros_indexados || '';
+    setPromptStatus('INDICE_MEMORIA_ENOS reconstruido correctamente' + (total ? ' · Registros: ' + total : '') + '.', true);
+  }catch(error){
+    setPromptStatus('Error reconstruyendo índice: ' + (error.message || error), false);
+  }
 }
 
 function abrirGPTInstitucional(){
