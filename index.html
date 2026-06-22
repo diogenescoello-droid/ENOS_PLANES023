@@ -629,23 +629,12 @@ select,input{
         <div class="two">
           <div>
             <h2>Actualizar base y generar prompt GPT</h2>
-            <p>Sincronice Kobo, seleccione el caso y genere el prompt técnico para el asistente ENOS Zona 5.</p>
-            <div class="inputline"><label>Código de caso</label><input value="Pedro_carbo-_Enos"></div>
-            <div class="actions"><button class="btn red">Actualizar base F01-F07</button><button class="btn soft">Ver casos</button><button class="btn primary">Generar y copiar prompt</button><button class="btn white">Cargar último prompt</button><button class="btn white">Limpiar prompt</button></div>
-            <div class="status"><span class="dot"></span>Dashboard actualizado. Casos disponibles: 53</div>
-            <div class="inputline"><label>Prompt GPT generado</label><textarea>"Base conceptual breve",
-"Metodología",
-"Insumos utilizados",
-"Caracterización territorial",
-"Análisis de amenazas, exposición, vulnerabilidad, infraestructura y capacidades",
-"Matriz de hallazgos",
-"Plan de acción",
-"Ruta de seguimiento y cierre",
-"Conclusiones",
-"Recomendaciones",
-"Anexos",
-"Bibliografía"</textarea></div>
-            <div class="actions"><button class="btn primary">Copiar prompt</button><button class="btn green">Ingresar al GPT institucional</button></div>
+            <p>Ingrese el código de caso y genere el prompt técnico para el asistente ENOS Zona 5. Esta versión mantiene la plataforma original y no usa buscador dinámico.</p>
+            <div class="inputline"><label>Código de caso</label><input id="codigoCasoInput" placeholder="Ejemplo: GADSALINAS_PAENOS_2026_2027|PUNTO-1"></div>
+            <div class="actions"><button class="btn red" onclick="actualizarBaseF01F07()">Actualizar base F01-F07</button><button class="btn soft" onclick="verCasosDashboard()">Ver casos</button><button class="btn primary" onclick="generarPromptGPT()">Generar y copiar prompt</button><button class="btn white" onclick="cargarUltimoPrompt()">Cargar último prompt</button><button class="btn white" onclick="limpiarPrompt()">Limpiar prompt</button></div>
+            <div id="promptStatus" class="status" style="display:none"><span class="dot"></span><span id="promptStatusText"></span></div>
+            <div class="inputline"><label>Prompt GPT generado</label><textarea id="promptOutput" placeholder="Aquí aparecerá el prompt técnico generado."></textarea></div>
+            <div class="actions"><button class="btn primary" onclick="copiarPromptActual()">Copiar prompt</button><button class="btn green" onclick="abrirGPTInstitucional()">Ingresar al GPT institucional</button></div>
           </div>
           <div class="info-card">
             <h3>Control de suficiencia</h3>
@@ -858,6 +847,9 @@ select,input{
 
 <script>
 
+// VERSION_ORIGINAL_FORMULARIOS_POR_ACTOR_PROMPT_FIX_20260622_01
+const GPT_INSTITUCIONAL_URL = 'https://chatgpt.com/';
+
 const FORM_LINKS = {
   F01: 'https://ee.kobotoolbox.org/x/XuixUrMH',
   F02: 'https://ee.kobotoolbox.org/x/HxbqyITN',
@@ -976,6 +968,130 @@ function openDetailTab(id,btn){
   document.querySelectorAll('.detail-tab').forEach(el=>el.classList.remove('active'));
   btn.classList.add('active');
 }
+
+function setPromptStatus(message, ok){
+  const box = document.getElementById('promptStatus');
+  const txt = document.getElementById('promptStatusText');
+  if(!box || !txt) return;
+  txt.textContent = message || '';
+  box.style.display = message ? 'flex' : 'none';
+  box.style.background = ok ? '#eef9f2' : '#fff8e8';
+  box.style.borderColor = ok ? '#bfe5ca' : '#f1d28b';
+}
+
+function construirPromptTecnico(codigoCaso){
+  const cfg = ACTOR_CONFIG[selectedActor] || ACTOR_CONFIG.GAD;
+  const formularios = (cfg.forms || []).join(', ');
+  return [
+    'INSTRUCCIÓN PARA GPT:',
+    'Actúa como asistente técnico ENOS Zona 5 de la Secretaría Nacional de Gestión de Riesgos.',
+    '',
+    'Construye una entrevista técnica progresiva y luego un plan de acción institucional para el caso indicado.',
+    '',
+    'DATOS DEL CASO:',
+    '- Código de caso: ' + codigoCaso,
+    '- Actor seleccionado en plataforma: ' + cfg.title.replace('Flujo operativo · ', ''),
+    '- Formularios aplicables para este actor: ' + formularios,
+    '',
+    'CRITERIO DE USO:',
+    '1. Usa únicamente información disponible del caso asociado al código indicado.',
+    '2. No inventes datos. Si falta información, declárala como brecha o pendiente de validación.',
+    '3. Diferencia amenaza, exposición, vulnerabilidad, infraestructura, capacidad, acción, responsable, plazo e indicador.',
+    '4. Verifica coherencia con los lineamientos ENOS 2026-2027 y estructura de plan de acción.',
+    '5. Si la información es suficiente, genera el plan de acción institucional.',
+    '6. Si es parcial, genera borrador con limitaciones explícitas y lista de insumos faltantes críticos.',
+    '',
+    'ESTRUCTURA ESPERADA:',
+    '- Antecedentes',
+    '- Objetivo general y específicos',
+    '- Alcance y limitaciones',
+    '- Metodología',
+    '- Insumos utilizados',
+    '- Caracterización territorial',
+    '- Análisis de amenazas, exposición, vulnerabilidad, infraestructura y capacidades',
+    '- Matriz de hallazgos',
+    '- Plan de acción',
+    '- Seguimiento mensual y cierre',
+    '- Conclusiones',
+    '- Recomendaciones',
+    '- Anexos'
+  ].join(String.fromCharCode(10));
+}
+
+function generarPromptGPT(){
+  const input = document.getElementById('codigoCasoInput');
+  const output = document.getElementById('promptOutput');
+  const codigo = (input && input.value ? input.value : '').trim();
+  if(!codigo){
+    alert('Ingrese primero el código de caso.');
+    if(input) input.focus();
+    return;
+  }
+  const prompt = construirPromptTecnico(codigo);
+  if(output) output.value = prompt;
+  try { localStorage.setItem('ENOS_ULTIMO_PROMPT_GPT', prompt); } catch(e) {}
+  copiarTextoSeguro(prompt);
+  setPromptStatus('Prompt generado para: ' + codigo, true);
+}
+
+function copiarTextoSeguro(texto){
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(texto).catch(function(){});
+    return;
+  }
+  const area = document.createElement('textarea');
+  area.value = texto;
+  document.body.appendChild(area);
+  area.focus();
+  area.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(area);
+}
+
+function copiarPromptActual(){
+  const output = document.getElementById('promptOutput');
+  const prompt = output ? output.value.trim() : '';
+  if(!prompt){
+    alert('No hay prompt generado para copiar.');
+    return;
+  }
+  copiarTextoSeguro(prompt);
+  setPromptStatus('Prompt copiado al portapapeles.', true);
+}
+
+function cargarUltimoPrompt(){
+  let prompt = '';
+  try { prompt = localStorage.getItem('ENOS_ULTIMO_PROMPT_GPT') || ''; } catch(e) {}
+  if(!prompt){
+    alert('No hay prompt guardado en este navegador.');
+    return;
+  }
+  const output = document.getElementById('promptOutput');
+  if(output) output.value = prompt;
+  setPromptStatus('Último prompt cargado.', true);
+}
+
+function limpiarPrompt(){
+  const input = document.getElementById('codigoCasoInput');
+  const output = document.getElementById('promptOutput');
+  if(input) input.value = '';
+  if(output) output.value = '';
+  setPromptStatus('', true);
+}
+
+function verCasosDashboard(){
+  const tab = Array.from(document.querySelectorAll('.tab')).find(b => b.textContent.includes('Dashboard'));
+  if(tab) openTab('dashboard', tab);
+}
+
+function actualizarBaseF01F07(){
+  setPromptStatus('La actualización de base se mantiene en el módulo Dashboard / Apps Script. En esta versión estable no se ejecuta desde este botón.', false);
+}
+
+function abrirGPTInstitucional(){
+  window.open(GPT_INSTITUCIONAL_URL, '_blank', 'noopener,noreferrer');
+}
+
 </script>
 </body>
 </html>
