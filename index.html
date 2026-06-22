@@ -1,1489 +1,1397 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Módulo cartográfico operativo ENOS v2</title>
-
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIINfQmM77jVY3dPu2nzy7iAeO0y7sxykU="
-    crossorigin=""
-  />
-
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
-  />
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
-  />
-
-  <style>
-    :root {
-      --azul: #003B63;
-      --azul-2: #0A4D78;
-      --celeste: #E9F5FF;
-      --borde: #C9DFF2;
-      --texto: #173B5C;
-      --rojo: #D9342B;
-      --verde: #2E8B57;
-      --amarillo: #F4B000;
-      --naranja: #E87511;
-      --gris: #F7FAFC;
-      --alerta: #FFF3CD;
-      --sombra: 0 12px 28px rgba(0, 40, 70, .12);
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #EDF4FA;
-      color: var(--texto);
-    }
-
-    .enos-module {
-      width: min(1550px, calc(100% - 24px));
-      margin: 12px auto;
-      background: white;
-      border: 1px solid var(--borde);
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: var(--sombra);
-    }
-
-    .module-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 14px;
-    }
-
-    .module-title h2 {
-      margin: 0 0 6px;
-      color: var(--azul);
-      font-size: 24px;
-      line-height: 1.2;
-    }
-
-    .module-title p {
-      margin: 0;
-      font-size: 15px;
-      color: #385878;
-    }
-
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: #E9F8EF;
-      border: 1px solid #BFE8CD;
-      color: #0D6338;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .status-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 999px;
-      background: var(--verde);
-    }
-
-    .identification-box {
-      border: 1px solid var(--borde);
-      border-radius: 18px;
-      background: #F8FCFF;
-      padding: 14px;
-      margin-bottom: 14px;
-    }
-
-    .identification-box h3 {
-      margin: 0 0 6px;
-      color: var(--azul);
-      font-size: 18px;
-    }
-
-    .identification-box p {
-      margin: 0 0 12px;
-      font-size: 14px;
-      color: #385878;
-      line-height: 1.4;
-    }
-
-    .toolbar {
-      display: grid;
-      grid-template-columns: 1.05fr 1.05fr 1.1fr .9fr .9fr 1.35fr auto auto;
-      gap: 10px;
-      align-items: end;
-    }
-
-    .field label {
-      display: block;
-      font-size: 13px;
-      font-weight: 800;
-      margin-bottom: 6px;
-      color: var(--azul);
-    }
-
-    .field select,
-    .field input {
-      width: 100%;
-      min-height: 46px;
-      border: 1px solid var(--borde);
-      border-radius: 14px;
-      padding: 0 14px;
-      font-size: 15px;
-      color: var(--texto);
-      background: white;
-      outline: none;
-    }
-
-    .field input:focus,
-    .field select:focus {
-      border-color: #6BB3E8;
-      box-shadow: 0 0 0 3px rgba(107, 179, 232, .22);
-    }
-
-    .btn {
-      min-height: 46px;
-      border: 0;
-      border-radius: 14px;
-      padding: 0 16px;
-      font-weight: 900;
-      font-size: 15px;
-      cursor: pointer;
-      transition: transform .08s ease, opacity .2s ease, box-shadow .2s ease;
-      white-space: nowrap;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-      opacity: .94;
-    }
-
-    .btn-primary {
-      background: var(--azul);
-      color: white;
-      box-shadow: 0 8px 18px rgba(0, 59, 99, .20);
-    }
-
-    .btn-secondary {
-      background: var(--celeste);
-      color: var(--azul);
-      border: 1px solid var(--borde);
-    }
-
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: minmax(680px, 68%) minmax(390px, 32%);
-      gap: 16px;
-      min-height: 680px;
-    }
-
-    .panel {
-      border: 1px solid var(--borde);
-      border-radius: 18px;
-      background: #FFF;
-      overflow: hidden;
-    }
-
-    .map-panel {
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      min-height: 680px;
-    }
-
-    .panel-header {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--borde);
-      background: #F8FCFF;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .panel-header h3 {
-      margin: 0;
-      color: var(--azul);
-      font-size: 18px;
-    }
-
-    .panel-header small {
-      color: #4D6B86;
-      font-weight: 700;
-    }
-
-    .map-wrap {
-      position: relative;
-      min-height: 590px;
-    }
-
-    #enosMap {
-      height: 100%;
-      min-height: 590px;
-      width: 100%;
-      z-index: 1;
-    }
-
-    .map-floating-card {
-      position: absolute;
-      left: 14px;
-      bottom: 18px;
-      z-index: 700;
-      width: min(430px, calc(100% - 28px));
-      background: white;
-      border: 1px solid var(--borde);
-      border-radius: 16px;
-      box-shadow: var(--sombra);
-      padding: 12px;
-      display: none;
-    }
-
-    .map-floating-card.active { display: block; }
-
-    .map-floating-card h4 {
-      margin: 0 0 6px;
-      color: var(--azul);
-      font-size: 16px;
-    }
-
-    .map-floating-card p {
-      margin: 0 0 10px;
-      font-size: 13px;
-      color: #375775;
-      line-height: 1.35;
-    }
-
-    .quick-actions,
-    .popup-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .quick-actions button,
-    .popup-actions button {
-      border: 0;
-      border-radius: 10px;
-      padding: 8px 10px;
-      font-size: 12px;
-      font-weight: 800;
-      cursor: pointer;
-      background: var(--azul);
-      color: white;
-    }
-
-    .quick-actions button.secondary,
-    .popup-actions button.secondary {
-      background: var(--celeste);
-      color: var(--azul);
-      border: 1px solid var(--borde);
-    }
-
-    .map-footer {
-      padding: 10px 14px;
-      border-top: 1px solid var(--borde);
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 13px;
-      color: #45647F;
-      background: #F8FCFF;
-      flex-wrap: wrap;
-    }
-
-    .legend {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .legend-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: 800;
-    }
-
-    .legend-symbol {
-      display: inline-block;
-      width: 18px;
-      height: 12px;
-      border-radius: 3px;
-      border: 2px solid currentColor;
-    }
-
-    .legend-dot {
-      width: 14px;
-      height: 14px;
-      border-radius: 999px;
-      background: var(--rojo);
-      border: 2px solid white;
-      box-shadow: 0 1px 4px rgba(0,0,0,.28);
-    }
-
-    .side-panel {
-      display: grid;
-      grid-template-rows: auto auto auto 1fr auto;
-      min-height: 680px;
-    }
-
-    .search-box {
-      padding: 14px;
-      border-bottom: 1px solid var(--borde);
-      background: white;
-    }
-
-    .search-box label {
-      display: block;
-      color: var(--azul);
-      font-weight: 900;
-      margin-bottom: 8px;
-    }
-
-    .search-box input {
-      width: 100%;
-      min-height: 46px;
-      border: 1px solid var(--borde);
-      border-radius: 14px;
-      padding: 0 14px;
-      font-size: 15px;
-      outline: none;
-    }
-
-    .hint-box {
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: #FFF8E6;
-      border: 1px solid #F1D18A;
-      color: #5C3A00;
-      font-size: 13px;
-      line-height: 1.35;
-    }
-
-    .summary-strip {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      padding: 12px 14px;
-      background: #F8FCFF;
-      border-bottom: 1px solid var(--borde);
-    }
-
-    .summary-box {
-      border: 1px solid var(--borde);
-      border-radius: 12px;
-      padding: 9px;
-      background: white;
-      text-align: center;
-    }
-
-    .summary-box strong {
-      display: block;
-      color: var(--azul);
-      font-size: 20px;
-      line-height: 1;
-    }
-
-    .summary-box span {
-      display: block;
-      margin-top: 4px;
-      font-size: 10px;
-      font-weight: 800;
-      color: #4D6B86;
-      text-transform: uppercase;
-    }
-
-    .case-list {
-      overflow: auto;
-      max-height: 500px;
-      background: white;
-    }
-
-    .case-row {
-      border-bottom: 1px solid var(--borde);
-      padding: 13px 14px;
-      cursor: pointer;
-      transition: background .15s ease, border-left .15s ease;
-      border-left: 5px solid transparent;
-    }
-
-    .case-row:hover { background: #F2F9FF; }
-
-    .case-row.active {
-      background: #E9F5FF;
-      border-left-color: var(--azul);
-    }
-
-    .case-main {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: flex-start;
-    }
-
-    .institution {
-      font-weight: 900;
-      color: var(--azul);
-      line-height: 1.25;
-      font-size: 15px;
-    }
-
-    .form-badge {
-      flex: 0 0 auto;
-      border-radius: 999px;
-      padding: 4px 9px;
-      background: var(--azul);
-      color: white;
-      font-size: 12px;
-      font-weight: 900;
-    }
-
-    .geom-badge {
-      display: inline-block;
-      border-radius: 999px;
-      padding: 3px 8px;
-      margin-top: 6px;
-      font-size: 11px;
-      font-weight: 900;
-      background: #EFF5FA;
-      color: #365A78;
-      border: 1px solid var(--borde);
-    }
-
-    .meta {
-      margin-top: 6px;
-      font-size: 13px;
-      color: #385878;
-      line-height: 1.35;
-    }
-
-    .case-code {
-      margin-top: 6px;
-      font-size: 11px;
-      color: #6C8298;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .detail-panel {
-      border-top: 1px solid var(--borde);
-      background: #FFFDF4;
-      padding: 12px 14px;
-      min-height: 120px;
-    }
-
-    .detail-panel h4 {
-      margin: 0 0 8px;
-      color: #5C3A00;
-    }
-
-    .detail-panel p {
-      margin: 0 0 8px;
-      font-size: 13px;
-      line-height: 1.35;
-      color: #5C3A00;
-    }
-
-    .empty {
-      padding: 22px;
-      color: #607891;
-      font-weight: 700;
-      text-align: center;
-    }
-
-    .leaflet-popup-content {
-      min-width: 280px;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .popup-title {
-      color: var(--azul);
-      font-size: 15px;
-      font-weight: 900;
-      margin-bottom: 6px;
-    }
-
-    .popup-meta {
-      font-size: 12px;
-      color: #385878;
-      line-height: 1.45;
-      margin-bottom: 8px;
-    }
-
-    .custom-marker {
-      width: 22px;
-      height: 22px;
-      border-radius: 999px;
-      background: var(--rojo);
-      border: 3px solid white;
-      box-shadow: 0 3px 9px rgba(0, 0, 0, .35);
-    }
-
-    .custom-marker.selected {
-      background: var(--amarillo);
-      transform: scale(1.28);
-    }
-
-    .warning-note {
-      margin-top: 14px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid #F1C36D;
-      background: var(--alerta);
-      color: #5C3A00;
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    @media (max-width: 1250px) {
-      .toolbar {
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .map-panel,
-      .side-panel {
-        min-height: unset;
-      }
-
-      .case-list {
-        max-height: 420px;
-      }
-    }
-
-    @media (max-width: 760px) {
-      .module-header {
-        flex-direction: column;
-      }
-
-      .toolbar {
-        grid-template-columns: 1fr;
-      }
-
-      .summary-strip {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .map-footer {
-        flex-direction: column;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BASE 01 · ENOS Zona 5 · Dashboard con análisis detallado</title>
+<style>
+:root{
+  --azul:#0b3f63;
+  --azul2:#114f78;
+  --azul3:#0a3555;
+  --celeste:#eaf6ff;
+  --borde:#cfe1ef;
+  --rojo:#d83a2e;
+  --rojo2:#ef5b4f;
+  --verde:#2e8b57;
+  --ambar:#f2b84b;
+  --fondo:#eef4f8;
+  --panel:#ffffff;
+  --texto:#15324a;
+  --muted:#4d6173;
+  --soft:#f7fbff;
+  --shadow:0 18px 38px rgba(12,45,72,.12);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:var(--fondo);
+  color:var(--texto);
+}
+.header{
+  background:linear-gradient(105deg,var(--azul3),var(--azul2));
+  color:#fff;
+  border-bottom:5px solid var(--rojo2);
+}
+.header-inner{
+  max-width:1220px;
+  margin:0 auto;
+  padding:18px 18px 32px;
+}
+.topline{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  margin-bottom:22px;
+}
+.brandline{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  font-weight:800;
+}
+.logo{
+  width:42px;
+  height:42px;
+  border-radius:11px;
+  background:linear-gradient(135deg,#d62e28,#e95b55);
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  border:1px solid rgba(255,255,255,.4);
+  box-shadow:0 5px 14px rgba(0,0,0,.18);
+}
+.clock{
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;
+  padding:9px 15px;
+  font-weight:800;
+  font-size:13px;
+}
+h1{
+  margin:0 0 14px;
+  font-size:31px;
+  letter-spacing:-.02em;
+}
+.header p{
+  margin:0;
+  max-width:980px;
+  line-height:1.45;
+  font-weight:700;
+  font-size:14px;
+}
+.wrap{
+  max-width:1220px;
+  margin:24px auto 56px;
+  padding:0 18px;
+}
+.platform{
+  background:#fff;
+  border:1px solid var(--borde);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.role-panel{
+  padding:22px 22px 20px;
+}
+.role-panel h2{
+  margin:0 0 8px;
+  font-size:20px;
+  color:var(--azul3);
+}
+.role-panel > p{
+  margin:0 0 18px;
+  color:var(--muted);
+  font-size:14px;
+}
+.roles{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+.role{
+  border:1px solid var(--borde);
+  background:linear-gradient(180deg,#fff,#fbfdff);
+  border-radius:20px;
+  min-height:292px;
+  padding:17px;
+  cursor:pointer;
+  transition:.18s ease;
+}
+.role.active{
+  border-color:var(--rojo2);
+  box-shadow:0 0 0 3px rgba(216,58,46,.08);
+}
+.role:hover{transform:translateY(-1px)}
+.role .badge{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:#dff1ff;
+  color:var(--azul3);
+  font-weight:900;
+  font-size:13px;
+  margin-bottom:10px;
+  border:1px solid #b8daf3;
+}
+.role.active .badge{
+  background:#c93a2d;
+  color:white;
+  border-color:#c93a2d;
+}
+.role h3{
+  margin:0 0 12px;
+  color:var(--azul3);
+  font-size:16px;
+  line-height:1.25;
+}
+.role p{
+  margin:0 0 28px;
+  color:#47596a;
+  line-height:1.35;
+  font-weight:700;
+  font-size:13px;
+}
+.role small{
+  display:block;
+  color:#6b7e90;
+  line-height:1.25;
+  font-weight:700;
+  font-size:12px;
+}
+.divider{height:1px;background:var(--borde)}
+.flow{
+  margin:40px 20px 22px;
+  border:1px solid var(--borde);
+  border-radius:21px;
+  overflow:hidden;
+}
+.flow-head{
+  background:var(--azul2);
+  color:#fff;
+  padding:18px 20px;
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  align-items:flex-start;
+}
+.flow-head h2{
+  margin:0 0 7px;
+  font-size:20px;
+}
+.flow-head p{
+  margin:0;
+  font-size:14px;
+  line-height:1.4;
+}
+.actor-chip{
+  border:1px solid rgba(255,255,255,.32);
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  border-radius:999px;
+  padding:9px 15px;
+  font-weight:900;
+  font-size:12px;
+  white-space:nowrap;
+}
+.tabs{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  padding:14px;
+  background:#fff;
+  border-bottom:1px solid var(--borde);
+}
+.tab{
+  border:1px solid var(--borde);
+  background:#fff;
+  color:var(--azul3);
+  border-radius:14px;
+  padding:14px 12px;
+  font-weight:900;
+  cursor:pointer;
+}
+.tab.active{
+  background:var(--azul3);
+  color:white;
+  border-color:#1284ff;
+  box-shadow:inset 0 0 0 1px #1284ff;
+}
+.tab-content{
+  display:none;
+  padding:20px 18px 22px;
+}
+.tab-content.active{display:block}
+.two{
+  display:grid;
+  grid-template-columns:1.35fr 1fr;
+  gap:18px;
+}
+.tab-content h2{
+  margin:0 0 8px;
+  color:var(--azul3);
+  font-size:22px;
+}
+.tab-content p{
+  margin:0 0 14px;
+  color:var(--muted);
+  line-height:1.45;
+  font-size:14px;
+}
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.form-card, .info-card, .kpi-card, .detail-card{
+  border:1px solid var(--borde);
+  border-radius:16px;
+  background:linear-gradient(180deg,#fff,#fbfdff);
+  padding:14px;
+}
+.form-card h3,.info-card h3,.detail-card h3{
+  margin:0 0 11px;
+  color:var(--azul3);
+  font-size:16px;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border:0;
+  border-radius:12px;
+  padding:11px 15px;
+  font-weight:900;
+  cursor:pointer;
+  text-decoration:none;
+  font-size:14px;
+}
+.btn.primary{background:var(--azul3);color:white;box-shadow:0 8px 18px rgba(10,53,85,.18)}
+.btn.red{background:var(--rojo);color:white}
+.btn.green{background:var(--verde);color:white}
+.btn.soft{background:#e8f5ff;color:var(--azul3);border:1px solid #bcdcf2}
+.btn.white{background:#fff;color:var(--azul3);border:1px solid var(--borde)}
+.note{
+  border:1px solid #f1cf85;
+  background:#fff5dc;
+  color:#734700;
+  border-radius:14px;
+  padding:13px;
+  font-size:13px;
+  line-height:1.35;
+}
+.inputline{
+  margin:8px 0 13px;
+}
+.inputline label{
+  display:block;
+  font-size:13px;
+  font-weight:900;
+  color:var(--azul3);
+  margin-bottom:6px;
+}
+.inputline input{
+  width:100%;
+  border:1px solid var(--borde);
+  border-radius:13px;
+  padding:12px;
+  font-size:14px;
+}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}
+.status{
+  border:1px solid var(--borde);
+  border-radius:13px;
+  background:#f2f8fd;
+  padding:12px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:#2c4053;
+  font-size:13px;
+}
+.dot{
+  width:11px;height:11px;border-radius:999px;background:#2e8b57;display:inline-block;
+}
+textarea{
+  width:100%;
+  min-height:245px;
+  border:1px solid var(--borde);
+  border-radius:13px;
+  background:#f8fbff;
+  padding:12px;
+  resize:vertical;
+  font-family:Consolas,monospace;
+}
+.steps{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.step{
+  border:1px solid var(--borde);
+  border-radius:14px;
+  padding:12px;
+  background:#fff;
+}
+.step strong{
+  display:block;
+  color:var(--azul3);
+  font-size:16px;
+  margin-bottom:5px;
+}
+.repo{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:12px;
+}
+.dashboard-actions{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0 13px}
+.kpi-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-top:13px;
+}
+.kpi-card h4{
+  margin:0 0 10px;
+  color:#526577;
+  font-size:12px;
+  text-transform:uppercase;
+}
+.kpi-card .num{
+  font-size:31px;
+  font-weight:900;
+  color:var(--azul3);
+}
+.kpi-card small{
+  display:block;
+  color:var(--muted);
+  margin-top:8px;
+  line-height:1.3;
+}
+.executive{
+  display:grid;
+  grid-template-columns:1.05fr 1fr;
+  gap:14px;
+  margin-top:14px;
+}
+.gauge{
+  border:1px solid var(--borde);
+  border-radius:18px;
+  padding:18px;
+  background:linear-gradient(180deg,#fff,#f8fbff);
+}
+.gauge-title{
+  font-size:13px;
+  color:#526577;
+  font-weight:900;
+  text-transform:uppercase;
+}
+.gauge-number{
+  margin:10px 0 13px;
+  color:var(--azul3);
+  font-size:52px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:-.04em;
+}
+.track{height:14px;border-radius:999px;background:#e2edf5;overflow:hidden}
+.fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--verde),var(--ambar));width:68%}
+.alert{
+  border:1px solid #f1cf85;
+  background:#fff6dd;
+  border-radius:18px;
+  padding:17px;
+  color:#634000;
+  line-height:1.38;
+}
+.alert strong{display:block;margin-bottom:7px;color:#4e3300}
+.table-wrap{
+  border:1px solid var(--borde);
+  border-radius:15px;
+  overflow:auto;
+  max-height:390px;
+  margin-top:14px;
+}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{
+  background:var(--azul3);
+  color:white;
+  text-align:left;
+  padding:11px 10px;
+}
+td{
+  border-bottom:1px solid #d9e5ef;
+  padding:12px 10px;
+  vertical-align:top;
+}
+.tag{
+  display:inline-flex;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+  white-space:nowrap;
+}
+.tag.ok{background:#e3f7ec;color:#217347}
+.tag.warn{background:#fff3d2;color:#8a5a00}
+.tag.bad{background:#ffe5e1;color:#a3281d}
+.tag.info{background:#e6f3ff;color:#0d4f7a}
+.detail-section{
+  display:none;
+  margin-top:24px;
+  animation:show .2s ease both;
+}
+.detail-section.active{display:block}
+@keyframes show{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.detail-shell{
+  background:white;
+  border:1px solid var(--borde);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.detail-head{
+  background:linear-gradient(105deg,var(--azul3),var(--azul2));
+  color:white;
+  padding:19px 22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+}
+.detail-head h2{margin:0 0 7px;font-size:24px}
+.detail-head p{margin:0;max-width:850px;font-size:14px;line-height:1.4}
+.detail-body{padding:18px}
+.detail-tabs{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:16px;
+}
+.detail-tab{
+  border:1px solid var(--borde);
+  background:#fff;
+  color:var(--azul3);
+  border-radius:999px;
+  padding:10px 13px;
+  font-weight:900;
+  cursor:pointer;
+}
+.detail-tab.active{background:var(--azul3);color:white}
+.detail-module{display:none}
+.detail-module.active{display:block}
+.filters{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr auto;
+  gap:10px;
+  margin-bottom:14px;
+}
+select,input{
+  border:1px solid var(--borde);
+  border-radius:12px;
+  background:#fff;
+  padding:11px;
+  color:var(--texto);
+}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.bars{display:grid;gap:10px}
+.barline{
+  display:grid;
+  grid-template-columns:180px 1fr 52px;
+  gap:9px;
+  align-items:center;
+  font-size:13px;
+}
+.barline .track{height:11px}
+.map{
+  min-height:300px;
+  border-radius:16px;
+  border:1px solid #c8dff0;
+  background:
+    radial-gradient(circle at 20% 32%, rgba(46,139,87,.28) 0 6%, transparent 7%),
+    radial-gradient(circle at 48% 42%, rgba(242,184,75,.35) 0 7%, transparent 8%),
+    radial-gradient(circle at 75% 58%, rgba(216,58,46,.25) 0 6%, transparent 7%),
+    radial-gradient(circle at 34% 72%, rgba(17,79,120,.25) 0 6%, transparent 7%),
+    linear-gradient(145deg,#e9f6ff,#f9fdff);
+  position:relative;
+}
+.map:before{
+  content:"Vista territorial simulada · futura conexión ArcGIS Online / GeoJSON";
+  position:absolute;
+  top:14px;left:14px;
+  background:#fff;
+  border:1px solid var(--borde);
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:12px;
+  font-weight:900;
+  color:var(--azul3);
+}
+.point{
+  position:absolute;width:17px;height:17px;border-radius:999px;border:3px solid white;box-shadow:0 5px 10px rgba(0,0,0,.18);background:var(--verde);
+}
+.p1{left:21%;top:36%}.p2{left:49%;top:48%;background:var(--ambar)}.p3{left:76%;top:62%;background:var(--rojo)}.p4{left:35%;top:75%;background:var(--azul2)}
+.criteria{
+  display:grid;
+  gap:10px;
+}
+.criterion{
+  border:1px solid var(--borde);
+  border-radius:14px;
+  padding:12px;
+  background:var(--soft);
+}
+.criterion strong{display:block;color:var(--azul3);margin-bottom:5px}
+.criterion span{color:var(--muted);font-size:13px;line-height:1.35}
+.footer-note{
+  color:#66798a;
+  font-size:12px;
+  text-align:right;
+  padding:12px 0 0;
+}
+@media(max-width:980px){
+  .roles,.tabs,.kpi-row,.two,.executive,.detail-grid,.filters{grid-template-columns:1fr}
+  .role{min-height:auto}
+  .flow{margin:20px 10px}
+  .topline,.flow-head,.detail-head{flex-direction:column}
+}
+
+.small-num{font-size:18px!important;line-height:1.15!important;word-break:break-word}.carto-map{min-height:340px;border-radius:16px;border:1px solid #c8dff0;background:radial-gradient(circle at 21% 24%, rgba(46,139,87,.14) 0 5%, transparent 6%),radial-gradient(circle at 66% 56%, rgba(242,184,75,.16) 0 7%, transparent 8%),linear-gradient(145deg,#e9f6ff,#f9fdff);position:relative;overflow:hidden}.carto-map-label{position:absolute;top:14px;left:14px;background:#fff;border:1px solid var(--borde);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:900;color:var(--azul3);z-index:3}.carto-point{position:absolute;width:18px;height:18px;border-radius:999px;border:3px solid #fff;box-shadow:0 5px 12px rgba(0,0,0,.22);background:var(--rojo);cursor:pointer;z-index:2}.carto-point.f01{background:var(--rojo)}.carto-point.f02{background:var(--ambar)}.carto-point.f03{background:var(--azul2)}.carto-point.f04{background:var(--verde)}.carto-point.f05{background:#744bc2}.carto-point.f06{background:#2b7a78}.carto-point.f07{background:#555}.carto-tooltip{position:absolute;display:none;max-width:260px;background:#fff;border:1px solid var(--borde);box-shadow:0 12px 28px rgba(12,45,72,.16);border-radius:12px;padding:10px;font-size:12px;color:var(--texto);z-index:5}.carto-point:hover + .carto-tooltip{display:block}.muted-text{color:var(--muted);font-size:13px;line-height:1.35}.case-action{white-space:nowrap}.record-json{white-space:pre-wrap;font-family:Consolas,monospace;font-size:12px;background:#f7fbff;border:1px solid var(--borde);border-radius:12px;padding:10px;max-height:260px;overflow:auto}.score-ok{color:var(--verde)}.score-warn{color:#8a5a00}.score-bad{color:var(--rojo)}
+
+</style>
 </head>
-
 <body>
-  <main class="enos-module">
-    <section class="module-header">
-      <div class="module-title">
-        <h2>Módulo cartográfico operativo ENOS 2026–2027</h2>
-        <p>Mapa ampliado con puntos, líneas y polígonos; identificación por provincia, cantón, institución o número/código.</p>
+<header class="header">
+  <div class="header-inner">
+    <div class="topline">
+      <div class="brandline"><div class="logo">CZ5</div><span>Secretaría Nacional de Gestión de Riesgos · Coordinación Zonal 5</span></div>
+      <div class="clock">20 jun 2026, 4:10 p. m.</div>
+    </div>
+    <h1>BASE 01 · Ecosistema digital ENOS Zona 5</h1>
+    <p>Ambiente operativo para levantamiento de información F01-F07 en Bolívar, Guayas, Los Ríos, Santa Elena y Galápagos, consolidación Kobo, generación de paquete GPT, elaboración de plan de acción y cierre de ciclo.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="platform">
+    <div class="role-panel">
+      <h2>Seleccione el actor que usará el sistema</h2>
+      <p>El sistema muestra formularios y acciones según el rol seleccionado. La Coordinación Zonal mantiene la trazabilidad del ciclo completo.</p>
+      <div class="roles">
+        <article class="role active" onclick="selectActor('GAD', this)"><div class="badge">GAD</div><h3>GAD municipal / parroquial</h3><p>Levanta información territorial, puntos críticos, infraestructura expuesta, aporte cartográfico, acciones preventivas, alojamientos, capacidades y seguimiento del plan.</p><small>Uso recomendado para unidades de gestión de riesgos, planificación, catastro, obras públicas y equipos parroquiales o municipales.</small></article>
+        <article class="role" onclick="selectActor('MTT', this)"><div class="badge">MTT</div><h3>Mesa Técnica de Trabajo</h3><p>Aporta información sectorial, infraestructura, cartografía institucional, acciones, capacidades, recursos y seguimiento según su competencia.</p><small>Uso recomendado para instituciones rectoras o sectoriales que integran las mesas técnicas.</small></article>
+        <article class="role" onclick="selectActor('GT', this)"><div class="badge">GT</div><h3>Grupos de Trabajo - Soporte Operativo</h3><p>Brindan soporte logístico, seguridad y control, movilización de recursos, telecomunicaciones, abastecimiento y apoyo de primera respuesta.</p><small>Uso recomendado para Fuerzas Armadas, Policía Nacional, Bomberos, ECU 911, ANT, Cruz Roja, MSP y grupos voluntarios.</small></article>
+        <article class="role" onclick="selectActor('CZ5', this)"><div class="badge">CZ5</div><h3>Coordinación Zonal 5 SNGR</h3><p>Consolida, verifica, controla calidad, genera paquetes GPT, monitorea el total de planes y mantiene trazabilidad zonal.</p><small>Uso recomendado para seguimiento integral, suficiencia técnica, consolidación, generación de planes y control del ciclo.</small></article>
       </div>
-      <div class="status-pill">
-        <span class="status-dot"></span>
-        <span id="statusText">Módulo operativo</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <section class="flow">
+      <div class="flow-head">
+        <div><h2 id="flowTitle">Flujo operativo · GAD municipal / parroquial</h2><p id="flowDescription">Levanta información territorial, puntos críticos, infraestructura expuesta, aporte cartográfico, acciones preventivas, alojamientos, capacidades y seguimiento del plan.</p></div>
+        <span class="actor-chip" id="actorChip">Actor territorial</span>
       </div>
-    </section>
 
-    <section class="identification-box">
-      <h3>Identificación del registro</h3>
-      <p>
-        El usuario no necesita conocer obligatoriamente el código técnico. Puede ubicar su información
-        por provincia, cantón, institución/GAD, formulario, estado o número/código si lo tiene disponible.
-      </p>
-
-      <div class="toolbar" aria-label="Filtros de identificación">
-        <div class="field">
-          <label for="provinceFilter">Provincia</label>
-          <select id="provinceFilter"><option value="">Todas</option></select>
-        </div>
-
-        <div class="field">
-          <label for="cantonFilter">Cantón</label>
-          <select id="cantonFilter"><option value="">Todos</option></select>
-        </div>
-
-        <div class="field">
-          <label for="institutionFilter">Institución / GAD</label>
-          <select id="institutionFilter"><option value="">Todas</option></select>
-        </div>
-
-        <div class="field">
-          <label for="formFilter">Formulario</label>
-          <select id="formFilter"><option value="">Todos</option></select>
-        </div>
-
-        <div class="field">
-          <label for="geomFilter">Geometría</label>
-          <select id="geomFilter">
-            <option value="">Todas</option>
-            <option value="Point">Puntos</option>
-            <option value="LineString">Líneas</option>
-            <option value="Polygon">Polígonos</option>
-            <option value="None">Sin coordenadas</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="quickSearchInput">Número, código, cantón o palabra clave</label>
-          <input id="quickSearchInput" type="search" placeholder="Ejemplo: Palenque, F04, 001, UGR..." />
-        </div>
-
-        <button class="btn btn-secondary" id="clearFiltersBtn">Limpiar</button>
-        <button class="btn btn-primary" id="fitMapBtn">Ver extensión</button>
+      <div class="tabs">
+        <button class="tab active" onclick="openTab('datos',this)">1. Llenar datos</button>
+        <button class="tab" onclick="openTab('actualizar',this)">2. Actualizar y prompt</button>
+        <button class="tab" onclick="openTab('gpt',this)">3. GPT y descarga</button>
+        <button class="tab" onclick="openTab('bibliografia',this)">4. Bibliografía</button>
+        <button class="tab" onclick="openTab('dashboard',this)">5. Dashboard</button>
       </div>
-    </section>
 
-    <section class="dashboard-grid">
-      <article class="panel map-panel">
-        <div class="panel-header">
+      <div id="datos" class="tab-content active">
+        <div class="two">
           <div>
-            <h3>1. Mapa operativo ampliado</h3>
-            <small id="mapSubtitle">Puntos, líneas y polígonos georreferenciados</small>
+            <h2>Formularios Kobo disponibles</h2>
+            <p>Use los formularios según el tipo de actor y el momento del ciclo. Todos alimentan la base consolidada F01-F07.</p>
+            <div class="form-grid" id="formGrid"></div>
           </div>
-          <small id="visibleCounter">0 elementos visibles</small>
+          <div class="info-card">
+            <h3>Uso práctico</h3>
+            <p id="usoPractico">1. Seleccione el actor.<br>2. Abra el formulario correspondiente.<br>3. Use el mismo código de caso en todos los formularios.<br>4. Al finalizar, vuelva al módulo “Actualizar y prompt”.</p>
+            <div class="note">El código de caso es la llave para integrar información de GAD, MTT, Grupo Técnico y CZ5.</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="actualizar" class="tab-content">
+        <div class="two">
+          <div>
+            <h2>Actualizar base y generar prompt GPT</h2>
+            <p>Ingrese el código de caso y genere el prompt técnico para el asistente ENOS Zona 5. Esta versión mantiene la plataforma original y no usa buscador dinámico.</p>
+            <div class="inputline"><label>Código de caso</label><input id="codigoCasoInput" placeholder="Ejemplo: GADSALINAS_PAENOS_2026_2027|PUNTO-1"></div>
+            <div class="actions"><button class="btn red" onclick="actualizarBaseF01F07()">Actualizar base F01-F07</button><button class="btn soft" onclick="verCasosDashboard()">Ver casos</button><button class="btn primary" onclick="generarPromptGPT()">Generar y copiar prompt</button><button class="btn white" onclick="cargarUltimoPrompt()">Cargar último prompt</button><button class="btn white" onclick="limpiarPrompt()">Limpiar prompt</button></div>
+            <div id="promptStatus" class="status" style="display:none"><span class="dot"></span><span id="promptStatusText"></span></div>
+            <div class="inputline"><label>Prompt GPT generado</label><textarea id="promptOutput" placeholder="Aquí aparecerá el prompt técnico generado."></textarea></div>
+            <div class="actions"><button class="btn primary" onclick="copiarPromptActual()">Copiar prompt</button><button class="btn green" onclick="abrirGPTInstitucional()">Ingresar al GPT institucional</button></div>
+          </div>
+          <div class="info-card">
+            <h3>Control de suficiencia</h3>
+            <p>• F01 identifica el caso y los puntos críticos.<br>• F02 incorpora infraestructura esencial expuesta.<br>• F03-F07 completan cartografía, acciones, preparación, capacidades y seguimiento.<br>• Si faltan datos, el GPT debe declarar limitaciones y brechas.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="gpt" class="tab-content">
+        <div class="two">
+          <div>
+            <h2>GPT institucional y cierre práctico</h2>
+            <p>Ingrese al asistente técnico ENOS Zona 5, pegue el prompt generado y descargue el plan de acción desde el GPT.</p>
+            <button class="btn primary" onclick="abrirGPTInstitucional()">Ingresar al GPT institucional</button>
+            <div class="note" style="margin-top:13px">Cierre del ciclo en esta plataforma: el usuario genera el plan con el GPT y descarga el archivo final. La firma, envío por Quipux, archivo institucional o socialización se gestiona fuera de esta página.</div>
+            <h3 style="color:var(--azul3)">Flujo de cierre práctico</h3>
+            <div class="steps"><div class="step"><strong>1. Generar</strong><p>Pegue el prompt en el GPT institucional y solicite el plan de acción.</p></div><div class="step"><strong>2. Revisar</strong><p>Verifique datos, conclusiones, recomendaciones y responsabilidades antes de usarlo oficialmente.</p></div><div class="step"><strong>3. Descargar</strong><p>Descargue el archivo final desde el GPT en Word, PDF o el formato que corresponda.</p></div></div>
+          </div>
+          <div class="info-card"><h3>Criterio operativo</h3><p>1. La página no registra cierres administrativos.<br>2. No se exige carpeta de cierre de ciclo.<br>3. No se utiliza F08.<br>4. El cierre funcional es la descarga del plan desde el GPT.<br>5. La trazabilidad formal queda en los procedimientos institucionales externos.</p></div>
+        </div>
+      </div>
+
+      <div id="bibliografia" class="tab-content">
+        <div class="two">
+          <div>
+            <h2>Bibliografía e insumos de apoyo</h2>
+            <p>Acceso directo a normativa, lineamientos, cartografía, fuentes institucionales y respaldos técnicos que acompañan la construcción del plan.</p>
+            <div class="repo"><div class="step"><strong>Cartografía</strong><p>F03 alimenta mapas, capas, fuentes, formatos y limitaciones.</p></div><div class="step"><strong>Insumos técnicos</strong><p>F01-F06 consolidan amenazas, infraestructura, acciones y capacidades.</p></div><div class="step"><strong>Seguimiento</strong><p>F07 documenta avance mensual, evidencias y escalamiento.</p></div></div>
+            <div class="actions"><button class="btn white">Abrir normativa y lineamientos</button></div>
+          </div>
+          <div class="info-card"><h3>Repositorio técnico</h3><p>Este botón abre directamente la carpeta oficial de Drive con normativa, lineamientos e insumos de apoyo para la elaboración del plan.</p><button class="btn green">Abrir carpeta Drive</button><div class="note" style="margin-top:13px">El cierre práctico del ciclo se realiza mediante descarga directa del plan desde el GPT. La biblioteca queda como repositorio de consulta técnica.</div></div>
+        </div>
+      </div>
+
+      <div id="dashboard" class="tab-content">
+        <h2>Dashboard operativo conectado al índice</h2>
+        <p>Vista viva desde <strong>INDICE_MEMORIA_ENOS</strong>: resume casos, formularios, registros, calidad, brechas y datos con georreferencia. Mantiene la plataforma original y agrega los dos módulos acordados: cartográfico operativo e información ampliada.</p>
+        <div class="dashboard-actions">
+          <button class="btn primary" onclick="probarConexionENOS()">Probar conexión</button>
+          <button class="btn red" onclick="actualizarBaseF01F07()">Sincronizar base F01-F07</button>
+          <button class="btn soft" onclick="cargarDashboardOperativo()">Actualizar dashboard</button>
+          <button class="btn green" onclick="openDetailed()">Información ampliada</button>
+        </div>
+        <div id="dashboardStatus" class="status" style="display:none"><span class="dot"></span><span id="dashboardStatusText"></span></div>
+
+        <div class="kpi-row">
+          <div class="kpi-card"><h4>Casos</h4><div class="num" id="dashCasos">—</div><small>Total de códigos de caso detectados en el índice.</small></div>
+          <div class="kpi-card"><h4>Registros</h4><div class="num" id="dashRegistros">—</div><small>Filas útiles indexadas desde hojas F01-F07 y bases.</small></div>
+          <div class="kpi-card"><h4>Promedio técnico</h4><div class="num" id="dashPromedio">—</div><small>Estimación por cobertura de formularios por caso.</small></div>
+          <div class="kpi-card"><h4>Georreferenciados</h4><div class="num" id="dashGeo">—</div><small>Registros con coordenada utilizable para mapa operativo.</small></div>
         </div>
 
-        <div class="map-wrap">
-          <div id="enosMap" role="application" aria-label="Mapa operativo ENOS"></div>
+        <div class="executive">
+          <div class="gauge">
+            <div class="gauge-title">Cobertura técnica promedio</div>
+            <div class="gauge-number" id="dashGaugeNumber">—</div>
+            <div class="track"><div class="fill" id="dashGaugeFill" style="width:0%"></div></div>
+            <p id="dashLectura" style="margin-top:12px">Actualice el dashboard para leer los datos reales del índice.</p>
+          </div>
+          <div class="alert">
+            <strong>Lectura ejecutiva automática</strong>
+            <span id="dashAlertaEjecutiva">El tablero está listo para consultar el índice y detectar casos con baja cobertura, seguimiento faltante o falta de georreferencia.</span>
+            <div class="actions" style="margin-bottom:0"><button class="btn primary" onclick="openDetailed()">Abrir información ampliada</button></div>
+          </div>
+        </div>
 
-          <div class="map-floating-card" id="selectedCard">
-            <h4 id="selectedTitle">Registro seleccionado</h4>
-            <p id="selectedText">Seleccione un punto, línea, polígono o registro de la lista.</p>
-            <div class="quick-actions">
-              <button id="copyCoordsBtn">Copiar ubicación</button>
-              <button class="secondary" id="centerSelectedBtn">Centrar</button>
-              <button class="secondary" id="clearSelectionBtn">Quitar selección</button>
+        <div class="detail-grid" style="margin-top:14px">
+          <div class="detail-card">
+            <h3>1. Módulo cartográfico operativo</h3>
+            <p>Mapa liviano calculado desde los registros con coordenadas. Si el caso no tiene coordenadas limpias, se muestra en la tabla territorial para depuración.</p>
+            <div class="filters" style="grid-template-columns:1fr 1fr auto">
+              <select id="dashProvinciaFilter" onchange="renderDashboardMap()"><option value="">Provincia: todas</option></select>
+              <select id="dashFormularioFilter" onchange="renderDashboardMap()"><option value="">Formulario: todos</option></select>
+              <button class="btn white" onclick="renderDashboardMap()">Refrescar mapa</button>
+            </div>
+            <div class="carto-map" id="cartoMapLayer">
+              <div class="carto-map-label">Mapa operativo · puntos desde INDICE_MEMORIA_ENOS</div>
+            </div>
+            <div class="footer-note" id="cartoMapNote">Sin datos cartográficos cargados todavía.</div>
+          </div>
+          <div class="detail-card">
+            <h3>2. Casos para análisis ampliado</h3>
+            <p>Seleccione un caso para abrir su paquete, formularios detectados, registros, brechas y soporte cartográfico.</p>
+            <div class="inputline"><label>Buscar caso, GAD o cantón</label><input id="dashCaseSearch" oninput="renderDashboardCases()" placeholder="Ejemplo: Empalme, Daule, GADMELEMPALME..."></div>
+            <div class="table-wrap" style="max-height:360px">
+              <table>
+                <thead><tr><th>Código</th><th>Cantón</th><th>Formularios</th><th>Registros</th><th>Acción</th></tr></thead>
+                <tbody id="dashCasesBody"><tr><td colspan="5">Actualice el dashboard para cargar casos reales.</td></tr></tbody>
+              </table>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="map-footer">
-          <span id="coordQualityText">Sin geometría: 0</span>
-          <div class="legend">
-            <span class="legend-item"><span class="legend-dot"></span>Punto</span>
-            <span class="legend-item" style="color: var(--naranja);"><span class="legend-symbol"></span>Línea</span>
-            <span class="legend-item" style="color: var(--verde);"><span class="legend-symbol"></span>Polígono</span>
-          </div>
-        </div>
-      </article>
-
-      <aside class="panel side-panel">
-        <div class="panel-header">
-          <div>
-            <h3>2. Casos para análisis ampliado</h3>
-            <small>Lectura por institución y territorio</small>
-          </div>
-        </div>
-
-        <div class="search-box">
-          <label for="searchInput">Búsqueda libre</label>
-          <input id="searchInput" type="search" placeholder="Busque por institución, GAD, provincia, cantón, formulario o código..." />
-          <div class="hint-box">
-            Recomendación para usuarios: primero seleccione provincia y cantón. Luego filtre por institución/GAD.
-            El número o código queda como búsqueda opcional, no obligatoria.
-          </div>
-        </div>
-
-        <div class="summary-strip">
-          <div class="summary-box">
-            <strong id="totalRows">0</strong>
-            <span>Filtrados</span>
-          </div>
-          <div class="summary-box">
-            <strong id="pointRows">0</strong>
-            <span>Puntos</span>
-          </div>
-          <div class="summary-box">
-            <strong id="lineRows">0</strong>
-            <span>Líneas</span>
-          </div>
-          <div class="summary-box">
-            <strong id="polygonRows">0</strong>
-            <span>Polígonos</span>
-          </div>
-        </div>
-
-        <div class="case-list" id="caseList"></div>
-
-        <div class="detail-panel" id="detailPanel">
-          <h4>Lectura rápida</h4>
-          <p>Seleccione un registro para revisar datos principales, geometría y acciones básicas.</p>
-        </div>
-      </aside>
     </section>
+  </section>
 
-    <div class="warning-note">
-      Nota técnica: esta versión acepta puntos, líneas y polígonos. Para Kobo/ODK puede mapear coordenadas simples
-      como Point, trazas como LineString y áreas como Polygon. Si el usuario no conoce el código, puede identificarse
-      por provincia, cantón e institución.
+  <section id="detalle" class="detail-section">
+    <div class="detail-shell">
+      <div class="detail-head">
+        <div>
+          <h2>Información ampliada ENOS 2026</h2>
+          <p>Módulo conectado al índice para revisar un caso seleccionado: resumen técnico, formularios, registros, brechas, cartografía disponible y calidad de datos. Esta vista no reemplaza al GPT: prepara la lectura antes de generar el plan.</p>
+        </div>
+        <button class="btn white" onclick="closeDetailed()">Volver al dashboard</button>
+      </div>
+      <div class="detail-body">
+        <div class="filters">
+          <input id="detalleCodigoCaso" placeholder="Código de caso para consultar">
+          <select id="detalleActor"><option value="GAD municipal / parroquial">GAD municipal / parroquial</option><option value="Mesa Técnica de Trabajo">Mesa Técnica de Trabajo</option><option value="Grupo de Trabajo / soporte operativo">Grupo de Trabajo / soporte operativo</option><option value="Coordinación Zonal 5 SNGR">Coordinación Zonal 5 SNGR</option></select>
+          <button class="btn primary" onclick="cargarDetalleCaso()">Consultar caso</button>
+          <button class="btn green" onclick="generarPromptDesdeDetalle()">Generar prompt del caso</button>
+        </div>
+        <div id="detalleStatus" class="status" style="display:none"><span class="dot"></span><span id="detalleStatusText"></span></div>
+
+        <div class="detail-tabs" style="margin-top:16px">
+          <button class="detail-tab active" onclick="openDetailTab('dresumen',this)">Resumen</button>
+          <button class="detail-tab" onclick="openDetailTab('dformularios',this)">Formularios</button>
+          <button class="detail-tab" onclick="openDetailTab('dbrechas',this)">Brechas / calidad</button>
+          <button class="detail-tab" onclick="openDetailTab('dterritorio',this)">Cartografía</button>
+          <button class="detail-tab" onclick="openDetailTab('dregistros',this)">Registros índice</button>
+        </div>
+
+        <div id="dresumen" class="detail-module active">
+          <div class="kpi-row">
+            <div class="kpi-card"><h4>Código</h4><div class="num small-num" id="detCodigo">—</div><small>Caso seleccionado.</small></div>
+            <div class="kpi-card"><h4>Registros</h4><div class="num" id="detRegistros">—</div><small>Total asociado al caso.</small></div>
+            <div class="kpi-card"><h4>Formularios</h4><div class="num" id="detFormularios">—</div><small>F01-F07 detectados.</small></div>
+            <div class="kpi-card"><h4>Suficiencia</h4><div class="num small-num" id="detSuficiencia">—</div><small>Lectura automática.</small></div>
+          </div>
+          <div class="detail-card" style="margin-top:14px">
+            <h3>Lectura técnica del caso</h3>
+            <div id="detLectura" class="criteria"><div class="criterion"><strong>Sin caso seleccionado</strong><span>Seleccione un caso desde el dashboard o ingrese el código manualmente.</span></div></div>
+          </div>
+        </div>
+
+        <div id="dformularios" class="detail-module">
+          <div class="detail-card"><h3>Formularios detectados y cobertura</h3><div id="detFormGrid" class="form-grid"></div></div>
+        </div>
+
+        <div id="dbrechas" class="detail-module">
+          <div class="detail-grid">
+            <div class="detail-card"><h3>Faltantes críticos</h3><div id="detFaltantes" class="criteria"></div></div>
+            <div class="detail-card"><h3>Advertencias</h3><div id="detAdvertencias" class="criteria"></div></div>
+          </div>
+        </div>
+
+        <div id="dterritorio" class="detail-module">
+          <div class="detail-grid">
+            <div class="detail-card"><h3>Puntos cartográficos del caso</h3><div class="carto-map" id="detMapLayer"><div class="carto-map-label">Puntos del caso seleccionado</div></div><div class="footer-note" id="detMapNote">Sin caso seleccionado.</div></div>
+            <div class="detail-card"><h3>Tabla territorial</h3><div class="table-wrap" style="max-height:330px"><table><thead><tr><th>Formulario</th><th>Nombre</th><th>Provincia</th><th>Cantón</th><th>Coordenada</th></tr></thead><tbody id="detMapRows"><tr><td colspan="5">Sin datos.</td></tr></tbody></table></div></div>
+          </div>
+        </div>
+
+        <div id="dregistros" class="detail-module">
+          <div class="detail-card"><h3>Registros recuperados desde INDICE_MEMORIA_ENOS</h3><textarea id="detJson" style="min-height:360px" readonly></textarea></div>
+        </div>
+      </div>
     </div>
-  </main>
+  </section>
 
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin="">
-  </script>
-  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+</main>
 
-  <script>
-    /*
-      ==========================================================
-      MÓDULO CARTOGRÁFICO OPERATIVO ENOS - V2
-      ==========================================================
-      Esta versión permite:
-      - Puntos
-      - Líneas
-      - Polígonos
-      - Registros sin geometría
-      - Identificación por provincia, cantón e institución
-      - Búsqueda opcional por número/código
+<script>
 
-      Estructura mínima:
-      {
-        id, institucion, provincia, canton, formulario, estado, codigo,
-        numero, fecha,
-        geometry: {
-          type: "Point" | "LineString" | "Polygon",
-          coordinates: [...]
-        }
-      }
+// VERSION_ORIGINAL_FORMULARIOS_POR_ACTOR_PROMPT_FIX_20260622_01
+const GPT_INSTITUCIONAL_URL = 'https://chatgpt.com/g/g-6a1db50eb650819185c06255c6850509-asistente-tecnico-enos-guayas-2-0';
 
-      Formato GeoJSON:
-      - Point: [lng, lat]
-      - LineString: [[lng,lat], [lng,lat]]
-      - Polygon: [[[lng,lat], [lng,lat], [lng,lat], [lng,lat]]]
-      ==========================================================
-    */
+const FORM_LINKS = {
+  F01: 'https://ee.kobotoolbox.org/x/XuixUrMH',
+  F02: 'https://ee.kobotoolbox.org/x/HxbqyITN',
+  F03: 'https://ee.kobotoolbox.org/x/BMR6RaE1',
+  F04: 'https://ee.kobotoolbox.org/x/xo3JtPm9',
+  F05: 'https://ee.kobotoolbox.org/x/lgXrZHzb',
+  F06: 'https://ee.kobotoolbox.org/x/NL8gKLLD',
+  F07: 'https://ee.kobotoolbox.org/x/0pXtskTZ'
+};
 
-    const REGISTROS_ENOS = [
-      {
-        id: "pal-f04-001",
-        institucion: "GAD Municipal de Palenque",
-        provincia: "Los Ríos",
-        canton: "Palenque",
-        formulario: "F04",
-        estado: "Revisado",
-        codigo: "AGRPALENQUE-ENOS-2026-001|F04",
-        numero: "001",
-        fecha: "Junio 2026",
-        geometry: { type: "Point", coordinates: [-79.7562, -1.4389] },
-        expedienteUrl: ""
-      },
-      {
-        id: "pal-linea-001",
-        institucion: "GAD Municipal de Palenque",
-        provincia: "Los Ríos",
-        canton: "Palenque",
-        formulario: "F03",
-        estado: "En revisión",
-        codigo: "AGRPALENQUE-ENOS-2026-001|F03-LINEA",
-        numero: "001",
-        fecha: "Junio 2026",
-        geometry: {
-          type: "LineString",
-          coordinates: [
-            [-79.7601, -1.4440],
-            [-79.7542, -1.4400],
-            [-79.7486, -1.4372]
-          ]
-        },
-        expedienteUrl: ""
-      },
-      {
-        id: "playas-poligono-001",
-        institucion: "GAD Municipal de Playas",
-        provincia: "Guayas",
-        canton: "Playas",
-        formulario: "F04",
-        estado: "Pendiente de validación",
-        codigo: "BORRADOR PLAYAS 2026|POLIGONO-001",
-        numero: "001",
-        fecha: "Junio 2026",
-        geometry: {
-          type: "Polygon",
-          coordinates: [[
-            [-80.3950, -2.6260],
-            [-80.3840, -2.6260],
-            [-80.3840, -2.6370],
-            [-80.3950, -2.6370],
-            [-80.3950, -2.6260]
-          ]]
-        },
-        expedienteUrl: ""
-      },
-      {
-        id: "gye-f01-001",
-        institucion: "GAD Municipal de Guayaquil",
-        provincia: "Guayas",
-        canton: "Guayaquil",
-        formulario: "F01",
-        estado: "Revisado",
-        codigo: "GADMGYE-ENOS-2026-001|F01",
-        numero: "001",
-        fecha: "Junio 2026",
-        geometry: { type: "Point", coordinates: [-79.8891, -2.1894] },
-        expedienteUrl: ""
-      },
-      {
-        id: "bal-f02-001",
-        institucion: "GAD Municipal de Balzar",
-        provincia: "Guayas",
-        canton: "Balzar",
-        formulario: "F02",
-        estado: "Revisado",
-        codigo: "ENOS-BALZAR-2026-001|F02",
-        numero: "001",
-        fecha: "15 de junio de 2026",
-        geometry: { type: "Point", coordinates: [-79.9054, -1.3659] },
-        expedienteUrl: ""
-      },
-      {
-        id: "emp-linea-001",
-        institucion: "GAD Municipal de El Empalme",
-        provincia: "Guayas",
-        canton: "El Empalme",
-        formulario: "F03",
-        estado: "En revisión",
-        codigo: "GADMEL EMPALME-ENOS-2026-001|RUTA",
-        numero: "001",
-        fecha: "Junio 2026",
-        geometry: {
-          type: "LineString",
-          coordinates: [
-            [-79.6412, -1.0506],
-            [-79.6354, -1.0468],
-            [-79.6282, -1.0426]
-          ]
-        },
-        expedienteUrl: ""
-      },
-      {
-        id: "caluma-sin-geo-001",
-        institucion: "GAD Municipal de Caluma",
-        provincia: "Bolívar",
-        canton: "Caluma",
-        formulario: "F07",
-        estado: "Completo",
-        codigo: "CALUMA-ENOS-2026-001|F07",
-        numero: "001",
-        fecha: "10 de junio de 2026",
-        geometry: null,
-        expedienteUrl: ""
-      }
-    ];
+const FORM_CARDS = {
+  F01: {title:'F01 - Punto crítico territorial', desc:'Identifica caso, puntos críticos, amenazas, brechas, elementos expuestos y acciones iniciales.'},
+  F02: {title:'F02 - Infraestructura esencial expuesta', desc:'Registra infraestructura expuesta, criticidad, vulnerabilidad, brechas y acciones requeridas.'},
+  F03: {title:'F03 - Aporte cartográfico institucional', desc:'Registra capas, mapas, fuentes, formatos, cobertura y limitaciones cartográficas aportadas por GAD, instituciones técnicas o CZ5.'},
+  F04: {title:'F04 - Acciones preventivas y mitigación', desc:'Documenta acciones propuestas, responsables, prioridad, plazo, recursos y estado.'},
+  F05: {title:'F05 - Alojamientos, rutas y puntos seguros', desc:'Registra alojamientos temporales, rutas, puntos seguros, brechas y responsables.'},
+  F06: {title:'F06 - Capacidades y recursos', desc:'Registra recursos disponibles, capacidades institucionales, logística y brechas operativas.'},
+  F07: {title:'F07 - Seguimiento mensual del plan', desc:'Actualiza avance mensual, evidencias, nudos críticos, estado de cumplimiento y necesidades de escalamiento.'}
+};
 
-    const map = L.map("enosMap", {
-      zoomControl: true,
-      preferCanvas: true
-    }).setView([-1.85, -79.8], 8);
+const ACTOR_CONFIG = {
+  GAD: {
+    title:'Flujo operativo · GAD municipal / parroquial',
+    chip:'Actor territorial',
+    description:'Levanta información territorial, puntos críticos, infraestructura expuesta, aporte cartográfico, acciones preventivas, alojamientos, capacidades y seguimiento del plan.',
+    forms:['F01','F02','F03','F04','F05','F06','F07'],
+    uso:'1. Seleccione GAD municipal/parroquial.<br>2. Abra los formularios requeridos del ciclo completo F01-F07.<br>3. Use el mismo código de caso en todos los formularios.<br>4. Al finalizar, vuelva al módulo “Actualizar y prompt”.'
+  },
+  MTT: {
+    title:'Flujo operativo · Mesa Técnica de Trabajo',
+    chip:'Actor sectorial',
+    description:'Aporta información sectorial sobre infraestructura, cartografía, acciones, capacidades, recursos y seguimiento según su competencia.',
+    forms:['F02','F03','F04','F06','F07'],
+    uso:'1. Seleccione Mesa Técnica de Trabajo.<br>2. Registre solo la información sectorial aplicable a su competencia.<br>3. Use el mismo código de caso entregado por el GAD o CZ5.<br>4. F01 no se muestra porque la MTT no crea el caso territorial padre.'
+  },
+  GT: {
+    title:'Flujo operativo · Grupo de Trabajo / soporte operativo',
+    chip:'Soporte operativo',
+    description:'Registra acciones, alojamientos, rutas, puntos seguros, capacidades, recursos operativos y seguimiento de respuesta/preparación.',
+    forms:['F04','F05','F06','F07'],
+    uso:'1. Seleccione Grupo de Trabajo / soporte operativo.<br>2. Registre acciones, preparación, capacidades y seguimiento.<br>3. Use el código de caso entregado por el GAD, MTT o CZ5.<br>4. No se muestran F01-F03 salvo que el equipo tenga competencia técnica para levantarlos.'
+  },
+  CZ5: {
+    title:'Flujo operativo · Coordinación Zonal 5 SNGR',
+    chip:'Control CZ5',
+    description:'Consolida, verifica, controla calidad, genera paquetes GPT, monitorea el total de planes y mantiene trazabilidad zonal.',
+    forms:['F01','F02','F03','F04','F05','F06','F07'],
+    uso:'1. Seleccione Coordinación Zonal 5.<br>2. Revise o complete cualquier formulario F01-F07 cuando corresponda asistencia técnica.<br>3. Use el código de caso para consolidación y paquete GPT.<br>4. Verifique calidad antes de seguimiento o descarga.'
+  }
+};
 
-    const baseOSM = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: "&copy; OpenStreetMap contributors"
-    });
+let selectedActor = 'GAD';
 
-    const baseEsriSat = L.tileLayer(
-      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-      {
-        maxZoom: 19,
-        attribution: "Tiles &copy; Esri"
-      }
-    );
+function renderActorForms(actorKey){
+  const cfg = ACTOR_CONFIG[actorKey] || ACTOR_CONFIG.GAD;
+  selectedActor = actorKey;
+  document.getElementById('flowTitle').textContent = cfg.title;
+  document.getElementById('flowDescription').textContent = cfg.description;
+  document.getElementById('actorChip').textContent = cfg.chip;
+  const uso = document.getElementById('usoPractico');
+  if(uso) uso.innerHTML = cfg.uso;
 
-    const baseEsriGray = L.tileLayer(
-      "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-      {
-        maxZoom: 16,
-        attribution: "Tiles &copy; Esri"
-      }
-    );
+  const grid = document.getElementById('formGrid');
+  grid.innerHTML = '';
 
-    baseOSM.addTo(map);
-
-    L.control.layers(
-      {
-        "OpenStreetMap": baseOSM,
-        "Satélite Esri": baseEsriSat,
-        "Gris claro Esri": baseEsriGray
-      },
-      {},
-      { collapsed: false, position: "topright" }
-    ).addTo(map);
-
-    const pointClusterLayer = L.markerClusterGroup({
-      showCoverageOnHover: false,
-      spiderfyOnMaxZoom: true,
-      maxClusterRadius: 42
-    });
-
-    const lineLayer = L.layerGroup().addTo(map);
-    const polygonLayer = L.layerGroup().addTo(map);
-    pointClusterLayer.addTo(map);
-
-    let layerById = {};
-    let selectedRecord = null;
-    let currentFiltered = [];
-
-    const provinceFilter = document.getElementById("provinceFilter");
-    const cantonFilter = document.getElementById("cantonFilter");
-    const institutionFilter = document.getElementById("institutionFilter");
-    const formFilter = document.getElementById("formFilter");
-    const geomFilter = document.getElementById("geomFilter");
-    const quickSearchInput = document.getElementById("quickSearchInput");
-    const searchInput = document.getElementById("searchInput");
-    const caseList = document.getElementById("caseList");
-    const visibleCounter = document.getElementById("visibleCounter");
-    const coordQualityText = document.getElementById("coordQualityText");
-    const totalRows = document.getElementById("totalRows");
-    const pointRows = document.getElementById("pointRows");
-    const lineRows = document.getElementById("lineRows");
-    const polygonRows = document.getElementById("polygonRows");
-    const detailPanel = document.getElementById("detailPanel");
-
-    const selectedCard = document.getElementById("selectedCard");
-    const selectedTitle = document.getElementById("selectedTitle");
-    const selectedText = document.getElementById("selectedText");
-    const copyCoordsBtn = document.getElementById("copyCoordsBtn");
-    const centerSelectedBtn = document.getElementById("centerSelectedBtn");
-    const clearSelectionBtn = document.getElementById("clearSelectionBtn");
-
-    function hasGeometry(record) {
-      return record.geometry && record.geometry.type && Array.isArray(record.geometry.coordinates);
-    }
-
-    function geometryType(record) {
-      return hasGeometry(record) ? record.geometry.type : "None";
-    }
-
-    function uniqueValues(data, key) {
-      return [...new Set(data.map(item => item[key]).filter(Boolean))]
-        .sort((a, b) => String(a).localeCompare(String(b), "es"));
-    }
-
-    function fillSelect(selectElement, values, defaultText) {
-      const current = selectElement.value;
-      selectElement.innerHTML = `<option value="">${defaultText}</option>`;
-      values.forEach(value => {
-        const option = document.createElement("option");
-        option.value = value;
-        option.textContent = value;
-        selectElement.appendChild(option);
-      });
-      if ([...selectElement.options].some(opt => opt.value === current)) {
-        selectElement.value = current;
-      }
-    }
-
-    function initializeFilters() {
-      fillSelect(provinceFilter, uniqueValues(REGISTROS_ENOS, "provincia"), "Todas");
-      updateDependentFilters();
-      fillSelect(formFilter, uniqueValues(REGISTROS_ENOS, "formulario"), "Todos");
-    }
-
-    function updateDependentFilters() {
-      const province = provinceFilter.value;
-      const canton = cantonFilter.value;
-
-      const provinceData = province
-        ? REGISTROS_ENOS.filter(item => item.provincia === province)
-        : REGISTROS_ENOS;
-
-      fillSelect(cantonFilter, uniqueValues(provinceData, "canton"), "Todos");
-
-      const cantonData = cantonFilter.value
-        ? provinceData.filter(item => item.canton === cantonFilter.value)
-        : provinceData;
-
-      fillSelect(institutionFilter, uniqueValues(cantonData, "institucion"), "Todas");
-    }
-
-    function normalize(text) {
-      return String(text || "")
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
-    }
-
-    function searchableText(item) {
-      return normalize([
-        item.institucion,
-        item.provincia,
-        item.canton,
-        item.formulario,
-        item.estado,
-        item.codigo,
-        item.numero,
-        geometryType(item)
-      ].join(" "));
-    }
-
-    function getFilteredData() {
-      const province = provinceFilter.value;
-      const canton = cantonFilter.value;
-      const institution = institutionFilter.value;
-      const form = formFilter.value;
-      const geom = geomFilter.value;
-      const quickQuery = normalize(quickSearchInput.value);
-      const freeQuery = normalize(searchInput.value);
-
-      return REGISTROS_ENOS.filter(item => {
-        const matchesProvince = !province || item.provincia === province;
-        const matchesCanton = !canton || item.canton === canton;
-        const matchesInstitution = !institution || item.institucion === institution;
-        const matchesForm = !form || item.formulario === form;
-        const matchesGeom = !geom || geometryType(item) === geom;
-
-        const text = searchableText(item);
-        const matchesQuick = !quickQuery || text.includes(quickQuery);
-        const matchesFree = !freeQuery || text.includes(freeQuery);
-
-        return matchesProvince && matchesCanton && matchesInstitution && matchesForm && matchesGeom && matchesQuick && matchesFree;
+  cfg.forms.forEach(id => {
+    const data = FORM_CARDS[id];
+    const card = document.createElement('div');
+    card.className = 'form-card';
+    card.innerHTML = '<h3>' + data.title + '</h3><p>' + data.desc + '</p>';
+    const a = document.createElement('a');
+    a.className = 'btn primary';
+    a.textContent = 'Abrir Kobo';
+    a.href = FORM_LINKS[id] || '#';
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    if(!FORM_LINKS[id] || FORM_LINKS[id] === '#'){
+      a.addEventListener('click', function(e){
+        e.preventDefault();
+        alert('Enlace pendiente para ' + id + '.');
       });
     }
+    card.appendChild(a);
+    grid.appendChild(card);
+  });
+}
 
-    function escapeHTML(value) {
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+function selectActor(actorKey, el){
+  document.querySelectorAll('.role').forEach(r=>r.classList.remove('active'));
+  if(el) el.classList.add('active');
+  renderActorForms(actorKey);
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  renderActorForms('GAD');
+});
+
+function openTab(id, btn){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  btn.classList.add('active');
+}
+function openDetailed(){
+  const d=document.getElementById('detalle');
+  d.classList.add('active');
+  d.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function closeDetailed(){
+  document.getElementById('detalle').classList.remove('active');
+  document.getElementById('dashboard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function openDetailTab(id,btn){
+  document.querySelectorAll('.detail-module').forEach(el=>el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.detail-tab').forEach(el=>el.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function setPromptStatus(message, ok){
+  const box = document.getElementById('promptStatus');
+  const txt = document.getElementById('promptStatusText');
+  if(!box || !txt) return;
+  txt.textContent = message || '';
+  box.style.display = message ? 'flex' : 'none';
+  box.style.background = ok ? '#eef9f2' : '#fff8e8';
+  box.style.borderColor = ok ? '#bfe5ca' : '#f1d28b';
+}
+
+
+// VERSION_INDICE_MEMORIA_PROMPT_REAL_20260622_02
+const ENOS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzp-apAS0-u3JPrVzjIk3KgmGeK5ISx61rqM9amLtXmIz3XWWdplhpgbHe4srPXDlHi/exec';
+const ENOS_WEBAPP_KEY = 'CZ5_ENOS_2026';
+
+function extraerCodigoCaso(valor){
+  let txt = String(valor || '').trim();
+  if(!txt) return '';
+
+  // Si por error se pegó un prompt completo, se extrae solo el código.
+  const patrones = [
+    /Código de caso:\s*([A-Za-z0-9_\-|\.]+)/i,
+    /Código solicitado:\s*([A-Za-z0-9_\-|\.]+)/i,
+    /codigo_caso["']?\s*[:=]\s*["']?([A-Za-z0-9_\-|\.]+)/i
+  ];
+
+  for(const patron of patrones){
+    const m = txt.match(patron);
+    if(m && m[1]) return m[1].trim();
+  }
+
+  // Si no es prompt, se limpia el valor como código.
+  txt = txt.split(/\s+/)[0].trim();
+  return txt;
+}
+
+function obtenerActorPlataforma(){
+  const cfg = ACTOR_CONFIG[selectedActor] || ACTOR_CONFIG.GAD;
+  return cfg.title.replace('Flujo operativo · ', '');
+}
+
+function jsonpENOS(action, params){
+  return new Promise(function(resolve, reject){
+    if(!ENOS_WEBAPP_URL || ENOS_WEBAPP_URL.indexOf('script.google.com') === -1){
+      reject(new Error('No está configurada la URL del Web App de Apps Script.'));
+      return;
     }
 
-    function pointIcon(isSelected = false) {
-      return L.divIcon({
-        className: "",
-        html: `<div class="custom-marker ${isSelected ? "selected" : ""}"></div>`,
-        iconSize: [24, 24],
-        iconAnchor: [12, 12],
-        popupAnchor: [0, -10]
-      });
-    }
+    const callbackName = 'enosCallback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+    const url = new URL(ENOS_WEBAPP_URL);
+    url.searchParams.set('action', action);
+    url.searchParams.set('webapp_key', ENOS_WEBAPP_KEY);
+    url.searchParams.set('callback', callbackName);
+    url.searchParams.set('_t', Date.now());
 
-    function styleForRecord(record, isSelected = false) {
-      if (geometryType(record) === "Polygon") {
-        return {
-          color: isSelected ? "#F4B000" : "#2E8B57",
-          weight: isSelected ? 5 : 3,
-          opacity: .95,
-          fillColor: isSelected ? "#F4B000" : "#2E8B57",
-          fillOpacity: isSelected ? .26 : .16
-        };
-      }
-
-      return {
-        color: isSelected ? "#F4B000" : "#E87511",
-        weight: isSelected ? 6 : 4,
-        opacity: .95
-      };
-    }
-
-    function getRepresentativeLatLng(record) {
-      if (!hasGeometry(record)) return null;
-
-      const type = record.geometry.type;
-      const c = record.geometry.coordinates;
-
-      if (type === "Point") return [c[1], c[0]];
-
-      if (type === "LineString" && c.length) {
-        const mid = c[Math.floor(c.length / 2)];
-        return [mid[1], mid[0]];
-      }
-
-      if (type === "Polygon" && c.length && c[0].length) {
-        const ring = c[0];
-        let sumLat = 0, sumLng = 0;
-        ring.forEach(coord => {
-          sumLng += coord[0];
-          sumLat += coord[1];
-        });
-        return [sumLat / ring.length, sumLng / ring.length];
-      }
-
-      return null;
-    }
-
-    function getBoundsForRecord(record) {
-      if (!hasGeometry(record)) return null;
-
-      if (record.geometry.type === "Point") {
-        const latLng = getRepresentativeLatLng(record);
-        return latLng ? L.latLngBounds([latLng]) : null;
-      }
-
-      const latlngs = geoJSONToLatLngs(record.geometry);
-      if (!latlngs.length) return null;
-      return L.latLngBounds(latlngs);
-    }
-
-    function geoJSONToLatLngs(geometry) {
-      if (!geometry) return [];
-
-      if (geometry.type === "LineString") {
-        return geometry.coordinates.map(coord => [coord[1], coord[0]]);
-      }
-
-      if (geometry.type === "Polygon") {
-        return geometry.coordinates.flat().map(coord => [coord[1], coord[0]]);
-      }
-
-      if (geometry.type === "Point") {
-        return [[geometry.coordinates[1], geometry.coordinates[0]]];
-      }
-
-      return [];
-    }
-
-    function geometryLabel(record) {
-      const type = geometryType(record);
-      if (type === "Point") return "Punto";
-      if (type === "LineString") return "Línea";
-      if (type === "Polygon") return "Polígono";
-      return "Sin geometría";
-    }
-
-    function popupHTML(record) {
-      const coordsText = getLocationText(record);
-
-      return `
-        <div class="popup-title">${escapeHTML(record.institucion)}</div>
-        <div class="popup-meta">
-          <strong>${escapeHTML(record.canton || "")}</strong> · ${escapeHTML(record.provincia || "")}<br>
-          Formulario: <strong>${escapeHTML(record.formulario || "S/D")}</strong><br>
-          Geometría: <strong>${geometryLabel(record)}</strong><br>
-          Estado: ${escapeHTML(record.estado || "S/D")}<br>
-          Número: ${escapeHTML(record.numero || "S/N")}<br>
-          Código: ${escapeHTML(record.codigo || "S/D")}<br>
-          Ubicación: ${escapeHTML(coordsText)}
-        </div>
-        <div class="popup-actions">
-          <button onclick="window.ENOS.select('${record.id}')">Ver detalle</button>
-          <button class="secondary" onclick="window.ENOS.copy('${record.id}')">Copiar ubicación</button>
-          <button class="secondary" onclick="window.ENOS.filterRelated('${record.id}')">Filtrar GAD</button>
-        </div>
-      `;
-    }
-
-    function renderMap(data) {
-      pointClusterLayer.clearLayers();
-      lineLayer.clearLayers();
-      polygonLayer.clearLayers();
-      layerById = {};
-
-      const geoData = data.filter(hasGeometry);
-
-      geoData.forEach(record => {
-        const selected = selectedRecord?.id === record.id;
-        const type = geometryType(record);
-        let layer = null;
-
-        if (type === "Point") {
-          const latlng = getRepresentativeLatLng(record);
-          if (!latlng) return;
-
-          layer = L.marker(latlng, {
-            icon: pointIcon(selected),
-            title: record.institucion
-          });
-
-          layer.bindPopup(popupHTML(record));
-          layer.on("click", () => selectRecord(record.id, { openPopup: false, pan: false }));
-          pointClusterLayer.addLayer(layer);
-        }
-
-        if (type === "LineString") {
-          const latlngs = geoJSONToLatLngs(record.geometry);
-          layer = L.polyline(latlngs, styleForRecord(record, selected));
-          layer.bindPopup(popupHTML(record));
-          layer.on("click", () => selectRecord(record.id, { openPopup: false, pan: false }));
-          lineLayer.addLayer(layer);
-        }
-
-        if (type === "Polygon") {
-          const rings = record.geometry.coordinates.map(ring => ring.map(coord => [coord[1], coord[0]]));
-          layer = L.polygon(rings, styleForRecord(record, selected));
-          layer.bindPopup(popupHTML(record));
-          layer.on("click", () => selectRecord(record.id, { openPopup: false, pan: false }));
-          polygonLayer.addLayer(layer);
-        }
-
-        if (layer) layerById[record.id] = layer;
-      });
-
-      const points = data.filter(item => geometryType(item) === "Point").length;
-      const lines = data.filter(item => geometryType(item) === "LineString").length;
-      const polygons = data.filter(item => geometryType(item) === "Polygon").length;
-      const none = data.filter(item => geometryType(item) === "None").length;
-
-      visibleCounter.textContent = `${geoData.length} elementos visibles`;
-      coordQualityText.textContent = `Sin geometría: ${none}`;
-
-      totalRows.textContent = data.length;
-      pointRows.textContent = points;
-      lineRows.textContent = lines;
-      polygonRows.textContent = polygons;
-    }
-
-    function renderList(data) {
-      caseList.innerHTML = "";
-
-      if (!data.length) {
-        caseList.innerHTML = `<div class="empty">No existen registros con los filtros aplicados.</div>`;
-        return;
-      }
-
-      data.forEach(record => {
-        const row = document.createElement("div");
-        row.className = `case-row ${selectedRecord?.id === record.id ? "active" : ""}`;
-        row.dataset.id = record.id;
-
-        row.innerHTML = `
-          <div class="case-main">
-            <div class="institution">${escapeHTML(record.institucion || "Institución sin nombre")}</div>
-            <div class="form-badge">${escapeHTML(record.formulario || "S/D")}</div>
-          </div>
-          <div class="meta">
-            ${escapeHTML(record.canton || "Sin cantón")} · ${escapeHTML(record.provincia || "Sin provincia")}<br>
-            Estado: <strong>${escapeHTML(record.estado || "Sin estado")}</strong>
-            · Número: <strong>${escapeHTML(record.numero || "S/N")}</strong>
-          </div>
-          <span class="geom-badge">${geometryLabel(record)}</span>
-          <div class="case-code">${escapeHTML(record.codigo || "Sin código")}</div>
-        `;
-
-        row.addEventListener("click", () => selectRecord(record.id, { openPopup: true, pan: true }));
-        caseList.appendChild(row);
-      });
-    }
-
-    function renderDetail(record) {
-      if (!record) {
-        detailPanel.innerHTML = `
-          <h4>Lectura rápida</h4>
-          <p>Seleccione un registro para revisar datos principales, geometría y acciones básicas.</p>
-        `;
-        selectedCard.classList.remove("active");
-        return;
-      }
-
-      detailPanel.innerHTML = `
-        <h4>${escapeHTML(record.institucion)}</h4>
-        <p>
-          <strong>Ubicación:</strong> ${escapeHTML(record.canton)} · ${escapeHTML(record.provincia)}<br>
-          <strong>Formulario:</strong> ${escapeHTML(record.formulario)}<br>
-          <strong>Geometría:</strong> ${geometryLabel(record)}<br>
-          <strong>Estado:</strong> ${escapeHTML(record.estado)}<br>
-          <strong>Número:</strong> ${escapeHTML(record.numero || "S/N")}<br>
-          <strong>Fecha:</strong> ${escapeHTML(record.fecha || "Sin fecha")}<br>
-          <strong>Código:</strong> ${escapeHTML(record.codigo)}
-        </p>
-      `;
-
-      selectedTitle.textContent = record.institucion;
-      selectedText.innerHTML = `
-        ${escapeHTML(record.canton)} · ${escapeHTML(record.provincia)}<br>
-        Geometría: ${geometryLabel(record)}<br>
-        Ubicación: ${escapeHTML(getLocationText(record))}
-      `;
-      selectedCard.classList.add("active");
-    }
-
-    function getLocationText(record) {
-      if (!hasGeometry(record)) return "sin geometría";
-      const type = geometryType(record);
-
-      if (type === "Point") {
-        const latLng = getRepresentativeLatLng(record);
-        return latLng ? `${latLng[0].toFixed(6)}, ${latLng[1].toFixed(6)}` : "punto inválido";
-      }
-
-      const latlngs = geoJSONToLatLngs(record.geometry);
-      return `${geometryLabel(record)} con ${latlngs.length} vértices`;
-    }
-
-    function renderAll() {
-      currentFiltered = getFilteredData();
-      renderMap(currentFiltered);
-      renderList(currentFiltered);
-    }
-
-    function selectRecord(id, options = { openPopup: true, pan: true }) {
-      const record = REGISTROS_ENOS.find(item => item.id === id);
-      if (!record) return;
-
-      selectedRecord = record;
-      renderDetail(record);
-      renderAll();
-
-      if (hasGeometry(record) && layerById[record.id]) {
-        const layer = layerById[record.id];
-
-        if (options.pan) {
-          const bounds = getBoundsForRecord(record);
-          if (bounds) {
-            if (geometryType(record) === "Point") {
-              const latLng = getRepresentativeLatLng(record);
-              map.setView(latLng, Math.max(map.getZoom(), 15), { animate: true });
-            } else {
-              map.fitBounds(bounds, { padding: [60, 60], maxZoom: 16 });
-            }
-          }
-        }
-
-        if (options.openPopup) {
-          setTimeout(() => {
-            if (geometryType(record) === "Point" && pointClusterLayer.hasLayer(layer)) {
-              pointClusterLayer.zoomToShowLayer(layer, () => layer.openPopup());
-            } else {
-              layer.openPopup();
-            }
-          }, 180);
-        }
-      }
-
-      const activeRow = document.querySelector(`.case-row[data-id="${CSS.escape(record.id)}"]`);
-      if (activeRow) activeRow.scrollIntoView({ block: "nearest", behavior: "smooth" });
-    }
-
-    function clearSelection() {
-      selectedRecord = null;
-      renderDetail(null);
-      renderAll();
-    }
-
-    function fitToVisible() {
-      const geoData = currentFiltered.filter(hasGeometry);
-      if (!geoData.length) {
-        map.setView([-1.85, -79.8], 8);
-        return;
-      }
-
-      const boundsArray = geoData
-        .map(getBoundsForRecord)
-        .filter(Boolean);
-
-      if (!boundsArray.length) return;
-
-      const totalBounds = boundsArray.reduce((acc, bounds) => acc.extend(bounds), boundsArray[0]);
-      map.fitBounds(totalBounds, { padding: [45, 45], maxZoom: 14 });
-    }
-
-    function copyLocation(id = selectedRecord?.id) {
-      const record = REGISTROS_ENOS.find(item => item.id === id);
-      if (!record || !hasGeometry(record)) {
-        alert("El registro seleccionado no tiene geometría válida.");
-        return;
-      }
-
-      let text = "";
-      if (geometryType(record) === "Point") {
-        const latLng = getRepresentativeLatLng(record);
-        text = latLng ? `${latLng[0].toFixed(6)}, ${latLng[1].toFixed(6)}` : "";
-      } else {
-        text = JSON.stringify(record.geometry);
-      }
-
-      if (!text) {
-        alert("No se pudo copiar la ubicación.");
-        return;
-      }
-
-      navigator.clipboard.writeText(text)
-        .then(() => {
-          document.getElementById("statusText").textContent = "Ubicación copiada";
-          setTimeout(() => document.getElementById("statusText").textContent = "Módulo operativo", 1800);
-        })
-        .catch(() => alert(text));
-    }
-
-    function filterRelated(id) {
-      const record = REGISTROS_ENOS.find(item => item.id === id);
-      if (!record) return;
-
-      provinceFilter.value = record.provincia || "";
-      updateDependentFilters();
-      cantonFilter.value = record.canton || "";
-      updateDependentFilters();
-      institutionFilter.value = record.institucion || "";
-      quickSearchInput.value = "";
-      searchInput.value = "";
-      renderAll();
-      selectRecord(record.id, { openPopup: true, pan: true });
-    }
-
-    provinceFilter.addEventListener("change", () => {
-      updateDependentFilters();
-      renderAll();
+    Object.keys(params || {}).forEach(function(k){
+      url.searchParams.set(k, params[k]);
     });
 
-    cantonFilter.addEventListener("change", () => {
-      updateDependentFilters();
-      renderAll();
-    });
+    const script = document.createElement('script');
+    let finished = false;
 
-    [institutionFilter, formFilter, geomFilter].forEach(element => {
-      element.addEventListener("change", renderAll);
-    });
+    const timeout = setTimeout(function(){
+      if(finished) return;
+      finished = true;
+      cleanup();
+      reject(new Error('Tiempo de espera agotado consultando Apps Script.'));
+    }, 45000);
 
-    quickSearchInput.addEventListener("input", renderAll);
-    searchInput.addEventListener("input", renderAll);
+    function cleanup(){
+      clearTimeout(timeout);
+      try { delete window[callbackName]; } catch(e) { window[callbackName] = undefined; }
+      if(script && script.parentNode) script.parentNode.removeChild(script);
+    }
 
-    document.getElementById("clearFiltersBtn").addEventListener("click", () => {
-      provinceFilter.value = "";
-      cantonFilter.value = "";
-      institutionFilter.value = "";
-      formFilter.value = "";
-      geomFilter.value = "";
-      quickSearchInput.value = "";
-      searchInput.value = "";
-      updateDependentFilters();
-      clearSelection();
-      renderAll();
-      fitToVisible();
-    });
-
-    document.getElementById("fitMapBtn").addEventListener("click", fitToVisible);
-
-    copyCoordsBtn.addEventListener("click", () => copyLocation());
-    centerSelectedBtn.addEventListener("click", () => {
-      if (!selectedRecord || !hasGeometry(selectedRecord)) return;
-      const bounds = getBoundsForRecord(selectedRecord);
-      if (!bounds) return;
-      if (geometryType(selectedRecord) === "Point") {
-        map.setView(getRepresentativeLatLng(selectedRecord), 15, { animate: true });
-      } else {
-        map.fitBounds(bounds, { padding: [60, 60], maxZoom: 16 });
-      }
-    });
-    clearSelectionBtn.addEventListener("click", clearSelection);
-
-    window.ENOS = {
-      select: (id) => selectRecord(id, { openPopup: false, pan: false }),
-      copy: copyLocation,
-      filterRelated
+    window[callbackName] = function(response){
+      if(finished) return;
+      finished = true;
+      cleanup();
+      resolve(response);
     };
 
-    initializeFilters();
-    renderAll();
-    setTimeout(fitToVisible, 300);
-  </script>
+    script.onerror = function(){
+      if(finished) return;
+      finished = true;
+      cleanup();
+      reject(new Error('No se pudo conectar con Apps Script. Revise implementación y permisos del Web App.'));
+    };
+
+    script.src = url.toString();
+    document.body.appendChild(script);
+  });
+}
+
+function construirPromptDesdeRespuestaIndice(codigoCaso, response){
+  if(response && response.prompt) return response.prompt;
+
+  if(response && response.paquete){
+    return [
+      'INSTRUCCIÓN PARA GPT:',
+      'Actúa como asistente técnico ENOS Zona 5 de la Secretaría Nacional de Gestión de Riesgos.',
+      '',
+      'Usa únicamente la información contenida en el PAQUETE GPT CZ5 DEL CASO.',
+      '',
+      'DATOS DE CONTROL DE LA PLATAFORMA:',
+      '- Código solicitado: ' + codigoCaso,
+      '- Actor seleccionado: ' + obtenerActorPlataforma(),
+      '- Registros detectados: ' + (response.total_registros || response.total || ''),
+      '',
+      'PAQUETE GPT CZ5 DEL CASO:',
+      JSON.stringify(response.paquete, null, 2),
+      '',
+      'ESTRUCTURA ESPERADA:',
+      '- Antecedentes',
+      '- Objetivo general y específicos',
+      '- Alcance y limitaciones',
+      '- Metodología',
+      '- Insumos utilizados',
+      '- Caracterización territorial',
+      '- Análisis de amenazas, exposición, vulnerabilidad, infraestructura y capacidades',
+      '- Matriz de hallazgos',
+      '- Plan de acción',
+      '- Seguimiento mensual y cierre',
+      '- Conclusiones',
+      '- Recomendaciones',
+      '- Anexos'
+    ].join(String.fromCharCode(10));
+  }
+
+  throw new Error('Apps Script respondió, pero no devolvió prompt ni paquete GPT.');
+}
+
+async function generarPromptGPT(){
+  const input = document.getElementById('codigoCasoInput');
+  const output = document.getElementById('promptOutput');
+  const codigo = extraerCodigoCaso(input && input.value ? input.value : '');
+
+  if(!codigo){
+    alert('Ingrese primero el código de caso.');
+    if(input) input.focus();
+    return;
+  }
+
+  if(input) input.value = codigo;
+  if(output) output.value = '';
+
+  setPromptStatus('Consultando INDICE_MEMORIA_ENOS para el caso: ' + codigo + ' ...', true);
+
+  try{
+    const response = await jsonpENOS('generatePromptFromIndex', {
+      codigo_caso: codigo,
+      actor: obtenerActorPlataforma()
+    });
+
+    if(!response || response.ok === false){
+      const msg = (response && (response.message || response.error)) || 'No se encontró el caso o Apps Script no devolvió respuesta válida.';
+      setPromptStatus(msg, false);
+      if(output) output.value = 'NO SE GENERÓ PROMPT.\n\n' + msg + '\n\nCódigo buscado: ' + codigo + '\n\nRevise que el caso exista en INDICE_MEMORIA_ENOS y que el Web App esté implementado como nueva versión.';
+      return;
+    }
+
+    const prompt = construirPromptDesdeRespuestaIndice(codigo, response);
+    if(!prompt || prompt.indexOf('PAQUETE GPT CZ5 DEL CASO') === -1){
+      setPromptStatus('La respuesta no contiene PAQUETE GPT CZ5 DEL CASO. No se usará plantilla genérica.', false);
+      if(output) output.value = JSON.stringify(response, null, 2);
+      return;
+    }
+
+    if(output) output.value = prompt;
+    try { localStorage.setItem('ENOS_ULTIMO_PROMPT_GPT', prompt); } catch(e) {}
+    copiarTextoSeguro(prompt);
+
+    const total = response.total_registros || response.total || (response.paquete && response.paquete.resumen_control ? response.paquete.resumen_control.total_registros_indice : '');
+    setPromptStatus('Prompt real generado desde INDICE_MEMORIA_ENOS para: ' + codigo + (total ? ' · Registros: ' + total : ''), true);
+
+  }catch(error){
+    const msg = error && error.message ? error.message : String(error);
+    setPromptStatus('Error consultando índice: ' + msg, false);
+    if(output) output.value = 'NO SE GENERÓ PROMPT.\n\nError consultando Apps Script / INDICE_MEMORIA_ENOS:\n' + msg + '\n\nCódigo buscado: ' + codigo;
+  }
+}
+
+function copiarTextoSeguro(texto){
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(texto).catch(function(){});
+    return;
+  }
+  const area = document.createElement('textarea');
+  area.value = texto;
+  document.body.appendChild(area);
+  area.focus();
+  area.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(area);
+}
+
+function copiarPromptActual(){
+  const output = document.getElementById('promptOutput');
+  const prompt = output ? output.value.trim() : '';
+  if(!prompt){
+    alert('No hay prompt generado para copiar.');
+    return;
+  }
+  copiarTextoSeguro(prompt);
+  setPromptStatus('Prompt copiado al portapapeles.', true);
+}
+
+function cargarUltimoPrompt(){
+  let prompt = '';
+  try { prompt = localStorage.getItem('ENOS_ULTIMO_PROMPT_GPT') || ''; } catch(e) {}
+  if(!prompt){
+    alert('No hay prompt guardado en este navegador.');
+    return;
+  }
+  const output = document.getElementById('promptOutput');
+  if(output) output.value = prompt;
+  setPromptStatus('Último prompt cargado.', true);
+}
+
+function limpiarPrompt(){
+  const input = document.getElementById('codigoCasoInput');
+  const output = document.getElementById('promptOutput');
+  if(input) input.value = '';
+  if(output) output.value = '';
+  setPromptStatus('', true);
+}
+
+
+async function verCasosDashboard(){
+  setPromptStatus('Consultando casos disponibles desde INDICE_MEMORIA_ENOS...', true);
+  try{
+    const response = await jsonpENOS('listCases', {});
+    if(!response || response.ok === false){
+      setPromptStatus((response && (response.message || response.error)) || 'No se pudo listar casos.', false);
+      return;
+    }
+    const total = response.total_casos || (response.data ? response.data.length : 0);
+    setPromptStatus('Casos disponibles desde INDICE_MEMORIA_ENOS: ' + total, true);
+    const tab = Array.from(document.querySelectorAll('.tab')).find(b => b.textContent.includes('Dashboard'));
+    if(tab) openTab('dashboard', tab);
+  }catch(error){
+    setPromptStatus('Error consultando casos: ' + (error.message || error), false);
+  }
+}
+
+async function actualizarBaseF01F07(){
+  setPromptStatus('Reconstruyendo INDICE_MEMORIA_ENOS desde todas las hojas...', true);
+  try{
+    const response = await jsonpENOS('rebuildIndex', {});
+    if(!response || response.ok === false){
+      setPromptStatus((response && (response.message || response.error)) || 'No se pudo reconstruir el índice.', false);
+      return;
+    }
+    const total = response.total_registros || response.total || response.registros_indexados || '';
+    setPromptStatus('INDICE_MEMORIA_ENOS reconstruido correctamente' + (total ? ' · Registros: ' + total : '') + '.', true);
+  }catch(error){
+    setPromptStatus('Error reconstruyendo índice: ' + (error.message || error), false);
+  }
+}
+
+function abrirGPTInstitucional(){
+  window.open(GPT_INSTITUCIONAL_URL, '_blank', 'noopener,noreferrer');
+}
+
+
+
+// VERSION_DASHBOARD_OPERATIVO_INFO_AMPLIADA_20260622_01
+let ENOS_DASHBOARD_DATA = {summary:null, map:[], cases:[], selectedCase:null};
+
+function setDashboardStatus(message, ok){
+  const box=document.getElementById('dashboardStatus');
+  const txt=document.getElementById('dashboardStatusText');
+  if(!box||!txt) return;
+  txt.textContent=message||'';
+  box.style.display=message?'flex':'none';
+  box.style.background=ok?'#eef9f2':'#fff8e8';
+  box.style.borderColor=ok?'#bfe5ca':'#f1d28b';
+}
+function setDetalleStatus(message, ok){
+  const box=document.getElementById('detalleStatus');
+  const txt=document.getElementById('detalleStatusText');
+  if(!box||!txt) return;
+  txt.textContent=message||'';
+  box.style.display=message?'flex':'none';
+  box.style.background=ok?'#eef9f2':'#fff8e8';
+  box.style.borderColor=ok?'#bfe5ca':'#f1d28b';
+}
+async function probarConexionENOS(){
+  setDashboardStatus('Probando conexión con Apps Script...', true);
+  try{
+    const r=await jsonpENOS('indexHealth', {});
+    setDashboardStatus(r && r.ok ? 'Conexión OK · ' + (r.spreadsheet_name || 'Spreadsheet conectado') : 'Respuesta no válida de Apps Script.', !!(r&&r.ok));
+  }catch(e){ setDashboardStatus('Error de conexión: ' + (e.message||e), false); }
+}
+async function cargarDashboardOperativo(){
+  setDashboardStatus('Cargando dashboard desde INDICE_MEMORIA_ENOS...', true);
+  try{
+    const summary=await jsonpENOS('dashboardSummary', {});
+    if(!summary || summary.ok===false) throw new Error((summary && (summary.message||summary.error)) || 'No se pudo obtener dashboardSummary.');
+    const map=await jsonpENOS('dashboardMapData', {});
+    ENOS_DASHBOARD_DATA.summary=summary;
+    ENOS_DASHBOARD_DATA.map=(map && map.ok!==false && map.data) ? map.data : [];
+    ENOS_DASHBOARD_DATA.cases=summary.casos || [];
+    renderDashboardSummary(summary);
+    renderDashboardFilters(summary);
+    renderDashboardMap();
+    renderDashboardCases();
+    setDashboardStatus('Dashboard actualizado. Casos: ' + (summary.total_casos||0) + ' · Registros: ' + (summary.total_registros_indice||0), true);
+  }catch(e){ setDashboardStatus('Error cargando dashboard: ' + (e.message||e), false); }
+}
+function renderDashboardSummary(s){
+  const totalCasos=s.total_casos||0;
+  const totalRegs=s.total_registros_indice||0;
+  const prom=s.promedio_cobertura||0;
+  const geo=s.registros_georreferenciados||0;
+  setText('dashCasos', totalCasos);
+  setText('dashRegistros', totalRegs);
+  setText('dashPromedio', prom + '%');
+  setText('dashGeo', geo);
+  setText('dashGaugeNumber', prom + '%');
+  const fill=document.getElementById('dashGaugeFill'); if(fill) fill.style.width=Math.max(0,Math.min(100,prom))+'%';
+  setText('dashLectura', s.lectura_ejecutiva || 'Cobertura calculada por formularios detectados en cada caso.');
+  setText('dashAlertaEjecutiva', s.alerta_ejecutiva || 'Sin alerta ejecutiva generada.');
+}
+function setText(id, value){ const el=document.getElementById(id); if(el) el.textContent=value; }
+function renderDashboardFilters(summary){
+  const prov=document.getElementById('dashProvinciaFilter');
+  const form=document.getElementById('dashFormularioFilter');
+  if(prov){
+    const current=prov.value;
+    const opts=['<option value="">Provincia: todas</option>'].concat((summary.provincias||[]).map(p=>'<option value="'+escapeHtml(p)+'">'+escapeHtml(p)+'</option>'));
+    prov.innerHTML=opts.join(''); prov.value=current || '';
+  }
+  if(form){
+    const current=form.value;
+    const formularios=['F01','F02','F03','F04','F05','F06','F07','BASE_CASOS','OTRO'];
+    form.innerHTML='<option value="">Formulario: todos</option>'+formularios.map(f=>'<option value="'+f+'">'+f+'</option>').join('');
+    form.value=current || '';
+  }
+}
+function renderDashboardMap(){
+  const map=document.getElementById('cartoMapLayer');
+  const note=document.getElementById('cartoMapNote');
+  if(!map) return;
+  const prov=(document.getElementById('dashProvinciaFilter')||{}).value || '';
+  const form=(document.getElementById('dashFormularioFilter')||{}).value || '';
+  const pts=(ENOS_DASHBOARD_DATA.map||[]).filter(p=>(!prov || p.provincia===prov) && (!form || p.formulario===form));
+  map.innerHTML='<div class="carto-map-label">Mapa operativo · puntos desde INDICE_MEMORIA_ENOS</div>';
+  pts.slice(0,180).forEach((p,i)=>{
+    const pos=coordToMapPosition(p.lat, p.lng);
+    const dot=document.createElement('div');
+    dot.className='carto-point '+String(p.formulario||'').toLowerCase();
+    dot.style.left=pos.x+'%'; dot.style.top=pos.y+'%';
+    const tt=document.createElement('div');
+    tt.className='carto-tooltip';
+    tt.style.left='calc('+pos.x+'% + 10px)'; tt.style.top='calc('+pos.y+'% + 10px)';
+    tt.innerHTML='<strong>'+escapeHtml(p.codigo_caso||'Sin código')+'</strong><br>'+escapeHtml(p.formulario||'')+' · '+escapeHtml(p.nombre_visible||'')+'<br>'+escapeHtml([p.provincia,p.canton].filter(Boolean).join(' / '))+'<br>'+Number(p.lat).toFixed(5)+', '+Number(p.lng).toFixed(5);
+    map.appendChild(dot); map.appendChild(tt);
+  });
+  if(note) note.textContent = pts.length ? ('Puntos visibles: '+Math.min(pts.length,180)+' de '+pts.length+'.') : 'No hay registros con coordenadas para el filtro seleccionado. Revise F01/F03 o campos de georreferencia.';
+}
+function coordToMapPosition(lat,lng){
+  const minLat=-5.2,maxLat=1.8,minLng=-82.2,maxLng=-74.5;
+  const x=Math.max(2,Math.min(96,((Number(lng)-minLng)/(maxLng-minLng))*100));
+  const y=Math.max(4,Math.min(94,((maxLat-Number(lat))/(maxLat-minLat))*100));
+  return {x:x,y:y};
+}
+function renderDashboardCases(){
+  const body=document.getElementById('dashCasesBody'); if(!body) return;
+  const q=(document.getElementById('dashCaseSearch')||{}).value || '';
+  const nq=normalizeTextClient(q);
+  const cases=(ENOS_DASHBOARD_DATA.cases||[]).filter(c=>!nq || normalizeTextClient([c.codigo_caso,c.nombre_visible,c.actor,c.provincia,c.canton,c.formularios].join(' ')).includes(nq));
+  if(!cases.length){ body.innerHTML='<tr><td colspan="5">No hay casos para mostrar.</td></tr>'; return; }
+  body.innerHTML=cases.slice(0,80).map(c=>'<tr><td><strong>'+escapeHtml(c.codigo_caso||'')+'</strong></td><td>'+escapeHtml(c.canton||'')+'</td><td>'+escapeHtml(c.formularios||'')+'</td><td>'+escapeHtml(c.registros||0)+'</td><td class="case-action"><button class="btn soft" onclick="seleccionarCasoDashboard(\''+escapeAttr(c.codigo_caso||'')+'\')">Abrir</button></td></tr>').join('');
+}
+function seleccionarCasoDashboard(codigo){
+  const inp=document.getElementById('detalleCodigoCaso'); if(inp) inp.value=codigo;
+  openDetailed();
+  cargarDetalleCaso(codigo);
+}
+async function cargarDetalleCaso(codigoManual){
+  const input=document.getElementById('detalleCodigoCaso');
+  const codigo=extraerCodigoCaso(codigoManual || (input&&input.value) || '');
+  if(!codigo){ setDetalleStatus('Ingrese o seleccione un código de caso.', false); return; }
+  if(input) input.value=codigo;
+  setDetalleStatus('Consultando información ampliada del caso '+codigo+'...', true);
+  try{
+    const actor=(document.getElementById('detalleActor')||{}).value || obtenerActorPlataforma();
+    const response=await jsonpENOS('caseDetailsFromIndex', {codigo_caso:codigo, actor:actor});
+    if(!response || response.ok===false) throw new Error((response && (response.message||response.error)) || 'No se pudo consultar el caso.');
+    ENOS_DASHBOARD_DATA.selectedCase=response;
+    renderDetalleCaso(response);
+    setDetalleStatus('Caso cargado: '+codigo+' · Registros: '+(response.total_registros||0), true);
+  }catch(e){ setDetalleStatus('Error consultando caso: '+(e.message||e), false); }
+}
+function renderDetalleCaso(r){
+  const p=r.paquete || {};
+  const rc=p.resumen_control || {};
+  const suf=p.criterio_suficiencia || {};
+  setText('detCodigo', r.codigo_buscado || p.codigo_buscado || '—');
+  setText('detRegistros', r.total_registros || rc.total_registros_indice || 0);
+  setText('detFormularios', (rc.formularios_detectados||[]).length || 0);
+  setText('detSuficiencia', suf.clasificacion || '—');
+  const lectura=document.getElementById('detLectura');
+  if(lectura){
+    lectura.innerHTML = [
+      criterionHtml('Formularios detectados', (rc.formularios_detectados||[]).join(', ') || 'Sin formularios detectados'),
+      criterionHtml('Actores detectados', (rc.actores_detectados||[]).join(', ') || 'Sin actor detectado'),
+      criterionHtml('Territorio', [rc.provincias_detectadas, rc.cantones_detectados].map(a=>(a||[]).join(', ')).filter(Boolean).join(' / ') || 'Sin provincia/cantón detectado'),
+      criterionHtml('Recomendación', suf.recomendacion_para_gpt || 'Generar lectura técnica con las limitaciones disponibles.')
+    ].join('');
+  }
+  renderDetalleFormularios(p);
+  renderDetalleBrechas(p);
+  renderDetalleMap(r);
+  const json=document.getElementById('detJson'); if(json) json.value=JSON.stringify(p, null, 2);
+}
+function renderDetalleFormularios(p){
+  const grid=document.getElementById('detFormGrid'); if(!grid) return;
+  const keys=[['F01','puntos_riesgo'],['F02','infraestructura_esencial'],['F03','cartografia_institucional'],['F04','acciones_preventivas_mitigacion'],['F05','alojamientos_rutas_puntos_seguros'],['F06','capacidades_recursos'],['F07','seguimiento_mensual']];
+  grid.innerHTML=keys.map(([f,k])=>{
+    const n=(p[k]||[]).length;
+    const cls=n?'ok':'warn';
+    return '<div class="form-card"><h3>'+f+'</h3><p>'+escapeHtml((FORM_CARDS[f]||{}).desc||'Registro asociado')+'</p><span class="tag '+cls+'">'+n+' registros</span></div>';
+  }).join('');
+}
+function renderDetalleBrechas(p){
+  const suf=p.criterio_suficiencia || {};
+  const falt=document.getElementById('detFaltantes');
+  const adv=document.getElementById('detAdvertencias');
+  const faltantes=suf.faltantes_criticos || [];
+  const advert=suf.advertencias || [];
+  if(falt) falt.innerHTML = faltantes.length ? faltantes.map(x=>criterionHtml('Faltante', x)).join('') : criterionHtml('Sin faltantes críticos', 'No se detectaron faltantes críticos automáticos.');
+  if(adv) adv.innerHTML = advert.length ? advert.map(x=>criterionHtml('Advertencia', x)).join('') : criterionHtml('Sin advertencias', 'No se detectaron advertencias automáticas.');
+}
+function renderDetalleMap(r){
+  const map=document.getElementById('detMapLayer');
+  const rows=document.getElementById('detMapRows');
+  const note=document.getElementById('detMapNote');
+  if(!map) return;
+  const pts=(r.puntos_cartograficos || []);
+  map.innerHTML='<div class="carto-map-label">Puntos del caso seleccionado</div>';
+  pts.forEach(p=>{
+    const pos=coordToMapPosition(p.lat, p.lng);
+    const dot=document.createElement('div'); dot.className='carto-point '+String(p.formulario||'').toLowerCase(); dot.style.left=pos.x+'%'; dot.style.top=pos.y+'%';
+    const tt=document.createElement('div'); tt.className='carto-tooltip'; tt.style.left='calc('+pos.x+'% + 10px)'; tt.style.top='calc('+pos.y+'% + 10px)'; tt.innerHTML='<strong>'+escapeHtml(p.formulario||'')+'</strong><br>'+escapeHtml(p.nombre_visible||'')+'<br>'+Number(p.lat).toFixed(5)+', '+Number(p.lng).toFixed(5);
+    map.appendChild(dot); map.appendChild(tt);
+  });
+  if(note) note.textContent = pts.length ? 'Puntos cartográficos del caso: '+pts.length : 'El caso no tiene coordenadas limpias detectadas en el índice.';
+  if(rows) rows.innerHTML = pts.length ? pts.map(p=>'<tr><td>'+escapeHtml(p.formulario||'')+'</td><td>'+escapeHtml(p.nombre_visible||'')+'</td><td>'+escapeHtml(p.provincia||'')+'</td><td>'+escapeHtml(p.canton||'')+'</td><td>'+Number(p.lat).toFixed(5)+', '+Number(p.lng).toFixed(5)+'</td></tr>').join('') : '<tr><td colspan="5">Sin puntos georreferenciados para este caso.</td></tr>';
+}
+function generarPromptDesdeDetalle(){
+  const codigo=(document.getElementById('detalleCodigoCaso')||{}).value || '';
+  const mainInput=document.getElementById('codigoCasoInput'); if(mainInput) mainInput.value=codigo;
+  const tab = Array.from(document.querySelectorAll('.tab')).find(b => b.textContent.includes('Actualizar'));
+  if(tab) openTab('actualizar', tab);
+  generarPromptGPT();
+}
+function criterionHtml(t, s){ return '<div class="criterion"><strong>'+escapeHtml(t||'')+'</strong><span>'+escapeHtml(s||'')+'</span></div>'; }
+function normalizeTextClient(v){ return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase(); }
+function escapeHtml(v){ return String(v===undefined||v===null?'':v).replace(/[&<>"]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+function escapeAttr(v){ return escapeHtml(v).replace(/'/g,'&#39;'); }
+
+document.addEventListener('DOMContentLoaded', function(){
+  setTimeout(function(){ cargarDashboardOperativo().catch(function(){}); }, 900);
+});
+
+</script>
 </body>
 </html>
