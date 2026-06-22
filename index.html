@@ -1,991 +1,1184 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BASE 01 · Ecosistema CZ5 ENOS F01-F07</title>
-  <style>
-    :root {
-      --azul:#083B66;
-      --azul-oscuro:#052A49;
-      --azul-medio:#0A527C;
-      --azul-claro:#E7F2FA;
-      --rojo:#C32026;
-      --amarillo:#F4C542;
-      --verde:#197A4B;
-      --borde:#D8E1EA;
-      --texto:#17212B;
-      --muted:#52606D;
-      --shadow:0 16px 38px rgba(8,59,102,.11);
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BASE 01 · ENOS Zona 5 · Dashboard con análisis detallado</title>
+<style>
+:root{
+  --azul:#0b3f63;
+  --azul2:#114f78;
+  --azul3:#0a3555;
+  --celeste:#eaf6ff;
+  --borde:#cfe1ef;
+  --rojo:#d83a2e;
+  --rojo2:#ef5b4f;
+  --verde:#2e8b57;
+  --ambar:#f2b84b;
+  --fondo:#eef4f8;
+  --panel:#ffffff;
+  --texto:#15324a;
+  --muted:#4d6173;
+  --soft:#f7fbff;
+  --shadow:0 18px 38px rgba(12,45,72,.12);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:var(--fondo);
+  color:var(--texto);
+}
+.header{
+  background:linear-gradient(105deg,var(--azul3),var(--azul2));
+  color:#fff;
+  border-bottom:5px solid var(--rojo2);
+}
+.header-inner{
+  max-width:1220px;
+  margin:0 auto;
+  padding:18px 18px 32px;
+}
+.topline{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  margin-bottom:22px;
+}
+.brandline{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  font-weight:800;
+}
+.logo{
+  width:42px;
+  height:42px;
+  border-radius:11px;
+  background:linear-gradient(135deg,#d62e28,#e95b55);
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  border:1px solid rgba(255,255,255,.4);
+  box-shadow:0 5px 14px rgba(0,0,0,.18);
+}
+.clock{
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;
+  padding:9px 15px;
+  font-weight:800;
+  font-size:13px;
+}
+h1{
+  margin:0 0 14px;
+  font-size:31px;
+  letter-spacing:-.02em;
+}
+.header p{
+  margin:0;
+  max-width:980px;
+  line-height:1.45;
+  font-weight:700;
+  font-size:14px;
+}
+.wrap{
+  max-width:1220px;
+  margin:24px auto 56px;
+  padding:0 18px;
+}
+.platform{
+  background:#fff;
+  border:1px solid var(--borde);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.role-panel{
+  padding:22px 22px 20px;
+}
+.role-panel h2{
+  margin:0 0 8px;
+  font-size:20px;
+  color:var(--azul3);
+}
+.role-panel > p{
+  margin:0 0 18px;
+  color:var(--muted);
+  font-size:14px;
+}
+.roles{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+.role{
+  border:1px solid var(--borde);
+  background:linear-gradient(180deg,#fff,#fbfdff);
+  border-radius:20px;
+  min-height:292px;
+  padding:17px;
+  cursor:pointer;
+  transition:.18s ease;
+}
+.role.active{
+  border-color:var(--rojo2);
+  box-shadow:0 0 0 3px rgba(216,58,46,.08);
+}
+.role:hover{transform:translateY(-1px)}
+.role .badge{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:#dff1ff;
+  color:var(--azul3);
+  font-weight:900;
+  font-size:13px;
+  margin-bottom:10px;
+  border:1px solid #b8daf3;
+}
+.role.active .badge{
+  background:#c93a2d;
+  color:white;
+  border-color:#c93a2d;
+}
+.role h3{
+  margin:0 0 12px;
+  color:var(--azul3);
+  font-size:16px;
+  line-height:1.25;
+}
+.role p{
+  margin:0 0 28px;
+  color:#47596a;
+  line-height:1.35;
+  font-weight:700;
+  font-size:13px;
+}
+.role small{
+  display:block;
+  color:#6b7e90;
+  line-height:1.25;
+  font-weight:700;
+  font-size:12px;
+}
+.divider{height:1px;background:var(--borde)}
+.flow{
+  margin:40px 20px 22px;
+  border:1px solid var(--borde);
+  border-radius:21px;
+  overflow:hidden;
+}
+.flow-head{
+  background:var(--azul2);
+  color:#fff;
+  padding:18px 20px;
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  align-items:flex-start;
+}
+.flow-head h2{
+  margin:0 0 7px;
+  font-size:20px;
+}
+.flow-head p{
+  margin:0;
+  font-size:14px;
+  line-height:1.4;
+}
+.actor-chip{
+  border:1px solid rgba(255,255,255,.32);
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  border-radius:999px;
+  padding:9px 15px;
+  font-weight:900;
+  font-size:12px;
+  white-space:nowrap;
+}
+.tabs{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  padding:14px;
+  background:#fff;
+  border-bottom:1px solid var(--borde);
+}
+.tab{
+  border:1px solid var(--borde);
+  background:#fff;
+  color:var(--azul3);
+  border-radius:14px;
+  padding:14px 12px;
+  font-weight:900;
+  cursor:pointer;
+}
+.tab.active{
+  background:var(--azul3);
+  color:white;
+  border-color:#1284ff;
+  box-shadow:inset 0 0 0 1px #1284ff;
+}
+.tab-content{
+  display:none;
+  padding:20px 18px 22px;
+}
+.tab-content.active{display:block}
+.two{
+  display:grid;
+  grid-template-columns:1.35fr 1fr;
+  gap:18px;
+}
+.tab-content h2{
+  margin:0 0 8px;
+  color:var(--azul3);
+  font-size:22px;
+}
+.tab-content p{
+  margin:0 0 14px;
+  color:var(--muted);
+  line-height:1.45;
+  font-size:14px;
+}
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.form-card, .info-card, .kpi-card, .detail-card{
+  border:1px solid var(--borde);
+  border-radius:16px;
+  background:linear-gradient(180deg,#fff,#fbfdff);
+  padding:14px;
+}
+.form-card h3,.info-card h3,.detail-card h3{
+  margin:0 0 11px;
+  color:var(--azul3);
+  font-size:16px;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border:0;
+  border-radius:12px;
+  padding:11px 15px;
+  font-weight:900;
+  cursor:pointer;
+  text-decoration:none;
+  font-size:14px;
+}
+.btn.primary{background:var(--azul3);color:white;box-shadow:0 8px 18px rgba(10,53,85,.18)}
+.btn.red{background:var(--rojo);color:white}
+.btn.green{background:var(--verde);color:white}
+.btn.soft{background:#e8f5ff;color:var(--azul3);border:1px solid #bcdcf2}
+.btn.white{background:#fff;color:var(--azul3);border:1px solid var(--borde)}
+.note{
+  border:1px solid #f1cf85;
+  background:#fff5dc;
+  color:#734700;
+  border-radius:14px;
+  padding:13px;
+  font-size:13px;
+  line-height:1.35;
+}
+.inputline{
+  margin:8px 0 13px;
+}
+.inputline label{
+  display:block;
+  font-size:13px;
+  font-weight:900;
+  color:var(--azul3);
+  margin-bottom:6px;
+}
+.inputline input{
+  width:100%;
+  border:1px solid var(--borde);
+  border-radius:13px;
+  padding:12px;
+  font-size:14px;
+}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}
+.status{
+  border:1px solid var(--borde);
+  border-radius:13px;
+  background:#f2f8fd;
+  padding:12px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:#2c4053;
+  font-size:13px;
+}
+.dot{
+  width:11px;height:11px;border-radius:999px;background:#2e8b57;display:inline-block;
+}
+textarea{
+  width:100%;
+  min-height:245px;
+  border:1px solid var(--borde);
+  border-radius:13px;
+  background:#f8fbff;
+  padding:12px;
+  resize:vertical;
+  font-family:Consolas,monospace;
+}
+.steps{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.step{
+  border:1px solid var(--borde);
+  border-radius:14px;
+  padding:12px;
+  background:#fff;
+}
+.step strong{
+  display:block;
+  color:var(--azul3);
+  font-size:16px;
+  margin-bottom:5px;
+}
+.repo{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:12px;
+}
+.dashboard-actions{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0 13px}
+.kpi-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-top:13px;
+}
+.kpi-card h4{
+  margin:0 0 10px;
+  color:#526577;
+  font-size:12px;
+  text-transform:uppercase;
+}
+.kpi-card .num{
+  font-size:31px;
+  font-weight:900;
+  color:var(--azul3);
+}
+.kpi-card small{
+  display:block;
+  color:var(--muted);
+  margin-top:8px;
+  line-height:1.3;
+}
+.executive{
+  display:grid;
+  grid-template-columns:1.05fr 1fr;
+  gap:14px;
+  margin-top:14px;
+}
+.gauge{
+  border:1px solid var(--borde);
+  border-radius:18px;
+  padding:18px;
+  background:linear-gradient(180deg,#fff,#f8fbff);
+}
+.gauge-title{
+  font-size:13px;
+  color:#526577;
+  font-weight:900;
+  text-transform:uppercase;
+}
+.gauge-number{
+  margin:10px 0 13px;
+  color:var(--azul3);
+  font-size:52px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:-.04em;
+}
+.track{height:14px;border-radius:999px;background:#e2edf5;overflow:hidden}
+.fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--verde),var(--ambar));width:68%}
+.alert{
+  border:1px solid #f1cf85;
+  background:#fff6dd;
+  border-radius:18px;
+  padding:17px;
+  color:#634000;
+  line-height:1.38;
+}
+.alert strong{display:block;margin-bottom:7px;color:#4e3300}
+.table-wrap{
+  border:1px solid var(--borde);
+  border-radius:15px;
+  overflow:auto;
+  max-height:390px;
+  margin-top:14px;
+}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{
+  background:var(--azul3);
+  color:white;
+  text-align:left;
+  padding:11px 10px;
+}
+td{
+  border-bottom:1px solid #d9e5ef;
+  padding:12px 10px;
+  vertical-align:top;
+}
+.tag{
+  display:inline-flex;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+  white-space:nowrap;
+}
+.tag.ok{background:#e3f7ec;color:#217347}
+.tag.warn{background:#fff3d2;color:#8a5a00}
+.tag.bad{background:#ffe5e1;color:#a3281d}
+.tag.info{background:#e6f3ff;color:#0d4f7a}
+.detail-section{
+  display:none;
+  margin-top:24px;
+  animation:show .2s ease both;
+}
+.detail-section.active{display:block}
+@keyframes show{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.detail-shell{
+  background:white;
+  border:1px solid var(--borde);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.detail-head{
+  background:linear-gradient(105deg,var(--azul3),var(--azul2));
+  color:white;
+  padding:19px 22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+}
+.detail-head h2{margin:0 0 7px;font-size:24px}
+.detail-head p{margin:0;max-width:850px;font-size:14px;line-height:1.4}
+.detail-body{padding:18px}
+.detail-tabs{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:16px;
+}
+.detail-tab{
+  border:1px solid var(--borde);
+  background:#fff;
+  color:var(--azul3);
+  border-radius:999px;
+  padding:10px 13px;
+  font-weight:900;
+  cursor:pointer;
+}
+.detail-tab.active{background:var(--azul3);color:white}
+.detail-module{display:none}
+.detail-module.active{display:block}
+.filters{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr auto;
+  gap:10px;
+  margin-bottom:14px;
+}
+select,input{
+  border:1px solid var(--borde);
+  border-radius:12px;
+  background:#fff;
+  padding:11px;
+  color:var(--texto);
+}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.bars{display:grid;gap:10px}
+.barline{
+  display:grid;
+  grid-template-columns:180px 1fr 52px;
+  gap:9px;
+  align-items:center;
+  font-size:13px;
+}
+.barline .track{height:11px}
+.map{
+  min-height:300px;
+  border-radius:16px;
+  border:1px solid #c8dff0;
+  background:
+    radial-gradient(circle at 20% 32%, rgba(46,139,87,.28) 0 6%, transparent 7%),
+    radial-gradient(circle at 48% 42%, rgba(242,184,75,.35) 0 7%, transparent 8%),
+    radial-gradient(circle at 75% 58%, rgba(216,58,46,.25) 0 6%, transparent 7%),
+    radial-gradient(circle at 34% 72%, rgba(17,79,120,.25) 0 6%, transparent 7%),
+    linear-gradient(145deg,#e9f6ff,#f9fdff);
+  position:relative;
+}
+.map:before{
+  content:"Vista territorial simulada · futura conexión ArcGIS Online / GeoJSON";
+  position:absolute;
+  top:14px;left:14px;
+  background:#fff;
+  border:1px solid var(--borde);
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:12px;
+  font-weight:900;
+  color:var(--azul3);
+}
+.point{
+  position:absolute;width:17px;height:17px;border-radius:999px;border:3px solid white;box-shadow:0 5px 10px rgba(0,0,0,.18);background:var(--verde);
+}
+.p1{left:21%;top:36%}.p2{left:49%;top:48%;background:var(--ambar)}.p3{left:76%;top:62%;background:var(--rojo)}.p4{left:35%;top:75%;background:var(--azul2)}
+.criteria{
+  display:grid;
+  gap:10px;
+}
+.criterion{
+  border:1px solid var(--borde);
+  border-radius:14px;
+  padding:12px;
+  background:var(--soft);
+}
+.criterion strong{display:block;color:var(--azul3);margin-bottom:5px}
+.criterion span{color:var(--muted);font-size:13px;line-height:1.35}
+.footer-note{
+  color:#66798a;
+  font-size:12px;
+  text-align:right;
+  padding:12px 0 0;
+}
+@media(max-width:980px){
+  .roles,.tabs,.kpi-row,.two,.executive,.detail-grid,.filters{grid-template-columns:1fr}
+  .role{min-height:auto}
+  .flow{margin:20px 10px}
+  .topline,.flow-head,.detail-head{flex-direction:column}
+}
 
-    * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
-    body {
-      margin:0;
-      font-family:"Segoe UI", Arial, sans-serif;
-      color:var(--texto);
-      background:linear-gradient(180deg,#F8FAFC 0%,#EEF3F7 100%);
-    }
+/* Ajuste puntual: buscador guiado para prompt GPT sin cambiar arquitectura de módulos */
+.guided-case-search select{
+  width:100%;
+  border:1px solid var(--borde);
+  border-radius:12px;
+  padding:12px 10px;
+  color:var(--azul3);
+  background:#fff;
+  font-weight:800;
+  outline:none;
+}
+.guided-case-search select:disabled{
+  background:#f1f5f9;
+  color:#7a8a99;
+}
+.guided-case-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1.4fr;
+  gap:10px;
+}
+.case-preview{
+  margin-top:9px;
+  padding:11px 12px;
+  border:1px dashed var(--borde);
+  background:#f7fbff;
+  border-radius:14px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.35;
+  font-weight:700;
+}
+.case-preview strong{color:var(--azul3)}
+@media(max-width:850px){.guided-case-grid{grid-template-columns:1fr}}
 
-    header {
-      background:linear-gradient(135deg,var(--azul-oscuro),var(--azul),var(--azul-medio));
-      color:white;
-      border-bottom:6px solid var(--rojo);
-      padding:20px 24px 28px;
-    }
-
-    .wrap { max-width:1220px; margin:0 auto; }
-    .topline { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:18px; }
-    .brand { display:flex; align-items:center; gap:12px; font-size:13px; letter-spacing:.05em; text-transform:uppercase; opacity:.95; }
-    .mark { width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg,var(--rojo),#E34A4D); border:2px solid rgba(255,255,255,.38); display:grid; place-items:center; font-weight:900; }
-    .clock { background:rgba(255,255,255,.11); border:1px solid rgba(255,255,255,.28); padding:9px 12px; border-radius:999px; font-weight:800; font-size:13px; white-space:nowrap; }
-    h1 { margin:0; font-size:30px; line-height:1.15; }
-    .subtitle { margin:12px 0 0; font-size:15px; line-height:1.5; opacity:.95; max-width:980px; }
-
-    main { padding:24px; }
-    .shell { max-width:1220px; margin:0 auto; background:white; border:1px solid var(--borde); border-radius:24px; box-shadow:var(--shadow); overflow:hidden; }
-    .section { padding:22px; border-bottom:1px solid var(--borde); }
-    .section:last-child { border-bottom:none; }
-
-    h2 { margin:0 0 8px; color:var(--azul); font-size:20px; }
-    h3 { margin:0 0 8px; color:var(--azul); font-size:16px; }
-    h4 { margin:0 0 6px; color:var(--azul); font-size:14.5px; }
-    .lead { margin:0; color:var(--muted); font-size:14.5px; line-height:1.5; }
-
-    .actor-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:14px; margin-top:16px; }
-    .actor-card {
-      border:1px solid var(--borde);
-      border-radius:20px;
-      background:linear-gradient(180deg,#FFFFFF,#FAFCFE);
-      padding:16px;
-      cursor:pointer;
-      text-align:left;
-      min-height:220px;
-      display:flex;
-      flex-direction:column;
-      align-items:flex-start;
-      gap:8px;
-      transition:.18s ease;
-      font-family:inherit;
-      white-space:normal !important;
-    }
-    .actor-card * { white-space:normal !important; overflow-wrap:break-word; max-width:100%; }
-    .actor-card:hover { transform:translateY(-2px); box-shadow:0 14px 25px rgba(8,59,102,.12); }
-    .actor-card.active { border-color:var(--rojo); box-shadow:0 0 0 4px rgba(195,32,38,.09); }
-    .actor-icon { width:40px; height:40px; border-radius:14px; background:var(--azul-claro); color:var(--azul); display:grid; place-items:center; font-weight:900; border:1px solid #BED8EA; }
-    .actor-card.active .actor-icon { background:var(--rojo); color:white; border-color:var(--rojo); }
-    .actor-card strong { display:block; color:var(--azul); font-size:15.5px; line-height:1.22; }
-    .actor-card p { margin:0; color:var(--muted); font-size:13px; line-height:1.42; }
-    .actor-card small { margin-top:auto; color:#718092; font-size:12px; line-height:1.35; }
-
-    .workspace { margin-top:18px; border:1px solid var(--borde); border-radius:22px; overflow:hidden; background:#FFFFFF; }
-    .workspace-head { background:linear-gradient(135deg,var(--azul),var(--azul-medio)); color:white; padding:18px 20px; display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
-    .workspace-head h3 { color:white; margin:0 0 6px; font-size:19px; }
-    .workspace-head p { margin:0; font-size:14px; opacity:.94; line-height:1.45; }
-    .badge { background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.28); border-radius:999px; padding:8px 11px; white-space:nowrap; font-weight:800; font-size:12.8px; }
-
-    .module-tabs { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; padding:14px; background:#F6F9FC; border-bottom:1px solid var(--borde); }
-    .tab { background:white; color:var(--azul); border:1px solid var(--borde); border-radius:14px; padding:11px 10px; font-weight:800; cursor:pointer; font-size:13px; min-height:46px; white-space:normal; line-height:1.25; }
-    .tab.active { background:var(--azul); color:white; border-color:var(--azul); }
-
-    .module { display:none; padding:18px; background:#FFFFFF; }
-    .module.show { display:block; }
-    .module-layout { display:grid; grid-template-columns:1.15fr .85fr; gap:16px; align-items:start; }
-
-    .forms-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
-    .form-card { border:1px solid var(--borde); border-radius:18px; background:#FBFCFE; padding:14px; min-height:160px; display:flex; flex-direction:column; gap:8px; }
-    .form-card p { margin:0; color:var(--muted); font-size:13px; line-height:1.4; }
-    .form-card .actions { margin-top:auto; }
-
-    .hint-box { border:1px solid #DCE8F0; background:#F8FBFD; border-radius:18px; padding:14px; }
-    .hint-box ul,.hint-box ol { margin:10px 0 0 20px; padding:0; color:var(--muted); font-size:13.5px; line-height:1.5; }
-
-    .actions { display:flex; flex-wrap:wrap; gap:9px; margin-top:14px; }
-    button,a.btn {
-      border:none;
-      border-radius:13px;
-      padding:10px 13px;
-      font-weight:800;
-      font-size:13.5px;
-      cursor:pointer;
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      transition:.18s ease;
-      white-space:nowrap;
-      font-family:inherit;
-    }
-    button:hover,a.btn:hover { transform:translateY(-1px); }
-    .btn-blue { background:var(--azul); color:white; box-shadow:0 10px 18px rgba(8,59,102,.18); }
-    .btn-red { background:var(--rojo); color:white; box-shadow:0 10px 18px rgba(195,32,38,.18); }
-    .btn-green { background:var(--verde); color:white; }
-    .btn-yellow { background:var(--amarillo); color:#2A2A2A; border:1px solid #E0B52E; }
-    .btn-soft { background:var(--azul-claro); color:var(--azul); border:1px solid #BCD8EA; }
-    .btn-outline { background:white; color:var(--azul); border:1px solid var(--borde); }
-
-    label { display:block; font-size:13px; font-weight:800; color:var(--azul); margin:12px 0 6px; }
-    input,textarea { width:100%; border:1px solid var(--borde); border-radius:13px; padding:10px 12px; font-family:inherit; font-size:14px; color:var(--texto); background:#FFFFFF; }
-    textarea { min-height:250px; resize:vertical; font-family:Consolas,"Courier New",monospace; font-size:12.5px; line-height:1.45; background:#F8FBFD; }
-
-    .status { display:flex; align-items:flex-start; gap:8px; padding:10px 12px; border-radius:14px; background:#F7FBFE; border:1px solid var(--borde); color:#405161; margin-top:12px; font-size:13px; line-height:1.42; }
-    .dot { width:10px; height:10px; border-radius:50%; background:var(--amarillo); flex:0 0 auto; margin-top:4px; }
-    .dot.ok { background:var(--verde); }
-    .dot.error { background:var(--rojo); }
-
-    .dashboard-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:14px; }
-    .kpi { border:1px solid var(--borde); border-radius:18px; background:linear-gradient(180deg,#FFFFFF,#FAFCFE); padding:15px; min-height:108px; }
-    .kpi span { color:var(--muted); font-size:12.5px; font-weight:800; text-transform:uppercase; letter-spacing:.03em; }
-    .kpi strong { display:block; color:var(--azul); font-size:30px; line-height:1; margin-top:10px; }
-    .kpi small { display:block; color:var(--muted); margin-top:8px; font-size:12.5px; line-height:1.3; }
-
-    .table-wrap { margin-top:14px; border:1px solid var(--borde); border-radius:18px; overflow:auto; max-height:390px; background:white; }
-    table { width:100%; border-collapse:collapse; min-width:1030px; font-size:13px; }
-    th { background:var(--azul); color:white; text-align:left; padding:10px; position:sticky; top:0; z-index:1; }
-    td { border-top:1px solid var(--borde); padding:9px 10px; vertical-align:top; }
-    tr:hover td { background:#F8FBFD; }
-
-    .chip { display:inline-flex; border-radius:999px; padding:5px 9px; font-size:12px; font-weight:800; background:#EAF2FA; color:var(--azul); border:1px solid #C5DAEA; }
-    .chip.ok { background:#EAF7F0; color:var(--verde); border-color:#CBE9D8; }
-    .chip.warn { background:#FFF6DF; color:#8A6200; border-color:#F2DB99; }
-    .chip.bad { background:#FDECEC; color:var(--rojo); border-color:#F3B6B8; }
-
-    .note { border:1px solid #F2DB99; background:#FFF8E6; color:#725100; border-radius:14px; padding:11px 12px; font-size:13px; line-height:1.42; margin-top:12px; }
-    .mini-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:14px; }
-    .mini-card { border:1px solid var(--borde); background:#FBFCFE; border-radius:16px; padding:13px; }
-    .mini-card strong { color:var(--azul); display:block; margin-bottom:5px; }
-    .mini-card p { margin:0; color:var(--muted); font-size:13px; line-height:1.38; }
-
-    .toast { position:fixed; right:22px; bottom:22px; background:var(--azul-oscuro); color:white; border-left:6px solid var(--amarillo); padding:14px 16px; border-radius:14px; box-shadow:0 16px 30px rgba(5,42,73,.25); display:none; max-width:460px; font-size:14px; line-height:1.42; z-index:999; }
-    .toast.show { display:block; animation:fadeIn .18s ease; }
-    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-
-    #module-dashboard,
-    #module-dashboard * { box-sizing:border-box; }
-    #module-dashboard { width:100% !important; max-width:100% !important; overflow:visible !important; }
-    #module-dashboard .dashboard-only { display:block !important; width:100% !important; max-width:100% !important; overflow:visible !important; }
-    #module-dashboard .dashboard-grid { width:100% !important; max-width:100% !important; }
-    #module-dashboard .table-wrap { width:100% !important; max-width:100% !important; overflow-x:auto !important; }
-    #module-dashboard table { width:100% !important; }
-    #module-dashboard .config-panel { width:100% !important; max-width:100% !important; margin-top:18px; border:1px solid #DCE8F0; background:#F8FBFD; border-radius:18px; padding:16px; overflow:visible !important; clear:both !important; }
-    #module-dashboard .config-panel.hidden { display:none !important; }
-    #module-dashboard .config-grid { display:grid !important; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)) !important; gap:12px !important; width:100% !important; max-width:100% !important; }
-    #module-dashboard .config-grid > div { width:100% !important; max-width:100% !important; }
-    #module-dashboard input { width:100% !important; max-width:100% !important; }
-
-    @media (max-width:900px) {
-      main { padding:12px; }
-      .module-layout { grid-template-columns:1fr; }
-      .module-tabs { grid-template-columns:1fr 1fr; }
-      .forms-grid { grid-template-columns:1fr; }
-      .dashboard-grid { grid-template-columns:1fr 1fr; }
-      .mini-grid { grid-template-columns:1fr; }
-      .topline,.workspace-head { flex-direction:column; }
-      button,a.btn { white-space:normal; }
-    }
-
-    @media (max-width:560px) {
-      .dashboard-grid { grid-template-columns:1fr; }
-      .module-tabs { grid-template-columns:1fr; }
-      h1 { font-size:24px; }
-    }
-  
-    /* Cierre simplificado: dashboard estable sin carpeta de cierre */
-    #module-dashboard,
-    #module-dashboard * {
-      box-sizing: border-box;
-    }
-    #module-dashboard .dashboard-only {
-      display:block !important;
-      width:100% !important;
-      max-width:100% !important;
-    }
-    #module-dashboard .table-wrap {
-      width:100% !important;
-      max-width:100% !important;
-      overflow-x:auto !important;
-    }
-    #module-dashboard table {
-      width:100% !important;
-    }
-
-  </style>
+</style>
+<script src="config.js"></script>
 </head>
 <body>
-<header>
-  <div class="wrap">
+<header class="header">
+  <div class="header-inner">
     <div class="topline">
-      <div class="brand"><div class="mark">CZ5</div><div>Secretaría Nacional de Gestión de Riesgos · Coordinación Zonal 5</div></div>
-      <div class="clock" id="clock">--:--</div>
+      <div class="brandline"><div class="logo">CZ5</div><span>Secretaría Nacional de Gestión de Riesgos · Coordinación Zonal 5</span></div>
+      <div class="clock">20 jun 2026, 4:10 p. m.</div>
     </div>
     <h1>BASE 01 · Ecosistema digital ENOS Zona 5</h1>
-    <p class="subtitle">Ambiente operativo para levantamiento de información F01-F07 en Bolívar, Guayas, Los Ríos, Santa Elena y Galápagos, consolidación Kobo, generación de paquete GPT, elaboración de plan de acción y cierre de ciclo.</p>
+    <p>Ambiente operativo para levantamiento de información F01-F07 en Bolívar, Guayas, Los Ríos, Santa Elena y Galápagos, consolidación Kobo, generación de paquete GPT, elaboración de plan de acción y cierre de ciclo.</p>
   </div>
 </header>
 
-<main>
-  <section class="shell">
-    <div class="section">
+<main class="wrap">
+  <section class="platform">
+    <div class="role-panel">
       <h2>Seleccione el actor que usará el sistema</h2>
-      <p class="lead">El sistema muestra formularios y acciones según el rol seleccionado. La Coordinación Zonal mantiene la trazabilidad del ciclo completo.</p>
-      <div class="actor-grid" id="actorGrid"></div>
+      <p>El sistema muestra formularios y acciones según el rol seleccionado. La Coordinación Zonal mantiene la trazabilidad del ciclo completo.</p>
+      <div class="roles">
+        <article class="role active"><div class="badge">GAD</div><h3>GAD municipal / parroquial</h3><p>Levanta información territorial, puntos críticos, infraestructura expuesta, aporte cartográfico, acciones preventivas, alojamientos, capacidades y seguimiento del plan.</p><small>Uso recomendado para unidades de gestión de riesgos, planificación, catastro, obras públicas y equipos parroquiales o municipales.</small></article>
+        <article class="role"><div class="badge">MTT</div><h3>Mesa Técnica de Trabajo</h3><p>Aporta información sectorial, infraestructura, cartografía institucional, acciones, capacidades, recursos y seguimiento según su competencia.</p><small>Uso recomendado para instituciones rectoras o sectoriales que integran las mesas técnicas.</small></article>
+        <article class="role"><div class="badge">GT</div><h3>Grupos de Trabajo - Soporte Operativo</h3><p>Brindan soporte logístico, seguridad y control, movilización de recursos, telecomunicaciones, abastecimiento y apoyo de primera respuesta.</p><small>Uso recomendado para Fuerzas Armadas, Policía Nacional, Bomberos, ECU 911, ANT, Cruz Roja, MSP y grupos voluntarios.</small></article>
+        <article class="role"><div class="badge">CZ5</div><h3>Coordinación Zonal 5 SNGR</h3><p>Consolida, verifica, controla calidad, genera paquetes GPT, monitorea el total de planes y mantiene trazabilidad zonal.</p><small>Uso recomendado para seguimiento integral, suficiencia técnica, consolidación, generación de planes y control del ciclo.</small></article>
+      </div>
     </div>
 
-    <div class="section">
-      <div class="workspace">
-        <div class="workspace-head">
+    <div class="divider"></div>
+
+    <section class="flow">
+      <div class="flow-head">
+        <div><h2>Flujo operativo · GAD municipal / parroquial</h2><p>Levanta información territorial, puntos críticos, infraestructura expuesta, aporte cartográfico, acciones preventivas, alojamientos, capacidades y seguimiento del plan.</p></div>
+        <span class="actor-chip">Actor territorial</span>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="openTab('datos',this)">1. Llenar datos</button>
+        <button class="tab" onclick="openTab('actualizar',this)">2. Actualizar y prompt</button>
+        <button class="tab" onclick="openTab('gpt',this)">3. GPT y descarga</button>
+        <button class="tab" onclick="openTab('bibliografia',this)">4. Bibliografía</button>
+        <button class="tab" onclick="openTab('dashboard',this)">5. Dashboard</button>
+      </div>
+
+      <div id="datos" class="tab-content active">
+        <div class="two">
           <div>
-            <h3 id="workspaceTitle">Flujo operativo</h3>
-            <p id="workspaceDesc">Seleccione un actor para iniciar el trabajo.</p>
-          </div>
-          <div class="badge" id="actorBadge">Actor no seleccionado</div>
-        </div>
-
-        <div class="module-tabs">
-          <button class="tab active" data-module="datos" onclick="showModule(this,'datos')">1. Llenar datos</button>
-          <button class="tab" data-module="prompt" onclick="showModule(this,'prompt')">2. Actualizar y prompt</button>
-          <button class="tab" data-module="gpt" onclick="showModule(this,'gpt')">3. GPT y descarga</button>
-          <button class="tab" data-module="bibliografia" onclick="showModule(this,'bibliografia')">4. Bibliografía</button>
-          <button class="tab" data-module="dashboard" onclick="showModule(this,'dashboard')">5. Dashboard</button>
-        </div>
-
-        <div class="module show" id="module-datos">
-          <div class="module-layout">
-            <div>
-              <h2>Formularios Kobo disponibles</h2>
-              <p class="lead">Use los formularios según el tipo de actor y el momento del ciclo. Todos alimentan la base consolidada F01-F07.</p>
-              <div class="forms-grid" id="formsGrid"></div>
-            </div>
-            <div class="hint-box">
-              <h3>Uso práctico</h3>
-              <ol>
-                <li>Seleccione el actor.</li>
-                <li>Abra el formulario correspondiente.</li>
-                <li>Use el mismo código de caso en todos los formularios.</li>
-                <li>Al finalizar, vuelva al módulo “Actualizar y prompt”.</li>
-              </ol>
-              <div class="note">El código de caso es la llave para integrar información de GAD, MTT, Grupo Técnico y CZ5.</div>
+            <h2>Formularios Kobo disponibles</h2>
+            <p>Use los formularios según el tipo de actor y el momento del ciclo. Todos alimentan la base consolidada F01-F07.</p>
+            <div class="form-grid">
+              <div class="form-card"><h3>F01 - Punto crítico territorial</h3><p>Identifica caso, puntos críticos, amenazas, brechas, elementos expuestos y acciones iniciales.</p><a class="btn primary">Abrir Kobo</a></div>
+              <div class="form-card"><h3>F02 - Infraestructura esencial expuesta</h3><p>Registra infraestructura expuesta, criticidad, vulnerabilidad, brechas y acciones requeridas.</p><a class="btn primary">Abrir Kobo</a></div>
+              <div class="form-card"><h3>F03 - Aporte cartográfico institucional</h3><p>Registra capas, mapas, fuentes, formatos, cobertura y limitaciones cartográficas aportadas por GAD, instituciones técnicas o CZ5.</p><a class="btn primary">Abrir Kobo</a></div>
+              <div class="form-card"><h3>F04 - Acciones preventivas y mitigación</h3><p>Documenta acciones propuestas, responsables, prioridad, plazo, recursos y estado.</p><a class="btn primary">Abrir Kobo</a></div>
+              <div class="form-card"><h3>F05 - Alojamientos, rutas y puntos seguros</h3><p>Registra alojamientos temporales, rutas, puntos seguros, brechas y responsables.</p><a class="btn primary">Abrir Kobo</a></div>
+              <div class="form-card"><h3>F06 - Capacidades y recursos</h3><p>Registra recursos disponibles, capacidades institucionales, logística y brechas operativas.</p><a class="btn primary">Abrir Kobo</a></div>
             </div>
           </div>
-        </div>
-
-        <div class="module" id="module-prompt">
-          <div class="module-layout">
-            <div>
-              <h2>Actualizar base y generar prompt GPT</h2>
-              <p class="lead">Sincronice Kobo, seleccione el caso y genere el prompt técnico para el asistente ENOS Zona 5.</p>
-
-              <label>Código de caso</label>
-              <input id="codigoCaso" placeholder="Ejemplo: ENOS-GYE-001" />
-
-              <div class="actions">
-                <button class="btn-red" onclick="syncAll()">Actualizar base F01-F07</button>
-                <button class="btn-soft" onclick="listCases()">Ver casos</button>
-                <button class="btn-blue" onclick="generateAndCopy()">Generar y copiar prompt</button>
-                <button class="btn-outline" onclick="getLastPrompt()">Cargar último prompt</button>
-                <button class="btn-outline" onclick="clearPrompt()">Limpiar prompt</button>
-              </div>
-
-              <div class="status"><span class="dot" id="statusDot"></span><span id="statusText">Sistema listo. Seleccione un caso o actualice la base.</span></div>
-
-              <label>Prompt GPT generado</label>
-              <textarea id="promptOutput" placeholder="Aquí aparecerá el prompt generado para copiar y pegar en el GPT."></textarea>
-
-              <div class="actions">
-                <button class="btn-blue" onclick="copyPrompt()">Copiar prompt</button>
-                <button class="btn-green" onclick="openGPT()">Ingresar al GPT institucional</button>
-              </div>
-            </div>
-
-            <div class="hint-box">
-              <h3>Control de suficiencia</h3>
-              <ul>
-                <li>F01 identifica el caso y los puntos críticos.</li>
-                <li>F02 incorpora infraestructura esencial expuesta.</li>
-                <li>F03-F07 completan cartografía, acciones, preparación, capacidades y seguimiento.</li>
-                <li>Si faltan datos, el GPT debe declarar limitaciones y brechas.</li>
-              </ul>
-            </div>
+          <div class="info-card">
+            <h3>Uso práctico</h3>
+            <p>1. Seleccione el actor.<br>2. Abra el formulario correspondiente.<br>3. Use el mismo código de caso en todos los formularios.<br>4. Al finalizar, vuelva al módulo “Actualizar y prompt”.</p>
+            <div class="note">El código de caso es la llave para integrar información de GAD, MTT, Grupo Técnico y CZ5.</div>
           </div>
         </div>
+      </div>
 
-        <div class="module" id="module-gpt">
-          <div class="module-layout">
-            <div>
-              <h2>GPT institucional y cierre práctico</h2>
-              <p class="lead">Ingrese al asistente técnico ENOS Zona 5, pegue el prompt generado y descargue el plan de acción desde el GPT.</p>
-
-              <div class="actions">
-                <button class="btn-blue" onclick="openGPT()">Ingresar al GPT institucional</button>
+      <div id="actualizar" class="tab-content">
+        <div class="two">
+          <div>
+            <h2>Actualizar base y generar prompt GPT</h2>
+            <p>Sincronice Kobo, seleccione el caso y genere el prompt técnico para el asistente ENOS Zona 5.</p>
+            <div class="inputline guided-case-search">
+              <label>Buscar caso para prompt GPT</label>
+              <div class="guided-case-grid">
+                <select id="nivelBusqueda" onchange="actualizarTerritorioPrompt()" aria-label="Nivel de cobertura">
+                  <option value="">1. Nivel</option>
+                  <option value="cantonal">Cantonal</option>
+                  <option value="provincial">Provincial</option>
+                  <option value="zonal">Zonal</option>
+                </select>
+                <select id="territorioBusqueda" onchange="actualizarCasosPrompt()" aria-label="Territorio o actor" disabled>
+                  <option value="">2. Territorio / actor</option>
+                </select>
+                <select id="casoBusqueda" onchange="seleccionarCasoPrompt()" aria-label="Caso visible" disabled>
+                  <option value="">3. Caso visible</option>
+                </select>
               </div>
-
-              <div class="note">
-                Cierre del ciclo en esta plataforma: el usuario genera el plan con el GPT y descarga el archivo final. La firma, envío por Quipux, archivo institucional o socialización se gestionan fuera de esta página, según el procedimiento interno de cada institución.
-              </div>
-
-              <h3 style="margin-top:16px;">Flujo de cierre práctico</h3>
-              <div class="mini-grid">
-                <div class="mini-card">
-                  <strong>1. Generar</strong>
-                  <p>Pegue el prompt en el GPT institucional y solicite el plan de acción.</p>
-                </div>
-                <div class="mini-card">
-                  <strong>2. Revisar</strong>
-                  <p>Verifique datos, conclusiones, recomendaciones y responsabilidades antes de usarlo oficialmente.</p>
-                </div>
-                <div class="mini-card">
-                  <strong>3. Descargar</strong>
-                  <p>Descargue el archivo final desde el GPT en Word, PDF o el formato que corresponda.</p>
-                </div>
-              </div>
+              <input id="caseCode" type="hidden" value="" />
+              <div id="casoSeleccionadoPrompt" class="case-preview">Seleccione nivel, territorio/actor y caso. La página usará el código técnico oculto para generar el prompt.</div>
             </div>
-
-            <div class="hint-box">
-              <h3>Criterio operativo</h3>
-              <ol>
-                <li>La página no registra cierres administrativos.</li>
-                <li>No se exige carpeta de cierre de ciclo.</li>
-                <li>No se utiliza F08.</li>
-                <li>El cierre funcional es la descarga del plan desde el GPT.</li>
-                <li>La trazabilidad formal queda en los procedimientos institucionales externos.</li>
-              </ol>
-            </div>
+            <div class="actions"><button class="btn red" onclick="cargarCatalogoPromptsGPT(true)">Actualizar base F01-F07</button><button class="btn soft" onclick="verCasosPromptGuiado()">Ver casos</button><button class="btn primary" onclick="generarPromptGuiado()">Generar y copiar prompt</button><button class="btn white" onclick="cargarUltimoPromptGuiado()">Cargar último prompt</button><button class="btn white" onclick="limpiarPromptGuiado()">Limpiar prompt</button></div>
+            <div class="status"><span class="dot"></span><span id="promptSearchStatus">Catálogo de prompts listo para conectar.</span></div>
+            <div class="inputline"><label>Prompt GPT generado</label><textarea id="promptBox">"Base conceptual breve",
+"Metodología",
+"Insumos utilizados",
+"Caracterización territorial",
+"Análisis de amenazas, exposición, vulnerabilidad, infraestructura y capacidades",
+"Matriz de hallazgos",
+"Plan de acción",
+"Ruta de seguimiento y cierre",
+"Conclusiones",
+"Recomendaciones",
+"Anexos",
+"Bibliografía"</textarea></div>
+            <div class="actions"><button class="btn primary">Copiar prompt</button><button class="btn green">Ingresar al GPT institucional</button></div>
+          </div>
+          <div class="info-card">
+            <h3>Control de suficiencia</h3>
+            <p>• F01 identifica el caso y los puntos críticos.<br>• F02 incorpora infraestructura esencial expuesta.<br>• F03-F07 completan cartografía, acciones, preparación, capacidades y seguimiento.<br>• Si faltan datos, el GPT debe declarar limitaciones y brechas.</p>
           </div>
         </div>
+      </div>
 
-        <div class="module" id="module-bibliografia">
-          <div class="module-layout">
-            <div>
-              <h2>Bibliografía e insumos de apoyo</h2>
-              <p class="lead">Acceso directo a normativa, lineamientos, cartografía, fuentes institucionales y respaldos técnicos que acompañan la construcción del plan.</p>
-              <div class="mini-grid">
-                <div class="mini-card"><strong>Cartografía</strong><p>F03 alimenta mapas, capas, fuentes, formatos y limitaciones.</p></div>
-                <div class="mini-card"><strong>Insumos técnicos</strong><p>F01-F06 consolidan amenazas, infraestructura, acciones y capacidades.</p></div>
-                <div class="mini-card"><strong>Seguimiento</strong><p>F07 documenta avance mensual, evidencias y escalamiento.</p></div>
-              </div>
-              <div class="actions">
-                <button class="btn-outline" onclick="openBiblioteca()">Abrir normativa y lineamientos</button>
-              </div>
-            </div>
+      <div id="gpt" class="tab-content">
+        <div class="two">
+          <div>
+            <h2>GPT institucional y cierre práctico</h2>
+            <p>Ingrese al asistente técnico ENOS Zona 5, pegue el prompt generado y descargue el plan de acción desde el GPT.</p>
+            <a class="btn primary">Ingresar al GPT institucional</a>
+            <div class="note" style="margin-top:13px">Cierre del ciclo en esta plataforma: el usuario genera el plan con el GPT y descarga el archivo final. La firma, envío por Quipux, archivo institucional o socialización se gestiona fuera de esta página.</div>
+            <h3 style="color:var(--azul3)">Flujo de cierre práctico</h3>
+            <div class="steps"><div class="step"><strong>1. Generar</strong><p>Pegue el prompt en el GPT institucional y solicite el plan de acción.</p></div><div class="step"><strong>2. Revisar</strong><p>Verifique datos, conclusiones, recomendaciones y responsabilidades antes de usarlo oficialmente.</p></div><div class="step"><strong>3. Descargar</strong><p>Descargue el archivo final desde el GPT en Word, PDF o el formato que corresponda.</p></div></div>
+          </div>
+          <div class="info-card"><h3>Criterio operativo</h3><p>1. La página no registra cierres administrativos.<br>2. No se exige carpeta de cierre de ciclo.<br>3. No se utiliza F08.<br>4. El cierre funcional es la descarga del plan desde el GPT.<br>5. La trazabilidad formal queda en los procedimientos institucionales externos.</p></div>
+        </div>
+      </div>
 
-            <div class="hint-box">
-              <h3>Repositorio técnico</h3>
-              <p class="lead">Este botón abre directamente la carpeta oficial de Drive con normativa, lineamientos e insumos de apoyo para la elaboración del plan.</p>
-              <div class="actions">
-                <button class="btn-green" onclick="openBiblioteca()">Abrir carpeta Drive</button>
-              </div>
-              <div class="note">El cierre práctico del ciclo se realiza mediante descarga directa del plan desde el GPT. La biblioteca queda como repositorio de consulta técnica.</div>
-            </div>
+      <div id="bibliografia" class="tab-content">
+        <div class="two">
+          <div>
+            <h2>Bibliografía e insumos de apoyo</h2>
+            <p>Acceso directo a normativa, lineamientos, cartografía, fuentes institucionales y respaldos técnicos que acompañan la construcción del plan.</p>
+            <div class="repo"><div class="step"><strong>Cartografía</strong><p>F03 alimenta mapas, capas, fuentes, formatos y limitaciones.</p></div><div class="step"><strong>Insumos técnicos</strong><p>F01-F06 consolidan amenazas, infraestructura, acciones y capacidades.</p></div><div class="step"><strong>Seguimiento</strong><p>F07 documenta avance mensual, evidencias y escalamiento.</p></div></div>
+            <div class="actions"><button class="btn white">Abrir normativa y lineamientos</button></div>
+          </div>
+          <div class="info-card"><h3>Repositorio técnico</h3><p>Este botón abre directamente la carpeta oficial de Drive con normativa, lineamientos e insumos de apoyo para la elaboración del plan.</p><button class="btn green">Abrir carpeta Drive</button><div class="note" style="margin-top:13px">El cierre práctico del ciclo se realiza mediante descarga directa del plan desde el GPT. La biblioteca queda como repositorio de consulta técnica.</div></div>
+        </div>
+      </div>
+
+      <div id="dashboard" class="tab-content">
+        <h2>Dashboard de control operativo</h2>
+        <p>Tablero de seguimiento: casos, registros, disponibilidad del paquete GPT y lectura ejecutiva de implementación. Esta vista se mantiene liviana para no cambiar la plataforma original.</p>
+        <div class="dashboard-actions"><button class="btn primary">Probar conexión</button><button class="btn red">Sincronizar base F01-F07</button><button class="btn soft">Actualizar dashboard</button></div>
+
+        <div class="kpi-row">
+          <div class="kpi-card"><h4>Casos</h4><div class="num">53</div><small>Total de códigos de caso identificados.</small></div>
+          <div class="kpi-card"><h4>Disponibles</h4><div class="num">53</div><small>Casos visibles o disponibles para GPT.</small></div>
+          <div class="kpi-card"><h4>Registros</h4><div class="num">372</div><small>Suma de registros asociados reportados.</small></div>
+          <div class="kpi-card"><h4>Pendientes</h4><div class="num">0</div><small>Casos sin estado disponible o con revisión pendiente.</small></div>
+        </div>
+
+        <div class="executive">
+          <div class="gauge">
+            <div class="gauge-title">Implementación técnica promedio</div>
+            <div class="gauge-number">68%</div>
+            <div class="track"><div class="fill"></div></div>
+            <p style="margin-top:12px">Indicador calculado por criterios aplicables, no por simple entrega documental.</p>
+          </div>
+          <div class="alert">
+            <strong>Alerta ejecutiva</strong>
+            Hay planes entregados que todavía pueden fallar por verificables, responsables, seguimiento mensual o integración incompleta de lineamientos. Esta alerta debe motivar el ingreso al análisis detallado.
+            <div class="actions" style="margin-bottom:0"><button class="btn primary" onclick="openDetailed()">Análisis detallado</button></div>
           </div>
         </div>
 
-        <div class="module" id="module-dashboard">
-          <div class="dashboard-only">
-            <h2>Dashboard de control operativo</h2>
-            <p class="lead">Tablero de seguimiento: casos, registros y disponibilidad del paquete GPT para elaboración del plan.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Código caso</th><th>Institución</th><th>Tipo usuario</th><th>Cantón</th><th>Formularios</th><th>Registros</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr><td><strong>GADGUARANDA-ENOS-2026</strong></td><td>GAD GUARANDA</td><td>gad_municipal</td><td>guaranda</td><td>F01|F02|F04|F05|F06|F07</td><td>17</td><td><span class="tag ok">DISPONIBLE_PARA_GPT</span></td></tr>
+              <tr><td><strong>GADPLR-01</strong></td><td>GAD PROVINCIAL DE LOS RIOS</td><td>otro</td><td></td><td>F01</td><td>1</td><td><span class="tag ok">DISPONIBLE_PARA_GPT</span></td></tr>
+              <tr><td><strong>GADDAULE-ENOS-2026-001BORRADOR</strong></td><td>GAD MUNICIPAL DAULE</td><td>gad_municipal</td><td>daule</td><td>F01|F02|F03|F04|F05|F06|F07</td><td>30</td><td><span class="tag ok">DISPONIBLE_PARA_GPT</span></td></tr>
+              <tr><td><strong>GAD MONTALVO 001-PLAN EMERGENCIA</strong></td><td>GOBIERNO AUTONOMO DESCENTRALIZADO DEL CANTON MONTALVO</td><td>gad_municipal</td><td>montalvo</td><td>F02|F04</td><td>2</td><td><span class="tag warn">OBSERVADO</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </section>
 
-            <div class="actions">
-              <button class="btn-blue" onclick="pingWebApp()">Probar conexión</button>
-              <button class="btn-red" onclick="syncAll()">Sincronizar base F01-F07</button>
-              <button class="btn-soft" onclick="listCases()">Actualizar dashboard</button>
-            </div>
+  <section id="detalle" class="detail-section">
+    <div class="detail-shell">
+      <div class="detail-head">
+        <div>
+          <h2>Cabina de análisis detallado ENOS 2026</h2>
+          <p>Vista técnica-operativa para revisar porcentaje de implementación, criterios fallidos, verificables, errores Kobo, seguimiento mensual y lectura territorial. Es el segundo pantallazo; no reemplaza el dashboard liviano.</p>
+        </div>
+        <button class="btn white" onclick="closeDetailed()">Volver al dashboard</button>
+      </div>
+      <div class="detail-body">
+        <div class="detail-tabs">
+          <button class="detail-tab active" onclick="openDetailTab('dresumen',this)">Resumen</button>
+          <button class="detail-tab" onclick="openDetailTab('ddocumental',this)">Control documental</button>
+          <button class="detail-tab" onclick="openDetailTab('dcriterios',this)">Criterios</button>
+          <button class="detail-tab" onclick="openDetailTab('dseguimiento',this)">Seguimiento mensual</button>
+          <button class="detail-tab" onclick="openDetailTab('dterritorio',this)">Territorio</button>
+          <button class="detail-tab" onclick="openDetailTab('dkobo',this)">Calidad Kobo</button>
+        </div>
 
-            <div class="dashboard-grid">
-              <div class="kpi">
-                <span>Casos</span>
-                <strong id="kpiCasos">0</strong>
-                <small>Total de códigos de caso identificados.</small>
-              </div>
-              <div class="kpi">
-                <span>Disponibles</span>
-                <strong id="kpiDisponibles">0</strong>
-                <small>Casos visibles o disponibles para GPT.</small>
-              </div>
-              <div class="kpi">
-                <span>Registros</span>
-                <strong id="kpiRegistros">0</strong>
-                <small>Suma de registros asociados reportados.</small>
-              </div>
-              <div class="kpi">
-                <span>Pendientes</span>
-                <strong id="kpiPendientes">0</strong>
-                <small>Casos sin estado disponible o con revisión pendiente.</small>
-              </div>
-            </div>
+        <div class="filters">
+          <select><option>Provincia: todas</option><option>Guayas</option><option>Los Ríos</option><option>Bolívar</option><option>Santa Elena</option></select>
+          <select><option>Estado: todos</option><option>Conforme</option><option>En revisión</option><option>Observado</option><option>No reporta</option></select>
+          <input placeholder="Buscar GAD o código de caso">
+          <button class="btn primary">Aplicar filtros</button>
+        </div>
 
-            <div class="table-wrap" id="casesTableWrap" style="display:none;">
-              <table id="casesTable">
-                <thead>
-                  <tr>
-                    <th>Código caso</th>
-                    <th>Institución</th>
-                    <th>Tipo usuario</th>
-                    <th>Cantón</th>
-                    <th>Formularios</th>
-                    <th>Registros</th>
-                    <th>Estado</th>
-                    <th>Acción</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
+        <div id="dresumen" class="detail-module active">
+          <div class="kpi-row">
+            <div class="kpi-card"><h4>Implementación promedio</h4><div class="num">68%</div><small>Criterios aplicables cumplidos.</small></div>
+            <div class="kpi-card"><h4>GAD observados</h4><div class="num">11</div><small>Requieren ajuste técnico.</small></div>
+            <div class="kpi-card"><h4>Oficios verificables</h4><div class="num">31</div><small>Firmados o cargados.</small></div>
+            <div class="kpi-card"><h4>Fichas válidas</h4><div class="num">82%</div><small>Sin error crítico Kobo.</small></div>
+          </div>
+          <div class="detail-grid" style="margin-top:14px">
+            <div class="detail-card"><h3>Implementación por GAD</h3><div class="bars">
+              <div class="barline"><strong>Pedro Carbo</strong><div class="track"><div class="fill" style="width:86%;background:var(--verde)"></div></div><strong>86%</strong></div>
+              <div class="barline"><strong>El Empalme</strong><div class="track"><div class="fill" style="width:76%;background:var(--ambar)"></div></div><strong>76%</strong></div>
+              <div class="barline"><strong>Montalvo</strong><div class="track"><div class="fill" style="width:54%;background:var(--rojo)"></div></div><strong>54%</strong></div>
+              <div class="barline"><strong>Buena Fe</strong><div class="track"><div class="fill" style="width:82%;background:var(--verde)"></div></div><strong>82%</strong></div>
+            </div></div>
+            <div class="detail-card"><h3>Lectura ejecutiva</h3><div class="criteria">
+              <div class="criterion"><strong>Alto 80–100%</strong><span>Plan útil para gestión y seguimiento.</span></div>
+              <div class="criterion"><strong>Medio 60–79%</strong><span>Plan funcional, pero requiere ajustes técnicos.</span></div>
+              <div class="criterion"><strong>Bajo 40–59%</strong><span>Brechas importantes en estructura, verificables o seguimiento.</span></div>
+              <div class="criterion"><strong>Crítico &lt;40%</strong><span>No permite conocer la aplicabilidad real del plan.</span></div>
+            </div></div>
+          </div>
+        </div>
+
+        <div id="ddocumental" class="detail-module">
+          <div class="detail-card">
+            <h3>Control documental y verificables</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>GAD</th><th>Estado</th><th>Implementación</th><th>Oficio alcalde</th><th>Informe revisión</th><th>Verificables</th><th>Observación</th></tr></thead>
+                <tbody>
+                  <tr><td>Pedro Carbo</td><td><span class="tag ok">Conforme</span></td><td>86%</td><td>Sí</td><td>Cargado</td><td>9</td><td>Pasar a seguimiento mensual.</td></tr>
+                  <tr><td>El Empalme</td><td><span class="tag info">En revisión</span></td><td>76%</td><td>Sí</td><td>Cargado</td><td>6</td><td>Faltan evidencias y cierre de responsables.</td></tr>
+                  <tr><td>Montalvo</td><td><span class="tag warn">Observado</span></td><td>54%</td><td>No</td><td>Cargado</td><td>4</td><td>Acciones sin indicador medible.</td></tr>
+                  <tr><td>Isidro Ayora</td><td><span class="tag bad">No reporta</span></td><td>0%</td><td>No</td><td>No</td><td>0</td><td>Sin información suficiente.</td></tr>
+                </tbody>
               </table>
             </div>
-
-            <div class="note" style="margin-top:16px;">
-              Cierre práctico: una vez generado el plan, el usuario debe ingresar al GPT institucional y descargar el archivo final. Esta página no administra firma, Quipux ni archivo documental.
-            </div>
           </div>
         </div>
+
+        <div id="dcriterios" class="detail-module">
+          <div class="detail-grid">
+            <div class="detail-card"><h3>Criterios que más fallan</h3><div class="bars">
+              <div class="barline"><strong>Verificables</strong><div class="track"><div class="fill" style="width:90%;background:var(--rojo)"></div></div><strong>14</strong></div>
+              <div class="barline"><strong>Seguimiento mensual</strong><div class="track"><div class="fill" style="width:74%;background:var(--ambar)"></div></div><strong>11</strong></div>
+              <div class="barline"><strong>Responsables</strong><div class="track"><div class="fill" style="width:58%;background:var(--ambar)"></div></div><strong>8</strong></div>
+              <div class="barline"><strong>Recursos</strong><div class="track"><div class="fill" style="width:44%;background:var(--azul2)"></div></div><strong>6</strong></div>
+            </div></div>
+            <div class="detail-card"><h3>Matriz de criterios SNGR sugerida</h3><div class="criteria">
+              <div class="criterion"><strong>C1. Estructura concordante</strong><span>Antecedentes, objetivo, alcance, responsables, activación, respuesta y seguimiento.</span></div>
+              <div class="criterion"><strong>C2. Identificación territorial del riesgo</strong><span>Puntos críticos, población expuesta, infraestructura y cartografía.</span></div>
+              <div class="criterion"><strong>C3. Acciones operativas medibles</strong><span>Responsable, plazo, recurso, indicador y medio de verificación.</span></div>
+              <div class="criterion"><strong>C4. Coordinación interinstitucional</strong><span>Participación de GAD, Bomberos, MSP, Policía, educación, CNEL, agua potable y GAD parroquiales.</span></div>
+              <div class="criterion"><strong>C5. Verificables</strong><span>Oficio, actas, fotos, resoluciones, matrices, enlaces, firmas y anexos.</span></div>
+            </div></div>
+          </div>
+        </div>
+
+        <div id="dseguimiento" class="detail-module">
+          <div class="detail-grid">
+            <div class="detail-card"><h3>Seguimiento mensual</h3><div class="bars">
+              <div class="barline"><strong>Junio</strong><div class="track"><div class="fill" style="width:68%"></div></div><strong>68%</strong></div>
+              <div class="barline"><strong>Julio</strong><div class="track"><div class="fill" style="width:0%"></div></div><strong>0%</strong></div>
+              <div class="barline"><strong>Agosto</strong><div class="track"><div class="fill" style="width:0%"></div></div><strong>0%</strong></div>
+              <div class="barline"><strong>Septiembre</strong><div class="track"><div class="fill" style="width:0%"></div></div><strong>0%</strong></div>
+            </div></div>
+            <div class="detail-card"><h3>Campos mínimos F07 seguimiento</h3><div class="criteria">
+              <div class="criterion"><strong>Código único normalizado</strong><span>Provincia + cantón + ENOS + año.</span></div>
+              <div class="criterion"><strong>Avance mensual</strong><span>Actividades ejecutadas, pendientes, evidencia y porcentaje actualizado.</span></div>
+              <div class="criterion"><strong>Brecha técnica</strong><span>Criterio no implementado, causa y apoyo requerido.</span></div>
+              <div class="criterion"><strong>Validación documental</strong><span>Verificable, enlace, fecha, responsable y estado de revisión.</span></div>
+            </div></div>
+          </div>
+        </div>
+
+        <div id="dterritorio" class="detail-module">
+          <div class="detail-grid">
+            <div class="detail-card"><h3>Vista territorial</h3><div class="map"><div class="point p1"></div><div class="point p2"></div><div class="point p3"></div><div class="point p4"></div></div></div>
+            <div class="detail-card"><h3>Consulta para autoridad / ministerio</h3><div class="criteria">
+              <div class="criterion"><strong>Uso previsto</strong><span>Mostrar GAD con mayor avance, GAD rezagados, planes observados y zonas con baja integración de lineamientos.</span></div>
+              <div class="criterion"><strong>Conexión futura</strong><span>ArcGIS Online o capa GeoJSON con polígonos cantonales pintados por porcentaje.</span></div>
+            </div></div>
+          </div>
+        </div>
+
+        <div id="dkobo" class="detail-module">
+          <div class="detail-grid">
+            <div class="detail-card"><h3>Calidad de datos Kobo</h3><div class="table-wrap">
+              <table><thead><tr><th>Hallazgo</th><th>Cantidad</th><th>Acción</th></tr></thead><tbody>
+                <tr><td>Códigos de GAD mal escritos</td><td>9</td><td>Normalizar código único</td></tr>
+                <tr><td>Fichas vacías o sin adjunto</td><td>5</td><td>Solicitar corrección</td></tr>
+                <tr><td>Registros duplicados</td><td>7</td><td>Consolidar por GAD y fecha</td></tr>
+                <tr><td>Documentos sin oficio firmado</td><td>6</td><td>Marcar pendiente documental</td></tr>
+              </tbody></table>
+            </div></div>
+            <div class="detail-card"><h3>Reglas de depuración</h3><div class="criteria">
+              <div class="criterion"><strong>Regla 1</strong><span>Agrupar por GAD, provincia, cantón y período; no depender del código escrito manualmente.</span></div>
+              <div class="criterion"><strong>Regla 2</strong><span>Marcar duplicado si hay mismo GAD, mismo formulario y fecha cercana.</span></div>
+              <div class="criterion"><strong>Regla 3</strong><span>Separar ficha incompleta, válida, observada y consolidada.</span></div>
+            </div></div>
+          </div>
+        </div>
+
+        <div class="footer-note">Maqueta estática · Lista para convertir en parche sobre dashboard.html + analisis-detallado.html.</div>
       </div>
     </div>
   </section>
 </main>
 
-<div class="toast" id="toast"></div>
-
 <script>
-  const WEBAPP_URL = "https://script.google.com/a/macros/gestionderiesgos.gob.ec/s/AKfycbxOLAUWizV9w3jgfo8F4K4_u3pZzMLC-XQi4rT3-twpOz_XhnBvwS-BkLnNdA2R8eVM/exec";
-  const WEBAPP_KEY = "CZ5_ENOS_2026";
-  const GPT_INSTITUCIONAL_URL = "https://chatgpt.com/g/g-6a1db50eb650819185c06255c6850509-asistente-tecnico-enos-guayas-2-0";
-  const BIBLIOTECA_TECNICA_URL = "https://drive.google.com/drive/folders/1ExV7zR5bBLWg6IAyPlYutJMen7YBZUnB?usp=sharing";
+function openTab(id, btn){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  btn.classList.add('active');
+}
+function openDetailed(){
+  const d=document.getElementById('detalle');
+  d.classList.add('active');
+  d.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function closeDetailed(){
+  document.getElementById('detalle').classList.remove('active');
+  document.getElementById('dashboard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function openDetailTab(id,btn){
+  document.querySelectorAll('.detail-module').forEach(el=>el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.detail-tab').forEach(el=>el.classList.remove('active'));
+  btn.classList.add('active');
+}
 
-  const ACTORS = {
-    gad: {
-      title:"GAD municipal / parroquial",
-      icon:"GAD",
-      desc:"Levanta información territorial, puntos críticos, infraestructura expuesta, aporte cartográfico, acciones preventivas, alojamientos, capacidades y seguimiento del plan.",
-      badge:"Actor territorial",
-      note:"Uso recomendado para unidades de gestión de riesgos, planificación, catastro, obras públicas y equipos parroquiales o municipales."
-    },
-    mtt: {
-      title:"Mesa Técnica de Trabajo",
-      icon:"MTT",
-      desc:"Aporta información sectorial, infraestructura, cartografía institucional, acciones, capacidades, recursos y seguimiento según su competencia.",
-      badge:"Implementación técnica sectorial",
-      note:"Uso recomendado para instituciones rectoras o sectoriales que integran las mesas técnicas."
-    },
-    gt: {
-      title:"Grupos de Trabajo - Soporte Operativo",
-      icon:"GT",
-      desc:"Brindan soporte logístico, seguridad y control, movilización de recursos, telecomunicaciones, abastecimiento y apoyo de primera respuesta.",
-      badge:"Soporte operativo",
-      note:"Uso recomendado para Fuerzas Armadas, Policía Nacional, Bomberos, ECU 911, ANT, Cruz Roja, MSP, grupos voluntarios reconocidos y demás instituciones operativas."
-    },
-    cz: {
-      title:"Coordinación Zonal 5 SNGR",
-      icon:"CZ5",
-      desc:"Consolida, verifica, controla calidad, genera paquetes GPT, monitorea el total de planes y mantiene trazabilidad zonal.",
-      badge:"Administración y control zonal",
-      note:"Uso recomendado para seguimiento integral, suficiencia técnica, consolidación, generación de planes y control del ciclo."
+
+/* Ajuste puntual: búsqueda guiada en el módulo existente "Actualizar y prompt".
+   Mantiene la arquitectura original y reemplaza el campo de código por búsqueda guiada.
+   El catálogo se carga dinámicamente desde Apps Script si config.js define ENOS_PROMPTS_API_URL.
+   Si la API aún no está conectada, usa datos de demostración para no romper la página. */
+const CATALOGO_PROMPTS_GPT_DEMO = [
+  {
+    nivel:'zonal', territorio:'CZ5 SNGR', formulario:'F01',
+    nombre_visible:'Estero La Hormiga – Durán – prioridad crítica',
+    folio:'F01-CZ5-0001', codigo:'ENOS_Z5_CZ5_SNGR_ZONAL_SNGR_CZ5_2026-SC001',
+    actor:'SNGR CZ5', provincia:'ZONA_5', canton:'ZONAL', estado:'OBSERVADO',
+    url_drive:'',
+    prompt:'Genera el análisis técnico ENOS 2026 del folio F01-CZ5-0001, correspondiente al sitio Estero La Hormiga, cantón Durán, registrado por SNGR CZ5. Usa el código técnico oculto ENOS_Z5_CZ5_SNGR_ZONAL_SNGR_CZ5_2026-SC001. Integra amenaza, exposición, vulnerabilidad, infraestructura vinculada, evidencia, brechas, criterios SNGR y recomendaciones operativas. Si falta información, declara limitaciones y datos requeridos.'
+  },
+  {
+    nivel:'cantonal', territorio:'GUAYAS / DURÁN', formulario:'F01',
+    nombre_visible:'Estero La Hormiga – Durán – prioridad crítica',
+    folio:'F01-DUR-0001', codigo:'ENOS_Z5_GAD_CANTONAL_GUAYAS_DURAN_GAD_2026-SC001',
+    actor:'GAD Municipal', provincia:'GUAYAS', canton:'DURAN', estado:'DISPONIBLE',
+    url_drive:'',
+    prompt:'Genera el análisis técnico ENOS 2026 del folio F01-DUR-0001, correspondiente al sitio Estero La Hormiga, cantón Durán. Usa el código técnico oculto ENOS_Z5_GAD_CANTONAL_GUAYAS_DURAN_GAD_2026-SC001. Revisa amenaza, exposición, población, infraestructura, cartografía, brechas, responsables y lineamientos SNGR.'
+  },
+  {
+    nivel:'cantonal', territorio:'GUAYAS / PEDRO_CARBO', formulario:'PLAN',
+    nombre_visible:'Plan cantonal Pedro Carbo – ENOS 2026',
+    folio:'PLAN-PC-0001', codigo:'ENOS_Z5_GAD_CANTONAL_GUAYAS_PEDRO_CARBO_GAD_2026',
+    actor:'GAD Municipal', provincia:'GUAYAS', canton:'PEDRO_CARBO', estado:'DISPONIBLE',
+    url_drive:'',
+    prompt:'Genera o revisa el plan de acción ENOS 2026 del GAD Cantonal Pedro Carbo con código técnico oculto ENOS_Z5_GAD_CANTONAL_GUAYAS_PEDRO_CARBO_GAD_2026. Evalúa concordancia con lineamientos SNGR, acciones, responsables, verificables, capacidades, alojamientos, seguimiento mensual y brechas.'
+  },
+  {
+    nivel:'provincial', territorio:'GUAYAS / PREFECTURA', formulario:'F04',
+    nombre_visible:'Acciones provinciales de apoyo – Guayas',
+    folio:'F04-PG-0001', codigo:'ENOS_Z5_GAD_PROVINCIAL_GUAYAS_PREFECTURA_2026-ACC001',
+    actor:'Prefectura del Guayas', provincia:'GUAYAS', canton:'PROVINCIAL', estado:'REFERENCIAL',
+    url_drive:'',
+    prompt:'Genera síntesis técnica de acciones provinciales ENOS 2026 para Guayas, folio F04-PG-0001. Usa el código técnico oculto ENOS_Z5_GAD_PROVINCIAL_GUAYAS_PREFECTURA_2026-ACC001. Relaciona acciones, responsables, recursos, plazos, verificables y brechas de coordinación.'
+  }
+];
+let CATALOGO_PROMPTS_GPT = [];
+
+function normalizarTexto(v){ return (v ?? '').toString().trim(); }
+function escapeHtml(v){
+  return normalizarTexto(v).replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));
+}
+function normalizarNivel(v){
+  const t = normalizarTexto(v).toLowerCase();
+  if(t.includes('canton')) return 'cantonal';
+  if(t.includes('prov')) return 'provincial';
+  if(t.includes('zona') || t.includes('cz')) return 'zonal';
+  return t || 'cantonal';
+}
+function normalizarCatalogoPromptsGPT(rows){
+  const arr = Array.isArray(rows) ? rows : [];
+  return arr.map((r,idx)=>{
+    const nivel = normalizarNivel(r.nivel || r.nivel_cobertura || r.cobertura || r.tipo_cobertura);
+    const provincia = normalizarTexto(r.provincia || r.provincia_codigo);
+    const canton = normalizarTexto(r.canton || r.canton_codigo);
+    const actor = normalizarTexto(r.actor || r.institucion || r.institucion_reporta || r.tipo_actor || r.responsable);
+    let territorio = normalizarTexto(r.territorio || r.territorio_actor || r.territorio_visible);
+    if(!territorio){
+      if(nivel==='cantonal') territorio = `${provincia || 'SIN_PROVINCIA'} / ${canton || 'SIN_CANTON'}`;
+      else if(nivel==='provincial') territorio = `${provincia || 'SIN_PROVINCIA'} / ${actor || 'ACTOR PROVINCIAL'}`;
+      else territorio = actor || 'CZ5 SNGR';
     }
+    const codigo = normalizarTexto(r.codigo_tecnico || r.codigo || r.codigo_enos_2026 || r.id_sitio_critico || r.id_infraestructura || r.id_accion || r.id_georreferencia);
+    const folio = normalizarTexto(r.folio_operativo || r.folio || r.codigo_corto || r.id_visible || codigo || `CASO-${idx+1}`);
+    const nombre_visible = normalizarTexto(r.nombre_visible || r.etiqueta_visible || r.etiqueta_sitio || r.nombre_sitio || r.nombre_infraestructura || r.nombre_accion || r.descripcion_corta || folio);
+    const formulario = normalizarTexto(r.formulario || r.formulario_origen || r.tipo_formulario || r.origen_formulario || 'CASO');
+    const estado = normalizarTexto(r.estado || r.estado_calidad || r.estado_catalogo || r.estado_documental || 'DISPONIBLE');
+    const url_drive = normalizarTexto(r.url_drive || r.url_carpeta_drive || r.url_verificable || r.url_capa_mapa || '');
+    const prompt = normalizarTexto(r.prompt_base_gpt || r.prompt || r.prompt_gpt || '');
+    return {nivel, territorio, formulario, nombre_visible, folio, codigo, actor, provincia, canton, estado, url_drive, prompt};
+  }).filter(x=>x.nivel && x.territorio && x.folio && x.nombre_visible && x.codigo);
+}
+function aplicarCatalogoPromptsGPT(rows, origen){
+  CATALOGO_PROMPTS_GPT = normalizarCatalogoPromptsGPT(rows);
+  const status = document.getElementById('promptSearchStatus');
+  const nivel = document.getElementById('nivelBusqueda');
+  const territorio = document.getElementById('territorioBusqueda');
+  const caso = document.getElementById('casoBusqueda');
+  if(territorio){ setOptions(territorio, [], '2. Territorio / actor'); territorio.disabled = true; }
+  if(caso){ setOptions(caso, [], '3. Caso visible'); caso.disabled = true; }
+  if(nivel) nivel.value = '';
+  if(status){
+    const modo = origen === 'api' ? 'Catálogo conectado a base' : 'Modo demostración';
+    status.textContent = `${modo}. Casos disponibles para prompt: ${CATALOGO_PROMPTS_GPT.length}.`;
+  }
+}
+function usarCatalogoDemo(motivo){
+  aplicarCatalogoPromptsGPT(CATALOGO_PROMPTS_GPT_DEMO, 'demo');
+  const status = document.getElementById('promptSearchStatus');
+  if(status) status.textContent = `Modo demostración: ${CATALOGO_PROMPTS_GPT.length} casos de prueba. ${motivo || 'Configure config.js para conectar la base.'}`;
+}
+function cargarCatalogoPromptsGPT(forzar){
+  const status = document.getElementById('promptSearchStatus');
+  if(status) status.textContent = 'Cargando catálogo de prompts...';
+  if(Array.isArray(window.CATALOGO_PROMPTS_GPT) && window.CATALOGO_PROMPTS_GPT.length && !forzar){
+    aplicarCatalogoPromptsGPT(window.CATALOGO_PROMPTS_GPT, 'api');
+    return;
+  }
+  const apiUrl = normalizarTexto(window.ENOS_PROMPTS_API_URL || '');
+  if(!apiUrl || apiUrl.includes('PEGAR_AQUI') || apiUrl.includes('REEMPLAZAR')){
+    usarCatalogoDemo('API no configurada.');
+    return;
+  }
+  const modo = normalizarTexto(window.ENOS_PROMPTS_API_MODO || 'jsonp').toLowerCase();
+  if(modo === 'fetch') cargarCatalogoPromptsFetch(apiUrl);
+  else cargarCatalogoPromptsJsonp(apiUrl);
+}
+function cargarCatalogoPromptsFetch(apiUrl){
+  fetch(apiUrl, {method:'GET', cache:'no-store'})
+    .then(r=>r.json())
+    .then(payload=>{
+      const data = payload.data || payload.catalogo || payload.rows || payload;
+      aplicarCatalogoPromptsGPT(data, 'api');
+    })
+    .catch(()=>usarCatalogoDemo('No se pudo leer la API por fetch.'));
+}
+function cargarCatalogoPromptsJsonp(apiUrl){
+  const callbackName = 'recibirCatalogoPromptsGPT_' + Date.now();
+  const sep = apiUrl.includes('?') ? '&' : '?';
+  const script = document.createElement('script');
+  let terminado = false;
+  const limpiar = ()=>{ try{ delete window[callbackName]; }catch(e){} if(script.parentNode) script.parentNode.removeChild(script); };
+  const timer = setTimeout(()=>{ if(!terminado){ terminado = true; limpiar(); usarCatalogoDemo('La API no respondió por JSONP.'); } }, 9000);
+  window[callbackName] = function(payload){
+    if(terminado) return;
+    terminado = true;
+    clearTimeout(timer);
+    limpiar();
+    const data = payload.data || payload.catalogo || payload.rows || payload;
+    aplicarCatalogoPromptsGPT(data, 'api');
   };
-
-  const FORM_DEFS = {
-    F01: {
-      uid:"aDp2JK7VCK26q2QAKiVChQ",
-      url:"https://ee.kobotoolbox.org/x/XuixUrMH",
-      title:"F01 - Punto crítico territorial",
-      desc:"Identifica caso, puntos críticos, amenazas, brechas, elementos expuestos y acciones iniciales.",
-      actors:["gad","cz"]
-    },
-    F02: {
-      uid:"abcnTWDp9vCeQCeCjnubAe",
-      url:"https://ee.kobotoolbox.org/x/HxbqyITN",
-      title:"F02 - Infraestructura esencial expuesta",
-      desc:"Registra infraestructura expuesta, criticidad, vulnerabilidad, brechas y acciones requeridas.",
-      actors:["gad","mtt","cz"]
-    },
-    F03: {
-      uid:"a86WYnMJZA3XCNJ8tcjQb2",
-      url:"https://ee.kobotoolbox.org/x/BMR6RaE1",
-      title:"F03 - Aporte cartográfico institucional",
-      desc:"Registra capas, mapas, fuentes, formatos, cobertura y limitaciones cartográficas aportadas por GAD, instituciones técnicas o CZ5.",
-      actors:["gad","mtt","cz"]
-    },
-    F04: {
-      uid:"aZcJKkSCYBciexEAZP2PfA",
-      url:"https://ee.kobotoolbox.org/x/xo3JtPm9",
-      title:"F04 - Acciones preventivas y mitigación",
-      desc:"Documenta acciones propuestas, responsables, prioridad, plazo, recursos y estado.",
-      actors:["gad","mtt","gt","cz"]
-    },
-    F05: {
-      uid:"am4xGEpRP85bXDuEbucPod",
-      url:"https://ee.kobotoolbox.org/x/lgXrZHzb",
-      title:"F05 - Alojamientos, rutas y puntos seguros",
-      desc:"Registra alojamientos temporales, rutas, puntos seguros, brechas y responsables.",
-      actors:["gad","mtt","gt","cz"]
-    },
-    F06: {
-      uid:"aJoE9gh8JgNAfY9froZ4gQ",
-      url:"https://ee.kobotoolbox.org/x/NL8gKLLD",
-      title:"F06 - Capacidades y recursos",
-      desc:"Registra recursos disponibles, capacidades institucionales, logística y brechas operativas.",
-      actors:["gad","mtt","gt","cz"]
-    },
-    F07: {
-      uid:"aGBMqM63bGK9fLADxYfe4w",
-      url:"https://ee.kobotoolbox.org/x/0pXtskTZ",
-      title:"F07 - Seguimiento mensual del plan",
-      desc:"Permite registrar avance mensual, evidencias, obstáculos, alertas y escalamiento.",
-      actors:["gad","mtt","gt","cz"]
-    }
-  };
-
-  let currentActor = "gad";
-
-  function updateClock(){
-    const el = document.getElementById("clock");
-    const now = new Date();
-    el.textContent = now.toLocaleString("es-EC", { dateStyle:"medium", timeStyle:"short" });
+  script.onerror = ()=>{ if(!terminado){ terminado = true; clearTimeout(timer); limpiar(); usarCatalogoDemo('Error cargando la API JSONP.'); } };
+  script.src = `${apiUrl}${sep}callback=${callbackName}&_=${Date.now()}`;
+  document.head.appendChild(script);
+}
+function verCasosPromptGuiado(){
+  const status = document.getElementById('promptSearchStatus');
+  const preview = document.getElementById('casoSeleccionadoPrompt');
+  const total = CATALOGO_PROMPTS_GPT.length;
+  if(status) status.textContent = `Casos disponibles para prompt: ${total}. Use Nivel → Territorio/actor → Caso visible.`;
+  if(preview){
+    const resumen = [...new Set(CATALOGO_PROMPTS_GPT.map(x=>`${x.nivel.toUpperCase()}: ${x.territorio}`))].slice(0,8).join('<br>');
+    preview.innerHTML = total ? `<strong>Catálogo cargado:</strong><br>${resumen}${total>8?'<br>…':''}` : 'No hay casos cargados todavía.';
   }
+}
 
-  setInterval(updateClock, 30000);
-  updateClock();
-
-  function renderActors(){
-    const grid = document.getElementById("actorGrid");
-    grid.innerHTML = "";
-    Object.keys(ACTORS).forEach(key => {
-      const actor = ACTORS[key];
-      const btn = document.createElement("button");
-      btn.className = "actor-card" + (key === currentActor ? " active" : "");
-      btn.onclick = () => selectActor(key);
-      btn.innerHTML = `
-        <div class="actor-icon">${actor.icon}</div>
-        <strong>${actor.title}</strong>
-        <p>${actor.desc}</p>
-        <small>${actor.note}</small>
-      `;
-      grid.appendChild(btn);
-    });
+function setOptions(select, values, placeholder){
+  if(!select) return;
+  select.innerHTML = '';
+  const opt = document.createElement('option');
+  opt.value = '';
+  opt.textContent = placeholder;
+  select.appendChild(opt);
+  values.forEach(v=>{
+    const o = document.createElement('option');
+    o.value = v;
+    o.textContent = v;
+    select.appendChild(o);
+  });
+}
+function actualizarTerritorioPrompt(){
+  const nivel = document.getElementById('nivelBusqueda')?.value || '';
+  const territorio = document.getElementById('territorioBusqueda');
+  const caso = document.getElementById('casoBusqueda');
+  const preview = document.getElementById('casoSeleccionadoPrompt');
+  const input = document.getElementById('caseCode');
+  if(input) input.value = '';
+  if(preview) preview.textContent = 'Seleccione territorio/actor y caso visible. La página usará el código técnico oculto para generar el prompt.';
+  setOptions(caso, [], '3. Caso visible');
+  caso.disabled = true;
+  if(!nivel){ setOptions(territorio, [], '2. Territorio / actor'); territorio.disabled = true; return; }
+  const territorios = [...new Set(CATALOGO_PROMPTS_GPT.filter(x=>x.nivel===nivel).map(x=>x.territorio))].sort();
+  setOptions(territorio, territorios, nivel==='cantonal' ? '2. Provincia / cantón' : (nivel==='provincial' ? '2. Provincia / actor provincial' : '2. Actor zonal'));
+  territorio.disabled = false;
+}
+function actualizarCasosPrompt(){
+  const nivel = document.getElementById('nivelBusqueda')?.value || '';
+  const territorio = document.getElementById('territorioBusqueda')?.value || '';
+  const caso = document.getElementById('casoBusqueda');
+  const input = document.getElementById('caseCode');
+  if(input) input.value = '';
+  if(!nivel || !territorio){ setOptions(caso, [], '3. Caso visible'); caso.disabled = true; return; }
+  const casos = CATALOGO_PROMPTS_GPT
+    .filter(x=>x.nivel===nivel && x.territorio===territorio)
+    .map(x=>`${x.folio} · ${x.nombre_visible}`)
+    .sort();
+  setOptions(caso, casos, '3. Caso visible / folio');
+  caso.disabled = false;
+}
+function seleccionarCasoPrompt(){
+  const valor = document.getElementById('casoBusqueda')?.value || '';
+  const preview = document.getElementById('casoSeleccionadoPrompt');
+  const input = document.getElementById('caseCode');
+  const status = document.getElementById('promptSearchStatus');
+  const caso = CATALOGO_PROMPTS_GPT.find(x=>`${x.folio} · ${x.nombre_visible}`===valor);
+  if(!caso){
+    if(input) input.value = '';
+    if(preview) preview.textContent = 'Seleccione un caso visible para generar el prompt.';
+    return;
   }
-
-  function selectActor(key){
-    currentActor = key;
-    renderActors();
-    renderActorForms();
-    const actor = ACTORS[key];
-    document.getElementById("workspaceTitle").textContent = "Flujo operativo · " + actor.title;
-    document.getElementById("workspaceDesc").textContent = actor.desc;
-    document.getElementById("actorBadge").textContent = actor.badge;
+  if(input) input.value = caso.codigo;
+  if(preview) preview.innerHTML = `<strong>${caso.folio}</strong> · ${caso.nombre_visible}<br>Actor: ${caso.actor} · Territorio: ${caso.territorio}<br>Código técnico oculto listo para generar prompt.`;
+  if(status) status.textContent = `Caso seleccionado: ${caso.folio}. Código técnico interno listo.`;
+}
+function generarPromptGuiado(){
+  const valor = document.getElementById('casoBusqueda')?.value || '';
+  const caso = CATALOGO_PROMPTS_GPT.find(x=>`${x.folio} · ${x.nombre_visible}`===valor);
+  const box = document.getElementById('promptBox');
+  const status = document.getElementById('promptSearchStatus');
+  if(!caso){
+    if(status) status.textContent = 'Seleccione nivel, territorio/actor y caso visible antes de generar el prompt.';
+    return;
   }
+  const prompt = caso.prompt || `Genera el análisis técnico ENOS 2026 para ${caso.nombre_visible}. Usa el código técnico oculto ${caso.codigo}. Si falta información, declara brechas y limitaciones.`;
+  if(box) box.value = prompt;
+  try{ navigator.clipboard.writeText(prompt); if(status) status.textContent = `Prompt generado y copiado: ${caso.folio}.`; }
+  catch(e){ if(status) status.textContent = `Prompt generado: ${caso.folio}. Copie manualmente desde el cuadro.`; }
+}
+function cargarUltimoPromptGuiado(){
+  const box = document.getElementById('promptBox');
+  const ultimo = localStorage.getItem('enos_ultimo_prompt_guiado');
+  if(box && ultimo) box.value = ultimo;
+}
+function limpiarPromptGuiado(){
+  const box = document.getElementById('promptBox');
+  if(box) box.value = '';
+  const status = document.getElementById('promptSearchStatus');
+  if(status) status.textContent = 'Prompt limpiado. Seleccione un caso para generar uno nuevo.';
+}
+(function conservarUltimoPrompt(){
+  const box = document.getElementById('promptBox');
+  if(box){ box.addEventListener('input',()=>localStorage.setItem('enos_ultimo_prompt_guiado',box.value)); }
+})();
 
-  function renderActorForms(){
-    const grid = document.getElementById("formsGrid");
-    grid.innerHTML = "";
+cargarCatalogoPromptsGPT(false);
 
-    if(currentActor === "cz"){
-      grid.innerHTML = `
-        <div class="form-card">
-          <h4>Control zonal de planes</h4>
-          <p>Sincroniza la base F01-F07, actualiza casos y controla el avance del total de planes levantados en la Zona 5.</p>
-          <div class="actions">
-            <button class="btn-red" onclick="syncAll()">Sincronizar base F01-F07</button>
-            <button class="btn-soft" onclick="showModuleFromCode('dashboard')">Abrir dashboard</button>
-          </div>
-        </div>
-        <div class="form-card">
-          <h4>Generación de paquete GPT</h4>
-          <p>Selecciona un código de caso, genera el paquete técnico y prepara el prompt para elaboración o revisión del plan de acción.</p>
-          <div class="actions">
-            <button class="btn-blue" onclick="showModuleFromCode('prompt')">Generar prompt</button>
-            <button class="btn-green" onclick="openGPT()">Abrir GPT</button>
-          </div>
-        </div>
-        <div class="form-card">
-          <h4>Control de suficiencia técnica</h4>
-          <p>Revisa brechas de información, consistencia entre fichas, actores participantes y disponibilidad de evidencia para el plan.</p>
-          <div class="actions">
-            <button class="btn-soft" onclick="listCases()">Ver casos disponibles</button>
-          </div>
-        </div>
-        <div class="form-card">
-          <h4>Bibliografía e insumos</h4>
-          <p>Accede al repositorio técnico con normativa, lineamientos, cartografía, fuentes institucionales y respaldos para los planes.</p>
-          <div class="actions">
-            <button class="btn-green" onclick="openBiblioteca()">Abrir biblioteca técnica</button>
-          </div>
-        </div>
-        <div class="form-card" style="grid-column:1 / -1; min-height:auto;">
-          <h4>Acceso excepcional a fichas Kobo</h4>
-          <p>Uso subsidiario de la CZ5 solo para acompañamiento técnico, corrección, carga asistida o verificación. El levantamiento primario corresponde al actor territorial, sectorial u operativo competente.</p>
-        </div>
-      `;
-
-      Object.keys(FORM_DEFS).forEach(code => {
-        const f = FORM_DEFS[code];
-        const card = document.createElement("div");
-        card.className = "form-card";
-        card.innerHTML = `
-          <h4>${f.title}</h4>
-          <p>${f.desc}</p>
-          <div class="actions">
-            <a class="btn btn-outline" href="${f.url}" target="_blank" rel="noopener">Abrir Kobo</a>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-      return;
-    }
-
-    Object.keys(FORM_DEFS).forEach(code => {
-      const f = FORM_DEFS[code];
-      if(!f.actors.includes(currentActor)) return;
-      const card = document.createElement("div");
-      card.className = "form-card";
-      card.innerHTML = `
-        <h4>${f.title}</h4>
-        <p>${f.desc}</p>
-        <div class="actions">
-          <a class="btn btn-blue" href="${f.url}" target="_blank" rel="noopener">Abrir Kobo</a>
-        </div>
-      `;
-      grid.appendChild(card);
-    });
-  }
-
-  function showModule(btn, code){
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-    btn.classList.add("active");
-    document.querySelectorAll(".module").forEach(m => m.classList.remove("show"));
-    document.getElementById("module-" + code).classList.add("show");
-    if(code === "dashboard") listCases();
-  }
-
-  function showModuleFromCode(code){
-    const btn = document.querySelector(`.tab[data-module="${code}"]`);
-    if(btn) showModule(btn, code);
-  }
-
-  async function copyText(text){
-    try {
-      await navigator.clipboard.writeText(text);
-      toast("Copiado: " + text);
-    } catch(err) {
-      toast("No se pudo copiar automáticamente. Copie manualmente: " + text);
-    }
-  }
-
-  function openGPT(){
-    window.open(GPT_INSTITUCIONAL_URL, "_blank", "noopener");
-  }
-
-  function openBiblioteca(){
-    window.open(BIBLIOTECA_TECNICA_URL, "_blank", "noopener");
-  }
-
-  function openCierre(){
-    toast("Cierre práctico: descargue el archivo final directamente desde el GPT institucional.");
-  }
-
-  function toggleConfigPanel(){
-    const panel = document.getElementById("configPanel");
-    if(!panel) return;
-    panel.classList.toggle("hidden");
-    loadSavedLinks();
-  }
-
-  function saveConfig(){
-    const biblio = document.getElementById("cfgBiblioteca")?.value.trim() || document.getElementById("cfgBiblioInline")?.value.trim() || "";
-    if(biblio){
-      localStorage.setItem("CZ5_BIBLIOTECA_URL", biblio);
-      toast("Biblioteca técnica guardada.");
-    } else {
-      toast("Pegue primero el enlace de la biblioteca técnica.");
-    }
-  }
-
-  function saveInlineFolders(){
-    const biblio = document.getElementById("cfgBiblioInline")?.value.trim() || "";
-    if(biblio){
-      localStorage.setItem("CZ5_BIBLIOTECA_URL", biblio);
-      toast("Biblioteca técnica guardada.");
-      return;
-    }
-    toast("Pegue primero el enlace de la biblioteca técnica.");
-  }
-
-  function endpoint(action, extra={}){
-    const url = new URL(WEBAPP_URL);
-    url.searchParams.set("action", action);
-    url.searchParams.set("webapp_key", WEBAPP_KEY);
-    Object.keys(extra).forEach(k => {
-      if(extra[k] !== undefined && extra[k] !== null && String(extra[k]).trim() !== "") url.searchParams.set(k, extra[k]);
-    });
-    return url.toString();
-  }
-
-  async function callApi(action, extra={}) {
-    return jsonpApi(action, extra);
-  }
-
-  function jsonpApi(action, extra={}) {
-    return new Promise((resolve, reject) => {
-      const callbackName = "cz5_jsonp_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-      const url = new URL(WEBAPP_URL);
-
-      url.searchParams.set("action", action);
-      url.searchParams.set("webapp_key", WEBAPP_KEY);
-      url.searchParams.set("callback", callbackName);
-
-      Object.keys(extra).forEach(k => {
-        if(extra[k] !== undefined && extra[k] !== null && String(extra[k]).trim() !== "") {
-          url.searchParams.set(k, extra[k]);
-        }
-      });
-
-      const tag = document.createElement("script");
-      const timer = setTimeout(() => {
-        cleanup();
-        reject(new Error("No hubo respuesta del Web App. Revise implementación, permisos o red."));
-      }, 45000);
-
-      function cleanup() {
-        clearTimeout(timer);
-        try { delete window[callbackName]; } catch(e) { window[callbackName] = undefined; }
-        if(tag.parentNode) tag.parentNode.removeChild(tag);
-      }
-
-      window[callbackName] = function(data) {
-        cleanup();
-        resolve(data);
-      };
-
-      tag.onerror = function() {
-        cleanup();
-        reject(new Error("No se pudo cargar el Web App desde GitHub Pages. Revise que la implementación esté publicada y que WEBAPP_KEY sea correcta."));
-      };
-
-      tag.src = url.toString();
-      document.body.appendChild(tag);
-    });
-  }
-
-  function setStatus(ok, text){
-    document.getElementById("statusText").textContent = text;
-    document.getElementById("statusDot").className = "dot " + (ok ? "ok" : "error");
-  }
-
-  async function pingWebApp(){
-    setStatus(false, "Probando conexión...");
-    try {
-      const data = await callApi("ping");
-      if(data.ok){
-        setStatus(true, "Conexión correcta: " + (data.message || "Web App activo") + " · " + (data.spreadsheet_name || ""));
-        toast("Web App activo.");
-      } else {
-        setStatus(false, data.message || "No se pudo validar conexión.");
-      }
-    } catch(err) {
-      setStatus(false, err.message);
-      toast("Error al probar conexión.");
-    }
-  }
-
-  async function syncAll(){
-    setStatus(false, "Actualizando base F01-F07 desde Kobo...");
-    try {
-      const data = await callApi("syncAll");
-      if(data.ok){
-        const d = data.data || {};
-        setStatus(true, "Base actualizada. Procesados: " + (d.procesados ?? "-") + " · omitidos: " + (d.omitidos ?? "-") + " · errores: " + (d.errores ?? "-"));
-        toast("Base F01-F07 actualizada.");
-        await listCases();
-      } else {
-        setStatus(false, data.message || "No se pudo actualizar.");
-      }
-    } catch(err) {
-      setStatus(false, err.message);
-      toast("Error al actualizar base.");
-    }
-  }
-
-  async function listCases(){
-    try {
-      const data = await callApi("listCases");
-      if(!data.ok){
-        setStatus(false, data.message || "No se pudieron listar casos.");
-        return;
-      }
-      renderCases(data.casos || []);
-      updateDashboard(data.casos || []);
-      setStatus(true, "Dashboard actualizado. Casos disponibles: " + (data.total || 0));
-    } catch(err) {
-      setStatus(false, err.message);
-      toast("Error al actualizar dashboard.");
-    }
-  }
-
-  function updateDashboard(cases){
-    const total = cases.length;
-    let disponibles = 0, registros = 0, pendientes = 0;
-
-    cases.forEach(c => {
-      const estado = String(c.estado_paquete || c.estado_registro || "");
-      const reg = Number(c.total_registros_repeat || c.total_puntos_riesgo || 0);
-      registros += isNaN(reg) ? 0 : reg;
-      if(estado.includes("DISPONIBLE") || estado.includes("enviado")) disponibles += 1;
-      else pendientes += 1;
-    });
-
-    document.getElementById("kpiCasos").textContent = total;
-    document.getElementById("kpiDisponibles").textContent = disponibles;
-    document.getElementById("kpiRegistros").textContent = registros;
-    document.getElementById("kpiPendientes").textContent = pendientes;
-  }
-
-  function renderCases(cases){
-    const wrap = document.getElementById("casesTableWrap");
-    const tbody = document.querySelector("#casesTable tbody");
-    tbody.innerHTML = "";
-
-    if(!cases.length){
-      wrap.style.display = "none";
-      return;
-    }
-
-    cases.forEach(c => {
-      const registros = c.total_registros_repeat || c.total_puntos_riesgo || "0";
-      const formularios = c.formularios_origen || c.formulario || "";
-      const estado = c.estado_paquete || c.estado_registro || "";
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td><strong>${escapeHtml(c.codigo_caso || "")}</strong></td>
-        <td>${escapeHtml(c.institucion_reporta || "")}</td>
-        <td>${escapeHtml(c.tipo_usuario || "")}</td>
-        <td>${escapeHtml(c.canton || "")}</td>
-        <td>${escapeHtml(formularios)}</td>
-        <td>${escapeHtml(registros)}</td>
-        <td><span class="chip ${String(estado).includes("DISPONIBLE") ? "ok" : String(estado).includes("pend") ? "bad" : "warn"}">${escapeHtml(estado)}</span></td>
-        <td><button class="btn-soft" onclick="selectCase('${escapeAttr(c.codigo_caso || "")}')">Seleccionar</button></td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    wrap.style.display = "block";
-  }
-
-  function selectCase(code){
-    document.getElementById("codigoCaso").value = code;
-    showModuleFromCode("prompt");
-    toast("Caso seleccionado: " + code);
-  }
-
-  async function generatePackage(){
-    const codigo = getCodigoCaso();
-    if(!codigo) return null;
-
-    setStatus(false, "Generando paquete GPT para " + codigo + "...");
-    const data = await callApi("generatePackage", { codigo_caso: codigo });
-
-    if(!data.ok){
-      setStatus(false, data.message || "No se pudo generar paquete.");
-      throw new Error(data.message || "No se pudo generar paquete.");
-    }
-
-    const resumen = "Paquete generado. Suficiencia: " + (data.clasificacion_suficiencia || "sin clasificar") +
-      " · puntos: " + (data.total_puntos_riesgo || 0) +
-      " · infra: " + (data.total_infraestructura || 0) +
-      " · acciones: " + (data.total_acciones || 0);
-
-    setStatus(true, resumen);
-    toast("Paquete GPT generado.");
-    return data;
-  }
-
-  async function getLastPrompt(){
-    const codigo = getCodigoCaso();
-    if(!codigo) return null;
-
-    setStatus(false, "Obteniendo prompt GPT...");
-    const data = await callApi("getLastPrompt", { codigo_caso: codigo });
-
-    if(!data.ok){
-      setStatus(false, data.message || "No se pudo obtener prompt.");
-      throw new Error(data.message || "No se pudo obtener prompt.");
-    }
-
-    document.getElementById("promptOutput").value = data.prompt_gpt || "";
-    setStatus(true, "Prompt cargado. Suficiencia: " + (data.clasificacion_suficiencia || "sin clasificar"));
-    toast("Prompt GPT cargado.");
-    return data.prompt_gpt || "";
-  }
-
-  async function generateAndCopy(){
-    try {
-      await generatePackage();
-      await getLastPrompt();
-      await copyPrompt();
-    } catch(err) {
-      toast("No se pudo copiar el prompt: " + err.message);
-    }
-  }
-
-  async function copyPrompt(){
-    const text = document.getElementById("promptOutput").value;
-    if(!text.trim()){
-      toast("No hay prompt para copiar. Primero genere el paquete.");
-      return;
-    }
-
-    try {
-      await navigator.clipboard.writeText(text);
-      toast("Prompt copiado. Ahora vaya al GPT y péguelo.");
-    } catch(err) {
-      document.getElementById("promptOutput").select();
-      document.execCommand("copy");
-      toast("Prompt seleccionado/copiadο. Verifique el portapapeles.");
-    }
-  }
-
-  function clearPrompt(){
-    document.getElementById("promptOutput").value = "";
-    setStatus(true, "Panel de prompt limpio.");
-  }
-
-  function getCodigoCaso(){
-    const codigo = document.getElementById("codigoCaso").value.trim();
-    if(!codigo){
-      toast("Ingrese o seleccione un código de caso.");
-      return "";
-    }
-    return codigo;
-  }
-
-  function toast(texto){
-    const t = document.getElementById("toast");
-    t.textContent = texto;
-    t.classList.add("show");
-    setTimeout(() => t.classList.remove("show"), 4300);
-  }
-
-  function escapeHtml(value){
-    return String(value)
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-
-  function escapeAttr(value){
-    return escapeHtml(value).replaceAll("`","&#096;");
-  }
-
-  function loadSavedLinks(){
-    const biblio = localStorage.getItem("CZ5_BIBLIOTECA_URL") || "";
-    const cfgBiblioteca = document.getElementById("cfgBiblioteca");
-    const cfgBiblioInline = document.getElementById("cfgBiblioInline");
-    if(cfgBiblioteca) cfgBiblioteca.value = biblio;
-    if(cfgBiblioInline) cfgBiblioInline.value = biblio;
-  }
-
-  renderActors();
-  selectActor(currentActor);
-  loadSavedLinks();
 </script>
 </body>
 </html>
