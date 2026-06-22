@@ -569,7 +569,8 @@ select,input{
 }
 
 /* Ajuste puntual: buscador guiado para prompt GPT sin cambiar arquitectura de módulos */
-.guided-case-search select{
+.guided-case-search select,
+.guided-case-search input{
   width:100%;
   border:1px solid var(--borde);
   border-radius:12px;
@@ -579,13 +580,39 @@ select,input{
   font-weight:800;
   outline:none;
 }
-.guided-case-search select:disabled{
+.guided-case-search select:disabled,
+.guided-case-search input:disabled{
   background:#f1f5f9;
   color:#7a8a99;
 }
 .guided-case-grid{
   display:grid;
   grid-template-columns:1fr 1fr 1.4fr;
+  gap:10px;
+}
+.prompt-mode-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:10px;
+}
+.prompt-mode-grid button{
+  border:1px solid var(--borde);
+  background:#fff;
+  color:var(--azul3);
+  border-radius:12px;
+  padding:10px;
+  font-weight:900;
+  cursor:pointer;
+}
+.prompt-mode-grid button.active{
+  background:var(--azul3);
+  color:#fff;
+  border-color:var(--azul3);
+}
+.code-search-grid{
+  display:grid;
+  grid-template-columns:1fr auto;
   gap:10px;
 }
 .case-preview{
@@ -600,7 +627,7 @@ select,input{
   font-weight:700;
 }
 .case-preview strong{color:var(--azul3)}
-@media(max-width:850px){.guided-case-grid{grid-template-columns:1fr}}
+@media(max-width:850px){.guided-case-grid,.prompt-mode-grid,.code-search-grid{grid-template-columns:1fr}}
 
 </style>
 <script src="config.js"></script>
@@ -662,8 +689,8 @@ select,input{
           </div>
           <div class="info-card">
             <h3>Uso práctico</h3>
-            <p>1. Seleccione el actor.<br>2. Abra el formulario correspondiente.<br>3. Use el mismo código de caso en todos los formularios.<br>4. Al finalizar, vuelva al módulo “Actualizar y prompt”.</p>
-            <div class="note">El código de caso es la llave para integrar información de GAD, MTT, Grupo Técnico y CZ5.</div>
+            <p>1. Seleccione el actor.<br>2. Abra el formulario correspondiente.<br>3. Complete formularios según corresponda; los códigos técnicos se gestionan internamente.<br>4. Al finalizar, vuelva al módulo “Actualizar y prompt”.</p>
+            <div class="note">La integración se realiza con códigos técnicos internos, folios operativos y catálogo de búsqueda conectado a la base.</div>
           </div>
         </div>
       </div>
@@ -675,22 +702,34 @@ select,input{
             <p>Sincronice Kobo, seleccione el caso y genere el prompt técnico para el asistente ENOS Zona 5.</p>
             <div class="inputline guided-case-search">
               <label>Buscar caso para prompt GPT</label>
-              <div class="guided-case-grid">
-                <select id="nivelBusqueda" onchange="actualizarTerritorioPrompt()" aria-label="Nivel de cobertura">
-                  <option value="">1. Nivel</option>
-                  <option value="cantonal">Cantonal</option>
-                  <option value="provincial">Provincial</option>
-                  <option value="zonal">Zonal</option>
-                </select>
-                <select id="territorioBusqueda" onchange="actualizarCasosPrompt()" aria-label="Territorio o actor" disabled>
-                  <option value="">2. Territorio / actor</option>
-                </select>
-                <select id="casoBusqueda" onchange="seleccionarCasoPrompt()" aria-label="Caso visible" disabled>
-                  <option value="">3. Caso visible</option>
-                </select>
+              <div class="prompt-mode-grid">
+                <button type="button" id="modoDatosBtn" class="active" onclick="setModoPrompt('datos')">Buscar por datos del caso</button>
+                <button type="button" id="modoCodigoBtn" onclick="setModoPrompt('codigo')">Ya tengo código / folio</button>
+              </div>
+              <div id="panelBusquedaDatos">
+                <div class="guided-case-grid">
+                  <select id="nivelBusqueda" onchange="actualizarTerritorioPrompt()" aria-label="Nivel de cobertura" disabled>
+                    <option value="">1. Nivel</option>
+                    <option value="cantonal">Cantonal</option>
+                    <option value="provincial">Provincial</option>
+                    <option value="zonal">Zonal</option>
+                  </select>
+                  <select id="territorioBusqueda" onchange="actualizarCasosPrompt()" aria-label="Territorio o actor" disabled>
+                    <option value="">2. Territorio / actor</option>
+                  </select>
+                  <select id="casoBusqueda" onchange="seleccionarCasoPrompt()" aria-label="Caso visible" disabled>
+                    <option value="">3. Caso visible</option>
+                  </select>
+                </div>
+              </div>
+              <div id="panelBusquedaCodigo" style="display:none">
+                <div class="code-search-grid">
+                  <input id="codigoExistenteBusqueda" placeholder="Pegue código, folio, ID preliminar, sitio o palabra clave" onkeydown="if(event.key==='Enter'){buscarPorCodigoExistente();}" />
+                  <button type="button" class="btn soft" onclick="buscarPorCodigoExistente()">Buscar</button>
+                </div>
               </div>
               <input id="caseCode" type="hidden" value="" />
-              <div id="casoSeleccionadoPrompt" class="case-preview">Seleccione nivel, territorio/actor y caso. La página usará el código técnico oculto para generar el prompt.</div>
+              <div id="casoSeleccionadoPrompt" class="case-preview">Catálogo pendiente de conexión. Cuando se conecte la base, podrá buscar por datos del caso o por código existente.</div>
             </div>
             <div class="actions"><button class="btn red" onclick="cargarCatalogoPromptsGPT(true)">Actualizar base F01-F07</button><button class="btn soft" onclick="verCasosPromptGuiado()">Ver casos</button><button class="btn primary" onclick="generarPromptGuiado()">Generar y copiar prompt</button><button class="btn white" onclick="cargarUltimoPromptGuiado()">Cargar último prompt</button><button class="btn white" onclick="limpiarPromptGuiado()">Limpiar prompt</button></div>
             <div class="status"><span class="dot"></span><span id="promptSearchStatus">Catálogo de prompts listo para conectar.</span></div>
@@ -942,153 +981,59 @@ function openDetailTab(id,btn){
 
 
 /* Ajuste puntual: búsqueda guiada en el módulo existente "Actualizar y prompt".
-   Mantiene la arquitectura original y reemplaza el campo de código por búsqueda guiada.
-   El catálogo se carga dinámicamente desde Apps Script si config.js define ENOS_PROMPTS_API_URL.
-   Si la API aún no está conectada, usa datos de demostración para no romper la página. */
-const CATALOGO_PROMPTS_GPT_DEMO = [
-  {
-    nivel:'zonal', territorio:'CZ5 SNGR', formulario:'F01',
-    nombre_visible:'Estero La Hormiga – Durán – prioridad crítica',
-    folio:'F01-CZ5-0001', codigo:'ENOS_Z5_CZ5_SNGR_ZONAL_SNGR_CZ5_2026-SC001',
-    actor:'SNGR CZ5', provincia:'ZONA_5', canton:'ZONAL', estado:'OBSERVADO',
-    url_drive:'',
-    prompt:'Genera el análisis técnico ENOS 2026 del folio F01-CZ5-0001, correspondiente al sitio Estero La Hormiga, cantón Durán, registrado por SNGR CZ5. Usa el código técnico oculto ENOS_Z5_CZ5_SNGR_ZONAL_SNGR_CZ5_2026-SC001. Integra amenaza, exposición, vulnerabilidad, infraestructura vinculada, evidencia, brechas, criterios SNGR y recomendaciones operativas. Si falta información, declara limitaciones y datos requeridos.'
-  },
-  {
-    nivel:'cantonal', territorio:'GUAYAS / DURÁN', formulario:'F01',
-    nombre_visible:'Estero La Hormiga – Durán – prioridad crítica',
-    folio:'F01-DUR-0001', codigo:'ENOS_Z5_GAD_CANTONAL_GUAYAS_DURAN_GAD_2026-SC001',
-    actor:'GAD Municipal', provincia:'GUAYAS', canton:'DURAN', estado:'DISPONIBLE',
-    url_drive:'',
-    prompt:'Genera el análisis técnico ENOS 2026 del folio F01-DUR-0001, correspondiente al sitio Estero La Hormiga, cantón Durán. Usa el código técnico oculto ENOS_Z5_GAD_CANTONAL_GUAYAS_DURAN_GAD_2026-SC001. Revisa amenaza, exposición, población, infraestructura, cartografía, brechas, responsables y lineamientos SNGR.'
-  },
-  {
-    nivel:'cantonal', territorio:'GUAYAS / PEDRO_CARBO', formulario:'PLAN',
-    nombre_visible:'Plan cantonal Pedro Carbo – ENOS 2026',
-    folio:'PLAN-PC-0001', codigo:'ENOS_Z5_GAD_CANTONAL_GUAYAS_PEDRO_CARBO_GAD_2026',
-    actor:'GAD Municipal', provincia:'GUAYAS', canton:'PEDRO_CARBO', estado:'DISPONIBLE',
-    url_drive:'',
-    prompt:'Genera o revisa el plan de acción ENOS 2026 del GAD Cantonal Pedro Carbo con código técnico oculto ENOS_Z5_GAD_CANTONAL_GUAYAS_PEDRO_CARBO_GAD_2026. Evalúa concordancia con lineamientos SNGR, acciones, responsables, verificables, capacidades, alojamientos, seguimiento mensual y brechas.'
-  },
-  {
-    nivel:'provincial', territorio:'GUAYAS / PREFECTURA', formulario:'F04',
-    nombre_visible:'Acciones provinciales de apoyo – Guayas',
-    folio:'F04-PG-0001', codigo:'ENOS_Z5_GAD_PROVINCIAL_GUAYAS_PREFECTURA_2026-ACC001',
-    actor:'Prefectura del Guayas', provincia:'GUAYAS', canton:'PROVINCIAL', estado:'REFERENCIAL',
-    url_drive:'',
-    prompt:'Genera síntesis técnica de acciones provinciales ENOS 2026 para Guayas, folio F04-PG-0001. Usa el código técnico oculto ENOS_Z5_GAD_PROVINCIAL_GUAYAS_PREFECTURA_2026-ACC001. Relaciona acciones, responsables, recursos, plazos, verificables y brechas de coordinación.'
-  }
-];
+   V2 real: sin opciones quemadas. Si la API no responde, NO muestra datos demo.
+   Incluye búsqueda guiada por datos y búsqueda por código/folio/ID ya creado. */
 let CATALOGO_PROMPTS_GPT = [];
+let CASO_PROMPT_SELECCIONADO = null;
+let MODO_PROMPT = 'datos';
 
 function normalizarTexto(v){ return (v ?? '').toString().trim(); }
+function normalizarClave(v){ return normalizarTexto(v).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
 function escapeHtml(v){
   return normalizarTexto(v).replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));
 }
 function normalizarNivel(v){
-  const t = normalizarTexto(v).toLowerCase();
+  const t = normalizarClave(v);
   if(t.includes('canton')) return 'cantonal';
   if(t.includes('prov')) return 'provincial';
   if(t.includes('zona') || t.includes('cz')) return 'zonal';
   return t || 'cantonal';
 }
+function campo(r, nombres){
+  for(const n of nombres){
+    if(r && Object.prototype.hasOwnProperty.call(r,n) && normalizarTexto(r[n])) return r[n];
+  }
+  return '';
+}
 function normalizarCatalogoPromptsGPT(rows){
   const arr = Array.isArray(rows) ? rows : [];
   return arr.map((r,idx)=>{
-    const nivel = normalizarNivel(r.nivel || r.nivel_cobertura || r.cobertura || r.tipo_cobertura);
-    const provincia = normalizarTexto(r.provincia || r.provincia_codigo);
-    const canton = normalizarTexto(r.canton || r.canton_codigo);
-    const actor = normalizarTexto(r.actor || r.institucion || r.institucion_reporta || r.tipo_actor || r.responsable);
-    let territorio = normalizarTexto(r.territorio || r.territorio_actor || r.territorio_visible);
+    const nivel = normalizarNivel(campo(r,['nivel','nivel_cobertura','cobertura','tipo_cobertura']));
+    const provincia = normalizarTexto(campo(r,['provincia','provincia_codigo']));
+    const canton = normalizarTexto(campo(r,['canton','cantón','canton_codigo']));
+    const actor = normalizarTexto(campo(r,['actor','institucion','institución','institucion_reporta','tipo_actor','responsable']));
+    let territorio = normalizarTexto(campo(r,['territorio','territorio_actor','territorio_visible']));
     if(!territorio){
       if(nivel==='cantonal') territorio = `${provincia || 'SIN_PROVINCIA'} / ${canton || 'SIN_CANTON'}`;
       else if(nivel==='provincial') territorio = `${provincia || 'SIN_PROVINCIA'} / ${actor || 'ACTOR PROVINCIAL'}`;
       else territorio = actor || 'CZ5 SNGR';
     }
-    const codigo = normalizarTexto(r.codigo_tecnico || r.codigo || r.codigo_enos_2026 || r.id_sitio_critico || r.id_infraestructura || r.id_accion || r.id_georreferencia);
-    const folio = normalizarTexto(r.folio_operativo || r.folio || r.codigo_corto || r.id_visible || codigo || `CASO-${idx+1}`);
-    const nombre_visible = normalizarTexto(r.nombre_visible || r.etiqueta_visible || r.etiqueta_sitio || r.nombre_sitio || r.nombre_infraestructura || r.nombre_accion || r.descripcion_corta || folio);
-    const formulario = normalizarTexto(r.formulario || r.formulario_origen || r.tipo_formulario || r.origen_formulario || 'CASO');
-    const estado = normalizarTexto(r.estado || r.estado_calidad || r.estado_catalogo || r.estado_documental || 'DISPONIBLE');
-    const url_drive = normalizarTexto(r.url_drive || r.url_carpeta_drive || r.url_verificable || r.url_capa_mapa || '');
-    const prompt = normalizarTexto(r.prompt_base_gpt || r.prompt || r.prompt_gpt || '');
-    return {nivel, territorio, formulario, nombre_visible, folio, codigo, actor, provincia, canton, estado, url_drive, prompt};
+    const codigo = normalizarTexto(campo(r,['codigo_tecnico','codigo','codigo_enos_2026','id_sitio_critico','id_infraestructura','id_accion','id_georreferencia','id_alojamiento','id_capacidad','id_seguimiento']));
+    const folio = normalizarTexto(campo(r,['folio_operativo','folio','codigo_corto','id_visible','id_preliminar'])) || codigo || `CASO-${idx+1}`;
+    const nombre_visible = normalizarTexto(campo(r,['nombre_visible','etiqueta_visible','etiqueta_sitio','nombre_sitio','nombre_infraestructura','nombre_accion','nombre_elemento','descripcion_corta','tarea','accion','acción'])) || folio;
+    const formulario = normalizarTexto(campo(r,['formulario','formulario_origen','tipo_formulario','origen_formulario','fuente'])) || 'CASO';
+    const estado = normalizarTexto(campo(r,['estado','estado_calidad','estado_catalogo','estado_documental','estado_importacion'])) || 'DISPONIBLE';
+    const url_drive = normalizarTexto(campo(r,['url_drive','url_carpeta_drive','url_verificable','url_capa_mapa','foto_url'])) || '';
+    const prompt = normalizarTexto(campo(r,['prompt_base_gpt','prompt','prompt_gpt'])) || '';
+    const claves = [
+      codigo, folio, nombre_visible,
+      campo(r,['codigo_enos_2026']), campo(r,['id_sitio_critico']), campo(r,['id_infraestructura']),
+      campo(r,['id_georreferencia']), campo(r,['id_accion']), campo(r,['id_preliminar']),
+      campo(r,['uuid_registro']), campo(r,['_uuid']), campo(r,['_id'])
+    ].map(normalizarTexto).filter(Boolean).join(' | ');
+    return {nivel, territorio, formulario, nombre_visible, folio, codigo, actor, provincia, canton, estado, url_drive, prompt, claves};
   }).filter(x=>x.nivel && x.territorio && x.folio && x.nombre_visible && x.codigo);
 }
-function aplicarCatalogoPromptsGPT(rows, origen){
-  CATALOGO_PROMPTS_GPT = normalizarCatalogoPromptsGPT(rows);
-  const status = document.getElementById('promptSearchStatus');
-  const nivel = document.getElementById('nivelBusqueda');
-  const territorio = document.getElementById('territorioBusqueda');
-  const caso = document.getElementById('casoBusqueda');
-  if(territorio){ setOptions(territorio, [], '2. Territorio / actor'); territorio.disabled = true; }
-  if(caso){ setOptions(caso, [], '3. Caso visible'); caso.disabled = true; }
-  if(nivel) nivel.value = '';
-  if(status){
-    const modo = origen === 'api' ? 'Catálogo conectado a base' : 'Modo demostración';
-    status.textContent = `${modo}. Casos disponibles para prompt: ${CATALOGO_PROMPTS_GPT.length}.`;
-  }
-}
-function usarCatalogoDemo(motivo){
-  aplicarCatalogoPromptsGPT(CATALOGO_PROMPTS_GPT_DEMO, 'demo');
-  const status = document.getElementById('promptSearchStatus');
-  if(status) status.textContent = `Modo demostración: ${CATALOGO_PROMPTS_GPT.length} casos de prueba. ${motivo || 'Configure config.js para conectar la base.'}`;
-}
-function cargarCatalogoPromptsGPT(forzar){
-  const status = document.getElementById('promptSearchStatus');
-  if(status) status.textContent = 'Cargando catálogo de prompts...';
-  if(Array.isArray(window.CATALOGO_PROMPTS_GPT) && window.CATALOGO_PROMPTS_GPT.length && !forzar){
-    aplicarCatalogoPromptsGPT(window.CATALOGO_PROMPTS_GPT, 'api');
-    return;
-  }
-  const apiUrl = normalizarTexto(window.ENOS_PROMPTS_API_URL || '');
-  if(!apiUrl || apiUrl.includes('PEGAR_AQUI') || apiUrl.includes('REEMPLAZAR')){
-    usarCatalogoDemo('API no configurada.');
-    return;
-  }
-  const modo = normalizarTexto(window.ENOS_PROMPTS_API_MODO || 'jsonp').toLowerCase();
-  if(modo === 'fetch') cargarCatalogoPromptsFetch(apiUrl);
-  else cargarCatalogoPromptsJsonp(apiUrl);
-}
-function cargarCatalogoPromptsFetch(apiUrl){
-  fetch(apiUrl, {method:'GET', cache:'no-store'})
-    .then(r=>r.json())
-    .then(payload=>{
-      const data = payload.data || payload.catalogo || payload.rows || payload;
-      aplicarCatalogoPromptsGPT(data, 'api');
-    })
-    .catch(()=>usarCatalogoDemo('No se pudo leer la API por fetch.'));
-}
-function cargarCatalogoPromptsJsonp(apiUrl){
-  const callbackName = 'recibirCatalogoPromptsGPT_' + Date.now();
-  const sep = apiUrl.includes('?') ? '&' : '?';
-  const script = document.createElement('script');
-  let terminado = false;
-  const limpiar = ()=>{ try{ delete window[callbackName]; }catch(e){} if(script.parentNode) script.parentNode.removeChild(script); };
-  const timer = setTimeout(()=>{ if(!terminado){ terminado = true; limpiar(); usarCatalogoDemo('La API no respondió por JSONP.'); } }, 9000);
-  window[callbackName] = function(payload){
-    if(terminado) return;
-    terminado = true;
-    clearTimeout(timer);
-    limpiar();
-    const data = payload.data || payload.catalogo || payload.rows || payload;
-    aplicarCatalogoPromptsGPT(data, 'api');
-  };
-  script.onerror = ()=>{ if(!terminado){ terminado = true; clearTimeout(timer); limpiar(); usarCatalogoDemo('Error cargando la API JSONP.'); } };
-  script.src = `${apiUrl}${sep}callback=${callbackName}&_=${Date.now()}`;
-  document.head.appendChild(script);
-}
-function verCasosPromptGuiado(){
-  const status = document.getElementById('promptSearchStatus');
-  const preview = document.getElementById('casoSeleccionadoPrompt');
-  const total = CATALOGO_PROMPTS_GPT.length;
-  if(status) status.textContent = `Casos disponibles para prompt: ${total}. Use Nivel → Territorio/actor → Caso visible.`;
-  if(preview){
-    const resumen = [...new Set(CATALOGO_PROMPTS_GPT.map(x=>`${x.nivel.toUpperCase()}: ${x.territorio}`))].slice(0,8).join('<br>');
-    preview.innerHTML = total ? `<strong>Catálogo cargado:</strong><br>${resumen}${total>8?'<br>…':''}` : 'No hay casos cargados todavía.';
-  }
-}
-
 function setOptions(select, values, placeholder){
   if(!select) return;
   select.innerHTML = '';
@@ -1103,61 +1048,174 @@ function setOptions(select, values, placeholder){
     select.appendChild(o);
   });
 }
+function resetSeleccionPrompt(mensaje){
+  CASO_PROMPT_SELECCIONADO = null;
+  const input = document.getElementById('caseCode');
+  const preview = document.getElementById('casoSeleccionadoPrompt');
+  if(input) input.value = '';
+  if(preview) preview.textContent = mensaje || 'Seleccione un caso para generar el prompt.';
+}
+function setModoPrompt(modo){
+  MODO_PROMPT = modo;
+  document.getElementById('modoDatosBtn')?.classList.toggle('active', modo==='datos');
+  document.getElementById('modoCodigoBtn')?.classList.toggle('active', modo==='codigo');
+  const pd = document.getElementById('panelBusquedaDatos');
+  const pc = document.getElementById('panelBusquedaCodigo');
+  if(pd) pd.style.display = modo==='datos' ? 'block' : 'none';
+  if(pc) pc.style.display = modo==='codigo' ? 'block' : 'none';
+  resetSeleccionPrompt(modo==='datos' ? 'Use Nivel → Territorio/actor → Caso visible.' : 'Pegue un código, folio, ID preliminar, sitio o palabra clave y presione Buscar.');
+}
+function aplicarCatalogoPromptsGPT(rows, origen){
+  CATALOGO_PROMPTS_GPT = normalizarCatalogoPromptsGPT(rows);
+  const status = document.getElementById('promptSearchStatus');
+  const nivel = document.getElementById('nivelBusqueda');
+  const territorio = document.getElementById('territorioBusqueda');
+  const caso = document.getElementById('casoBusqueda');
+  if(territorio){ setOptions(territorio, [], '2. Territorio / actor'); territorio.disabled = true; }
+  if(caso){ setOptions(caso, [], '3. Caso visible'); caso.disabled = true; }
+  if(nivel){ nivel.value = ''; nivel.disabled = CATALOGO_PROMPTS_GPT.length === 0; }
+  resetSeleccionPrompt(CATALOGO_PROMPTS_GPT.length ? 'Catálogo conectado. Busque por datos o por código existente.' : 'Catálogo no cargado. Revise config.js y Apps Script.');
+  if(status){
+    if(CATALOGO_PROMPTS_GPT.length) status.textContent = `Catálogo conectado a base. Casos disponibles para prompt: ${CATALOGO_PROMPTS_GPT.length}.`;
+    else status.textContent = 'Catálogo vacío o no conectado. No se muestran opciones de prueba.';
+  }
+}
+function marcarCatalogoNoConectado(motivo){
+  aplicarCatalogoPromptsGPT([], 'sin_api');
+  const status = document.getElementById('promptSearchStatus');
+  if(status) status.textContent = `Catálogo no conectado: ${motivo}. No se cargan opciones de prueba.`;
+}
+function cargarCatalogoPromptsGPT(forzar){
+  const status = document.getElementById('promptSearchStatus');
+  if(status) status.textContent = 'Cargando catálogo real de prompts desde la base...';
+  if(Array.isArray(window.CATALOGO_PROMPTS_GPT) && window.CATALOGO_PROMPTS_GPT.length && !forzar){
+    aplicarCatalogoPromptsGPT(window.CATALOGO_PROMPTS_GPT, 'api');
+    return;
+  }
+  const apiUrl = normalizarTexto(window.ENOS_PROMPTS_API_URL || '');
+  if(!apiUrl || apiUrl.includes('PEGAR_AQUI') || apiUrl.includes('REEMPLAZAR')){
+    marcarCatalogoNoConectado('falta configurar ENOS_PROMPTS_API_URL en config.js');
+    return;
+  }
+  const modo = normalizarTexto(window.ENOS_PROMPTS_API_MODO || 'jsonp').toLowerCase();
+  if(modo === 'fetch') cargarCatalogoPromptsFetch(apiUrl);
+  else cargarCatalogoPromptsJsonp(apiUrl);
+}
+function cargarCatalogoPromptsFetch(apiUrl){
+  fetch(apiUrl, {method:'GET', cache:'no-store'})
+    .then(r=>r.json())
+    .then(payload=>{
+      const data = payload.data || payload.catalogo || payload.rows || payload;
+      aplicarCatalogoPromptsGPT(data, 'api');
+    })
+    .catch(()=>marcarCatalogoNoConectado('no se pudo leer la API por fetch'));
+}
+function cargarCatalogoPromptsJsonp(apiUrl){
+  const callbackName = 'recibirCatalogoPromptsGPT_' + Date.now();
+  const sep = apiUrl.includes('?') ? '&' : '?';
+  const script = document.createElement('script');
+  let terminado = false;
+  const limpiar = ()=>{ try{ delete window[callbackName]; }catch(e){} if(script.parentNode) script.parentNode.removeChild(script); };
+  const timer = setTimeout(()=>{ if(!terminado){ terminado = true; limpiar(); marcarCatalogoNoConectado('la API no respondió por JSONP'); } }, 12000);
+  window[callbackName] = function(payload){
+    if(terminado) return;
+    terminado = true;
+    clearTimeout(timer);
+    limpiar();
+    const data = payload.data || payload.catalogo || payload.rows || payload;
+    aplicarCatalogoPromptsGPT(data, 'api');
+  };
+  script.onerror = ()=>{ if(!terminado){ terminado = true; clearTimeout(timer); limpiar(); marcarCatalogoNoConectado('error cargando la API JSONP'); } };
+  script.src = `${apiUrl}${sep}callback=${callbackName}&_=${Date.now()}`;
+  document.head.appendChild(script);
+}
+function verCasosPromptGuiado(){
+  const status = document.getElementById('promptSearchStatus');
+  const preview = document.getElementById('casoSeleccionadoPrompt');
+  const total = CATALOGO_PROMPTS_GPT.length;
+  if(status) status.textContent = total ? `Casos disponibles: ${total}. Puede buscar por datos o por código existente.` : 'No hay catálogo cargado. Configure la API o actualice base.';
+  if(preview){
+    const resumen = [...new Set(CATALOGO_PROMPTS_GPT.map(x=>`${x.nivel.toUpperCase()}: ${x.territorio}`))].slice(0,10).join('<br>');
+    preview.innerHTML = total ? `<strong>Catálogo real cargado:</strong><br>${resumen}${total>10?'<br>…':''}` : 'No hay casos reales cargados. No se muestran ejemplos quemados.';
+  }
+}
 function actualizarTerritorioPrompt(){
   const nivel = document.getElementById('nivelBusqueda')?.value || '';
   const territorio = document.getElementById('territorioBusqueda');
   const caso = document.getElementById('casoBusqueda');
-  const preview = document.getElementById('casoSeleccionadoPrompt');
-  const input = document.getElementById('caseCode');
-  if(input) input.value = '';
-  if(preview) preview.textContent = 'Seleccione territorio/actor y caso visible. La página usará el código técnico oculto para generar el prompt.';
+  resetSeleccionPrompt('Seleccione territorio/actor y caso visible.');
   setOptions(caso, [], '3. Caso visible');
   caso.disabled = true;
   if(!nivel){ setOptions(territorio, [], '2. Territorio / actor'); territorio.disabled = true; return; }
   const territorios = [...new Set(CATALOGO_PROMPTS_GPT.filter(x=>x.nivel===nivel).map(x=>x.territorio))].sort();
   setOptions(territorio, territorios, nivel==='cantonal' ? '2. Provincia / cantón' : (nivel==='provincial' ? '2. Provincia / actor provincial' : '2. Actor zonal'));
-  territorio.disabled = false;
+  territorio.disabled = territorios.length === 0;
+  if(territorios.length === 0) resetSeleccionPrompt('No hay registros reales para ese nivel en el catálogo conectado.');
 }
 function actualizarCasosPrompt(){
   const nivel = document.getElementById('nivelBusqueda')?.value || '';
   const territorio = document.getElementById('territorioBusqueda')?.value || '';
   const caso = document.getElementById('casoBusqueda');
-  const input = document.getElementById('caseCode');
-  if(input) input.value = '';
+  resetSeleccionPrompt('Seleccione caso visible o folio.');
   if(!nivel || !territorio){ setOptions(caso, [], '3. Caso visible'); caso.disabled = true; return; }
   const casos = CATALOGO_PROMPTS_GPT
     .filter(x=>x.nivel===nivel && x.territorio===territorio)
     .map(x=>`${x.folio} · ${x.nombre_visible}`)
     .sort();
   setOptions(caso, casos, '3. Caso visible / folio');
-  caso.disabled = false;
+  caso.disabled = casos.length === 0;
 }
 function seleccionarCasoPrompt(){
   const valor = document.getElementById('casoBusqueda')?.value || '';
-  const preview = document.getElementById('casoSeleccionadoPrompt');
-  const input = document.getElementById('caseCode');
-  const status = document.getElementById('promptSearchStatus');
   const caso = CATALOGO_PROMPTS_GPT.find(x=>`${x.folio} · ${x.nombre_visible}`===valor);
-  if(!caso){
-    if(input) input.value = '';
-    if(preview) preview.textContent = 'Seleccione un caso visible para generar el prompt.';
+  if(!caso){ resetSeleccionPrompt('Seleccione un caso visible para generar el prompt.'); return; }
+  seleccionarCasoObjeto(caso);
+}
+function seleccionarCasoObjeto(caso){
+  CASO_PROMPT_SELECCIONADO = caso;
+  const input = document.getElementById('caseCode');
+  const preview = document.getElementById('casoSeleccionadoPrompt');
+  const status = document.getElementById('promptSearchStatus');
+  if(input) input.value = caso.codigo;
+  if(preview) preview.innerHTML = `<strong>${escapeHtml(caso.folio)}</strong> · ${escapeHtml(caso.nombre_visible)}<br>Actor: ${escapeHtml(caso.actor)} · Territorio: ${escapeHtml(caso.territorio)}<br>Código técnico interno encontrado y listo para generar prompt.`;
+  if(status) status.textContent = `Caso seleccionado: ${caso.folio}.`;
+}
+function buscarPorCodigoExistente(){
+  const q = normalizarClave(document.getElementById('codigoExistenteBusqueda')?.value || '');
+  const preview = document.getElementById('casoSeleccionadoPrompt');
+  const status = document.getElementById('promptSearchStatus');
+  if(!q || q.length < 3){ if(status) status.textContent = 'Escriba al menos 3 caracteres para buscar.'; return; }
+  const resultados = CATALOGO_PROMPTS_GPT.filter(c=>{
+    const bolsa = normalizarClave([c.claves,c.codigo,c.folio,c.nombre_visible,c.actor,c.territorio,c.provincia,c.canton].join(' | '));
+    return bolsa.includes(q);
+  });
+  if(resultados.length === 0){
+    resetSeleccionPrompt('No se encontró ese código, folio, ID o texto en el catálogo conectado.');
+    if(status) status.textContent = 'Sin resultados. Verifique que la base esté sincronizada y que el registro exista en CATALOGO_PROMPTS_GPT o en hojas fuente.';
     return;
   }
-  if(input) input.value = caso.codigo;
-  if(preview) preview.innerHTML = `<strong>${caso.folio}</strong> · ${caso.nombre_visible}<br>Actor: ${caso.actor} · Territorio: ${caso.territorio}<br>Código técnico oculto listo para generar prompt.`;
-  if(status) status.textContent = `Caso seleccionado: ${caso.folio}. Código técnico interno listo.`;
+  if(resultados.length === 1){ seleccionarCasoObjeto(resultados[0]); return; }
+  if(preview){
+    preview.innerHTML = `<strong>${resultados.length} coincidencias encontradas.</strong><br>` + resultados.slice(0,8).map((r,i)=>`<button class="btn soft" style="margin:4px 4px 0 0;padding:6px 8px" onclick="seleccionarResultadoCodigo(${i})">${escapeHtml(r.folio)} · ${escapeHtml(r.nombre_visible)}</button>`).join('') + (resultados.length>8?'<br>Hay más coincidencias. Precise el código o folio.':'');
+  }
+  window.__RESULTADOS_CODIGO_PROMPT = resultados;
+  if(status) status.textContent = `Se encontraron ${resultados.length} coincidencias. Seleccione una tarjeta.`;
+}
+function seleccionarResultadoCodigo(i){
+  const r = (window.__RESULTADOS_CODIGO_PROMPT || [])[i];
+  if(r) seleccionarCasoObjeto(r);
 }
 function generarPromptGuiado(){
-  const valor = document.getElementById('casoBusqueda')?.value || '';
-  const caso = CATALOGO_PROMPTS_GPT.find(x=>`${x.folio} · ${x.nombre_visible}`===valor);
+  const caso = CASO_PROMPT_SELECCIONADO;
   const box = document.getElementById('promptBox');
   const status = document.getElementById('promptSearchStatus');
   if(!caso){
-    if(status) status.textContent = 'Seleccione nivel, territorio/actor y caso visible antes de generar el prompt.';
+    if(status) status.textContent = 'Seleccione un caso por datos o búsquelo por código existente antes de generar el prompt.';
     return;
   }
-  const prompt = caso.prompt || `Genera el análisis técnico ENOS 2026 para ${caso.nombre_visible}. Usa el código técnico oculto ${caso.codigo}. Si falta información, declara brechas y limitaciones.`;
+  const prompt = caso.prompt || `Genera el análisis técnico ENOS 2026 para ${caso.nombre_visible}. Usa el código técnico interno ${caso.codigo}. Integra datos F01-F07 disponibles, amenaza, exposición, infraestructura, cartografía, acciones, capacidades, seguimiento, brechas y recomendaciones. Si falta información, declara limitaciones y datos requeridos.`;
   if(box) box.value = prompt;
+  localStorage.setItem('enos_ultimo_prompt_guiado', prompt);
   try{ navigator.clipboard.writeText(prompt); if(status) status.textContent = `Prompt generado y copiado: ${caso.folio}.`; }
   catch(e){ if(status) status.textContent = `Prompt generado: ${caso.folio}. Copie manualmente desde el cuadro.`; }
 }
@@ -1169,8 +1227,9 @@ function cargarUltimoPromptGuiado(){
 function limpiarPromptGuiado(){
   const box = document.getElementById('promptBox');
   if(box) box.value = '';
+  resetSeleccionPrompt('Prompt limpiado. Seleccione o busque un caso para generar uno nuevo.');
   const status = document.getElementById('promptSearchStatus');
-  if(status) status.textContent = 'Prompt limpiado. Seleccione un caso para generar uno nuevo.';
+  if(status) status.textContent = 'Prompt limpiado.';
 }
 (function conservarUltimoPrompt(){
   const box = document.getElementById('promptBox');
