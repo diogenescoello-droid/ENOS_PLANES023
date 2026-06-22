@@ -567,6 +567,9 @@ select,input{
   .flow{margin:20px 10px}
   .topline,.flow-head,.detail-head{flex-direction:column}
 }
+
+.small-num{font-size:18px!important;line-height:1.15!important;word-break:break-word}.carto-map{min-height:340px;border-radius:16px;border:1px solid #c8dff0;background:radial-gradient(circle at 21% 24%, rgba(46,139,87,.14) 0 5%, transparent 6%),radial-gradient(circle at 66% 56%, rgba(242,184,75,.16) 0 7%, transparent 8%),linear-gradient(145deg,#e9f6ff,#f9fdff);position:relative;overflow:hidden}.carto-map-label{position:absolute;top:14px;left:14px;background:#fff;border:1px solid var(--borde);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:900;color:var(--azul3);z-index:3}.carto-point{position:absolute;width:18px;height:18px;border-radius:999px;border:3px solid #fff;box-shadow:0 5px 12px rgba(0,0,0,.22);background:var(--rojo);cursor:pointer;z-index:2}.carto-point.f01{background:var(--rojo)}.carto-point.f02{background:var(--ambar)}.carto-point.f03{background:var(--azul2)}.carto-point.f04{background:var(--verde)}.carto-point.f05{background:#744bc2}.carto-point.f06{background:#2b7a78}.carto-point.f07{background:#555}.carto-tooltip{position:absolute;display:none;max-width:260px;background:#fff;border:1px solid var(--borde);box-shadow:0 12px 28px rgba(12,45,72,.16);border-radius:12px;padding:10px;font-size:12px;color:var(--texto);z-index:5}.carto-point:hover + .carto-tooltip{display:block}.muted-text{color:var(--muted);font-size:13px;line-height:1.35}.case-action{white-space:nowrap}.record-json{white-space:pre-wrap;font-family:Consolas,monospace;font-size:12px;background:#f7fbff;border:1px solid var(--borde);border-radius:12px;padding:10px;max-height:260px;overflow:auto}.score-ok{color:var(--verde)}.score-warn{color:#8a5a00}.score-bad{color:var(--rojo)}
+
 </style>
 </head>
 <body>
@@ -648,7 +651,7 @@ select,input{
           <div>
             <h2>GPT institucional y cierre práctico</h2>
             <p>Ingrese al asistente técnico ENOS Zona 5, pegue el prompt generado y descargue el plan de acción desde el GPT.</p>
-            <a class="btn primary">Ingresar al GPT institucional</a>
+            <button class="btn primary" onclick="abrirGPTInstitucional()">Ingresar al GPT institucional</button>
             <div class="note" style="margin-top:13px">Cierre del ciclo en esta plataforma: el usuario genera el plan con el GPT y descarga el archivo final. La firma, envío por Quipux, archivo institucional o socialización se gestiona fuera de esta página.</div>
             <h3 style="color:var(--azul3)">Flujo de cierre práctico</h3>
             <div class="steps"><div class="step"><strong>1. Generar</strong><p>Pegue el prompt en el GPT institucional y solicite el plan de acción.</p></div><div class="step"><strong>2. Revisar</strong><p>Verifique datos, conclusiones, recomendaciones y responsabilidades antes de usarlo oficialmente.</p></div><div class="step"><strong>3. Descargar</strong><p>Descargue el archivo final desde el GPT en Word, PDF o el formato que corresponda.</p></div></div>
@@ -670,43 +673,65 @@ select,input{
       </div>
 
       <div id="dashboard" class="tab-content">
-        <h2>Dashboard de control operativo</h2>
-        <p>Tablero de seguimiento: casos, registros, disponibilidad del paquete GPT y lectura ejecutiva de implementación. Esta vista se mantiene liviana para no cambiar la plataforma original.</p>
-        <div class="dashboard-actions"><button class="btn primary">Probar conexión</button><button class="btn red">Sincronizar base F01-F07</button><button class="btn soft">Actualizar dashboard</button></div>
+        <h2>Dashboard operativo conectado al índice</h2>
+        <p>Vista viva desde <strong>INDICE_MEMORIA_ENOS</strong>: resume casos, formularios, registros, calidad, brechas y datos con georreferencia. Mantiene la plataforma original y agrega los dos módulos acordados: cartográfico operativo e información ampliada.</p>
+        <div class="dashboard-actions">
+          <button class="btn primary" onclick="probarConexionENOS()">Probar conexión</button>
+          <button class="btn red" onclick="actualizarBaseF01F07()">Sincronizar base F01-F07</button>
+          <button class="btn soft" onclick="cargarDashboardOperativo()">Actualizar dashboard</button>
+          <button class="btn green" onclick="openDetailed()">Información ampliada</button>
+        </div>
+        <div id="dashboardStatus" class="status" style="display:none"><span class="dot"></span><span id="dashboardStatusText"></span></div>
 
         <div class="kpi-row">
-          <div class="kpi-card"><h4>Casos</h4><div class="num">53</div><small>Total de códigos de caso identificados.</small></div>
-          <div class="kpi-card"><h4>Disponibles</h4><div class="num">53</div><small>Casos visibles o disponibles para GPT.</small></div>
-          <div class="kpi-card"><h4>Registros</h4><div class="num">372</div><small>Suma de registros asociados reportados.</small></div>
-          <div class="kpi-card"><h4>Pendientes</h4><div class="num">0</div><small>Casos sin estado disponible o con revisión pendiente.</small></div>
+          <div class="kpi-card"><h4>Casos</h4><div class="num" id="dashCasos">—</div><small>Total de códigos de caso detectados en el índice.</small></div>
+          <div class="kpi-card"><h4>Registros</h4><div class="num" id="dashRegistros">—</div><small>Filas útiles indexadas desde hojas F01-F07 y bases.</small></div>
+          <div class="kpi-card"><h4>Promedio técnico</h4><div class="num" id="dashPromedio">—</div><small>Estimación por cobertura de formularios por caso.</small></div>
+          <div class="kpi-card"><h4>Georreferenciados</h4><div class="num" id="dashGeo">—</div><small>Registros con coordenada utilizable para mapa operativo.</small></div>
         </div>
 
         <div class="executive">
           <div class="gauge">
-            <div class="gauge-title">Implementación técnica promedio</div>
-            <div class="gauge-number">68%</div>
-            <div class="track"><div class="fill"></div></div>
-            <p style="margin-top:12px">Indicador calculado por criterios aplicables, no por simple entrega documental.</p>
+            <div class="gauge-title">Cobertura técnica promedio</div>
+            <div class="gauge-number" id="dashGaugeNumber">—</div>
+            <div class="track"><div class="fill" id="dashGaugeFill" style="width:0%"></div></div>
+            <p id="dashLectura" style="margin-top:12px">Actualice el dashboard para leer los datos reales del índice.</p>
           </div>
           <div class="alert">
-            <strong>Alerta ejecutiva</strong>
-            Hay planes entregados que todavía pueden fallar por verificables, responsables, seguimiento mensual o integración incompleta de lineamientos. Esta alerta debe motivar el ingreso al análisis detallado.
-            <div class="actions" style="margin-bottom:0"><button class="btn primary" onclick="openDetailed()">Análisis detallado</button></div>
+            <strong>Lectura ejecutiva automática</strong>
+            <span id="dashAlertaEjecutiva">El tablero está listo para consultar el índice y detectar casos con baja cobertura, seguimiento faltante o falta de georreferencia.</span>
+            <div class="actions" style="margin-bottom:0"><button class="btn primary" onclick="openDetailed()">Abrir información ampliada</button></div>
           </div>
         </div>
 
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Código caso</th><th>Institución</th><th>Tipo usuario</th><th>Cantón</th><th>Formularios</th><th>Registros</th><th>Estado</th></tr></thead>
-            <tbody>
-              <tr><td><strong>GADGUARANDA-ENOS-2026</strong></td><td>GAD GUARANDA</td><td>gad_municipal</td><td>guaranda</td><td>F01|F02|F04|F05|F06|F07</td><td>17</td><td><span class="tag ok">DISPONIBLE_PARA_GPT</span></td></tr>
-              <tr><td><strong>GADPLR-01</strong></td><td>GAD PROVINCIAL DE LOS RIOS</td><td>otro</td><td></td><td>F01</td><td>1</td><td><span class="tag ok">DISPONIBLE_PARA_GPT</span></td></tr>
-              <tr><td><strong>GADDAULE-ENOS-2026-001BORRADOR</strong></td><td>GAD MUNICIPAL DAULE</td><td>gad_municipal</td><td>daule</td><td>F01|F02|F03|F04|F05|F06|F07</td><td>30</td><td><span class="tag ok">DISPONIBLE_PARA_GPT</span></td></tr>
-              <tr><td><strong>GAD MONTALVO 001-PLAN EMERGENCIA</strong></td><td>GOBIERNO AUTONOMO DESCENTRALIZADO DEL CANTON MONTALVO</td><td>gad_municipal</td><td>montalvo</td><td>F02|F04</td><td>2</td><td><span class="tag warn">OBSERVADO</span></td></tr>
-            </tbody>
-          </table>
+        <div class="detail-grid" style="margin-top:14px">
+          <div class="detail-card">
+            <h3>1. Módulo cartográfico operativo</h3>
+            <p>Mapa liviano calculado desde los registros con coordenadas. Si el caso no tiene coordenadas limpias, se muestra en la tabla territorial para depuración.</p>
+            <div class="filters" style="grid-template-columns:1fr 1fr auto">
+              <select id="dashProvinciaFilter" onchange="renderDashboardMap()"><option value="">Provincia: todas</option></select>
+              <select id="dashFormularioFilter" onchange="renderDashboardMap()"><option value="">Formulario: todos</option></select>
+              <button class="btn white" onclick="renderDashboardMap()">Refrescar mapa</button>
+            </div>
+            <div class="carto-map" id="cartoMapLayer">
+              <div class="carto-map-label">Mapa operativo · puntos desde INDICE_MEMORIA_ENOS</div>
+            </div>
+            <div class="footer-note" id="cartoMapNote">Sin datos cartográficos cargados todavía.</div>
+          </div>
+          <div class="detail-card">
+            <h3>2. Casos para análisis ampliado</h3>
+            <p>Seleccione un caso para abrir su paquete, formularios detectados, registros, brechas y soporte cartográfico.</p>
+            <div class="inputline"><label>Buscar caso, GAD o cantón</label><input id="dashCaseSearch" oninput="renderDashboardCases()" placeholder="Ejemplo: Empalme, Daule, GADMELEMPALME..."></div>
+            <div class="table-wrap" style="max-height:360px">
+              <table>
+                <thead><tr><th>Código</th><th>Cantón</th><th>Formularios</th><th>Registros</th><th>Acción</th></tr></thead>
+                <tbody id="dashCasesBody"><tr><td colspan="5">Actualice el dashboard para cargar casos reales.</td></tr></tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
+
     </section>
   </section>
 
@@ -714,135 +739,66 @@ select,input{
     <div class="detail-shell">
       <div class="detail-head">
         <div>
-          <h2>Cabina de análisis detallado ENOS 2026</h2>
-          <p>Vista técnica-operativa para revisar porcentaje de implementación, criterios fallidos, verificables, errores Kobo, seguimiento mensual y lectura territorial. Es el segundo pantallazo; no reemplaza el dashboard liviano.</p>
+          <h2>Información ampliada ENOS 2026</h2>
+          <p>Módulo conectado al índice para revisar un caso seleccionado: resumen técnico, formularios, registros, brechas, cartografía disponible y calidad de datos. Esta vista no reemplaza al GPT: prepara la lectura antes de generar el plan.</p>
         </div>
         <button class="btn white" onclick="closeDetailed()">Volver al dashboard</button>
       </div>
       <div class="detail-body">
-        <div class="detail-tabs">
-          <button class="detail-tab active" onclick="openDetailTab('dresumen',this)">Resumen</button>
-          <button class="detail-tab" onclick="openDetailTab('ddocumental',this)">Control documental</button>
-          <button class="detail-tab" onclick="openDetailTab('dcriterios',this)">Criterios</button>
-          <button class="detail-tab" onclick="openDetailTab('dseguimiento',this)">Seguimiento mensual</button>
-          <button class="detail-tab" onclick="openDetailTab('dterritorio',this)">Territorio</button>
-          <button class="detail-tab" onclick="openDetailTab('dkobo',this)">Calidad Kobo</button>
-        </div>
-
         <div class="filters">
-          <select><option>Provincia: todas</option><option>Guayas</option><option>Los Ríos</option><option>Bolívar</option><option>Santa Elena</option></select>
-          <select><option>Estado: todos</option><option>Conforme</option><option>En revisión</option><option>Observado</option><option>No reporta</option></select>
-          <input placeholder="Buscar GAD o código de caso">
-          <button class="btn primary">Aplicar filtros</button>
+          <input id="detalleCodigoCaso" placeholder="Código de caso para consultar">
+          <select id="detalleActor"><option value="GAD municipal / parroquial">GAD municipal / parroquial</option><option value="Mesa Técnica de Trabajo">Mesa Técnica de Trabajo</option><option value="Grupo de Trabajo / soporte operativo">Grupo de Trabajo / soporte operativo</option><option value="Coordinación Zonal 5 SNGR">Coordinación Zonal 5 SNGR</option></select>
+          <button class="btn primary" onclick="cargarDetalleCaso()">Consultar caso</button>
+          <button class="btn green" onclick="generarPromptDesdeDetalle()">Generar prompt del caso</button>
+        </div>
+        <div id="detalleStatus" class="status" style="display:none"><span class="dot"></span><span id="detalleStatusText"></span></div>
+
+        <div class="detail-tabs" style="margin-top:16px">
+          <button class="detail-tab active" onclick="openDetailTab('dresumen',this)">Resumen</button>
+          <button class="detail-tab" onclick="openDetailTab('dformularios',this)">Formularios</button>
+          <button class="detail-tab" onclick="openDetailTab('dbrechas',this)">Brechas / calidad</button>
+          <button class="detail-tab" onclick="openDetailTab('dterritorio',this)">Cartografía</button>
+          <button class="detail-tab" onclick="openDetailTab('dregistros',this)">Registros índice</button>
         </div>
 
         <div id="dresumen" class="detail-module active">
           <div class="kpi-row">
-            <div class="kpi-card"><h4>Implementación promedio</h4><div class="num">68%</div><small>Criterios aplicables cumplidos.</small></div>
-            <div class="kpi-card"><h4>GAD observados</h4><div class="num">11</div><small>Requieren ajuste técnico.</small></div>
-            <div class="kpi-card"><h4>Oficios verificables</h4><div class="num">31</div><small>Firmados o cargados.</small></div>
-            <div class="kpi-card"><h4>Fichas válidas</h4><div class="num">82%</div><small>Sin error crítico Kobo.</small></div>
+            <div class="kpi-card"><h4>Código</h4><div class="num small-num" id="detCodigo">—</div><small>Caso seleccionado.</small></div>
+            <div class="kpi-card"><h4>Registros</h4><div class="num" id="detRegistros">—</div><small>Total asociado al caso.</small></div>
+            <div class="kpi-card"><h4>Formularios</h4><div class="num" id="detFormularios">—</div><small>F01-F07 detectados.</small></div>
+            <div class="kpi-card"><h4>Suficiencia</h4><div class="num small-num" id="detSuficiencia">—</div><small>Lectura automática.</small></div>
           </div>
-          <div class="detail-grid" style="margin-top:14px">
-            <div class="detail-card"><h3>Implementación por GAD</h3><div class="bars">
-              <div class="barline"><strong>Pedro Carbo</strong><div class="track"><div class="fill" style="width:86%;background:var(--verde)"></div></div><strong>86%</strong></div>
-              <div class="barline"><strong>El Empalme</strong><div class="track"><div class="fill" style="width:76%;background:var(--ambar)"></div></div><strong>76%</strong></div>
-              <div class="barline"><strong>Montalvo</strong><div class="track"><div class="fill" style="width:54%;background:var(--rojo)"></div></div><strong>54%</strong></div>
-              <div class="barline"><strong>Buena Fe</strong><div class="track"><div class="fill" style="width:82%;background:var(--verde)"></div></div><strong>82%</strong></div>
-            </div></div>
-            <div class="detail-card"><h3>Lectura ejecutiva</h3><div class="criteria">
-              <div class="criterion"><strong>Alto 80–100%</strong><span>Plan útil para gestión y seguimiento.</span></div>
-              <div class="criterion"><strong>Medio 60–79%</strong><span>Plan funcional, pero requiere ajustes técnicos.</span></div>
-              <div class="criterion"><strong>Bajo 40–59%</strong><span>Brechas importantes en estructura, verificables o seguimiento.</span></div>
-              <div class="criterion"><strong>Crítico &lt;40%</strong><span>No permite conocer la aplicabilidad real del plan.</span></div>
-            </div></div>
+          <div class="detail-card" style="margin-top:14px">
+            <h3>Lectura técnica del caso</h3>
+            <div id="detLectura" class="criteria"><div class="criterion"><strong>Sin caso seleccionado</strong><span>Seleccione un caso desde el dashboard o ingrese el código manualmente.</span></div></div>
           </div>
         </div>
 
-        <div id="ddocumental" class="detail-module">
-          <div class="detail-card">
-            <h3>Control documental y verificables</h3>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>GAD</th><th>Estado</th><th>Implementación</th><th>Oficio alcalde</th><th>Informe revisión</th><th>Verificables</th><th>Observación</th></tr></thead>
-                <tbody>
-                  <tr><td>Pedro Carbo</td><td><span class="tag ok">Conforme</span></td><td>86%</td><td>Sí</td><td>Cargado</td><td>9</td><td>Pasar a seguimiento mensual.</td></tr>
-                  <tr><td>El Empalme</td><td><span class="tag info">En revisión</span></td><td>76%</td><td>Sí</td><td>Cargado</td><td>6</td><td>Faltan evidencias y cierre de responsables.</td></tr>
-                  <tr><td>Montalvo</td><td><span class="tag warn">Observado</span></td><td>54%</td><td>No</td><td>Cargado</td><td>4</td><td>Acciones sin indicador medible.</td></tr>
-                  <tr><td>Isidro Ayora</td><td><span class="tag bad">No reporta</span></td><td>0%</td><td>No</td><td>No</td><td>0</td><td>Sin información suficiente.</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+        <div id="dformularios" class="detail-module">
+          <div class="detail-card"><h3>Formularios detectados y cobertura</h3><div id="detFormGrid" class="form-grid"></div></div>
         </div>
 
-        <div id="dcriterios" class="detail-module">
+        <div id="dbrechas" class="detail-module">
           <div class="detail-grid">
-            <div class="detail-card"><h3>Criterios que más fallan</h3><div class="bars">
-              <div class="barline"><strong>Verificables</strong><div class="track"><div class="fill" style="width:90%;background:var(--rojo)"></div></div><strong>14</strong></div>
-              <div class="barline"><strong>Seguimiento mensual</strong><div class="track"><div class="fill" style="width:74%;background:var(--ambar)"></div></div><strong>11</strong></div>
-              <div class="barline"><strong>Responsables</strong><div class="track"><div class="fill" style="width:58%;background:var(--ambar)"></div></div><strong>8</strong></div>
-              <div class="barline"><strong>Recursos</strong><div class="track"><div class="fill" style="width:44%;background:var(--azul2)"></div></div><strong>6</strong></div>
-            </div></div>
-            <div class="detail-card"><h3>Matriz de criterios SNGR sugerida</h3><div class="criteria">
-              <div class="criterion"><strong>C1. Estructura concordante</strong><span>Antecedentes, objetivo, alcance, responsables, activación, respuesta y seguimiento.</span></div>
-              <div class="criterion"><strong>C2. Identificación territorial del riesgo</strong><span>Puntos críticos, población expuesta, infraestructura y cartografía.</span></div>
-              <div class="criterion"><strong>C3. Acciones operativas medibles</strong><span>Responsable, plazo, recurso, indicador y medio de verificación.</span></div>
-              <div class="criterion"><strong>C4. Coordinación interinstitucional</strong><span>Participación de GAD, Bomberos, MSP, Policía, educación, CNEL, agua potable y GAD parroquiales.</span></div>
-              <div class="criterion"><strong>C5. Verificables</strong><span>Oficio, actas, fotos, resoluciones, matrices, enlaces, firmas y anexos.</span></div>
-            </div></div>
-          </div>
-        </div>
-
-        <div id="dseguimiento" class="detail-module">
-          <div class="detail-grid">
-            <div class="detail-card"><h3>Seguimiento mensual</h3><div class="bars">
-              <div class="barline"><strong>Junio</strong><div class="track"><div class="fill" style="width:68%"></div></div><strong>68%</strong></div>
-              <div class="barline"><strong>Julio</strong><div class="track"><div class="fill" style="width:0%"></div></div><strong>0%</strong></div>
-              <div class="barline"><strong>Agosto</strong><div class="track"><div class="fill" style="width:0%"></div></div><strong>0%</strong></div>
-              <div class="barline"><strong>Septiembre</strong><div class="track"><div class="fill" style="width:0%"></div></div><strong>0%</strong></div>
-            </div></div>
-            <div class="detail-card"><h3>Campos mínimos F07 seguimiento</h3><div class="criteria">
-              <div class="criterion"><strong>Código único normalizado</strong><span>Provincia + cantón + ENOS + año.</span></div>
-              <div class="criterion"><strong>Avance mensual</strong><span>Actividades ejecutadas, pendientes, evidencia y porcentaje actualizado.</span></div>
-              <div class="criterion"><strong>Brecha técnica</strong><span>Criterio no implementado, causa y apoyo requerido.</span></div>
-              <div class="criterion"><strong>Validación documental</strong><span>Verificable, enlace, fecha, responsable y estado de revisión.</span></div>
-            </div></div>
+            <div class="detail-card"><h3>Faltantes críticos</h3><div id="detFaltantes" class="criteria"></div></div>
+            <div class="detail-card"><h3>Advertencias</h3><div id="detAdvertencias" class="criteria"></div></div>
           </div>
         </div>
 
         <div id="dterritorio" class="detail-module">
           <div class="detail-grid">
-            <div class="detail-card"><h3>Vista territorial</h3><div class="map"><div class="point p1"></div><div class="point p2"></div><div class="point p3"></div><div class="point p4"></div></div></div>
-            <div class="detail-card"><h3>Consulta para autoridad / ministerio</h3><div class="criteria">
-              <div class="criterion"><strong>Uso previsto</strong><span>Mostrar GAD con mayor avance, GAD rezagados, planes observados y zonas con baja integración de lineamientos.</span></div>
-              <div class="criterion"><strong>Conexión futura</strong><span>ArcGIS Online o capa GeoJSON con polígonos cantonales pintados por porcentaje.</span></div>
-            </div></div>
+            <div class="detail-card"><h3>Puntos cartográficos del caso</h3><div class="carto-map" id="detMapLayer"><div class="carto-map-label">Puntos del caso seleccionado</div></div><div class="footer-note" id="detMapNote">Sin caso seleccionado.</div></div>
+            <div class="detail-card"><h3>Tabla territorial</h3><div class="table-wrap" style="max-height:330px"><table><thead><tr><th>Formulario</th><th>Nombre</th><th>Provincia</th><th>Cantón</th><th>Coordenada</th></tr></thead><tbody id="detMapRows"><tr><td colspan="5">Sin datos.</td></tr></tbody></table></div></div>
           </div>
         </div>
 
-        <div id="dkobo" class="detail-module">
-          <div class="detail-grid">
-            <div class="detail-card"><h3>Calidad de datos Kobo</h3><div class="table-wrap">
-              <table><thead><tr><th>Hallazgo</th><th>Cantidad</th><th>Acción</th></tr></thead><tbody>
-                <tr><td>Códigos de GAD mal escritos</td><td>9</td><td>Normalizar código único</td></tr>
-                <tr><td>Fichas vacías o sin adjunto</td><td>5</td><td>Solicitar corrección</td></tr>
-                <tr><td>Registros duplicados</td><td>7</td><td>Consolidar por GAD y fecha</td></tr>
-                <tr><td>Documentos sin oficio firmado</td><td>6</td><td>Marcar pendiente documental</td></tr>
-              </tbody></table>
-            </div></div>
-            <div class="detail-card"><h3>Reglas de depuración</h3><div class="criteria">
-              <div class="criterion"><strong>Regla 1</strong><span>Agrupar por GAD, provincia, cantón y período; no depender del código escrito manualmente.</span></div>
-              <div class="criterion"><strong>Regla 2</strong><span>Marcar duplicado si hay mismo GAD, mismo formulario y fecha cercana.</span></div>
-              <div class="criterion"><strong>Regla 3</strong><span>Separar ficha incompleta, válida, observada y consolidada.</span></div>
-            </div></div>
-          </div>
+        <div id="dregistros" class="detail-module">
+          <div class="detail-card"><h3>Registros recuperados desde INDICE_MEMORIA_ENOS</h3><textarea id="detJson" style="min-height:360px" readonly></textarea></div>
         </div>
-
-        <div class="footer-note">Maqueta estática · Lista para convertir en parche sobre dashboard.html + analisis-detallado.html.</div>
       </div>
     </div>
   </section>
+
 </main>
 
 <script>
@@ -1232,6 +1188,209 @@ async function actualizarBaseF01F07(){
 function abrirGPTInstitucional(){
   window.open(GPT_INSTITUCIONAL_URL, '_blank', 'noopener,noreferrer');
 }
+
+
+
+// VERSION_DASHBOARD_OPERATIVO_INFO_AMPLIADA_20260622_01
+let ENOS_DASHBOARD_DATA = {summary:null, map:[], cases:[], selectedCase:null};
+
+function setDashboardStatus(message, ok){
+  const box=document.getElementById('dashboardStatus');
+  const txt=document.getElementById('dashboardStatusText');
+  if(!box||!txt) return;
+  txt.textContent=message||'';
+  box.style.display=message?'flex':'none';
+  box.style.background=ok?'#eef9f2':'#fff8e8';
+  box.style.borderColor=ok?'#bfe5ca':'#f1d28b';
+}
+function setDetalleStatus(message, ok){
+  const box=document.getElementById('detalleStatus');
+  const txt=document.getElementById('detalleStatusText');
+  if(!box||!txt) return;
+  txt.textContent=message||'';
+  box.style.display=message?'flex':'none';
+  box.style.background=ok?'#eef9f2':'#fff8e8';
+  box.style.borderColor=ok?'#bfe5ca':'#f1d28b';
+}
+async function probarConexionENOS(){
+  setDashboardStatus('Probando conexión con Apps Script...', true);
+  try{
+    const r=await jsonpENOS('indexHealth', {});
+    setDashboardStatus(r && r.ok ? 'Conexión OK · ' + (r.spreadsheet_name || 'Spreadsheet conectado') : 'Respuesta no válida de Apps Script.', !!(r&&r.ok));
+  }catch(e){ setDashboardStatus('Error de conexión: ' + (e.message||e), false); }
+}
+async function cargarDashboardOperativo(){
+  setDashboardStatus('Cargando dashboard desde INDICE_MEMORIA_ENOS...', true);
+  try{
+    const summary=await jsonpENOS('dashboardSummary', {});
+    if(!summary || summary.ok===false) throw new Error((summary && (summary.message||summary.error)) || 'No se pudo obtener dashboardSummary.');
+    const map=await jsonpENOS('dashboardMapData', {});
+    ENOS_DASHBOARD_DATA.summary=summary;
+    ENOS_DASHBOARD_DATA.map=(map && map.ok!==false && map.data) ? map.data : [];
+    ENOS_DASHBOARD_DATA.cases=summary.casos || [];
+    renderDashboardSummary(summary);
+    renderDashboardFilters(summary);
+    renderDashboardMap();
+    renderDashboardCases();
+    setDashboardStatus('Dashboard actualizado. Casos: ' + (summary.total_casos||0) + ' · Registros: ' + (summary.total_registros_indice||0), true);
+  }catch(e){ setDashboardStatus('Error cargando dashboard: ' + (e.message||e), false); }
+}
+function renderDashboardSummary(s){
+  const totalCasos=s.total_casos||0;
+  const totalRegs=s.total_registros_indice||0;
+  const prom=s.promedio_cobertura||0;
+  const geo=s.registros_georreferenciados||0;
+  setText('dashCasos', totalCasos);
+  setText('dashRegistros', totalRegs);
+  setText('dashPromedio', prom + '%');
+  setText('dashGeo', geo);
+  setText('dashGaugeNumber', prom + '%');
+  const fill=document.getElementById('dashGaugeFill'); if(fill) fill.style.width=Math.max(0,Math.min(100,prom))+'%';
+  setText('dashLectura', s.lectura_ejecutiva || 'Cobertura calculada por formularios detectados en cada caso.');
+  setText('dashAlertaEjecutiva', s.alerta_ejecutiva || 'Sin alerta ejecutiva generada.');
+}
+function setText(id, value){ const el=document.getElementById(id); if(el) el.textContent=value; }
+function renderDashboardFilters(summary){
+  const prov=document.getElementById('dashProvinciaFilter');
+  const form=document.getElementById('dashFormularioFilter');
+  if(prov){
+    const current=prov.value;
+    const opts=['<option value="">Provincia: todas</option>'].concat((summary.provincias||[]).map(p=>'<option value="'+escapeHtml(p)+'">'+escapeHtml(p)+'</option>'));
+    prov.innerHTML=opts.join(''); prov.value=current || '';
+  }
+  if(form){
+    const current=form.value;
+    const formularios=['F01','F02','F03','F04','F05','F06','F07','BASE_CASOS','OTRO'];
+    form.innerHTML='<option value="">Formulario: todos</option>'+formularios.map(f=>'<option value="'+f+'">'+f+'</option>').join('');
+    form.value=current || '';
+  }
+}
+function renderDashboardMap(){
+  const map=document.getElementById('cartoMapLayer');
+  const note=document.getElementById('cartoMapNote');
+  if(!map) return;
+  const prov=(document.getElementById('dashProvinciaFilter')||{}).value || '';
+  const form=(document.getElementById('dashFormularioFilter')||{}).value || '';
+  const pts=(ENOS_DASHBOARD_DATA.map||[]).filter(p=>(!prov || p.provincia===prov) && (!form || p.formulario===form));
+  map.innerHTML='<div class="carto-map-label">Mapa operativo · puntos desde INDICE_MEMORIA_ENOS</div>';
+  pts.slice(0,180).forEach((p,i)=>{
+    const pos=coordToMapPosition(p.lat, p.lng);
+    const dot=document.createElement('div');
+    dot.className='carto-point '+String(p.formulario||'').toLowerCase();
+    dot.style.left=pos.x+'%'; dot.style.top=pos.y+'%';
+    const tt=document.createElement('div');
+    tt.className='carto-tooltip';
+    tt.style.left='calc('+pos.x+'% + 10px)'; tt.style.top='calc('+pos.y+'% + 10px)';
+    tt.innerHTML='<strong>'+escapeHtml(p.codigo_caso||'Sin código')+'</strong><br>'+escapeHtml(p.formulario||'')+' · '+escapeHtml(p.nombre_visible||'')+'<br>'+escapeHtml([p.provincia,p.canton].filter(Boolean).join(' / '))+'<br>'+Number(p.lat).toFixed(5)+', '+Number(p.lng).toFixed(5);
+    map.appendChild(dot); map.appendChild(tt);
+  });
+  if(note) note.textContent = pts.length ? ('Puntos visibles: '+Math.min(pts.length,180)+' de '+pts.length+'.') : 'No hay registros con coordenadas para el filtro seleccionado. Revise F01/F03 o campos de georreferencia.';
+}
+function coordToMapPosition(lat,lng){
+  const minLat=-5.2,maxLat=1.8,minLng=-82.2,maxLng=-74.5;
+  const x=Math.max(2,Math.min(96,((Number(lng)-minLng)/(maxLng-minLng))*100));
+  const y=Math.max(4,Math.min(94,((maxLat-Number(lat))/(maxLat-minLat))*100));
+  return {x:x,y:y};
+}
+function renderDashboardCases(){
+  const body=document.getElementById('dashCasesBody'); if(!body) return;
+  const q=(document.getElementById('dashCaseSearch')||{}).value || '';
+  const nq=normalizeTextClient(q);
+  const cases=(ENOS_DASHBOARD_DATA.cases||[]).filter(c=>!nq || normalizeTextClient([c.codigo_caso,c.nombre_visible,c.actor,c.provincia,c.canton,c.formularios].join(' ')).includes(nq));
+  if(!cases.length){ body.innerHTML='<tr><td colspan="5">No hay casos para mostrar.</td></tr>'; return; }
+  body.innerHTML=cases.slice(0,80).map(c=>'<tr><td><strong>'+escapeHtml(c.codigo_caso||'')+'</strong></td><td>'+escapeHtml(c.canton||'')+'</td><td>'+escapeHtml(c.formularios||'')+'</td><td>'+escapeHtml(c.registros||0)+'</td><td class="case-action"><button class="btn soft" onclick="seleccionarCasoDashboard(\''+escapeAttr(c.codigo_caso||'')+'\')">Abrir</button></td></tr>').join('');
+}
+function seleccionarCasoDashboard(codigo){
+  const inp=document.getElementById('detalleCodigoCaso'); if(inp) inp.value=codigo;
+  openDetailed();
+  cargarDetalleCaso(codigo);
+}
+async function cargarDetalleCaso(codigoManual){
+  const input=document.getElementById('detalleCodigoCaso');
+  const codigo=extraerCodigoCaso(codigoManual || (input&&input.value) || '');
+  if(!codigo){ setDetalleStatus('Ingrese o seleccione un código de caso.', false); return; }
+  if(input) input.value=codigo;
+  setDetalleStatus('Consultando información ampliada del caso '+codigo+'...', true);
+  try{
+    const actor=(document.getElementById('detalleActor')||{}).value || obtenerActorPlataforma();
+    const response=await jsonpENOS('caseDetailsFromIndex', {codigo_caso:codigo, actor:actor});
+    if(!response || response.ok===false) throw new Error((response && (response.message||response.error)) || 'No se pudo consultar el caso.');
+    ENOS_DASHBOARD_DATA.selectedCase=response;
+    renderDetalleCaso(response);
+    setDetalleStatus('Caso cargado: '+codigo+' · Registros: '+(response.total_registros||0), true);
+  }catch(e){ setDetalleStatus('Error consultando caso: '+(e.message||e), false); }
+}
+function renderDetalleCaso(r){
+  const p=r.paquete || {};
+  const rc=p.resumen_control || {};
+  const suf=p.criterio_suficiencia || {};
+  setText('detCodigo', r.codigo_buscado || p.codigo_buscado || '—');
+  setText('detRegistros', r.total_registros || rc.total_registros_indice || 0);
+  setText('detFormularios', (rc.formularios_detectados||[]).length || 0);
+  setText('detSuficiencia', suf.clasificacion || '—');
+  const lectura=document.getElementById('detLectura');
+  if(lectura){
+    lectura.innerHTML = [
+      criterionHtml('Formularios detectados', (rc.formularios_detectados||[]).join(', ') || 'Sin formularios detectados'),
+      criterionHtml('Actores detectados', (rc.actores_detectados||[]).join(', ') || 'Sin actor detectado'),
+      criterionHtml('Territorio', [rc.provincias_detectadas, rc.cantones_detectados].map(a=>(a||[]).join(', ')).filter(Boolean).join(' / ') || 'Sin provincia/cantón detectado'),
+      criterionHtml('Recomendación', suf.recomendacion_para_gpt || 'Generar lectura técnica con las limitaciones disponibles.')
+    ].join('');
+  }
+  renderDetalleFormularios(p);
+  renderDetalleBrechas(p);
+  renderDetalleMap(r);
+  const json=document.getElementById('detJson'); if(json) json.value=JSON.stringify(p, null, 2);
+}
+function renderDetalleFormularios(p){
+  const grid=document.getElementById('detFormGrid'); if(!grid) return;
+  const keys=[['F01','puntos_riesgo'],['F02','infraestructura_esencial'],['F03','cartografia_institucional'],['F04','acciones_preventivas_mitigacion'],['F05','alojamientos_rutas_puntos_seguros'],['F06','capacidades_recursos'],['F07','seguimiento_mensual']];
+  grid.innerHTML=keys.map(([f,k])=>{
+    const n=(p[k]||[]).length;
+    const cls=n?'ok':'warn';
+    return '<div class="form-card"><h3>'+f+'</h3><p>'+escapeHtml((FORM_CARDS[f]||{}).desc||'Registro asociado')+'</p><span class="tag '+cls+'">'+n+' registros</span></div>';
+  }).join('');
+}
+function renderDetalleBrechas(p){
+  const suf=p.criterio_suficiencia || {};
+  const falt=document.getElementById('detFaltantes');
+  const adv=document.getElementById('detAdvertencias');
+  const faltantes=suf.faltantes_criticos || [];
+  const advert=suf.advertencias || [];
+  if(falt) falt.innerHTML = faltantes.length ? faltantes.map(x=>criterionHtml('Faltante', x)).join('') : criterionHtml('Sin faltantes críticos', 'No se detectaron faltantes críticos automáticos.');
+  if(adv) adv.innerHTML = advert.length ? advert.map(x=>criterionHtml('Advertencia', x)).join('') : criterionHtml('Sin advertencias', 'No se detectaron advertencias automáticas.');
+}
+function renderDetalleMap(r){
+  const map=document.getElementById('detMapLayer');
+  const rows=document.getElementById('detMapRows');
+  const note=document.getElementById('detMapNote');
+  if(!map) return;
+  const pts=(r.puntos_cartograficos || []);
+  map.innerHTML='<div class="carto-map-label">Puntos del caso seleccionado</div>';
+  pts.forEach(p=>{
+    const pos=coordToMapPosition(p.lat, p.lng);
+    const dot=document.createElement('div'); dot.className='carto-point '+String(p.formulario||'').toLowerCase(); dot.style.left=pos.x+'%'; dot.style.top=pos.y+'%';
+    const tt=document.createElement('div'); tt.className='carto-tooltip'; tt.style.left='calc('+pos.x+'% + 10px)'; tt.style.top='calc('+pos.y+'% + 10px)'; tt.innerHTML='<strong>'+escapeHtml(p.formulario||'')+'</strong><br>'+escapeHtml(p.nombre_visible||'')+'<br>'+Number(p.lat).toFixed(5)+', '+Number(p.lng).toFixed(5);
+    map.appendChild(dot); map.appendChild(tt);
+  });
+  if(note) note.textContent = pts.length ? 'Puntos cartográficos del caso: '+pts.length : 'El caso no tiene coordenadas limpias detectadas en el índice.';
+  if(rows) rows.innerHTML = pts.length ? pts.map(p=>'<tr><td>'+escapeHtml(p.formulario||'')+'</td><td>'+escapeHtml(p.nombre_visible||'')+'</td><td>'+escapeHtml(p.provincia||'')+'</td><td>'+escapeHtml(p.canton||'')+'</td><td>'+Number(p.lat).toFixed(5)+', '+Number(p.lng).toFixed(5)+'</td></tr>').join('') : '<tr><td colspan="5">Sin puntos georreferenciados para este caso.</td></tr>';
+}
+function generarPromptDesdeDetalle(){
+  const codigo=(document.getElementById('detalleCodigoCaso')||{}).value || '';
+  const mainInput=document.getElementById('codigoCasoInput'); if(mainInput) mainInput.value=codigo;
+  const tab = Array.from(document.querySelectorAll('.tab')).find(b => b.textContent.includes('Actualizar'));
+  if(tab) openTab('actualizar', tab);
+  generarPromptGPT();
+}
+function criterionHtml(t, s){ return '<div class="criterion"><strong>'+escapeHtml(t||'')+'</strong><span>'+escapeHtml(s||'')+'</span></div>'; }
+function normalizeTextClient(v){ return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase(); }
+function escapeHtml(v){ return String(v===undefined||v===null?'':v).replace(/[&<>"]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+function escapeAttr(v){ return escapeHtml(v).replace(/'/g,'&#39;'); }
+
+document.addEventListener('DOMContentLoaded', function(){
+  setTimeout(function(){ cargarDashboardOperativo().catch(function(){}); }, 900);
+});
 
 </script>
 </body>
