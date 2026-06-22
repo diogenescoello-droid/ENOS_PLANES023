@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>BASE 01 · ENOS Zona 5 · Dashboard con análisis detallado</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 :root{
   --azul:#0b3f63;
@@ -570,6 +571,43 @@ select,input{
 
 .small-num{font-size:18px!important;line-height:1.15!important;word-break:break-word}.carto-map{min-height:340px;border-radius:16px;border:1px solid #c8dff0;background:radial-gradient(circle at 21% 24%, rgba(46,139,87,.14) 0 5%, transparent 6%),radial-gradient(circle at 66% 56%, rgba(242,184,75,.16) 0 7%, transparent 8%),linear-gradient(145deg,#e9f6ff,#f9fdff);position:relative;overflow:hidden}.carto-map-label{position:absolute;top:14px;left:14px;background:#fff;border:1px solid var(--borde);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:900;color:var(--azul3);z-index:3}.carto-point{position:absolute;width:18px;height:18px;border-radius:999px;border:3px solid #fff;box-shadow:0 5px 12px rgba(0,0,0,.22);background:var(--rojo);cursor:pointer;z-index:2}.carto-point.f01{background:var(--rojo)}.carto-point.f02{background:var(--ambar)}.carto-point.f03{background:var(--azul2)}.carto-point.f04{background:var(--verde)}.carto-point.f05{background:#744bc2}.carto-point.f06{background:#2b7a78}.carto-point.f07{background:#555}.carto-tooltip{position:absolute;display:none;max-width:260px;background:#fff;border:1px solid var(--borde);box-shadow:0 12px 28px rgba(12,45,72,.16);border-radius:12px;padding:10px;font-size:12px;color:var(--texto);z-index:5}.carto-point:hover + .carto-tooltip{display:block}.muted-text{color:var(--muted);font-size:13px;line-height:1.35}.case-action{white-space:nowrap}.record-json{white-space:pre-wrap;font-family:Consolas,monospace;font-size:12px;background:#f7fbff;border:1px solid var(--borde);border-radius:12px;padding:10px;max-height:260px;overflow:auto}.score-ok{color:var(--verde)}.score-warn{color:#8a5a00}.score-bad{color:var(--rojo)}
 
+
+/* AJUSTE SUTIL 20260622: Leaflet dentro del módulo cartográfico existente, sin cambiar arquitectura */
+.carto-map.leaflet-ready{
+  background:#e9f6ff;
+}
+.carto-map.leaflet-ready .leaflet-container{
+  border-radius:16px;
+}
+.leaflet-popup-content{
+  font-family:Arial, Helvetica, sans-serif;
+  font-size:12px;
+  color:var(--texto);
+}
+.leaflet-popup-content strong{
+  color:var(--azul3);
+}
+.prompt-lookup{
+  margin:8px 0 12px;
+}
+.prompt-lookup select,
+.prompt-lookup input{
+  width:100%;
+}
+.case-title-main{
+  display:block;
+  color:var(--azul3);
+  font-weight:900;
+  line-height:1.25;
+}
+.case-code-secondary{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.25;
+}
+
 </style>
 </head>
 <body>
@@ -634,6 +672,14 @@ select,input{
             <h2>Actualizar base y generar prompt GPT</h2>
             <p>Ingrese el código de caso y genere el prompt técnico para el asistente ENOS Zona 5. Esta versión mantiene la plataforma original y no usa buscador dinámico.</p>
             <div class="inputline"><label>Código de caso</label><input id="codigoCasoInput" placeholder="Ejemplo: GADSALINAS_PAENOS_2026_2027|PUNTO-1"></div>
+            <div class="note" style="margin:8px 0 12px">Si el usuario no conoce el código, puede identificar el caso por provincia, cantón e institución/GAD. El código se mantiene solo como llave técnica para generar el prompt.</div>
+            <div class="filters prompt-lookup" style="grid-template-columns:1fr 1fr 1.25fr auto">
+              <select id="promptProvinciaFilter" onchange="renderPromptCaseLookup()"><option value="">Provincia: todas</option></select>
+              <select id="promptCantonFilter" onchange="renderPromptCaseLookup()"><option value="">Cantón: todos</option></select>
+              <input id="promptCaseSearch" oninput="renderPromptCaseLookup()" placeholder="Buscar GAD, institución, cantón o número">
+              <button class="btn soft" onclick="usarCasoSeleccionadoParaPrompt()">Usar caso</button>
+            </div>
+            <div class="inputline"><label>Casos encontrados por territorio o institución</label><select id="promptCaseSelect"><option value="">Actualice el dashboard para cargar casos disponibles.</option></select></div>
             <div class="actions"><button class="btn red" onclick="actualizarBaseF01F07()">Actualizar base F01-F07</button><button class="btn soft" onclick="verCasosDashboard()">Ver casos</button><button class="btn primary" onclick="generarPromptGPT()">Generar y copiar prompt</button><button class="btn white" onclick="cargarUltimoPrompt()">Cargar último prompt</button><button class="btn white" onclick="limpiarPrompt()">Limpiar prompt</button></div>
             <div id="promptStatus" class="status" style="display:none"><span class="dot"></span><span id="promptStatusText"></span></div>
             <div class="inputline"><label>Prompt GPT generado</label><textarea id="promptOutput" placeholder="Aquí aparecerá el prompt técnico generado."></textarea></div>
@@ -724,7 +770,7 @@ select,input{
             <div class="inputline"><label>Buscar caso, GAD o cantón</label><input id="dashCaseSearch" oninput="renderDashboardCases()" placeholder="Ejemplo: Empalme, Daule, GADMELEMPALME..."></div>
             <div class="table-wrap" style="max-height:360px">
               <table>
-                <thead><tr><th>Código</th><th>Cantón</th><th>Formularios</th><th>Registros</th><th>Acción</th></tr></thead>
+                <thead><tr><th>Institución / caso</th><th>Territorio</th><th>Formularios</th><th>Registros</th><th>Acción</th></tr></thead>
                 <tbody id="dashCasesBody"><tr><td colspan="5">Actualice el dashboard para cargar casos reales.</td></tr></tbody>
               </table>
             </div>
@@ -801,6 +847,7 @@ select,input{
 
 </main>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 
 // VERSION_ORIGINAL_FORMULARIOS_POR_ACTOR_PROMPT_FIX_20260622_01
@@ -901,6 +948,7 @@ function selectActor(actorKey, el){
 
 document.addEventListener('DOMContentLoaded', function(){
   renderActorForms('GAD');
+  renderPromptCaseLookup();
 });
 
 function openTab(id, btn){
@@ -908,6 +956,12 @@ function openTab(id, btn){
   document.getElementById(id).classList.add('active');
   document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
   btn.classList.add('active');
+  if(id === 'dashboard'){
+    setTimeout(function(){
+      renderDashboardMap();
+      if(window.ENOS_LEAFLET_MAP){ window.ENOS_LEAFLET_MAP.invalidateSize(); }
+    }, 250);
+  }
 }
 function openDetailed(){
   const d=document.getElementById('detalle');
@@ -1193,6 +1247,9 @@ function abrirGPTInstitucional(){
 
 // VERSION_DASHBOARD_OPERATIVO_INFO_AMPLIADA_20260622_01
 let ENOS_DASHBOARD_DATA = {summary:null, map:[], cases:[], selectedCase:null};
+window.ENOS_LEAFLET_MAP = null;
+window.ENOS_LEAFLET_LAYER = null;
+window.ENOS_LEAFLET_BASES = null;
 
 function setDashboardStatus(message, ok){
   const box=document.getElementById('dashboardStatus');
@@ -1230,6 +1287,7 @@ async function cargarDashboardOperativo(){
     ENOS_DASHBOARD_DATA.cases=summary.casos || [];
     renderDashboardSummary(summary);
     renderDashboardFilters(summary);
+    renderPromptCaseLookup();
     renderDashboardMap();
     renderDashboardCases();
     setDashboardStatus('Dashboard actualizado. Casos: ' + (summary.total_casos||0) + ' · Registros: ' + (summary.total_registros_indice||0), true);
@@ -1266,14 +1324,122 @@ function renderDashboardFilters(summary){
   }
 }
 function renderDashboardMap(){
-  const map=document.getElementById('cartoMapLayer');
+  const mapEl=document.getElementById('cartoMapLayer');
   const note=document.getElementById('cartoMapNote');
-  if(!map) return;
+  if(!mapEl) return;
+
   const prov=(document.getElementById('dashProvinciaFilter')||{}).value || '';
   const form=(document.getElementById('dashFormularioFilter')||{}).value || '';
-  const pts=(ENOS_DASHBOARD_DATA.map||[]).filter(p=>(!prov || p.provincia===prov) && (!form || p.formulario===form));
+  const registros=(ENOS_DASHBOARD_DATA.map||[]).filter(p=>(!prov || p.provincia===prov) && (!form || p.formulario===form));
+
+  // Si Leaflet no carga por conectividad, se conserva el mapa simulado original como respaldo.
+  if(!window.L){
+    renderDashboardMapFallback(registros, mapEl, note);
+    return;
+  }
+
+  mapEl.classList.add('leaflet-ready');
+
+  if(!window.ENOS_LEAFLET_MAP){
+    mapEl.innerHTML='';
+    window.ENOS_LEAFLET_MAP = L.map('cartoMapLayer', {
+      zoomControl:true,
+      attributionControl:true
+    }).setView([-1.85, -79.8], 7);
+
+    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom:19,
+      attribution:'&copy; OpenStreetMap'
+    });
+
+    const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom:19,
+      attribution:'Tiles &copy; Esri'
+    });
+
+    const esriGray = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom:16,
+      attribution:'Tiles &copy; Esri'
+    });
+
+    osm.addTo(window.ENOS_LEAFLET_MAP);
+    window.ENOS_LEAFLET_BASES = {"OpenStreetMap":osm, "Satélite Esri":esriSat, "Gris claro Esri":esriGray};
+    L.control.layers(window.ENOS_LEAFLET_BASES, {}, {collapsed:true}).addTo(window.ENOS_LEAFLET_MAP);
+    window.ENOS_LEAFLET_LAYER = L.layerGroup().addTo(window.ENOS_LEAFLET_MAP);
+  }
+
+  const map=window.ENOS_LEAFLET_MAP;
+  const layerGroup=window.ENOS_LEAFLET_LAYER;
+  layerGroup.clearLayers();
+
+  let totalGeo=0;
+  let totalPuntos=0;
+  let totalLineas=0;
+  let totalPoligonos=0;
+  const capas=[];
+
+  registros.forEach(function(p){
+    const geom = obtenerGeometriaDashboard(p);
+    if(!geom) return;
+
+    const tipo = obtenerTipoGeometriaDashboard(geom);
+    if(tipo === 'Point') totalPuntos++;
+    if(tipo === 'LineString' || tipo === 'MultiLineString') totalLineas++;
+    if(tipo === 'Polygon' || tipo === 'MultiPolygon') totalPoligonos++;
+    totalGeo++;
+
+    const geoLayer = L.geoJSON(geom, {
+      pointToLayer:function(feature, latlng){
+        return L.circleMarker(latlng, {
+          radius:7,
+          weight:2,
+          opacity:.95,
+          fillOpacity:.82
+        });
+      },
+      style:function(feature){
+        const t = obtenerTipoGeometriaDashboard(feature);
+        if(t === 'Polygon' || t === 'MultiPolygon'){
+          return {weight:3, opacity:.95, fillOpacity:.20};
+        }
+        return {weight:4, opacity:.95};
+      }
+    });
+
+    geoLayer.bindPopup(htmlPopupDashboard(p, tipo));
+    geoLayer.on('click', function(){
+      if(p.codigo_caso) {
+        const input=document.getElementById('dashCaseSearch');
+        if(input){ input.value=p.codigo_caso; renderDashboardCases(); }
+      }
+    });
+
+    geoLayer.addTo(layerGroup);
+    capas.push(geoLayer);
+  });
+
+  setTimeout(function(){ map.invalidateSize(); }, 120);
+
+  if(capas.length){
+    try{
+      const grupo=L.featureGroup(capas);
+      map.fitBounds(grupo.getBounds(), {padding:[22,22], maxZoom:13});
+    }catch(e){}
+  }else{
+    map.setView([-1.85, -79.8], 7);
+  }
+
+  if(note){
+    note.textContent = registros.length
+      ? 'Elementos con geometría: '+totalGeo+' de '+registros.length+' · Puntos: '+totalPuntos+' · Líneas: '+totalLineas+' · Polígonos: '+totalPoligonos+'.'
+      : 'No hay registros para el filtro seleccionado.';
+  }
+}
+
+function renderDashboardMapFallback(pts, map, note){
   map.innerHTML='<div class="carto-map-label">Mapa operativo · puntos desde INDICE_MEMORIA_ENOS</div>';
   pts.slice(0,180).forEach((p,i)=>{
+    if(!p.lat || !p.lng) return;
     const pos=coordToMapPosition(p.lat, p.lng);
     const dot=document.createElement('div');
     dot.className='carto-point '+String(p.formulario||'').toLowerCase();
@@ -1284,8 +1450,93 @@ function renderDashboardMap(){
     tt.innerHTML='<strong>'+escapeHtml(p.codigo_caso||'Sin código')+'</strong><br>'+escapeHtml(p.formulario||'')+' · '+escapeHtml(p.nombre_visible||'')+'<br>'+escapeHtml([p.provincia,p.canton].filter(Boolean).join(' / '))+'<br>'+Number(p.lat).toFixed(5)+', '+Number(p.lng).toFixed(5);
     map.appendChild(dot); map.appendChild(tt);
   });
-  if(note) note.textContent = pts.length ? ('Puntos visibles: '+Math.min(pts.length,180)+' de '+pts.length+'.') : 'No hay registros con coordenadas para el filtro seleccionado. Revise F01/F03 o campos de georreferencia.';
+  if(note) note.textContent = pts.length ? ('Puntos visibles: '+Math.min(pts.length,180)+' de '+pts.length+'.') : 'No hay registros con coordenadas para el filtro seleccionado.';
 }
+
+function obtenerGeometriaDashboard(p){
+  if(!p) return null;
+
+  const candidatos = [
+    p.geojson, p.geometry, p.geometria, p.geom, p.shape,
+    p.geoshape, p.geotrace, p.coordenadas_geojson
+  ];
+
+  for(const raw of candidatos){
+    const geom = normalizarGeometriaDashboard(raw);
+    if(geom) return geom;
+  }
+
+  const lat = Number(p.lat || p.latitude || p.latitud);
+  const lng = Number(p.lng || p.lon || p.long || p.longitude || p.longitud);
+  if(Number.isFinite(lat) && Number.isFinite(lng)){
+    return {type:'Feature', properties:{}, geometry:{type:'Point', coordinates:[lng, lat]}};
+  }
+
+  const geopoint = p.geopoint || p.coordenada || p.coordenadas || p.ubicacion;
+  if(typeof geopoint === 'string'){
+    const nums = geopoint.trim().split(/[,\s]+/).map(Number).filter(Number.isFinite);
+    if(nums.length >= 2){
+      // Kobo suele guardar geopoint como lat lon alt accuracy.
+      return {type:'Feature', properties:{}, geometry:{type:'Point', coordinates:[nums[1], nums[0]]}};
+    }
+  }
+
+  return null;
+}
+
+function normalizarGeometriaDashboard(raw){
+  if(!raw) return null;
+  let g = raw;
+  if(typeof raw === 'string'){
+    const txt = raw.trim();
+    if(!txt) return null;
+    try { g = JSON.parse(txt); } catch(e) { return null; }
+  }
+  if(!g || typeof g !== 'object') return null;
+
+  if(g.type === 'FeatureCollection' && Array.isArray(g.features)){
+    return g;
+  }
+
+  if(g.type === 'Feature' && g.geometry){
+    return g;
+  }
+
+  if(g.type && g.coordinates){
+    return {type:'Feature', properties:{}, geometry:g};
+  }
+
+  return null;
+}
+
+function obtenerTipoGeometriaDashboard(geo){
+  if(!geo) return '';
+  if(geo.type === 'Feature') return geo.geometry ? geo.geometry.type : '';
+  if(geo.type === 'FeatureCollection' && geo.features && geo.features[0]){
+    return obtenerTipoGeometriaDashboard(geo.features[0]);
+  }
+  return geo.type || '';
+}
+
+function htmlPopupDashboard(p, tipo){
+  const nombre = p.nombre_visible || p.institucion || p.gad || p.canton || 'Registro ENOS';
+  const codigo = p.codigo_caso || p.codigo || '';
+  const territorio = [p.provincia, p.canton].filter(Boolean).join(' / ');
+  return '<strong>'+escapeHtml(nombre)+'</strong><br>'
+    + escapeHtml(territorio || 'Territorio sin clasificar') + '<br>'
+    + 'Formulario: <strong>'+escapeHtml(p.formulario || 'S/D')+'</strong><br>'
+    + 'Geometría: '+escapeHtml(etiquetaGeometriaDashboard(tipo))+'<br>'
+    + '<span style="font-size:11px;color:#4d6173">Código: '+escapeHtml(codigo || 'S/D')+'</span><br><br>'
+    + (codigo ? "<button class=\"btn soft\" onclick=\"seleccionarCasoDashboard(\'"+escapeAttr(codigo)+"\')\">Abrir caso</button>" : '');
+}
+
+function etiquetaGeometriaDashboard(tipo){
+  if(tipo === 'Point' || tipo === 'MultiPoint') return 'Punto';
+  if(tipo === 'LineString' || tipo === 'MultiLineString') return 'Línea';
+  if(tipo === 'Polygon' || tipo === 'MultiPolygon') return 'Polígono';
+  return tipo || 'Geometría';
+}
+
 function coordToMapPosition(lat,lng){
   const minLat=-5.2,maxLat=1.8,minLng=-82.2,maxLng=-74.5;
   const x=Math.max(2,Math.min(96,((Number(lng)-minLng)/(maxLng-minLng))*100));
@@ -1296,10 +1547,71 @@ function renderDashboardCases(){
   const body=document.getElementById('dashCasesBody'); if(!body) return;
   const q=(document.getElementById('dashCaseSearch')||{}).value || '';
   const nq=normalizeTextClient(q);
-  const cases=(ENOS_DASHBOARD_DATA.cases||[]).filter(c=>!nq || normalizeTextClient([c.codigo_caso,c.nombre_visible,c.actor,c.provincia,c.canton,c.formularios].join(' ')).includes(nq));
+  const cases=(ENOS_DASHBOARD_DATA.cases||[]).filter(c=>!nq || normalizeTextClient([
+    c.codigo_caso,c.codigo,c.nombre_visible,c.institucion,c.gad,c.actor,c.provincia,c.canton,c.formularios,c.numero
+  ].join(' ')).includes(nq));
   if(!cases.length){ body.innerHTML='<tr><td colspan="5">No hay casos para mostrar.</td></tr>'; return; }
-  body.innerHTML=cases.slice(0,80).map(c=>'<tr><td><strong>'+escapeHtml(c.codigo_caso||'')+'</strong></td><td>'+escapeHtml(c.canton||'')+'</td><td>'+escapeHtml(c.formularios||'')+'</td><td>'+escapeHtml(c.registros||0)+'</td><td class="case-action"><button class="btn soft" onclick="seleccionarCasoDashboard(\''+escapeAttr(c.codigo_caso||'')+'\')">Abrir</button></td></tr>').join('');
+  body.innerHTML=cases.slice(0,80).map(c=>{
+    const nombre=c.nombre_visible || c.institucion || c.gad || c.canton || c.codigo_caso || 'Caso ENOS';
+    const codigo=c.codigo_caso || c.codigo || '';
+    const territorio=[c.provincia,c.canton].filter(Boolean).join(' / ') || c.canton || '';
+    return '<tr><td><span class="case-title-main">'+escapeHtml(nombre)+'</span><span class="case-code-secondary">Código: '+escapeHtml(codigo || 'S/D')+'</span></td><td>'+escapeHtml(territorio)+'</td><td>'+escapeHtml(c.formularios||'')+'</td><td>'+escapeHtml(c.registros||0)+'</td><td class="case-action"><button class="btn soft" onclick="seleccionarCasoDashboard(\''+escapeAttr(codigo)+'\')">Abrir</button></td></tr>';
+  }).join('');
 }
+
+function renderPromptCaseLookup(){
+  const provSel=document.getElementById('promptProvinciaFilter');
+  const cantonSel=document.getElementById('promptCantonFilter');
+  const searchInput=document.getElementById('promptCaseSearch');
+  const caseSel=document.getElementById('promptCaseSelect');
+  if(!provSel || !cantonSel || !caseSel) return;
+
+  const cases=ENOS_DASHBOARD_DATA.cases || [];
+  const provActual=provSel.value || '';
+  const cantonActual=cantonSel.value || '';
+  const q=normalizeTextClient((searchInput||{}).value || '');
+
+  const provincias=[...new Set(cases.map(c=>c.provincia).filter(Boolean))].sort();
+  provSel.innerHTML='<option value="">Provincia: todas</option>'+provincias.map(p=>'<option value="'+escapeAttr(p)+'">'+escapeHtml(p)+'</option>').join('');
+  provSel.value=provincias.includes(provActual) ? provActual : '';
+
+  const cantones=[...new Set(cases.filter(c=>!provSel.value || c.provincia===provSel.value).map(c=>c.canton).filter(Boolean))].sort();
+  cantonSel.innerHTML='<option value="">Cantón: todos</option>'+cantones.map(c=>'<option value="'+escapeAttr(c)+'">'+escapeHtml(c)+'</option>').join('');
+  cantonSel.value=cantones.includes(cantonActual) ? cantonActual : '';
+
+  const filtrados=cases.filter(c=>{
+    const okProv=!provSel.value || c.provincia===provSel.value;
+    const okCanton=!cantonSel.value || c.canton===cantonSel.value;
+    const texto=normalizeTextClient([c.codigo_caso,c.nombre_visible,c.institucion,c.gad,c.provincia,c.canton,c.formularios,c.numero].join(' '));
+    const okQ=!q || texto.includes(q);
+    return okProv && okCanton && okQ;
+  });
+
+  if(!filtrados.length){
+    caseSel.innerHTML='<option value="">No hay casos con esos criterios.</option>';
+    return;
+  }
+
+  caseSel.innerHTML='<option value="">Seleccione un caso...</option>'+filtrados.slice(0,120).map(c=>{
+    const nombre=c.nombre_visible || c.institucion || c.gad || c.canton || c.codigo_caso || 'Caso ENOS';
+    const codigo=c.codigo_caso || c.codigo || '';
+    const etiqueta=[nombre, c.canton, c.provincia, codigo].filter(Boolean).join(' · ');
+    return '<option value="'+escapeAttr(codigo)+'">'+escapeHtml(etiqueta)+'</option>';
+  }).join('');
+}
+
+function usarCasoSeleccionadoParaPrompt(){
+  const sel=document.getElementById('promptCaseSelect');
+  const input=document.getElementById('codigoCasoInput');
+  const codigo=sel ? sel.value : '';
+  if(!codigo){
+    alert('Seleccione primero un caso desde provincia, cantón o institución.');
+    return;
+  }
+  if(input) input.value=codigo;
+  setPromptStatus('Caso identificado por territorio/institución. Código cargado para generar prompt: '+codigo, true);
+}
+
 function seleccionarCasoDashboard(codigo){
   const inp=document.getElementById('detalleCodigoCaso'); if(inp) inp.value=codigo;
   openDetailed();
