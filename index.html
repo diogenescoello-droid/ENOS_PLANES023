@@ -1,1709 +1,1042 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BASE 01 · ENOS Zona 5 · Dashboard con análisis detallado</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<style>
-:root{
-  --azul:#0b3f63;
-  --azul2:#114f78;
-  --azul3:#0a3555;
-  --celeste:#eaf6ff;
-  --borde:#cfe1ef;
-  --rojo:#d83a2e;
-  --rojo2:#ef5b4f;
-  --verde:#2e8b57;
-  --ambar:#f2b84b;
-  --fondo:#eef4f8;
-  --panel:#ffffff;
-  --texto:#15324a;
-  --muted:#4d6173;
-  --soft:#f7fbff;
-  --shadow:0 18px 38px rgba(12,45,72,.12);
-  --radius:22px;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial, Helvetica, sans-serif;
-  background:var(--fondo);
-  color:var(--texto);
-}
-.header{
-  background:linear-gradient(105deg,var(--azul3),var(--azul2));
-  color:#fff;
-  border-bottom:5px solid var(--rojo2);
-}
-.header-inner{
-  max-width:1220px;
-  margin:0 auto;
-  padding:18px 18px 32px;
-}
-.topline{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:14px;
-  margin-bottom:22px;
-}
-.brandline{
-  display:flex;
-  align-items:center;
-  gap:13px;
-  font-size:13px;
-  text-transform:uppercase;
-  letter-spacing:.06em;
-  font-weight:800;
-}
-.logo{
-  width:42px;
-  height:42px;
-  border-radius:11px;
-  background:linear-gradient(135deg,#d62e28,#e95b55);
-  display:grid;
-  place-items:center;
-  font-weight:900;
-  border:1px solid rgba(255,255,255,.4);
-  box-shadow:0 5px 14px rgba(0,0,0,.18);
-}
-.clock{
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.22);
-  border-radius:999px;
-  padding:9px 15px;
-  font-weight:800;
-  font-size:13px;
-}
-h1{
-  margin:0 0 14px;
-  font-size:31px;
-  letter-spacing:-.02em;
-}
-.header p{
-  margin:0;
-  max-width:980px;
-  line-height:1.45;
-  font-weight:700;
-  font-size:14px;
-}
-.wrap{
-  max-width:1220px;
-  margin:24px auto 56px;
-  padding:0 18px;
-}
-.platform{
-  background:#fff;
-  border:1px solid var(--borde);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.role-panel{
-  padding:22px 22px 20px;
-}
-.role-panel h2{
-  margin:0 0 8px;
-  font-size:20px;
-  color:var(--azul3);
-}
-.role-panel > p{
-  margin:0 0 18px;
-  color:var(--muted);
-  font-size:14px;
-}
-.roles{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-}
-.role{
-  border:1px solid var(--borde);
-  background:linear-gradient(180deg,#fff,#fbfdff);
-  border-radius:20px;
-  min-height:292px;
-  padding:17px;
-  cursor:pointer;
-  transition:.18s ease;
-}
-.role.active{
-  border-color:var(--rojo2);
-  box-shadow:0 0 0 3px rgba(216,58,46,.08);
-}
-.role:hover{transform:translateY(-1px)}
-.role .badge{
-  width:40px;
-  height:40px;
-  border-radius:12px;
-  display:grid;
-  place-items:center;
-  background:#dff1ff;
-  color:var(--azul3);
-  font-weight:900;
-  font-size:13px;
-  margin-bottom:10px;
-  border:1px solid #b8daf3;
-}
-.role.active .badge{
-  background:#c93a2d;
-  color:white;
-  border-color:#c93a2d;
-}
-.role h3{
-  margin:0 0 12px;
-  color:var(--azul3);
-  font-size:16px;
-  line-height:1.25;
-}
-.role p{
-  margin:0 0 28px;
-  color:#47596a;
-  line-height:1.35;
-  font-weight:700;
-  font-size:13px;
-}
-.role small{
-  display:block;
-  color:#6b7e90;
-  line-height:1.25;
-  font-weight:700;
-  font-size:12px;
-}
-.divider{height:1px;background:var(--borde)}
-.flow{
-  margin:40px 20px 22px;
-  border:1px solid var(--borde);
-  border-radius:21px;
-  overflow:hidden;
-}
-.flow-head{
-  background:var(--azul2);
-  color:#fff;
-  padding:18px 20px;
-  display:flex;
-  justify-content:space-between;
-  gap:16px;
-  align-items:flex-start;
-}
-.flow-head h2{
-  margin:0 0 7px;
-  font-size:20px;
-}
-.flow-head p{
-  margin:0;
-  font-size:14px;
-  line-height:1.4;
-}
-.actor-chip{
-  border:1px solid rgba(255,255,255,.32);
-  background:rgba(255,255,255,.12);
-  color:#fff;
-  border-radius:999px;
-  padding:9px 15px;
-  font-weight:900;
-  font-size:12px;
-  white-space:nowrap;
-}
-.tabs{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:8px;
-  padding:14px;
-  background:#fff;
-  border-bottom:1px solid var(--borde);
-}
-.tab{
-  border:1px solid var(--borde);
-  background:#fff;
-  color:var(--azul3);
-  border-radius:14px;
-  padding:14px 12px;
-  font-weight:900;
-  cursor:pointer;
-}
-.tab.active{
-  background:var(--azul3);
-  color:white;
-  border-color:#1284ff;
-  box-shadow:inset 0 0 0 1px #1284ff;
-}
-.tab-content{
-  display:none;
-  padding:20px 18px 22px;
-}
-.tab-content.active{display:block}
-.two{
-  display:grid;
-  grid-template-columns:1.35fr 1fr;
-  gap:18px;
-}
-.tab-content h2{
-  margin:0 0 8px;
-  color:var(--azul3);
-  font-size:22px;
-}
-.tab-content p{
-  margin:0 0 14px;
-  color:var(--muted);
-  line-height:1.45;
-  font-size:14px;
-}
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-.form-card, .info-card, .kpi-card, .detail-card{
-  border:1px solid var(--borde);
-  border-radius:16px;
-  background:linear-gradient(180deg,#fff,#fbfdff);
-  padding:14px;
-}
-.form-card h3,.info-card h3,.detail-card h3{
-  margin:0 0 11px;
-  color:var(--azul3);
-  font-size:16px;
-}
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  border:0;
-  border-radius:12px;
-  padding:11px 15px;
-  font-weight:900;
-  cursor:pointer;
-  text-decoration:none;
-  font-size:14px;
-}
-.btn.primary{background:var(--azul3);color:white;box-shadow:0 8px 18px rgba(10,53,85,.18)}
-.btn.red{background:var(--rojo);color:white}
-.btn.green{background:var(--verde);color:white}
-.btn.soft{background:#e8f5ff;color:var(--azul3);border:1px solid #bcdcf2}
-.btn.white{background:#fff;color:var(--azul3);border:1px solid var(--borde)}
-.note{
-  border:1px solid #f1cf85;
-  background:#fff5dc;
-  color:#734700;
-  border-radius:14px;
-  padding:13px;
-  font-size:13px;
-  line-height:1.35;
-}
-.inputline{
-  margin:8px 0 13px;
-}
-.inputline label{
-  display:block;
-  font-size:13px;
-  font-weight:900;
-  color:var(--azul3);
-  margin-bottom:6px;
-}
-.inputline input{
-  width:100%;
-  border:1px solid var(--borde);
-  border-radius:13px;
-  padding:12px;
-  font-size:14px;
-}
-.actions{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}
-.status{
-  border:1px solid var(--borde);
-  border-radius:13px;
-  background:#f2f8fd;
-  padding:12px;
-  display:flex;
-  align-items:center;
-  gap:9px;
-  color:#2c4053;
-  font-size:13px;
-}
-.dot{
-  width:11px;height:11px;border-radius:999px;background:#2e8b57;display:inline-block;
-}
-textarea{
-  width:100%;
-  min-height:245px;
-  border:1px solid var(--borde);
-  border-radius:13px;
-  background:#f8fbff;
-  padding:12px;
-  resize:vertical;
-  font-family:Consolas,monospace;
-}
-.steps{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-}
-.step{
-  border:1px solid var(--borde);
-  border-radius:14px;
-  padding:12px;
-  background:#fff;
-}
-.step strong{
-  display:block;
-  color:var(--azul3);
-  font-size:16px;
-  margin-bottom:5px;
-}
-.repo{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin-top:12px;
-}
-.dashboard-actions{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0 13px}
-.kpi-row{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  margin-top:13px;
-}
-.kpi-card h4{
-  margin:0 0 10px;
-  color:#526577;
-  font-size:12px;
-  text-transform:uppercase;
-}
-.kpi-card .num{
-  font-size:31px;
-  font-weight:900;
-  color:var(--azul3);
-}
-.kpi-card small{
-  display:block;
-  color:var(--muted);
-  margin-top:8px;
-  line-height:1.3;
-}
-.executive{
-  display:grid;
-  grid-template-columns:1.05fr 1fr;
-  gap:14px;
-  margin-top:14px;
-}
-.gauge{
-  border:1px solid var(--borde);
-  border-radius:18px;
-  padding:18px;
-  background:linear-gradient(180deg,#fff,#f8fbff);
-}
-.gauge-title{
-  font-size:13px;
-  color:#526577;
-  font-weight:900;
-  text-transform:uppercase;
-}
-.gauge-number{
-  margin:10px 0 13px;
-  color:var(--azul3);
-  font-size:52px;
-  line-height:1;
-  font-weight:900;
-  letter-spacing:-.04em;
-}
-.track{height:14px;border-radius:999px;background:#e2edf5;overflow:hidden}
-.fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--verde),var(--ambar));width:68%}
-.alert{
-  border:1px solid #f1cf85;
-  background:#fff6dd;
-  border-radius:18px;
-  padding:17px;
-  color:#634000;
-  line-height:1.38;
-}
-.alert strong{display:block;margin-bottom:7px;color:#4e3300}
-.table-wrap{
-  border:1px solid var(--borde);
-  border-radius:15px;
-  overflow:auto;
-  max-height:390px;
-  margin-top:14px;
-}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{
-  background:var(--azul3);
-  color:white;
-  text-align:left;
-  padding:11px 10px;
-}
-td{
-  border-bottom:1px solid #d9e5ef;
-  padding:12px 10px;
-  vertical-align:top;
-}
-.tag{
-  display:inline-flex;
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:900;
-  white-space:nowrap;
-}
-.tag.ok{background:#e3f7ec;color:#217347}
-.tag.warn{background:#fff3d2;color:#8a5a00}
-.tag.bad{background:#ffe5e1;color:#a3281d}
-.tag.info{background:#e6f3ff;color:#0d4f7a}
-.detail-section{
-  display:none;
-  margin-top:24px;
-  animation:show .2s ease both;
-}
-.detail-section.active{display:block}
-@keyframes show{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.detail-shell{
-  background:white;
-  border:1px solid var(--borde);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.detail-head{
-  background:linear-gradient(105deg,var(--azul3),var(--azul2));
-  color:white;
-  padding:19px 22px;
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:16px;
-}
-.detail-head h2{margin:0 0 7px;font-size:24px}
-.detail-head p{margin:0;max-width:850px;font-size:14px;line-height:1.4}
-.detail-body{padding:18px}
-.detail-tabs{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-bottom:16px;
-}
-.detail-tab{
-  border:1px solid var(--borde);
-  background:#fff;
-  color:var(--azul3);
-  border-radius:999px;
-  padding:10px 13px;
-  font-weight:900;
-  cursor:pointer;
-}
-.detail-tab.active{background:var(--azul3);color:white}
-.detail-module{display:none}
-.detail-module.active{display:block}
-.filters{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr auto;
-  gap:10px;
-  margin-bottom:14px;
-}
-select,input{
-  border:1px solid var(--borde);
-  border-radius:12px;
-  background:#fff;
-  padding:11px;
-  color:var(--texto);
-}
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.bars{display:grid;gap:10px}
-.barline{
-  display:grid;
-  grid-template-columns:180px 1fr 52px;
-  gap:9px;
-  align-items:center;
-  font-size:13px;
-}
-.barline .track{height:11px}
-.map{
-  min-height:300px;
-  border-radius:16px;
-  border:1px solid #c8dff0;
-  background:
-    radial-gradient(circle at 20% 32%, rgba(46,139,87,.28) 0 6%, transparent 7%),
-    radial-gradient(circle at 48% 42%, rgba(242,184,75,.35) 0 7%, transparent 8%),
-    radial-gradient(circle at 75% 58%, rgba(216,58,46,.25) 0 6%, transparent 7%),
-    radial-gradient(circle at 34% 72%, rgba(17,79,120,.25) 0 6%, transparent 7%),
-    linear-gradient(145deg,#e9f6ff,#f9fdff);
-  position:relative;
-}
-.map:before{
-  content:"Vista territorial simulada · futura conexión ArcGIS Online / GeoJSON";
-  position:absolute;
-  top:14px;left:14px;
-  background:#fff;
-  border:1px solid var(--borde);
-  border-radius:999px;
-  padding:8px 12px;
-  font-size:12px;
-  font-weight:900;
-  color:var(--azul3);
-}
-.point{
-  position:absolute;width:17px;height:17px;border-radius:999px;border:3px solid white;box-shadow:0 5px 10px rgba(0,0,0,.18);background:var(--verde);
-}
-.p1{left:21%;top:36%}.p2{left:49%;top:48%;background:var(--ambar)}.p3{left:76%;top:62%;background:var(--rojo)}.p4{left:35%;top:75%;background:var(--azul2)}
-.criteria{
-  display:grid;
-  gap:10px;
-}
-.criterion{
-  border:1px solid var(--borde);
-  border-radius:14px;
-  padding:12px;
-  background:var(--soft);
-}
-.criterion strong{display:block;color:var(--azul3);margin-bottom:5px}
-.criterion span{color:var(--muted);font-size:13px;line-height:1.35}
-.footer-note{
-  color:#66798a;
-  font-size:12px;
-  text-align:right;
-  padding:12px 0 0;
-}
-@media(max-width:980px){
-  .roles,.tabs,.kpi-row,.two,.executive,.detail-grid,.filters{grid-template-columns:1fr}
-  .role{min-height:auto}
-  .flow{margin:20px 10px}
-  .topline,.flow-head,.detail-head{flex-direction:column}
-}
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-.small-num{font-size:18px!important;line-height:1.15!important;word-break:break-word}.carto-map{min-height:340px;border-radius:16px;border:1px solid #c8dff0;background:radial-gradient(circle at 21% 24%, rgba(46,139,87,.14) 0 5%, transparent 6%),radial-gradient(circle at 66% 56%, rgba(242,184,75,.16) 0 7%, transparent 8%),linear-gradient(145deg,#e9f6ff,#f9fdff);position:relative;overflow:hidden}.carto-map-label{position:absolute;top:14px;left:14px;background:#fff;border:1px solid var(--borde);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:900;color:var(--azul3);z-index:3}.carto-point{position:absolute;width:18px;height:18px;border-radius:999px;border:3px solid #fff;box-shadow:0 5px 12px rgba(0,0,0,.22);background:var(--rojo);cursor:pointer;z-index:2}.carto-point.f01{background:var(--rojo)}.carto-point.f02{background:var(--ambar)}.carto-point.f03{background:var(--azul2)}.carto-point.f04{background:var(--verde)}.carto-point.f05{background:#744bc2}.carto-point.f06{background:#2b7a78}.carto-point.f07{background:#555}.carto-tooltip{position:absolute;display:none;max-width:260px;background:#fff;border:1px solid var(--borde);box-shadow:0 12px 28px rgba(12,45,72,.16);border-radius:12px;padding:10px;font-size:12px;color:var(--texto);z-index:5}.carto-point:hover + .carto-tooltip{display:block}.muted-text{color:var(--muted);font-size:13px;line-height:1.35}.case-action{white-space:nowrap}.record-json{white-space:pre-wrap;font-family:Consolas,monospace;font-size:12px;background:#f7fbff;border:1px solid var(--borde);border-radius:12px;padding:10px;max-height:260px;overflow:auto}.score-ok{color:var(--verde)}.score-warn{color:#8a5a00}.score-bad{color:var(--rojo)}
+  <title>ENOS 2026 · Plataforma CZ5</title>
 
+  <style>
+    :root {
+      --azul: #0f3b63;
+      --azul2: #14527f;
+      --celeste: #e8f3fb;
+      --gris: #f4f6f8;
+      --gris2: #d8dee6;
+      --texto: #1f2933;
+      --verde: #188754;
+      --amarillo: #b7791f;
+      --rojo: #c53030;
+      --naranja: #dd6b20;
+      --blanco: #ffffff;
+      --sombra: 0 8px 20px rgba(0,0,0,0.08);
+    }
 
-/* AJUSTE SUTIL 20260622: Leaflet dentro del módulo cartográfico existente, sin cambiar arquitectura */
-.carto-map.leaflet-ready{
-  background:#e9f6ff;
-}
-.carto-map.leaflet-ready .leaflet-container{
-  border-radius:16px;
-}
-.leaflet-popup-content{
-  font-family:Arial, Helvetica, sans-serif;
-  font-size:12px;
-  color:var(--texto);
-}
-.leaflet-popup-content strong{
-  color:var(--azul3);
-}
-.prompt-lookup{
-  margin:8px 0 12px;
-}
-.prompt-lookup select,
-.prompt-lookup input{
-  width:100%;
-}
-.case-title-main{
-  display:block;
-  color:var(--azul3);
-  font-weight:900;
-  line-height:1.25;
-}
-.case-code-secondary{
-  display:block;
-  margin-top:4px;
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.25;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-</style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--gris);
+      color: var(--texto);
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--azul), var(--azul2));
+      color: white;
+      padding: 18px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    header p {
+      margin: 4px 0 0;
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .contenedor {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    .login-card {
+      max-width: 460px;
+      margin: 70px auto;
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: var(--sombra);
+    }
+
+    .login-card h2 {
+      margin-top: 0;
+      color: var(--azul);
+    }
+
+    .fila {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .fila > * {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    input, select, button {
+      font-size: 14px;
+      border-radius: 9px;
+      border: 1px solid var(--gris2);
+      padding: 10px 12px;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--azul2);
+      box-shadow: 0 0 0 3px rgba(20,82,127,0.12);
+    }
+
+    button {
+      background: var(--azul);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background: var(--azul2);
+    }
+
+    button.secundario {
+      background: #64748b;
+    }
+
+    button.ligero {
+      background: var(--celeste);
+      color: var(--azul);
+      border: 1px solid #b8d8ee;
+    }
+
+    .estado {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: var(--celeste);
+      border-left: 4px solid var(--azul2);
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .topbar {
+      background: white;
+      box-shadow: var(--sombra);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .tab-btn {
+      background: #e2e8f0;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+    }
+
+    .tab-btn.activo {
+      background: var(--azul);
+      color: white;
+      border-color: var(--azul);
+    }
+
+    .panel {
+      display: none;
+    }
+
+    .panel.activo {
+      display: block;
+    }
+
+    .grid-kpi {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(150px, 1fr));
+      gap: 14px;
+      margin: 16px 0;
+    }
+
+    .kpi {
+      background: white;
+      border-radius: 16px;
+      box-shadow: var(--sombra);
+      padding: 16px;
+      border-top: 5px solid var(--azul);
+    }
+
+    .kpi .label {
+      font-size: 13px;
+      color: #52606d;
+      margin-bottom: 8px;
+    }
+
+    .kpi .valor {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--azul);
+    }
+
+    .kpi.validado {
+      border-top-color: var(--verde);
+    }
+
+    .kpi.devuelto {
+      border-top-color: var(--rojo);
+    }
+
+    .kpi.revision {
+      border-top-color: var(--amarillo);
+    }
+
+    .kpi.falta {
+      border-top-color: var(--naranja);
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: var(--sombra);
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .card h2, .card h3 {
+      margin-top: 0;
+      color: var(--azul);
+    }
+
+    .filtros {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(160px, 1fr));
+      gap: 12px;
+      margin: 14px 0;
+    }
+
+    .tabla-wrap {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+      background: white;
+    }
+
+    th {
+      background: var(--azul);
+      color: white;
+      padding: 10px;
+      text-align: left;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    td {
+      border-bottom: 1px solid #e2e8f0;
+      padding: 9px 10px;
+      font-size: 13px;
+      vertical-align: top;
+    }
+
+    tr:hover td {
+      background: #f8fafc;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge.validado {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .badge.devuelto {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .badge.revision {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge.falta {
+      background: #ffedd5;
+      color: #9a3412;
+    }
+
+    .badge.sindato {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .dos-columnas {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .barra-item {
+      margin-bottom: 10px;
+    }
+
+    .barra-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 4px;
+      gap: 10px;
+    }
+
+    .barra-fondo {
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .barra {
+      height: 100%;
+      background: var(--azul2);
+      width: 0%;
+    }
+
+    .nota {
+      font-size: 13px;
+      color: #52606d;
+      line-height: 1.5;
+    }
+
+    .oculto {
+      display: none !important;
+    }
+
+    @media (max-width: 980px) {
+      .grid-kpi {
+        grid-template-columns: repeat(2, minmax(150px, 1fr));
+      }
+
+      .filtros {
+        grid-template-columns: repeat(2, minmax(160px, 1fr));
+      }
+
+      .dos-columnas {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .grid-kpi,
+      .filtros {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        padding: 16px;
+      }
+
+      .contenedor {
+        padding: 14px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<header class="header">
-  <div class="header-inner">
-    <div class="topline">
-      <div class="brandline"><div class="logo">CZ5</div><span>Secretaría Nacional de Gestión de Riesgos · Coordinación Zonal 5</span></div>
-      <div class="clock">20 jun 2026, 4:10 p. m.</div>
+
+  <div id="bloqueLogin" class="login-card">
+    <h2>Plataforma ENOS 2026 · CZ5</h2>
+    <p class="nota">
+      Ingreso al tablero de seguimiento de planes, base memoria y módulos territoriales ENOS.
+    </p>
+
+    <label for="claveAcceso">Clave de acceso</label>
+    <input id="claveAcceso" type="password" placeholder="Ingrese la clave">
+
+    <div style="margin-top:14px;">
+      <button onclick="iniciarSesion()">Ingresar</button>
     </div>
-    <h1>BASE 01 · Ecosistema digital ENOS Zona 5</h1>
-    <p>Ambiente operativo para levantamiento de información F01-F07 en Bolívar, Guayas, Los Ríos, Santa Elena y Galápagos, consolidación Kobo, generación de paquete GPT, elaboración de plan de acción y cierre de ciclo.</p>
+
+    <div id="estadoLogin" class="estado">
+      Esperando ingreso.
+    </div>
   </div>
-</header>
 
-<main class="wrap">
-  <section class="platform">
-    <div class="role-panel">
-      <h2>Seleccione el actor que usará el sistema</h2>
-      <p>El sistema muestra formularios y acciones según el rol seleccionado. La Coordinación Zonal mantiene la trazabilidad del ciclo completo.</p>
-      <div class="roles">
-        <article class="role active" onclick="selectActor('GAD', this)"><div class="badge">GAD</div><h3>GAD municipal / parroquial</h3><p>Levanta información territorial, puntos críticos, infraestructura expuesta, aporte cartográfico, acciones preventivas, alojamientos, capacidades y seguimiento del plan.</p><small>Uso recomendado para unidades de gestión de riesgos, planificación, catastro, obras públicas y equipos parroquiales o municipales.</small></article>
-        <article class="role" onclick="selectActor('MTT', this)"><div class="badge">MTT</div><h3>Mesa Técnica de Trabajo</h3><p>Aporta información sectorial, infraestructura, cartografía institucional, acciones, capacidades, recursos y seguimiento según su competencia.</p><small>Uso recomendado para instituciones rectoras o sectoriales que integran las mesas técnicas.</small></article>
-        <article class="role" onclick="selectActor('GT', this)"><div class="badge">GT</div><h3>Grupos de Trabajo - Soporte Operativo</h3><p>Brindan soporte logístico, seguridad y control, movilización de recursos, telecomunicaciones, abastecimiento y apoyo de primera respuesta.</p><small>Uso recomendado para Fuerzas Armadas, Policía Nacional, Bomberos, ECU 911, ANT, Cruz Roja, MSP y grupos voluntarios.</small></article>
-        <article class="role" onclick="selectActor('CZ5', this)"><div class="badge">CZ5</div><h3>Coordinación Zonal 5 SNGR</h3><p>Consolida, verifica, controla calidad, genera paquetes GPT, monitorea el total de planes y mantiene trazabilidad zonal.</p><small>Uso recomendado para seguimiento integral, suficiencia técnica, consolidación, generación de planes y control del ciclo.</small></article>
-      </div>
-    </div>
+  <div id="bloqueDashboard" class="oculto">
 
-    <div class="divider"></div>
-
-    <section class="flow">
-      <div class="flow-head">
-        <div><h2 id="flowTitle">Flujo operativo · GAD municipal / parroquial</h2><p id="flowDescription">Levanta información territorial, puntos críticos, infraestructura expuesta, aporte cartográfico, acciones preventivas, alojamientos, capacidades y seguimiento del plan.</p></div>
-        <span class="actor-chip" id="actorChip">Actor territorial</span>
+    <header>
+      <div>
+        <h1 id="tituloApp">ENOS 2026 · Plataforma CZ5</h1>
+        <p id="subtituloApp">Seguimiento, consolidación y monitoreo operativo</p>
       </div>
 
-      <div class="tabs">
-        <button class="tab active" onclick="openTab('datos',this)">1. Llenar datos</button>
-        <button class="tab" onclick="openTab('actualizar',this)">2. Actualizar y prompt</button>
-        <button class="tab" onclick="openTab('gpt',this)">3. GPT y descarga</button>
-        <button class="tab" onclick="openTab('bibliografia',this)">4. Bibliografía</button>
-        <button class="tab" onclick="openTab('dashboard',this)">5. Dashboard</button>
+      <div>
+        <button class="ligero" onclick="actualizarPanelActivo()">Actualizar</button>
+        <button class="secundario" onclick="cerrarSesion()">Salir</button>
       </div>
+    </header>
 
-      <div id="datos" class="tab-content active">
-        <div class="two">
-          <div>
-            <h2>Formularios Kobo disponibles</h2>
-            <p>Use los formularios según el tipo de actor y el momento del ciclo. Todos alimentan la base consolidada F01-F07.</p>
-            <div class="form-grid" id="formGrid"></div>
+    <main class="contenedor">
+
+      <section class="topbar">
+        <strong>Estado del sistema</strong>
+        <div id="estadoSistema" class="estado">Cargando información de la aplicación...</div>
+
+        <div class="tabs">
+          <button id="btnTabSeguimiento" class="tab-btn activo" onclick="mostrarPanel('seguimiento')">
+            Seguimiento de planes
+          </button>
+          <button id="btnTabGeneral" class="tab-btn" onclick="mostrarPanel('general')">
+            Dashboard general
+          </button>
+          <button id="btnTabMemoria" class="tab-btn" onclick="mostrarPanel('memoria')">
+            Base memoria
+          </button>
+        </div>
+      </section>
+
+      <section id="panelSeguimiento" class="panel activo">
+
+        <section class="card">
+          <h2>Seguimiento de planes ENOS</h2>
+          <p class="nota">
+            Módulo conectado a la hoja <strong>Consolidado</strong> de MATRIZSEGUIM-EL NIÑO (2).
+          </p>
+
+          <div class="filtros">
+            <select id="filtroProvincia" onchange="cargarSeguimientoENOS()">
+              <option value="">Todas las provincias</option>
+            </select>
+
+            <select id="filtroCanton" onchange="cargarSeguimientoENOS()">
+              <option value="">Todos los cantones</option>
+            </select>
+
+            <select id="filtroEstadoCategoria" onchange="cargarSeguimientoENOS()">
+              <option value="">Todos los estados</option>
+            </select>
+
+            <select id="filtroTipoGad" onchange="cargarSeguimientoENOS()">
+              <option value="">Todos los tipos de GAD</option>
+            </select>
+
+            <input id="busquedaSeguimiento" type="text" placeholder="Buscar..." oninput="buscarConEspera()">
           </div>
-          <div class="info-card">
-            <h3>Uso práctico</h3>
-            <p id="usoPractico">1. Seleccione el actor.<br>2. Abra el formulario correspondiente.<br>3. Use el mismo código de caso en todos los formularios.<br>4. Al finalizar, vuelva al módulo “Actualizar y prompt”.</p>
-            <div class="note">El código de caso es la llave para integrar información de GAD, MTT, Grupo Técnico y CZ5.</div>
+
+          <div class="fila">
+            <button onclick="cargarSeguimientoENOS()">Actualizar seguimiento</button>
+            <button class="ligero" onclick="limpiarFiltrosSeguimiento()">Limpiar filtros</button>
+            <button class="secundario" onclick="exportarSeguimientoCSV()">Exportar CSV</button>
           </div>
-        </div>
-      </div>
 
-      <div id="actualizar" class="tab-content">
-        <div class="two">
-          <div>
-            <h2>Actualizar base y generar prompt GPT</h2>
-            <p>Ingrese el código de caso y genere el prompt técnico para el asistente ENOS Zona 5. Esta versión mantiene la plataforma original y no usa buscador dinámico.</p>
-            <div class="inputline"><label>Código de caso</label><input id="codigoCasoInput" placeholder="Ejemplo: GADSALINAS_PAENOS_2026_2027|PUNTO-1"></div>
-            <div class="note" style="margin:8px 0 12px">Si el usuario no conoce el código, puede identificar el caso por provincia, cantón e institución/GAD. El código se mantiene solo como llave técnica para generar el prompt.</div>
-            <div class="filters prompt-lookup" style="grid-template-columns:1fr 1fr 1.25fr auto">
-              <select id="promptProvinciaFilter" onchange="renderPromptCaseLookup()"><option value="">Provincia: todas</option></select>
-              <select id="promptCantonFilter" onchange="renderPromptCaseLookup()"><option value="">Cantón: todos</option></select>
-              <input id="promptCaseSearch" oninput="renderPromptCaseLookup()" placeholder="Buscar GAD, institución, cantón o número">
-              <button class="btn soft" onclick="usarCasoSeleccionadoParaPrompt()">Usar caso</button>
-            </div>
-            <div class="inputline"><label>Casos encontrados por territorio o institución</label><select id="promptCaseSelect"><option value="">Actualice el dashboard para cargar casos disponibles.</option></select></div>
-            <div class="actions"><button class="btn red" onclick="actualizarBaseF01F07()">Actualizar base F01-F07</button><button class="btn soft" onclick="verCasosDashboard()">Ver casos</button><button class="btn primary" onclick="generarPromptGPT()">Generar y copiar prompt</button><button class="btn white" onclick="cargarUltimoPrompt()">Cargar último prompt</button><button class="btn white" onclick="limpiarPrompt()">Limpiar prompt</button></div>
-            <div id="promptStatus" class="status" style="display:none"><span class="dot"></span><span id="promptStatusText"></span></div>
-            <div class="inputline"><label>Prompt GPT generado</label><textarea id="promptOutput" placeholder="Aquí aparecerá el prompt técnico generado."></textarea></div>
-            <div class="actions"><button class="btn primary" onclick="copiarPromptActual()">Copiar prompt</button><button class="btn green" onclick="abrirGPTInstitucional()">Ingresar al GPT institucional</button></div>
+          <div id="estadoSeguimiento" class="estado">
+            Listo para cargar seguimiento.
           </div>
-          <div class="info-card">
-            <h3>Control de suficiencia</h3>
-            <p>• F01 identifica el caso y los puntos críticos.<br>• F02 incorpora infraestructura esencial expuesta.<br>• F03-F07 completan cartografía, acciones, preparación, capacidades y seguimiento.<br>• Si faltan datos, el GPT debe declarar limitaciones y brechas.</p>
+        </section>
+
+        <section class="grid-kpi">
+          <div class="kpi">
+            <div class="label">Total registros</div>
+            <div id="segTotal" class="valor">0</div>
           </div>
-        </div>
-      </div>
 
-      <div id="gpt" class="tab-content">
-        <div class="two">
-          <div>
-            <h2>GPT institucional y cierre práctico</h2>
-            <p>Ingrese al asistente técnico ENOS Zona 5, pegue el prompt generado y descargue el plan de acción desde el GPT.</p>
-            <button class="btn primary" onclick="abrirGPTInstitucional()">Ingresar al GPT institucional</button>
-            <div class="note" style="margin-top:13px">Cierre del ciclo en esta plataforma: el usuario genera el plan con el GPT y descarga el archivo final. La firma, envío por Quipux, archivo institucional o socialización se gestiona fuera de esta página.</div>
-            <h3 style="color:var(--azul3)">Flujo de cierre práctico</h3>
-            <div class="steps"><div class="step"><strong>1. Generar</strong><p>Pegue el prompt en el GPT institucional y solicite el plan de acción.</p></div><div class="step"><strong>2. Revisar</strong><p>Verifique datos, conclusiones, recomendaciones y responsabilidades antes de usarlo oficialmente.</p></div><div class="step"><strong>3. Descargar</strong><p>Descargue el archivo final desde el GPT en Word, PDF o el formato que corresponda.</p></div></div>
+          <div class="kpi validado">
+            <div class="label">Validado</div>
+            <div id="segValidado" class="valor">0</div>
           </div>
-          <div class="info-card"><h3>Criterio operativo</h3><p>1. La página no registra cierres administrativos.<br>2. No se exige carpeta de cierre de ciclo.<br>3. No se utiliza F08.<br>4. El cierre funcional es la descarga del plan desde el GPT.<br>5. La trazabilidad formal queda en los procedimientos institucionales externos.</p></div>
-        </div>
-      </div>
 
-      <div id="bibliografia" class="tab-content">
-        <div class="two">
-          <div>
-            <h2>Bibliografía e insumos de apoyo</h2>
-            <p>Acceso directo a normativa, lineamientos, cartografía, fuentes institucionales y respaldos técnicos que acompañan la construcción del plan.</p>
-            <div class="repo"><div class="step"><strong>Cartografía</strong><p>F03 alimenta mapas, capas, fuentes, formatos y limitaciones.</p></div><div class="step"><strong>Insumos técnicos</strong><p>F01-F06 consolidan amenazas, infraestructura, acciones y capacidades.</p></div><div class="step"><strong>Seguimiento</strong><p>F07 documenta avance mensual, evidencias y escalamiento.</p></div></div>
-            <div class="actions"><button class="btn white">Abrir normativa y lineamientos</button></div>
+          <div class="kpi devuelto">
+            <div class="label">Devuelto</div>
+            <div id="segDevuelto" class="valor">0</div>
           </div>
-          <div class="info-card"><h3>Repositorio técnico</h3><p>Este botón abre directamente la carpeta oficial de Drive con normativa, lineamientos e insumos de apoyo para la elaboración del plan.</p><button class="btn green">Abrir carpeta Drive</button><div class="note" style="margin-top:13px">El cierre práctico del ciclo se realiza mediante descarga directa del plan desde el GPT. La biblioteca queda como repositorio de consulta técnica.</div></div>
-        </div>
-      </div>
 
-      <div id="dashboard" class="tab-content">
-        <h2>Dashboard operativo conectado al índice</h2>
-        <p>Vista viva desde <strong>INDICE_MEMORIA_ENOS</strong>: resume casos, formularios, registros, calidad, brechas y datos con georreferencia. Mantiene la plataforma original y agrega los dos módulos acordados: cartográfico operativo e información ampliada.</p>
-        <div class="dashboard-actions">
-          <button class="btn primary" onclick="probarConexionENOS()">Probar conexión</button>
-          <button class="btn red" onclick="actualizarBaseF01F07()">Sincronizar base F01-F07</button>
-          <button class="btn soft" onclick="cargarDashboardOperativo()">Actualizar dashboard</button>
-          <button class="btn green" onclick="openDetailed()">Información ampliada</button>
-        </div>
-        <div id="dashboardStatus" class="status" style="display:none"><span class="dot"></span><span id="dashboardStatusText"></span></div>
-
-        <div class="kpi-row">
-          <div class="kpi-card"><h4>Casos</h4><div class="num" id="dashCasos">—</div><small>Total de códigos de caso detectados en el índice.</small></div>
-          <div class="kpi-card"><h4>Registros</h4><div class="num" id="dashRegistros">—</div><small>Filas útiles indexadas desde hojas F01-F07 y bases.</small></div>
-          <div class="kpi-card"><h4>Promedio técnico</h4><div class="num" id="dashPromedio">—</div><small>Estimación por cobertura de formularios por caso.</small></div>
-          <div class="kpi-card"><h4>Georreferenciados</h4><div class="num" id="dashGeo">—</div><small>Registros con coordenada utilizable para mapa operativo.</small></div>
-        </div>
-
-        <div class="executive">
-          <div class="gauge">
-            <div class="gauge-title">Cobertura técnica promedio</div>
-            <div class="gauge-number" id="dashGaugeNumber">—</div>
-            <div class="track"><div class="fill" id="dashGaugeFill" style="width:0%"></div></div>
-            <p id="dashLectura" style="margin-top:12px">Actualice el dashboard para leer los datos reales del índice.</p>
+          <div class="kpi revision">
+            <div class="label">En revisión</div>
+            <div id="segRevision" class="valor">0</div>
           </div>
-          <div class="alert">
-            <strong>Lectura ejecutiva automática</strong>
-            <span id="dashAlertaEjecutiva">El tablero está listo para consultar el índice y detectar casos con baja cobertura, seguimiento faltante o falta de georreferencia.</span>
-            <div class="actions" style="margin-bottom:0"><button class="btn primary" onclick="openDetailed()">Abrir información ampliada</button></div>
+
+          <div class="kpi falta">
+            <div class="label">Falta</div>
+            <div id="segFalta" class="valor">0</div>
           </div>
-        </div>
+        </section>
 
-        <div class="detail-grid" style="margin-top:14px">
-          <div class="detail-card">
-            <h3>1. Módulo cartográfico operativo</h3>
-            <p>Mapa liviano calculado desde los registros con coordenadas. Si el caso no tiene coordenadas limpias, se muestra en la tabla territorial para depuración.</p>
-            <div class="filters" style="grid-template-columns:1fr 1fr auto">
-              <select id="dashProvinciaFilter" onchange="renderDashboardMap()"><option value="">Provincia: todas</option></select>
-              <select id="dashFormularioFilter" onchange="renderDashboardMap()"><option value="">Formulario: todos</option></select>
-              <button class="btn white" onclick="renderDashboardMap()">Refrescar mapa</button>
-            </div>
-            <div class="carto-map" id="cartoMapLayer">
-              <div class="carto-map-label">Mapa operativo · puntos desde INDICE_MEMORIA_ENOS</div>
-            </div>
-            <div class="footer-note" id="cartoMapNote">Sin datos cartográficos cargados todavía.</div>
+        <section class="dos-columnas">
+          <div class="card">
+            <h3>Registros por provincia</h3>
+            <div id="serieProvincia"></div>
           </div>
-          <div class="detail-card">
-            <h3>2. Casos para análisis ampliado</h3>
-            <p>Seleccione un caso para abrir su paquete, formularios detectados, registros, brechas y soporte cartográfico.</p>
-            <div class="inputline"><label>Buscar caso, GAD o cantón</label><input id="dashCaseSearch" oninput="renderDashboardCases()" placeholder="Ejemplo: Empalme, Daule, GADMELEMPALME..."></div>
-            <div class="table-wrap" style="max-height:360px">
-              <table>
-                <thead><tr><th>Institución / caso</th><th>Territorio</th><th>Formularios</th><th>Registros</th><th>Acción</th></tr></thead>
-                <tbody id="dashCasesBody"><tr><td colspan="5">Actualice el dashboard para cargar casos reales.</td></tr></tbody>
-              </table>
-            </div>
+
+          <div class="card">
+            <h3>Registros por estado</h3>
+            <div id="serieEstado"></div>
           </div>
-        </div>
-      </div>
+        </section>
 
-    </section>
-  </section>
+        <section class="card">
+          <h3>Tabla de seguimiento</h3>
 
-  <section id="detalle" class="detail-section">
-    <div class="detail-shell">
-      <div class="detail-head">
-        <div>
-          <h2>Información ampliada ENOS 2026</h2>
-          <p>Módulo conectado al índice para revisar un caso seleccionado: resumen técnico, formularios, registros, brechas, cartografía disponible y calidad de datos. Esta vista no reemplaza al GPT: prepara la lectura antes de generar el plan.</p>
-        </div>
-        <button class="btn white" onclick="closeDetailed()">Volver al dashboard</button>
-      </div>
-      <div class="detail-body">
-        <div class="filters">
-          <input id="detalleCodigoCaso" placeholder="Código de caso para consultar">
-          <select id="detalleActor"><option value="GAD municipal / parroquial">GAD municipal / parroquial</option><option value="Mesa Técnica de Trabajo">Mesa Técnica de Trabajo</option><option value="Grupo de Trabajo / soporte operativo">Grupo de Trabajo / soporte operativo</option><option value="Coordinación Zonal 5 SNGR">Coordinación Zonal 5 SNGR</option></select>
-          <button class="btn primary" onclick="cargarDetalleCaso()">Consultar caso</button>
-          <button class="btn green" onclick="generarPromptDesdeDetalle()">Generar prompt del caso</button>
-        </div>
-        <div id="detalleStatus" class="status" style="display:none"><span class="dot"></span><span id="detalleStatusText"></span></div>
-
-        <div class="detail-tabs" style="margin-top:16px">
-          <button class="detail-tab active" onclick="openDetailTab('dresumen',this)">Resumen</button>
-          <button class="detail-tab" onclick="openDetailTab('dformularios',this)">Formularios</button>
-          <button class="detail-tab" onclick="openDetailTab('dbrechas',this)">Brechas / calidad</button>
-          <button class="detail-tab" onclick="openDetailTab('dterritorio',this)">Cartografía</button>
-          <button class="detail-tab" onclick="openDetailTab('dregistros',this)">Registros índice</button>
-        </div>
-
-        <div id="dresumen" class="detail-module active">
-          <div class="kpi-row">
-            <div class="kpi-card"><h4>Código</h4><div class="num small-num" id="detCodigo">—</div><small>Caso seleccionado.</small></div>
-            <div class="kpi-card"><h4>Registros</h4><div class="num" id="detRegistros">—</div><small>Total asociado al caso.</small></div>
-            <div class="kpi-card"><h4>Formularios</h4><div class="num" id="detFormularios">—</div><small>F01-F07 detectados.</small></div>
-            <div class="kpi-card"><h4>Suficiencia</h4><div class="num small-num" id="detSuficiencia">—</div><small>Lectura automática.</small></div>
+          <div class="tabla-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Provincia</th>
+                  <th>Cantón</th>
+                  <th>Tipo GAD</th>
+                  <th>Estado revisión</th>
+                  <th>Categoría</th>
+                  <th>Entrega plan</th>
+                  <th>Punto focal</th>
+                  <th>Porcentaje</th>
+                  <th>Observaciones</th>
+                </tr>
+              </thead>
+              <tbody id="tablaSeguimientoBody">
+                <tr>
+                  <td colspan="9">Sin datos cargados.</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div class="detail-card" style="margin-top:14px">
-            <h3>Lectura técnica del caso</h3>
-            <div id="detLectura" class="criteria"><div class="criterion"><strong>Sin caso seleccionado</strong><span>Seleccione un caso desde el dashboard o ingrese el código manualmente.</span></div></div>
+        </section>
+
+      </section>
+
+      <section id="panelGeneral" class="panel">
+
+        <section class="card">
+          <h2>Dashboard general ENOS</h2>
+          <p class="nota">
+            Vista combinada del seguimiento de planes y, cuando se configure el ID, la Base Memoria V2.
+          </p>
+
+          <button onclick="cargarDashboardGeneral()">Cargar dashboard general</button>
+
+          <div id="estadoGeneral" class="estado">
+            Pendiente de carga.
           </div>
-        </div>
+        </section>
 
-        <div id="dformularios" class="detail-module">
-          <div class="detail-card"><h3>Formularios detectados y cobertura</h3><div id="detFormGrid" class="form-grid"></div></div>
-        </div>
-
-        <div id="dbrechas" class="detail-module">
-          <div class="detail-grid">
-            <div class="detail-card"><h3>Faltantes críticos</h3><div id="detFaltantes" class="criteria"></div></div>
-            <div class="detail-card"><h3>Advertencias</h3><div id="detAdvertencias" class="criteria"></div></div>
+        <section class="grid-kpi">
+          <div class="kpi">
+            <div class="label">Planes registrados</div>
+            <div id="genPlanes" class="valor">0</div>
           </div>
-        </div>
 
-        <div id="dterritorio" class="detail-module">
-          <div class="detail-grid">
-            <div class="detail-card"><h3>Puntos cartográficos del caso</h3><div class="carto-map" id="detMapLayer"><div class="carto-map-label">Puntos del caso seleccionado</div></div><div class="footer-note" id="detMapNote">Sin caso seleccionado.</div></div>
-            <div class="detail-card"><h3>Tabla territorial</h3><div class="table-wrap" style="max-height:330px"><table><thead><tr><th>Formulario</th><th>Nombre</th><th>Provincia</th><th>Cantón</th><th>Coordenada</th></tr></thead><tbody id="detMapRows"><tr><td colspan="5">Sin datos.</td></tr></tbody></table></div></div>
+          <div class="kpi validado">
+            <div class="label">Planes validados</div>
+            <div id="genValidados" class="valor">0</div>
           </div>
-        </div>
 
-        <div id="dregistros" class="detail-module">
-          <div class="detail-card"><h3>Registros recuperados desde INDICE_MEMORIA_ENOS</h3><textarea id="detJson" style="min-height:360px" readonly></textarea></div>
-        </div>
-      </div>
-    </div>
-  </section>
+          <div class="kpi revision">
+            <div class="label">En revisión</div>
+            <div id="genRevision" class="valor">0</div>
+          </div>
 
-</main>
+          <div class="kpi devuelto">
+            <div class="label">Devueltos</div>
+            <div id="genDevueltos" class="valor">0</div>
+          </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
+          <div class="kpi falta">
+            <div class="label">Falta</div>
+            <div id="genFalta" class="valor">0</div>
+          </div>
+        </section>
 
-// VERSION_ORIGINAL_FORMULARIOS_POR_ACTOR_PROMPT_FIX_20260622_01
-const GPT_INSTITUCIONAL_URL = 'https://chatgpt.com/g/g-6a1db50eb650819185c06255c6850509-asistente-tecnico-enos-guayas-2-0';
+      </section>
 
-const FORM_LINKS = {
-  F01: 'https://ee.kobotoolbox.org/x/XuixUrMH',
-  F02: 'https://ee.kobotoolbox.org/x/HxbqyITN',
-  F03: 'https://ee.kobotoolbox.org/x/BMR6RaE1',
-  F04: 'https://ee.kobotoolbox.org/x/xo3JtPm9',
-  F05: 'https://ee.kobotoolbox.org/x/lgXrZHzb',
-  F06: 'https://ee.kobotoolbox.org/x/NL8gKLLD',
-  F07: 'https://ee.kobotoolbox.org/x/0pXtskTZ'
-};
+      <section id="panelMemoria" class="panel">
 
-const FORM_CARDS = {
-  F01: {title:'F01 - Punto crítico territorial', desc:'Identifica caso, puntos críticos, amenazas, brechas, elementos expuestos y acciones iniciales.'},
-  F02: {title:'F02 - Infraestructura esencial expuesta', desc:'Registra infraestructura expuesta, criticidad, vulnerabilidad, brechas y acciones requeridas.'},
-  F03: {title:'F03 - Aporte cartográfico institucional', desc:'Registra capas, mapas, fuentes, formatos, cobertura y limitaciones cartográficas aportadas por GAD, instituciones técnicas o CZ5.'},
-  F04: {title:'F04 - Acciones preventivas y mitigación', desc:'Documenta acciones propuestas, responsables, prioridad, plazo, recursos y estado.'},
-  F05: {title:'F05 - Alojamientos, rutas y puntos seguros', desc:'Registra alojamientos temporales, rutas, puntos seguros, brechas y responsables.'},
-  F06: {title:'F06 - Capacidades y recursos', desc:'Registra recursos disponibles, capacidades institucionales, logística y brechas operativas.'},
-  F07: {title:'F07 - Seguimiento mensual del plan', desc:'Actualiza avance mensual, evidencias, nudos críticos, estado de cumplimiento y necesidades de escalamiento.'}
-};
+        <section class="card">
+          <h2>Base Memoria V2</h2>
+          <p class="nota">
+            Este módulo se activará completamente cuando el ID de BASE_MEMORIA_V2 esté colocado en el Code.gs.
+          </p>
 
-const ACTOR_CONFIG = {
-  GAD: {
-    title:'Flujo operativo · GAD municipal / parroquial',
-    chip:'Actor territorial',
-    description:'Levanta información territorial, puntos críticos, infraestructura expuesta, aporte cartográfico, acciones preventivas, alojamientos, capacidades y seguimiento del plan.',
-    forms:['F01','F02','F03','F04','F05','F06','F07'],
-    uso:'1. Seleccione GAD municipal/parroquial.<br>2. Abra los formularios requeridos del ciclo completo F01-F07.<br>3. Use el mismo código de caso en todos los formularios.<br>4. Al finalizar, vuelva al módulo “Actualizar y prompt”.'
-  },
-  MTT: {
-    title:'Flujo operativo · Mesa Técnica de Trabajo',
-    chip:'Actor sectorial',
-    description:'Aporta información sectorial sobre infraestructura, cartografía, acciones, capacidades, recursos y seguimiento según su competencia.',
-    forms:['F02','F03','F04','F06','F07'],
-    uso:'1. Seleccione Mesa Técnica de Trabajo.<br>2. Registre solo la información sectorial aplicable a su competencia.<br>3. Use el mismo código de caso entregado por el GAD o CZ5.<br>4. F01 no se muestra porque la MTT no crea el caso territorial padre.'
-  },
-  GT: {
-    title:'Flujo operativo · Grupo de Trabajo / soporte operativo',
-    chip:'Soporte operativo',
-    description:'Registra acciones, alojamientos, rutas, puntos seguros, capacidades, recursos operativos y seguimiento de respuesta/preparación.',
-    forms:['F04','F05','F06','F07'],
-    uso:'1. Seleccione Grupo de Trabajo / soporte operativo.<br>2. Registre acciones, preparación, capacidades y seguimiento.<br>3. Use el código de caso entregado por el GAD, MTT o CZ5.<br>4. No se muestran F01-F03 salvo que el equipo tenga competencia técnica para levantarlos.'
-  },
-  CZ5: {
-    title:'Flujo operativo · Coordinación Zonal 5 SNGR',
-    chip:'Control CZ5',
-    description:'Consolida, verifica, controla calidad, genera paquetes GPT, monitorea el total de planes y mantiene trazabilidad zonal.',
-    forms:['F01','F02','F03','F04','F05','F06','F07'],
-    uso:'1. Seleccione Coordinación Zonal 5.<br>2. Revise o complete cualquier formulario F01-F07 cuando corresponda asistencia técnica.<br>3. Use el código de caso para consolidación y paquete GPT.<br>4. Verifique calidad antes de seguimiento o descarga.'
-  }
-};
+          <button onclick="cargarBaseMemoria()">Probar base memoria</button>
 
-let selectedActor = 'GAD';
+          <div id="estadoMemoria" class="estado">
+            Pendiente de prueba.
+          </div>
+        </section>
 
-function renderActorForms(actorKey){
-  const cfg = ACTOR_CONFIG[actorKey] || ACTOR_CONFIG.GAD;
-  selectedActor = actorKey;
-  document.getElementById('flowTitle').textContent = cfg.title;
-  document.getElementById('flowDescription').textContent = cfg.description;
-  document.getElementById('actorChip').textContent = cfg.chip;
-  const uso = document.getElementById('usoPractico');
-  if(uso) uso.innerHTML = cfg.uso;
+        <section class="grid-kpi">
+          <div class="kpi">
+            <div class="label">Casos</div>
+            <div id="memCasos" class="valor">0</div>
+          </div>
 
-  const grid = document.getElementById('formGrid');
-  grid.innerHTML = '';
+          <div class="kpi">
+            <div class="label">Sitios críticos</div>
+            <div id="memSitios" class="valor">0</div>
+          </div>
 
-  cfg.forms.forEach(id => {
-    const data = FORM_CARDS[id];
-    const card = document.createElement('div');
-    card.className = 'form-card';
-    card.innerHTML = '<h3>' + data.title + '</h3><p>' + data.desc + '</p>';
-    const a = document.createElement('a');
-    a.className = 'btn primary';
-    a.textContent = 'Abrir Kobo';
-    a.href = FORM_LINKS[id] || '#';
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    if(!FORM_LINKS[id] || FORM_LINKS[id] === '#'){
-      a.addEventListener('click', function(e){
-        e.preventDefault();
-        alert('Enlace pendiente para ' + id + '.');
+          <div class="kpi">
+            <div class="label">Infraestructura</div>
+            <div id="memInfra" class="valor">0</div>
+          </div>
+
+          <div class="kpi">
+            <div class="label">Alojamientos</div>
+            <div id="memAlojamientos" class="valor">0</div>
+          </div>
+
+          <div class="kpi">
+            <div class="label">Alertas</div>
+            <div id="memAlertas" class="valor">0</div>
+          </div>
+        </section>
+
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    let SESION_AUTORIZADA = false;
+    let PANEL_ACTIVO = 'seguimiento';
+    let ULTIMO_SEGUIMIENTO = [];
+    let TIMER_BUSQUEDA = null;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      cargarInfoApp();
+    });
+
+    function cargarInfoApp() {
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (!res || !res.ok) return;
+
+          ponerTexto('tituloApp', res.nombre || 'ENOS 2026 · Plataforma CZ5');
+          ponerTexto('subtituloApp', 'Versión: ' + (res.version || 'sin versión'));
+
+          mostrarEstadoSistema(
+            'Aplicación cargada. Seguimiento: ' +
+            (res.seguimientoConfigurado ? 'configurado' : 'no configurado') +
+            '. Base memoria: ' +
+            (res.baseMemoriaConfigurada ? 'configurada' : 'pendiente') + '.'
+          );
+        })
+        .withFailureHandler(function(err) {
+          mostrarEstadoLogin('No se pudo leer información de la app: ' + err.message);
+        })
+        .getAppInfo();
+    }
+
+    function iniciarSesion() {
+      const clave = valorDe('claveAcceso');
+
+      if (!clave) {
+        mostrarEstadoLogin('Ingrese la clave de acceso.');
+        return;
+      }
+
+      mostrarEstadoLogin('Validando acceso...');
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (!res || !res.ok) {
+            mostrarEstadoLogin(res && res.mensaje ? res.mensaje : 'Acceso denegado.');
+            return;
+          }
+
+          SESION_AUTORIZADA = true;
+
+          document.getElementById('bloqueLogin').classList.add('oculto');
+          document.getElementById('bloqueDashboard').classList.remove('oculto');
+
+          mostrarEstadoSistema('Acceso autorizado. Cargando seguimiento ENOS...');
+          cargarSeguimientoENOS();
+        })
+        .withFailureHandler(function(err) {
+          mostrarEstadoLogin('Error de validación: ' + err.message);
+        })
+        .validarAcceso(clave);
+    }
+
+    function cerrarSesion() {
+      SESION_AUTORIZADA = false;
+      document.getElementById('bloqueDashboard').classList.add('oculto');
+      document.getElementById('bloqueLogin').classList.remove('oculto');
+      document.getElementById('claveAcceso').value = '';
+      mostrarEstadoLogin('Sesión cerrada.');
+    }
+
+    function mostrarPanel(nombre) {
+      PANEL_ACTIVO = nombre;
+
+      document.getElementById('panelSeguimiento').classList.remove('activo');
+      document.getElementById('panelGeneral').classList.remove('activo');
+      document.getElementById('panelMemoria').classList.remove('activo');
+
+      document.getElementById('btnTabSeguimiento').classList.remove('activo');
+      document.getElementById('btnTabGeneral').classList.remove('activo');
+      document.getElementById('btnTabMemoria').classList.remove('activo');
+
+      if (nombre === 'seguimiento') {
+        document.getElementById('panelSeguimiento').classList.add('activo');
+        document.getElementById('btnTabSeguimiento').classList.add('activo');
+      }
+
+      if (nombre === 'general') {
+        document.getElementById('panelGeneral').classList.add('activo');
+        document.getElementById('btnTabGeneral').classList.add('activo');
+      }
+
+      if (nombre === 'memoria') {
+        document.getElementById('panelMemoria').classList.add('activo');
+        document.getElementById('btnTabMemoria').classList.add('activo');
+      }
+    }
+
+    function actualizarPanelActivo() {
+      if (PANEL_ACTIVO === 'seguimiento') cargarSeguimientoENOS();
+      if (PANEL_ACTIVO === 'general') cargarDashboardGeneral();
+      if (PANEL_ACTIVO === 'memoria') cargarBaseMemoria();
+    }
+
+    function cargarSeguimientoENOS() {
+      if (!SESION_AUTORIZADA) return;
+
+      const filtros = leerFiltrosSeguimiento();
+
+      mostrarEstadoSeguimiento('Cargando seguimiento ENOS...');
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (!res || !res.ok) {
+            mostrarEstadoSeguimiento('No se pudo cargar seguimiento ENOS.');
+            return;
+          }
+
+          pintarSeguimiento(res);
+          mostrarEstadoSeguimiento('Seguimiento actualizado: ' + new Date().toLocaleString('es-EC'));
+        })
+        .withFailureHandler(function(err) {
+          mostrarEstadoSeguimiento('Error cargando seguimiento: ' + err.message);
+        })
+        .getDashboardSeguimientoENOS(filtros);
+    }
+
+    function pintarSeguimiento(res) {
+      const k = res.kpis || {};
+
+      ponerTexto('segTotal', formatoNumero(k.total));
+      ponerTexto('segValidado', formatoNumero(k.validado));
+      ponerTexto('segDevuelto', formatoNumero(k.devuelto));
+      ponerTexto('segRevision', formatoNumero(k.enRevision));
+      ponerTexto('segFalta', formatoNumero(k.falta));
+
+      cargarSelectConservando('filtroProvincia', res.opciones.provincias, 'Todas las provincias');
+      cargarSelectConservando('filtroCanton', res.opciones.cantones, 'Todos los cantones');
+      cargarSelectConservando('filtroEstadoCategoria', res.opciones.categoriasEstado, 'Todos los estados');
+      cargarSelectConservando('filtroTipoGad', res.opciones.tiposGad, 'Todos los tipos de GAD');
+
+      pintarBarras('serieProvincia', res.series.porProvincia);
+      pintarBarras('serieEstado', res.series.porCategoriaEstado || res.series.porEstado);
+
+      ULTIMO_SEGUIMIENTO = res.registros || [];
+      pintarTablaSeguimiento(ULTIMO_SEGUIMIENTO);
+    }
+
+    function leerFiltrosSeguimiento() {
+      return {
+        provincia: valorDe('filtroProvincia'),
+        canton: valorDe('filtroCanton'),
+        estado_categoria: valorDe('filtroEstadoCategoria'),
+        tipo_gad: valorDe('filtroTipoGad'),
+        busqueda: valorDe('busquedaSeguimiento')
+      };
+    }
+
+    function limpiarFiltrosSeguimiento() {
+      ponerValor('filtroProvincia', '');
+      ponerValor('filtroCanton', '');
+      ponerValor('filtroEstadoCategoria', '');
+      ponerValor('filtroTipoGad', '');
+      ponerValor('busquedaSeguimiento', '');
+      cargarSeguimientoENOS();
+    }
+
+    function buscarConEspera() {
+      clearTimeout(TIMER_BUSQUEDA);
+      TIMER_BUSQUEDA = setTimeout(function() {
+        cargarSeguimientoENOS();
+      }, 450);
+    }
+
+    function pintarTablaSeguimiento(datos) {
+      const tbody = document.getElementById('tablaSeguimientoBody');
+      tbody.innerHTML = '';
+
+      if (!datos || datos.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9">No hay registros con los filtros aplicados.</td></tr>';
+        return;
+      }
+
+      datos.forEach(function(r) {
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+          <td>${limpiarHtml(r.provincia)}</td>
+          <td>${limpiarHtml(r.canton)}</td>
+          <td>${limpiarHtml(r.tipo_gad)}</td>
+          <td>${limpiarHtml(r.estado_revision)}</td>
+          <td>${badgeEstado(r.estado_categoria)}</td>
+          <td>${limpiarHtml(r.entrega_plan)}</td>
+          <td>${limpiarHtml(r.punto_focal)}</td>
+          <td>${limpiarHtml(r.porcentaje)}</td>
+          <td>${limpiarHtml(r.observaciones)}</td>
+        `;
+
+        tbody.appendChild(tr);
       });
     }
-    card.appendChild(a);
-    grid.appendChild(card);
-  });
-}
 
-function selectActor(actorKey, el){
-  document.querySelectorAll('.role').forEach(r=>r.classList.remove('active'));
-  if(el) el.classList.add('active');
-  renderActorForms(actorKey);
-}
+    function badgeEstado(estado) {
+      const e = String(estado || 'SIN DATO').toUpperCase();
 
-document.addEventListener('DOMContentLoaded', function(){
-  renderActorForms('GAD');
-  renderPromptCaseLookup();
-});
+      let clase = 'sindato';
+      if (e.includes('VALIDADO')) clase = 'validado';
+      if (e.includes('DEVUELTO')) clase = 'devuelto';
+      if (e.includes('REVISION')) clase = 'revision';
+      if (e.includes('FALTA')) clase = 'falta';
 
-function openTab(id, btn){
-  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
-  btn.classList.add('active');
-  if(id === 'dashboard'){
-    setTimeout(function(){
-      renderDashboardMap();
-      if(window.ENOS_LEAFLET_MAP){ window.ENOS_LEAFLET_MAP.invalidateSize(); }
-    }, 250);
-  }
-}
-function openDetailed(){
-  const d=document.getElementById('detalle');
-  d.classList.add('active');
-  d.scrollIntoView({behavior:'smooth',block:'start'});
-}
-function closeDetailed(){
-  document.getElementById('detalle').classList.remove('active');
-  document.getElementById('dashboard').scrollIntoView({behavior:'smooth',block:'start'});
-}
-function openDetailTab(id,btn){
-  document.querySelectorAll('.detail-module').forEach(el=>el.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.detail-tab').forEach(el=>el.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-function setPromptStatus(message, ok){
-  const box = document.getElementById('promptStatus');
-  const txt = document.getElementById('promptStatusText');
-  if(!box || !txt) return;
-  txt.textContent = message || '';
-  box.style.display = message ? 'flex' : 'none';
-  box.style.background = ok ? '#eef9f2' : '#fff8e8';
-  box.style.borderColor = ok ? '#bfe5ca' : '#f1d28b';
-}
-
-
-// VERSION_INDICE_MEMORIA_PROMPT_REAL_20260622_02
-const ENOS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzp-apAS0-u3JPrVzjIk3KgmGeK5ISx61rqM9amLtXmIz3XWWdplhpgbHe4srPXDlHi/exec';
-const ENOS_WEBAPP_KEY = 'CZ5_ENOS_2026';
-
-function extraerCodigoCaso(valor){
-  let txt = String(valor || '').trim();
-  if(!txt) return '';
-
-  // Si por error se pegó un prompt completo, se extrae solo el código.
-  const patrones = [
-    /Código de caso:\s*([A-Za-z0-9_\-|\.]+)/i,
-    /Código solicitado:\s*([A-Za-z0-9_\-|\.]+)/i,
-    /codigo_caso["']?\s*[:=]\s*["']?([A-Za-z0-9_\-|\.]+)/i
-  ];
-
-  for(const patron of patrones){
-    const m = txt.match(patron);
-    if(m && m[1]) return m[1].trim();
-  }
-
-  // Si no es prompt, se limpia el valor como código.
-  txt = txt.split(/\s+/)[0].trim();
-  return txt;
-}
-
-function obtenerActorPlataforma(){
-  const cfg = ACTOR_CONFIG[selectedActor] || ACTOR_CONFIG.GAD;
-  return cfg.title.replace('Flujo operativo · ', '');
-}
-
-function jsonpENOS(action, params){
-  return new Promise(function(resolve, reject){
-    if(!ENOS_WEBAPP_URL || ENOS_WEBAPP_URL.indexOf('script.google.com') === -1){
-      reject(new Error('No está configurada la URL del Web App de Apps Script.'));
-      return;
+      return `<span class="badge ${clase}">${limpiarHtml(e)}</span>`;
     }
 
-    const callbackName = 'enosCallback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
-    const url = new URL(ENOS_WEBAPP_URL);
-    url.searchParams.set('action', action);
-    url.searchParams.set('webapp_key', ENOS_WEBAPP_KEY);
-    url.searchParams.set('callback', callbackName);
-    url.searchParams.set('_t', Date.now());
+    function pintarBarras(id, datos) {
+      const cont = document.getElementById(id);
+      cont.innerHTML = '';
 
-    Object.keys(params || {}).forEach(function(k){
-      url.searchParams.set(k, params[k]);
-    });
+      if (!datos || datos.length === 0) {
+        cont.innerHTML = '<p class="nota">Sin datos disponibles.</p>';
+        return;
+      }
 
-    const script = document.createElement('script');
-    let finished = false;
+      const max = Math.max.apply(null, datos.map(x => Number(x.valor || 0)));
 
-    const timeout = setTimeout(function(){
-      if(finished) return;
-      finished = true;
-      cleanup();
-      reject(new Error('Tiempo de espera agotado consultando Apps Script.'));
-    }, 45000);
+      datos.forEach(function(item) {
+        const valor = Number(item.valor || 0);
+        const pct = max > 0 ? Math.round((valor / max) * 100) : 0;
 
-    function cleanup(){
-      clearTimeout(timeout);
-      try { delete window[callbackName]; } catch(e) { window[callbackName] = undefined; }
-      if(script && script.parentNode) script.parentNode.removeChild(script);
+        const div = document.createElement('div');
+        div.className = 'barra-item';
+
+        div.innerHTML = `
+          <div class="barra-label">
+            <span>${limpiarHtml(item.nombre)}</span>
+            <strong>${formatoNumero(valor)}</strong>
+          </div>
+          <div class="barra-fondo">
+            <div class="barra" style="width:${pct}%"></div>
+          </div>
+        `;
+
+        cont.appendChild(div);
+      });
     }
 
-    window[callbackName] = function(response){
-      if(finished) return;
-      finished = true;
-      cleanup();
-      resolve(response);
-    };
+    function cargarDashboardGeneral() {
+      if (!SESION_AUTORIZADA) return;
 
-    script.onerror = function(){
-      if(finished) return;
-      finished = true;
-      cleanup();
-      reject(new Error('No se pudo conectar con Apps Script. Revise implementación y permisos del Web App.'));
-    };
+      mostrarEstadoGeneral('Cargando dashboard general...');
 
-    script.src = url.toString();
-    document.body.appendChild(script);
-  });
-}
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (!res || !res.ok) {
+            mostrarEstadoGeneral('No se pudo cargar el dashboard general.');
+            return;
+          }
 
-function construirPromptDesdeRespuestaIndice(codigoCaso, response){
-  if(response && response.prompt) return response.prompt;
+          const k = res.seguimiento && res.seguimiento.kpis ? res.seguimiento.kpis : {};
 
-  if(response && response.paquete){
-    return [
-      'INSTRUCCIÓN PARA GPT:',
-      'Actúa como asistente técnico ENOS Zona 5 de la Secretaría Nacional de Gestión de Riesgos.',
-      '',
-      'Usa únicamente la información contenida en el PAQUETE GPT CZ5 DEL CASO.',
-      '',
-      'DATOS DE CONTROL DE LA PLATAFORMA:',
-      '- Código solicitado: ' + codigoCaso,
-      '- Actor seleccionado: ' + obtenerActorPlataforma(),
-      '- Registros detectados: ' + (response.total_registros || response.total || ''),
-      '',
-      'PAQUETE GPT CZ5 DEL CASO:',
-      JSON.stringify(response.paquete, null, 2),
-      '',
-      'ESTRUCTURA ESPERADA:',
-      '- Antecedentes',
-      '- Objetivo general y específicos',
-      '- Alcance y limitaciones',
-      '- Metodología',
-      '- Insumos utilizados',
-      '- Caracterización territorial',
-      '- Análisis de amenazas, exposición, vulnerabilidad, infraestructura y capacidades',
-      '- Matriz de hallazgos',
-      '- Plan de acción',
-      '- Seguimiento mensual y cierre',
-      '- Conclusiones',
-      '- Recomendaciones',
-      '- Anexos'
-    ].join(String.fromCharCode(10));
-  }
+          ponerTexto('genPlanes', formatoNumero(k.total));
+          ponerTexto('genValidados', formatoNumero(k.validado));
+          ponerTexto('genRevision', formatoNumero(k.enRevision));
+          ponerTexto('genDevueltos', formatoNumero(k.devuelto));
+          ponerTexto('genFalta', formatoNumero(k.falta));
 
-  throw new Error('Apps Script respondió, pero no devolvió prompt ni paquete GPT.');
-}
+          let msg = 'Dashboard general actualizado.';
 
-async function generarPromptGPT(){
-  const input = document.getElementById('codigoCasoInput');
-  const output = document.getElementById('promptOutput');
-  const codigo = extraerCodigoCaso(input && input.value ? input.value : '');
+          if (res.memoria && !res.memoria.ok) {
+            msg += ' Base memoria pendiente: ' + res.memoria.mensaje;
+          }
 
-  if(!codigo){
-    alert('Ingrese primero el código de caso.');
-    if(input) input.focus();
-    return;
-  }
-
-  if(input) input.value = codigo;
-  if(output) output.value = '';
-
-  setPromptStatus('Consultando INDICE_MEMORIA_ENOS para el caso: ' + codigo + ' ...', true);
-
-  try{
-    const response = await jsonpENOS('generatePromptFromIndex', {
-      codigo_caso: codigo,
-      actor: obtenerActorPlataforma()
-    });
-
-    if(!response || response.ok === false){
-      const msg = (response && (response.message || response.error)) || 'No se encontró el caso o Apps Script no devolvió respuesta válida.';
-      setPromptStatus(msg, false);
-      if(output) output.value = 'NO SE GENERÓ PROMPT.\n\n' + msg + '\n\nCódigo buscado: ' + codigo + '\n\nRevise que el caso exista en INDICE_MEMORIA_ENOS y que el Web App esté implementado como nueva versión.';
-      return;
-    }
-
-    const prompt = construirPromptDesdeRespuestaIndice(codigo, response);
-    if(!prompt || prompt.indexOf('PAQUETE GPT CZ5 DEL CASO') === -1){
-      setPromptStatus('La respuesta no contiene PAQUETE GPT CZ5 DEL CASO. No se usará plantilla genérica.', false);
-      if(output) output.value = JSON.stringify(response, null, 2);
-      return;
-    }
-
-    if(output) output.value = prompt;
-    try { localStorage.setItem('ENOS_ULTIMO_PROMPT_GPT', prompt); } catch(e) {}
-    copiarTextoSeguro(prompt);
-
-    const total = response.total_registros || response.total || (response.paquete && response.paquete.resumen_control ? response.paquete.resumen_control.total_registros_indice : '');
-    setPromptStatus('Prompt real generado desde INDICE_MEMORIA_ENOS para: ' + codigo + (total ? ' · Registros: ' + total : ''), true);
-
-  }catch(error){
-    const msg = error && error.message ? error.message : String(error);
-    setPromptStatus('Error consultando índice: ' + msg, false);
-    if(output) output.value = 'NO SE GENERÓ PROMPT.\n\nError consultando Apps Script / INDICE_MEMORIA_ENOS:\n' + msg + '\n\nCódigo buscado: ' + codigo;
-  }
-}
-
-function copiarTextoSeguro(texto){
-  if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(texto).catch(function(){});
-    return;
-  }
-  const area = document.createElement('textarea');
-  area.value = texto;
-  document.body.appendChild(area);
-  area.focus();
-  area.select();
-  try { document.execCommand('copy'); } catch(e) {}
-  document.body.removeChild(area);
-}
-
-function copiarPromptActual(){
-  const output = document.getElementById('promptOutput');
-  const prompt = output ? output.value.trim() : '';
-  if(!prompt){
-    alert('No hay prompt generado para copiar.');
-    return;
-  }
-  copiarTextoSeguro(prompt);
-  setPromptStatus('Prompt copiado al portapapeles.', true);
-}
-
-function cargarUltimoPrompt(){
-  let prompt = '';
-  try { prompt = localStorage.getItem('ENOS_ULTIMO_PROMPT_GPT') || ''; } catch(e) {}
-  if(!prompt){
-    alert('No hay prompt guardado en este navegador.');
-    return;
-  }
-  const output = document.getElementById('promptOutput');
-  if(output) output.value = prompt;
-  setPromptStatus('Último prompt cargado.', true);
-}
-
-function limpiarPrompt(){
-  const input = document.getElementById('codigoCasoInput');
-  const output = document.getElementById('promptOutput');
-  if(input) input.value = '';
-  if(output) output.value = '';
-  setPromptStatus('', true);
-}
-
-
-async function verCasosDashboard(){
-  setPromptStatus('Consultando casos disponibles desde INDICE_MEMORIA_ENOS...', true);
-  try{
-    const response = await jsonpENOS('listCases', {});
-    if(!response || response.ok === false){
-      setPromptStatus((response && (response.message || response.error)) || 'No se pudo listar casos.', false);
-      return;
-    }
-    const total = response.total_casos || (response.data ? response.data.length : 0);
-    setPromptStatus('Casos disponibles desde INDICE_MEMORIA_ENOS: ' + total, true);
-    const tab = Array.from(document.querySelectorAll('.tab')).find(b => b.textContent.includes('Dashboard'));
-    if(tab) openTab('dashboard', tab);
-  }catch(error){
-    setPromptStatus('Error consultando casos: ' + (error.message || error), false);
-  }
-}
-
-async function actualizarBaseF01F07(){
-  setPromptStatus('Reconstruyendo INDICE_MEMORIA_ENOS desde todas las hojas...', true);
-  try{
-    const response = await jsonpENOS('rebuildIndex', {});
-    if(!response || response.ok === false){
-      setPromptStatus((response && (response.message || response.error)) || 'No se pudo reconstruir el índice.', false);
-      return;
-    }
-    const total = response.total_registros || response.total || response.registros_indexados || '';
-    setPromptStatus('INDICE_MEMORIA_ENOS reconstruido correctamente' + (total ? ' · Registros: ' + total : '') + '.', true);
-  }catch(error){
-    setPromptStatus('Error reconstruyendo índice: ' + (error.message || error), false);
-  }
-}
-
-function abrirGPTInstitucional(){
-  window.open(GPT_INSTITUCIONAL_URL, '_blank', 'noopener,noreferrer');
-}
-
-
-
-// VERSION_DASHBOARD_OPERATIVO_INFO_AMPLIADA_20260622_01
-let ENOS_DASHBOARD_DATA = {summary:null, map:[], cases:[], selectedCase:null};
-window.ENOS_LEAFLET_MAP = null;
-window.ENOS_LEAFLET_LAYER = null;
-window.ENOS_LEAFLET_BASES = null;
-
-function setDashboardStatus(message, ok){
-  const box=document.getElementById('dashboardStatus');
-  const txt=document.getElementById('dashboardStatusText');
-  if(!box||!txt) return;
-  txt.textContent=message||'';
-  box.style.display=message?'flex':'none';
-  box.style.background=ok?'#eef9f2':'#fff8e8';
-  box.style.borderColor=ok?'#bfe5ca':'#f1d28b';
-}
-function setDetalleStatus(message, ok){
-  const box=document.getElementById('detalleStatus');
-  const txt=document.getElementById('detalleStatusText');
-  if(!box||!txt) return;
-  txt.textContent=message||'';
-  box.style.display=message?'flex':'none';
-  box.style.background=ok?'#eef9f2':'#fff8e8';
-  box.style.borderColor=ok?'#bfe5ca':'#f1d28b';
-}
-async function probarConexionENOS(){
-  setDashboardStatus('Probando conexión con Apps Script...', true);
-  try{
-    const r=await jsonpENOS('indexHealth', {});
-    setDashboardStatus(r && r.ok ? 'Conexión OK · ' + (r.spreadsheet_name || 'Spreadsheet conectado') : 'Respuesta no válida de Apps Script.', !!(r&&r.ok));
-  }catch(e){ setDashboardStatus('Error de conexión: ' + (e.message||e), false); }
-}
-async function cargarDashboardOperativo(){
-  setDashboardStatus('Cargando dashboard desde INDICE_MEMORIA_ENOS...', true);
-  try{
-    const summary=await jsonpENOS('dashboardSummary', {});
-    if(!summary || summary.ok===false) throw new Error((summary && (summary.message||summary.error)) || 'No se pudo obtener dashboardSummary.');
-    const map=await jsonpENOS('dashboardMapData', {});
-    ENOS_DASHBOARD_DATA.summary=summary;
-    ENOS_DASHBOARD_DATA.map=(map && map.ok!==false && map.data) ? map.data : [];
-    ENOS_DASHBOARD_DATA.cases=summary.casos || [];
-    renderDashboardSummary(summary);
-    renderDashboardFilters(summary);
-    renderPromptCaseLookup();
-    renderDashboardMap();
-    renderDashboardCases();
-    setDashboardStatus('Dashboard actualizado. Casos: ' + (summary.total_casos||0) + ' · Registros: ' + (summary.total_registros_indice||0), true);
-  }catch(e){ setDashboardStatus('Error cargando dashboard: ' + (e.message||e), false); }
-}
-function renderDashboardSummary(s){
-  const totalCasos=s.total_casos||0;
-  const totalRegs=s.total_registros_indice||0;
-  const prom=s.promedio_cobertura||0;
-  const geo=s.registros_georreferenciados||0;
-  setText('dashCasos', totalCasos);
-  setText('dashRegistros', totalRegs);
-  setText('dashPromedio', prom + '%');
-  setText('dashGeo', geo);
-  setText('dashGaugeNumber', prom + '%');
-  const fill=document.getElementById('dashGaugeFill'); if(fill) fill.style.width=Math.max(0,Math.min(100,prom))+'%';
-  setText('dashLectura', s.lectura_ejecutiva || 'Cobertura calculada por formularios detectados en cada caso.');
-  setText('dashAlertaEjecutiva', s.alerta_ejecutiva || 'Sin alerta ejecutiva generada.');
-}
-function setText(id, value){ const el=document.getElementById(id); if(el) el.textContent=value; }
-function renderDashboardFilters(summary){
-  const prov=document.getElementById('dashProvinciaFilter');
-  const form=document.getElementById('dashFormularioFilter');
-  if(prov){
-    const current=prov.value;
-    const opts=['<option value="">Provincia: todas</option>'].concat((summary.provincias||[]).map(p=>'<option value="'+escapeHtml(p)+'">'+escapeHtml(p)+'</option>'));
-    prov.innerHTML=opts.join(''); prov.value=current || '';
-  }
-  if(form){
-    const current=form.value;
-    const formularios=['F01','F02','F03','F04','F05','F06','F07','BASE_CASOS','OTRO'];
-    form.innerHTML='<option value="">Formulario: todos</option>'+formularios.map(f=>'<option value="'+f+'">'+f+'</option>').join('');
-    form.value=current || '';
-  }
-}
-function renderDashboardMap(){
-  const mapEl=document.getElementById('cartoMapLayer');
-  const note=document.getElementById('cartoMapNote');
-  if(!mapEl) return;
-
-  const prov=(document.getElementById('dashProvinciaFilter')||{}).value || '';
-  const form=(document.getElementById('dashFormularioFilter')||{}).value || '';
-  const registros=(ENOS_DASHBOARD_DATA.map||[]).filter(p=>(!prov || p.provincia===prov) && (!form || p.formulario===form));
-
-  // Si Leaflet no carga por conectividad, se conserva el mapa simulado original como respaldo.
-  if(!window.L){
-    renderDashboardMapFallback(registros, mapEl, note);
-    return;
-  }
-
-  mapEl.classList.add('leaflet-ready');
-
-  if(!window.ENOS_LEAFLET_MAP){
-    mapEl.innerHTML='';
-    window.ENOS_LEAFLET_MAP = L.map('cartoMapLayer', {
-      zoomControl:true,
-      attributionControl:true
-    }).setView([-1.85, -79.8], 7);
-
-    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom:19,
-      attribution:'&copy; OpenStreetMap'
-    });
-
-    const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      maxZoom:19,
-      attribution:'Tiles &copy; Esri'
-    });
-
-    const esriGray = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-      maxZoom:16,
-      attribution:'Tiles &copy; Esri'
-    });
-
-    osm.addTo(window.ENOS_LEAFLET_MAP);
-    window.ENOS_LEAFLET_BASES = {"OpenStreetMap":osm, "Satélite Esri":esriSat, "Gris claro Esri":esriGray};
-    L.control.layers(window.ENOS_LEAFLET_BASES, {}, {collapsed:true}).addTo(window.ENOS_LEAFLET_MAP);
-    window.ENOS_LEAFLET_LAYER = L.layerGroup().addTo(window.ENOS_LEAFLET_MAP);
-  }
-
-  const map=window.ENOS_LEAFLET_MAP;
-  const layerGroup=window.ENOS_LEAFLET_LAYER;
-  layerGroup.clearLayers();
-
-  let totalGeo=0;
-  let totalPuntos=0;
-  let totalLineas=0;
-  let totalPoligonos=0;
-  const capas=[];
-
-  registros.forEach(function(p){
-    const geom = obtenerGeometriaDashboard(p);
-    if(!geom) return;
-
-    const tipo = obtenerTipoGeometriaDashboard(geom);
-    if(tipo === 'Point') totalPuntos++;
-    if(tipo === 'LineString' || tipo === 'MultiLineString') totalLineas++;
-    if(tipo === 'Polygon' || tipo === 'MultiPolygon') totalPoligonos++;
-    totalGeo++;
-
-    const geoLayer = L.geoJSON(geom, {
-      pointToLayer:function(feature, latlng){
-        return L.circleMarker(latlng, {
-          radius:7,
-          weight:2,
-          opacity:.95,
-          fillOpacity:.82
+          mostrarEstadoGeneral(msg);
+        })
+        .withFailureHandler(function(err) {
+          mostrarEstadoGeneral('Error: ' + err.message);
+        })
+        .getDashboardGeneralENOS({
+          seguimiento: leerFiltrosSeguimiento()
         });
-      },
-      style:function(feature){
-        const t = obtenerTipoGeometriaDashboard(feature);
-        if(t === 'Polygon' || t === 'MultiPolygon'){
-          return {weight:3, opacity:.95, fillOpacity:.20};
-        }
-        return {weight:4, opacity:.95};
-      }
-    });
-
-    geoLayer.bindPopup(htmlPopupDashboard(p, tipo));
-    geoLayer.on('click', function(){
-      if(p.codigo_caso) {
-        const input=document.getElementById('dashCaseSearch');
-        if(input){ input.value=p.codigo_caso; renderDashboardCases(); }
-      }
-    });
-
-    geoLayer.addTo(layerGroup);
-    capas.push(geoLayer);
-  });
-
-  setTimeout(function(){ map.invalidateSize(); }, 120);
-
-  if(capas.length){
-    try{
-      const grupo=L.featureGroup(capas);
-      map.fitBounds(grupo.getBounds(), {padding:[22,22], maxZoom:13});
-    }catch(e){}
-  }else{
-    map.setView([-1.85, -79.8], 7);
-  }
-
-  if(note){
-    note.textContent = registros.length
-      ? 'Elementos con geometría: '+totalGeo+' de '+registros.length+' · Puntos: '+totalPuntos+' · Líneas: '+totalLineas+' · Polígonos: '+totalPoligonos+'.'
-      : 'No hay registros para el filtro seleccionado.';
-  }
-}
-
-function renderDashboardMapFallback(pts, map, note){
-  map.innerHTML='<div class="carto-map-label">Mapa operativo · puntos desde INDICE_MEMORIA_ENOS</div>';
-  pts.slice(0,180).forEach((p,i)=>{
-    if(!p.lat || !p.lng) return;
-    const pos=coordToMapPosition(p.lat, p.lng);
-    const dot=document.createElement('div');
-    dot.className='carto-point '+String(p.formulario||'').toLowerCase();
-    dot.style.left=pos.x+'%'; dot.style.top=pos.y+'%';
-    const tt=document.createElement('div');
-    tt.className='carto-tooltip';
-    tt.style.left='calc('+pos.x+'% + 10px)'; tt.style.top='calc('+pos.y+'% + 10px)';
-    tt.innerHTML='<strong>'+escapeHtml(p.codigo_caso||'Sin código')+'</strong><br>'+escapeHtml(p.formulario||'')+' · '+escapeHtml(p.nombre_visible||'')+'<br>'+escapeHtml([p.provincia,p.canton].filter(Boolean).join(' / '))+'<br>'+Number(p.lat).toFixed(5)+', '+Number(p.lng).toFixed(5);
-    map.appendChild(dot); map.appendChild(tt);
-  });
-  if(note) note.textContent = pts.length ? ('Puntos visibles: '+Math.min(pts.length,180)+' de '+pts.length+'.') : 'No hay registros con coordenadas para el filtro seleccionado.';
-}
-
-function obtenerGeometriaDashboard(p){
-  if(!p) return null;
-
-  const candidatos = [
-    p.geojson, p.geometry, p.geometria, p.geom, p.shape,
-    p.geoshape, p.geotrace, p.coordenadas_geojson
-  ];
-
-  for(const raw of candidatos){
-    const geom = normalizarGeometriaDashboard(raw);
-    if(geom) return geom;
-  }
-
-  const lat = Number(p.lat || p.latitude || p.latitud);
-  const lng = Number(p.lng || p.lon || p.long || p.longitude || p.longitud);
-  if(Number.isFinite(lat) && Number.isFinite(lng)){
-    return {type:'Feature', properties:{}, geometry:{type:'Point', coordinates:[lng, lat]}};
-  }
-
-  const geopoint = p.geopoint || p.coordenada || p.coordenadas || p.ubicacion;
-  if(typeof geopoint === 'string'){
-    const nums = geopoint.trim().split(/[,\s]+/).map(Number).filter(Number.isFinite);
-    if(nums.length >= 2){
-      // Kobo suele guardar geopoint como lat lon alt accuracy.
-      return {type:'Feature', properties:{}, geometry:{type:'Point', coordinates:[nums[1], nums[0]]}};
     }
-  }
 
-  return null;
-}
+    function cargarBaseMemoria() {
+      if (!SESION_AUTORIZADA) return;
 
-function normalizarGeometriaDashboard(raw){
-  if(!raw) return null;
-  let g = raw;
-  if(typeof raw === 'string'){
-    const txt = raw.trim();
-    if(!txt) return null;
-    try { g = JSON.parse(txt); } catch(e) { return null; }
-  }
-  if(!g || typeof g !== 'object') return null;
+      mostrarEstadoMemoria('Probando conexión con Base Memoria V2...');
 
-  if(g.type === 'FeatureCollection' && Array.isArray(g.features)){
-    return g;
-  }
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (!res || !res.ok) {
+            mostrarEstadoMemoria(res && res.mensaje ? res.mensaje : 'Base memoria no disponible.');
+            return;
+          }
 
-  if(g.type === 'Feature' && g.geometry){
-    return g;
-  }
+          const c = res.conteos || {};
 
-  if(g.type && g.coordinates){
-    return {type:'Feature', properties:{}, geometry:g};
-  }
+          ponerTexto('memCasos', formatoNumero(c.casos));
+          ponerTexto('memSitios', formatoNumero(c.sitiosCriticos));
+          ponerTexto('memInfra', formatoNumero(c.infraestructura));
+          ponerTexto('memAlojamientos', formatoNumero(c.alojamientos));
+          ponerTexto('memAlertas', formatoNumero(c.alertas));
 
-  return null;
-}
+          mostrarEstadoMemoria('Base memoria conectada: ' + (res.archivo || 'sin nombre'));
+        })
+        .withFailureHandler(function(err) {
+          mostrarEstadoMemoria('Error probando base memoria: ' + err.message);
+        })
+        .getEstadoBaseMemoria();
+    }
 
-function obtenerTipoGeometriaDashboard(geo){
-  if(!geo) return '';
-  if(geo.type === 'Feature') return geo.geometry ? geo.geometry.type : '';
-  if(geo.type === 'FeatureCollection' && geo.features && geo.features[0]){
-    return obtenerTipoGeometriaDashboard(geo.features[0]);
-  }
-  return geo.type || '';
-}
+    function exportarSeguimientoCSV() {
+      if (!ULTIMO_SEGUIMIENTO || ULTIMO_SEGUIMIENTO.length === 0) {
+        mostrarEstadoSeguimiento('No hay datos para exportar.');
+        return;
+      }
 
-function htmlPopupDashboard(p, tipo){
-  const nombre = p.nombre_visible || p.institucion || p.gad || p.canton || 'Registro ENOS';
-  const codigo = p.codigo_caso || p.codigo || '';
-  const territorio = [p.provincia, p.canton].filter(Boolean).join(' / ');
-  return '<strong>'+escapeHtml(nombre)+'</strong><br>'
-    + escapeHtml(territorio || 'Territorio sin clasificar') + '<br>'
-    + 'Formulario: <strong>'+escapeHtml(p.formulario || 'S/D')+'</strong><br>'
-    + 'Geometría: '+escapeHtml(etiquetaGeometriaDashboard(tipo))+'<br>'
-    + '<span style="font-size:11px;color:#4d6173">Código: '+escapeHtml(codigo || 'S/D')+'</span><br><br>'
-    + (codigo ? "<button class=\"btn soft\" onclick=\"seleccionarCasoDashboard(\'"+escapeAttr(codigo)+"\')\">Abrir caso</button>" : '');
-}
+      const headers = [
+        'provincia',
+        'canton',
+        'tipo_gad',
+        'estado_revision',
+        'estado_categoria',
+        'entrega_plan',
+        'punto_focal',
+        'porcentaje',
+        'observaciones'
+      ];
 
-function etiquetaGeometriaDashboard(tipo){
-  if(tipo === 'Point' || tipo === 'MultiPoint') return 'Punto';
-  if(tipo === 'LineString' || tipo === 'MultiLineString') return 'Línea';
-  if(tipo === 'Polygon' || tipo === 'MultiPolygon') return 'Polígono';
-  return tipo || 'Geometría';
-}
+      const filas = [headers.join(',')];
 
-function coordToMapPosition(lat,lng){
-  const minLat=-5.2,maxLat=1.8,minLng=-82.2,maxLng=-74.5;
-  const x=Math.max(2,Math.min(96,((Number(lng)-minLng)/(maxLng-minLng))*100));
-  const y=Math.max(4,Math.min(94,((maxLat-Number(lat))/(maxLat-minLat))*100));
-  return {x:x,y:y};
-}
-function renderDashboardCases(){
-  const body=document.getElementById('dashCasesBody'); if(!body) return;
-  const q=(document.getElementById('dashCaseSearch')||{}).value || '';
-  const nq=normalizeTextClient(q);
-  const cases=(ENOS_DASHBOARD_DATA.cases||[]).filter(c=>!nq || normalizeTextClient([
-    c.codigo_caso,c.codigo,c.nombre_visible,c.institucion,c.gad,c.actor,c.provincia,c.canton,c.formularios,c.numero
-  ].join(' ')).includes(nq));
-  if(!cases.length){ body.innerHTML='<tr><td colspan="5">No hay casos para mostrar.</td></tr>'; return; }
-  body.innerHTML=cases.slice(0,80).map(c=>{
-    const nombre=c.nombre_visible || c.institucion || c.gad || c.canton || c.codigo_caso || 'Caso ENOS';
-    const codigo=c.codigo_caso || c.codigo || '';
-    const territorio=[c.provincia,c.canton].filter(Boolean).join(' / ') || c.canton || '';
-    return '<tr><td><span class="case-title-main">'+escapeHtml(nombre)+'</span><span class="case-code-secondary">Código: '+escapeHtml(codigo || 'S/D')+'</span></td><td>'+escapeHtml(territorio)+'</td><td>'+escapeHtml(c.formularios||'')+'</td><td>'+escapeHtml(c.registros||0)+'</td><td class="case-action"><button class="btn soft" onclick="seleccionarCasoDashboard(\''+escapeAttr(codigo)+'\')">Abrir</button></td></tr>';
-  }).join('');
-}
+      ULTIMO_SEGUIMIENTO.forEach(function(r) {
+        const row = headers.map(function(h) {
+          return '"' + String(r[h] || '').replace(/"/g, '""') + '"';
+        });
+        filas.push(row.join(','));
+      });
 
-function renderPromptCaseLookup(){
-  const provSel=document.getElementById('promptProvinciaFilter');
-  const cantonSel=document.getElementById('promptCantonFilter');
-  const searchInput=document.getElementById('promptCaseSearch');
-  const caseSel=document.getElementById('promptCaseSelect');
-  if(!provSel || !cantonSel || !caseSel) return;
+      const blob = new Blob([filas.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
 
-  const cases=ENOS_DASHBOARD_DATA.cases || [];
-  const provActual=provSel.value || '';
-  const cantonActual=cantonSel.value || '';
-  const q=normalizeTextClient((searchInput||{}).value || '');
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'seguimiento_enos.csv';
+      a.click();
 
-  const provincias=[...new Set(cases.map(c=>c.provincia).filter(Boolean))].sort();
-  provSel.innerHTML='<option value="">Provincia: todas</option>'+provincias.map(p=>'<option value="'+escapeAttr(p)+'">'+escapeHtml(p)+'</option>').join('');
-  provSel.value=provincias.includes(provActual) ? provActual : '';
+      URL.revokeObjectURL(url);
+    }
 
-  const cantones=[...new Set(cases.filter(c=>!provSel.value || c.provincia===provSel.value).map(c=>c.canton).filter(Boolean))].sort();
-  cantonSel.innerHTML='<option value="">Cantón: todos</option>'+cantones.map(c=>'<option value="'+escapeAttr(c)+'">'+escapeHtml(c)+'</option>').join('');
-  cantonSel.value=cantones.includes(cantonActual) ? cantonActual : '';
+    function cargarSelectConservando(id, valores, textoInicial) {
+      const sel = document.getElementById(id);
+      const actual = sel.value;
 
-  const filtrados=cases.filter(c=>{
-    const okProv=!provSel.value || c.provincia===provSel.value;
-    const okCanton=!cantonSel.value || c.canton===cantonSel.value;
-    const texto=normalizeTextClient([c.codigo_caso,c.nombre_visible,c.institucion,c.gad,c.provincia,c.canton,c.formularios,c.numero].join(' '));
-    const okQ=!q || texto.includes(q);
-    return okProv && okCanton && okQ;
-  });
+      sel.innerHTML = '';
 
-  if(!filtrados.length){
-    caseSel.innerHTML='<option value="">No hay casos con esos criterios.</option>';
-    return;
-  }
+      const opt0 = document.createElement('option');
+      opt0.value = '';
+      opt0.textContent = textoInicial || 'Todos';
+      sel.appendChild(opt0);
 
-  caseSel.innerHTML='<option value="">Seleccione un caso...</option>'+filtrados.slice(0,120).map(c=>{
-    const nombre=c.nombre_visible || c.institucion || c.gad || c.canton || c.codigo_caso || 'Caso ENOS';
-    const codigo=c.codigo_caso || c.codigo || '';
-    const etiqueta=[nombre, c.canton, c.provincia, codigo].filter(Boolean).join(' · ');
-    return '<option value="'+escapeAttr(codigo)+'">'+escapeHtml(etiqueta)+'</option>';
-  }).join('');
-}
+      (valores || []).forEach(function(v) {
+        const opt = document.createElement('option');
+        opt.value = v;
+        opt.textContent = v;
+        sel.appendChild(opt);
+      });
 
-function usarCasoSeleccionadoParaPrompt(){
-  const sel=document.getElementById('promptCaseSelect');
-  const input=document.getElementById('codigoCasoInput');
-  const codigo=sel ? sel.value : '';
-  if(!codigo){
-    alert('Seleccione primero un caso desde provincia, cantón o institución.');
-    return;
-  }
-  if(input) input.value=codigo;
-  setPromptStatus('Caso identificado por territorio/institución. Código cargado para generar prompt: '+codigo, true);
-}
+      sel.value = actual;
+    }
 
-function seleccionarCasoDashboard(codigo){
-  const inp=document.getElementById('detalleCodigoCaso'); if(inp) inp.value=codigo;
-  openDetailed();
-  cargarDetalleCaso(codigo);
-}
-async function cargarDetalleCaso(codigoManual){
-  const input=document.getElementById('detalleCodigoCaso');
-  const codigo=extraerCodigoCaso(codigoManual || (input&&input.value) || '');
-  if(!codigo){ setDetalleStatus('Ingrese o seleccione un código de caso.', false); return; }
-  if(input) input.value=codigo;
-  setDetalleStatus('Consultando información ampliada del caso '+codigo+'...', true);
-  try{
-    const actor=(document.getElementById('detalleActor')||{}).value || obtenerActorPlataforma();
-    const response=await jsonpENOS('caseDetailsFromIndex', {codigo_caso:codigo, actor:actor});
-    if(!response || response.ok===false) throw new Error((response && (response.message||response.error)) || 'No se pudo consultar el caso.');
-    ENOS_DASHBOARD_DATA.selectedCase=response;
-    renderDetalleCaso(response);
-    setDetalleStatus('Caso cargado: '+codigo+' · Registros: '+(response.total_registros||0), true);
-  }catch(e){ setDetalleStatus('Error consultando caso: '+(e.message||e), false); }
-}
-function renderDetalleCaso(r){
-  const p=r.paquete || {};
-  const rc=p.resumen_control || {};
-  const suf=p.criterio_suficiencia || {};
-  setText('detCodigo', r.codigo_buscado || p.codigo_buscado || '—');
-  setText('detRegistros', r.total_registros || rc.total_registros_indice || 0);
-  setText('detFormularios', (rc.formularios_detectados||[]).length || 0);
-  setText('detSuficiencia', suf.clasificacion || '—');
-  const lectura=document.getElementById('detLectura');
-  if(lectura){
-    lectura.innerHTML = [
-      criterionHtml('Formularios detectados', (rc.formularios_detectados||[]).join(', ') || 'Sin formularios detectados'),
-      criterionHtml('Actores detectados', (rc.actores_detectados||[]).join(', ') || 'Sin actor detectado'),
-      criterionHtml('Territorio', [rc.provincias_detectadas, rc.cantones_detectados].map(a=>(a||[]).join(', ')).filter(Boolean).join(' / ') || 'Sin provincia/cantón detectado'),
-      criterionHtml('Recomendación', suf.recomendacion_para_gpt || 'Generar lectura técnica con las limitaciones disponibles.')
-    ].join('');
-  }
-  renderDetalleFormularios(p);
-  renderDetalleBrechas(p);
-  renderDetalleMap(r);
-  const json=document.getElementById('detJson'); if(json) json.value=JSON.stringify(p, null, 2);
-}
-function renderDetalleFormularios(p){
-  const grid=document.getElementById('detFormGrid'); if(!grid) return;
-  const keys=[['F01','puntos_riesgo'],['F02','infraestructura_esencial'],['F03','cartografia_institucional'],['F04','acciones_preventivas_mitigacion'],['F05','alojamientos_rutas_puntos_seguros'],['F06','capacidades_recursos'],['F07','seguimiento_mensual']];
-  grid.innerHTML=keys.map(([f,k])=>{
-    const n=(p[k]||[]).length;
-    const cls=n?'ok':'warn';
-    return '<div class="form-card"><h3>'+f+'</h3><p>'+escapeHtml((FORM_CARDS[f]||{}).desc||'Registro asociado')+'</p><span class="tag '+cls+'">'+n+' registros</span></div>';
-  }).join('');
-}
-function renderDetalleBrechas(p){
-  const suf=p.criterio_suficiencia || {};
-  const falt=document.getElementById('detFaltantes');
-  const adv=document.getElementById('detAdvertencias');
-  const faltantes=suf.faltantes_criticos || [];
-  const advert=suf.advertencias || [];
-  if(falt) falt.innerHTML = faltantes.length ? faltantes.map(x=>criterionHtml('Faltante', x)).join('') : criterionHtml('Sin faltantes críticos', 'No se detectaron faltantes críticos automáticos.');
-  if(adv) adv.innerHTML = advert.length ? advert.map(x=>criterionHtml('Advertencia', x)).join('') : criterionHtml('Sin advertencias', 'No se detectaron advertencias automáticas.');
-}
-function renderDetalleMap(r){
-  const map=document.getElementById('detMapLayer');
-  const rows=document.getElementById('detMapRows');
-  const note=document.getElementById('detMapNote');
-  if(!map) return;
-  const pts=(r.puntos_cartograficos || []);
-  map.innerHTML='<div class="carto-map-label">Puntos del caso seleccionado</div>';
-  pts.forEach(p=>{
-    const pos=coordToMapPosition(p.lat, p.lng);
-    const dot=document.createElement('div'); dot.className='carto-point '+String(p.formulario||'').toLowerCase(); dot.style.left=pos.x+'%'; dot.style.top=pos.y+'%';
-    const tt=document.createElement('div'); tt.className='carto-tooltip'; tt.style.left='calc('+pos.x+'% + 10px)'; tt.style.top='calc('+pos.y+'% + 10px)'; tt.innerHTML='<strong>'+escapeHtml(p.formulario||'')+'</strong><br>'+escapeHtml(p.nombre_visible||'')+'<br>'+Number(p.lat).toFixed(5)+', '+Number(p.lng).toFixed(5);
-    map.appendChild(dot); map.appendChild(tt);
-  });
-  if(note) note.textContent = pts.length ? 'Puntos cartográficos del caso: '+pts.length : 'El caso no tiene coordenadas limpias detectadas en el índice.';
-  if(rows) rows.innerHTML = pts.length ? pts.map(p=>'<tr><td>'+escapeHtml(p.formulario||'')+'</td><td>'+escapeHtml(p.nombre_visible||'')+'</td><td>'+escapeHtml(p.provincia||'')+'</td><td>'+escapeHtml(p.canton||'')+'</td><td>'+Number(p.lat).toFixed(5)+', '+Number(p.lng).toFixed(5)+'</td></tr>').join('') : '<tr><td colspan="5">Sin puntos georreferenciados para este caso.</td></tr>';
-}
-function generarPromptDesdeDetalle(){
-  const codigo=(document.getElementById('detalleCodigoCaso')||{}).value || '';
-  const mainInput=document.getElementById('codigoCasoInput'); if(mainInput) mainInput.value=codigo;
-  const tab = Array.from(document.querySelectorAll('.tab')).find(b => b.textContent.includes('Actualizar'));
-  if(tab) openTab('actualizar', tab);
-  generarPromptGPT();
-}
-function criterionHtml(t, s){ return '<div class="criterion"><strong>'+escapeHtml(t||'')+'</strong><span>'+escapeHtml(s||'')+'</span></div>'; }
-function normalizeTextClient(v){ return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase(); }
-function escapeHtml(v){ return String(v===undefined||v===null?'':v).replace(/[&<>"]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
-function escapeAttr(v){ return escapeHtml(v).replace(/'/g,'&#39;'); }
+    function mostrarEstadoLogin(msg) {
+      ponerTexto('estadoLogin', msg);
+    }
 
-document.addEventListener('DOMContentLoaded', function(){
-  setTimeout(function(){ cargarDashboardOperativo().catch(function(){}); }, 900);
-});
+    function mostrarEstadoSistema(msg) {
+      ponerTexto('estadoSistema', msg);
+    }
 
-</script>
+    function mostrarEstadoSeguimiento(msg) {
+      ponerTexto('estadoSeguimiento', msg);
+    }
+
+    function mostrarEstadoGeneral(msg) {
+      ponerTexto('estadoGeneral', msg);
+    }
+
+    function mostrarEstadoMemoria(msg) {
+      ponerTexto('estadoMemoria', msg);
+    }
+
+    function ponerTexto(id, valor) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = valor ?? '';
+    }
+
+    function ponerValor(id, valor) {
+      const el = document.getElementById(id);
+      if (el) el.value = valor ?? '';
+    }
+
+    function valorDe(id) {
+      const el = document.getElementById(id);
+      return el ? el.value : '';
+    }
+
+    function formatoNumero(n) {
+      return Number(n || 0).toLocaleString('es-EC');
+    }
+
+    function limpiarHtml(v) {
+      return String(v || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+
 </body>
 </html>
