@@ -4,7 +4,6 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>ENOS 2026 · Plataforma CZ5</title>
 
   <style>
@@ -110,6 +109,10 @@
       border: 1px solid #b8d8ee;
     }
 
+    button.rojo {
+      background: var(--rojo);
+    }
+
     .estado {
       margin-top: 12px;
       padding: 10px 12px;
@@ -117,6 +120,20 @@
       border-left: 4px solid var(--azul2);
       border-radius: 8px;
       font-size: 13px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .estado.error {
+      background: #fee2e2;
+      border-left-color: var(--rojo);
+      color: #7f1d1d;
+    }
+
+    .estado.ok {
+      background: #d1fae5;
+      border-left-color: var(--verde);
+      color: #064e3b;
     }
 
     .topbar {
@@ -321,6 +338,18 @@
       line-height: 1.5;
     }
 
+    .debug {
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      background: #0f172a;
+      color: #d1fae5;
+      padding: 12px;
+      border-radius: 10px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      max-height: 260px;
+    }
+
     @media (max-width: 980px) {
       .grid-kpi {
         grid-template-columns: repeat(2, minmax(150px, 1fr));
@@ -357,11 +386,12 @@
   <header>
     <div>
       <h1 id="tituloApp">ENOS 2026 · Plataforma CZ5</h1>
-      <p id="subtituloApp">Seguimiento, consolidación y monitoreo operativo</p>
+      <p id="subtituloApp">Seguimiento, consolidación y monitoreo operativo · Acceso abierto temporal</p>
     </div>
 
     <div>
       <button class="ligero" onclick="actualizarPanelActivo()">Actualizar</button>
+      <button class="secundario" onclick="probarServidorCompleto()">Probar conexión</button>
     </div>
   </header>
 
@@ -382,6 +412,10 @@
 
         <button id="btnTabMemoria" class="tab-btn" onclick="mostrarPanel('memoria')">
           Base memoria
+        </button>
+
+        <button id="btnTabDebug" class="tab-btn" onclick="mostrarPanel('debug')">
+          Diagnóstico
         </button>
       </div>
     </section>
@@ -582,6 +616,29 @@
 
     </section>
 
+    <section id="panelDebug" class="panel">
+
+      <section class="card">
+        <h2>Diagnóstico técnico</h2>
+        <p class="nota">
+          Este panel sirve para verificar si el HTML logra comunicarse con Apps Script y si Apps Script logra leer la matriz.
+        </p>
+
+        <div class="fila">
+          <button onclick="probarServidorCompleto()">Probar servidor completo</button>
+          <button class="ligero" onclick="probarSoloPing()">Probar ping</button>
+          <button class="ligero" onclick="probarSoloSeguimiento()">Probar matriz</button>
+          <button class="rojo" onclick="limpiarDiagnostico()">Limpiar diagnóstico</button>
+        </div>
+
+        <div id="estadoDebug" class="estado">Sin diagnóstico ejecutado.</div>
+
+        <h3>Salida técnica</h3>
+        <pre id="salidaDebug" class="debug">Sin datos.</pre>
+      </section>
+
+    </section>
+
   </main>
 
   <script>
@@ -598,9 +655,12 @@
       SESION_AUTORIZADA = true;
 
       mostrarEstadoSistema('Acceso abierto temporalmente. Conectando con Apps Script...');
+      escribirDebug('Inicio de plataforma abierta.');
 
       google.script.run
         .withSuccessHandler(function(res) {
+          escribirDebug('getAppInfo OK', res);
+
           if (res && res.ok) {
             ponerTexto('tituloApp', res.nombre || 'ENOS 2026 · Plataforma CZ5');
             ponerTexto('subtituloApp', 'Versión: ' + (res.version || 'sin versión') + ' · Acceso abierto');
@@ -610,44 +670,11 @@
           cargarSeguimientoENOS();
         })
         .withFailureHandler(function(err) {
-          mostrarEstadoSistema('La interfaz abrió, pero no pudo leer getAppInfo(): ' + err.message);
+          escribirDebug('getAppInfo ERROR', err);
+          mostrarEstadoSistemaError('La interfaz abrió, pero no pudo ejecutar getAppInfo(): ' + err.message);
           cargarSeguimientoENOS();
         })
         .getAppInfo();
-    }
-
-    function mostrarPanel(nombre) {
-      PANEL_ACTIVO = nombre;
-
-      document.getElementById('panelSeguimiento').classList.remove('activo');
-      document.getElementById('panelGeneral').classList.remove('activo');
-      document.getElementById('panelMemoria').classList.remove('activo');
-
-      document.getElementById('btnTabSeguimiento').classList.remove('activo');
-      document.getElementById('btnTabGeneral').classList.remove('activo');
-      document.getElementById('btnTabMemoria').classList.remove('activo');
-
-      if (nombre === 'seguimiento') {
-        document.getElementById('panelSeguimiento').classList.add('activo');
-        document.getElementById('btnTabSeguimiento').classList.add('activo');
-      }
-
-      if (nombre === 'general') {
-        document.getElementById('panelGeneral').classList.add('activo');
-        document.getElementById('btnTabGeneral').classList.add('activo');
-        cargarDashboardGeneral();
-      }
-
-      if (nombre === 'memoria') {
-        document.getElementById('panelMemoria').classList.add('activo');
-        document.getElementById('btnTabMemoria').classList.add('activo');
-      }
-    }
-
-    function actualizarPanelActivo() {
-      if (PANEL_ACTIVO === 'seguimiento') cargarSeguimientoENOS();
-      if (PANEL_ACTIVO === 'general') cargarDashboardGeneral();
-      if (PANEL_ACTIVO === 'memoria') cargarBaseMemoria();
     }
 
     function cargarSeguimientoENOS() {
@@ -656,21 +683,56 @@
       const filtros = leerFiltrosSeguimiento();
 
       mostrarEstadoSeguimiento('Cargando seguimiento ENOS...');
+      mostrarEstadoSistema('Consultando getDashboardSeguimientoENOS en Apps Script...');
+      escribirDebug('Consultando getDashboardSeguimientoENOS con filtros:', filtros);
+
+      let respondioServidor = false;
+
+      setTimeout(function() {
+        if (!respondioServidor) {
+          mostrarEstadoSeguimientoError(
+            'La consulta no responde después de 20 segundos.\n\n' +
+            'Revisa en Apps Script:\n' +
+            '1. Implementar → Administrar implementaciones.\n' +
+            '2. Ejecutar como: Yo.\n' +
+            '3. Quién tiene acceso: Cualquier usuario con el enlace.\n' +
+            '4. Versión: Nueva versión.\n' +
+            '5. Ejecuta manualmente probarDashboardSeguimiento.'
+          );
+
+          mostrarEstadoSistemaError('Servidor sin respuesta después de 20 segundos.');
+          escribirDebug('TIMEOUT: getDashboardSeguimientoENOS no respondió después de 20 segundos.');
+        }
+      }, 20000);
 
       google.script.run
         .withSuccessHandler(function(res) {
-          if (!res || !res.ok) {
-            mostrarEstadoSeguimiento(res && res.mensaje ? res.mensaje : 'No se pudo cargar seguimiento ENOS.');
+          respondioServidor = true;
+          escribirDebug('getDashboardSeguimientoENOS RESPUESTA:', res);
+
+          if (!res) {
+            mostrarEstadoSeguimientoError('Apps Script respondió vacío.');
+            mostrarEstadoSistemaError('Respuesta vacía desde getDashboardSeguimientoENOS.');
+            return;
+          }
+
+          if (!res.ok) {
+            mostrarEstadoSeguimientoError(res.mensaje || 'Apps Script respondió con error.');
+            mostrarEstadoSistemaError('Error devuelto por getDashboardSeguimientoENOS.');
             return;
           }
 
           pintarSeguimiento(res);
-          mostrarEstadoSistema('Seguimiento ENOS cargado correctamente.');
-          mostrarEstadoSeguimiento('Seguimiento actualizado: ' + new Date().toLocaleString('es-EC'));
+
+          mostrarEstadoSistemaOk('Seguimiento ENOS cargado correctamente.');
+          mostrarEstadoSeguimientoOk('Seguimiento actualizado: ' + new Date().toLocaleString('es-EC'));
         })
         .withFailureHandler(function(err) {
-          mostrarEstadoSeguimiento('Error cargando seguimiento: ' + err.message);
-          mostrarEstadoSistema('Error de servidor al cargar seguimiento.');
+          respondioServidor = true;
+          escribirDebug('getDashboardSeguimientoENOS ERROR:', err);
+
+          mostrarEstadoSeguimientoError('Error cargando seguimiento: ' + err.message);
+          mostrarEstadoSistemaError('Falló la comunicación HTML → Apps Script.');
         })
         .getDashboardSeguimientoENOS(filtros);
     }
@@ -803,8 +865,10 @@
 
       google.script.run
         .withSuccessHandler(function(res) {
+          escribirDebug('getDashboardGeneralENOS RESPUESTA:', res);
+
           if (!res || !res.ok) {
-            mostrarEstadoGeneral(res && res.mensaje ? res.mensaje : 'No se pudo cargar el dashboard general.');
+            mostrarEstadoGeneralError(res && res.mensaje ? res.mensaje : 'No se pudo cargar el dashboard general.');
             return;
           }
 
@@ -819,13 +883,14 @@
           let msg = 'Dashboard general actualizado.';
 
           if (res.memoria && !res.memoria.ok) {
-            msg += ' Base memoria pendiente: ' + res.memoria.mensaje;
+            msg += '\nBase memoria pendiente: ' + res.memoria.mensaje;
           }
 
-          mostrarEstadoGeneral(msg);
+          mostrarEstadoGeneralOk(msg);
         })
         .withFailureHandler(function(err) {
-          mostrarEstadoGeneral('Error: ' + err.message);
+          escribirDebug('getDashboardGeneralENOS ERROR:', err);
+          mostrarEstadoGeneralError('Error: ' + err.message);
         })
         .getDashboardGeneralENOS({
           seguimiento: leerFiltrosSeguimiento()
@@ -839,8 +904,10 @@
 
       google.script.run
         .withSuccessHandler(function(res) {
+          escribirDebug('getEstadoBaseMemoria RESPUESTA:', res);
+
           if (!res || !res.ok) {
-            mostrarEstadoMemoria(res && res.mensaje ? res.mensaje : 'Base memoria no disponible.');
+            mostrarEstadoMemoriaError(res && res.mensaje ? res.mensaje : 'Base memoria no disponible.');
             return;
           }
 
@@ -852,12 +919,85 @@
           ponerTexto('memAlojamientos', formatoNumero(c.alojamientos));
           ponerTexto('memAlertas', formatoNumero(c.alertas));
 
-          mostrarEstadoMemoria('Base memoria conectada: ' + (res.archivo || 'sin nombre'));
+          mostrarEstadoMemoriaOk('Base memoria conectada: ' + (res.archivo || 'sin nombre'));
         })
         .withFailureHandler(function(err) {
-          mostrarEstadoMemoria('Error probando base memoria: ' + err.message);
+          escribirDebug('getEstadoBaseMemoria ERROR:', err);
+          mostrarEstadoMemoriaError('Error probando base memoria: ' + err.message);
         })
         .getEstadoBaseMemoria();
+    }
+
+    function probarServidorCompleto() {
+      mostrarPanel('debug');
+      limpiarDiagnostico();
+
+      escribirDebug('Iniciando diagnóstico completo...');
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          escribirDebug('pingServidor OK:', res);
+
+          google.script.run
+            .withSuccessHandler(function(res2) {
+              escribirDebug('testConexionSeguimiento OK:', res2);
+
+              google.script.run
+                .withSuccessHandler(function(res3) {
+                  escribirDebug('probarDashboardSeguimiento OK:', res3);
+                  mostrarEstadoDebugOk('Diagnóstico completo finalizado. Revisa la salida técnica.');
+                })
+                .withFailureHandler(function(err3) {
+                  escribirDebug('probarDashboardSeguimiento ERROR:', err3);
+                  mostrarEstadoDebugError('Falló probarDashboardSeguimiento: ' + err3.message);
+                })
+                .probarDashboardSeguimiento();
+
+            })
+            .withFailureHandler(function(err2) {
+              escribirDebug('testConexionSeguimiento ERROR:', err2);
+              mostrarEstadoDebugError('Falló testConexionSeguimiento: ' + err2.message);
+            })
+            .testConexionSeguimiento();
+
+        })
+        .withFailureHandler(function(err) {
+          escribirDebug('pingServidor ERROR:', err);
+          mostrarEstadoDebugError('Falló pingServidor: ' + err.message);
+        })
+        .pingServidor();
+    }
+
+    function probarSoloPing() {
+      mostrarPanel('debug');
+      escribirDebug('Probando pingServidor...');
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          escribirDebug('pingServidor OK:', res);
+          mostrarEstadoDebugOk('pingServidor respondió correctamente.');
+        })
+        .withFailureHandler(function(err) {
+          escribirDebug('pingServidor ERROR:', err);
+          mostrarEstadoDebugError('Falló pingServidor: ' + err.message);
+        })
+        .pingServidor();
+    }
+
+    function probarSoloSeguimiento() {
+      mostrarPanel('debug');
+      escribirDebug('Probando testConexionSeguimiento...');
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          escribirDebug('testConexionSeguimiento OK:', res);
+          mostrarEstadoDebugOk('testConexionSeguimiento respondió. Revisa salida técnica.');
+        })
+        .withFailureHandler(function(err) {
+          escribirDebug('testConexionSeguimiento ERROR:', err);
+          mostrarEstadoDebugError('Falló testConexionSeguimiento: ' + err.message);
+        })
+        .testConexionSeguimiento();
     }
 
     function exportarSeguimientoCSV() {
@@ -898,6 +1038,47 @@
       URL.revokeObjectURL(url);
     }
 
+    function mostrarPanel(nombre) {
+      PANEL_ACTIVO = nombre;
+
+      document.getElementById('panelSeguimiento').classList.remove('activo');
+      document.getElementById('panelGeneral').classList.remove('activo');
+      document.getElementById('panelMemoria').classList.remove('activo');
+      document.getElementById('panelDebug').classList.remove('activo');
+
+      document.getElementById('btnTabSeguimiento').classList.remove('activo');
+      document.getElementById('btnTabGeneral').classList.remove('activo');
+      document.getElementById('btnTabMemoria').classList.remove('activo');
+      document.getElementById('btnTabDebug').classList.remove('activo');
+
+      if (nombre === 'seguimiento') {
+        document.getElementById('panelSeguimiento').classList.add('activo');
+        document.getElementById('btnTabSeguimiento').classList.add('activo');
+      }
+
+      if (nombre === 'general') {
+        document.getElementById('panelGeneral').classList.add('activo');
+        document.getElementById('btnTabGeneral').classList.add('activo');
+      }
+
+      if (nombre === 'memoria') {
+        document.getElementById('panelMemoria').classList.add('activo');
+        document.getElementById('btnTabMemoria').classList.add('activo');
+      }
+
+      if (nombre === 'debug') {
+        document.getElementById('panelDebug').classList.add('activo');
+        document.getElementById('btnTabDebug').classList.add('activo');
+      }
+    }
+
+    function actualizarPanelActivo() {
+      if (PANEL_ACTIVO === 'seguimiento') cargarSeguimientoENOS();
+      if (PANEL_ACTIVO === 'general') cargarDashboardGeneral();
+      if (PANEL_ACTIVO === 'memoria') cargarBaseMemoria();
+      if (PANEL_ACTIVO === 'debug') probarServidorCompleto();
+    }
+
     function cargarSelectConservando(id, valores, textoInicial) {
       const sel = document.getElementById(id);
       if (!sel) return;
@@ -921,20 +1102,104 @@
       sel.value = actual;
     }
 
+    function escribirDebug(titulo, obj) {
+      const salida = document.getElementById('salidaDebug');
+      if (!salida) return;
+
+      const fecha = new Date().toLocaleString('es-EC');
+
+      let texto = '\n\n[' + fecha + '] ' + titulo;
+
+      if (obj !== undefined) {
+        try {
+          texto += '\n' + JSON.stringify(obj, null, 2);
+        } catch (e) {
+          texto += '\n' + String(obj);
+        }
+      }
+
+      if (salida.textContent === 'Sin datos.') {
+        salida.textContent = texto.trim();
+      } else {
+        salida.textContent += texto;
+      }
+    }
+
+    function limpiarDiagnostico() {
+      ponerTexto('salidaDebug', 'Sin datos.');
+      mostrarEstadoDebug('Sin diagnóstico ejecutado.');
+    }
+
+    function setEstado(id, msg, tipo) {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      el.textContent = msg;
+      el.classList.remove('ok');
+      el.classList.remove('error');
+
+      if (tipo === 'ok') el.classList.add('ok');
+      if (tipo === 'error') el.classList.add('error');
+    }
+
     function mostrarEstadoSistema(msg) {
-      ponerTexto('estadoSistema', msg);
+      setEstado('estadoSistema', msg, '');
+    }
+
+    function mostrarEstadoSistemaOk(msg) {
+      setEstado('estadoSistema', msg, 'ok');
+    }
+
+    function mostrarEstadoSistemaError(msg) {
+      setEstado('estadoSistema', msg, 'error');
     }
 
     function mostrarEstadoSeguimiento(msg) {
-      ponerTexto('estadoSeguimiento', msg);
+      setEstado('estadoSeguimiento', msg, '');
+    }
+
+    function mostrarEstadoSeguimientoOk(msg) {
+      setEstado('estadoSeguimiento', msg, 'ok');
+    }
+
+    function mostrarEstadoSeguimientoError(msg) {
+      setEstado('estadoSeguimiento', msg, 'error');
     }
 
     function mostrarEstadoGeneral(msg) {
-      ponerTexto('estadoGeneral', msg);
+      setEstado('estadoGeneral', msg, '');
+    }
+
+    function mostrarEstadoGeneralOk(msg) {
+      setEstado('estadoGeneral', msg, 'ok');
+    }
+
+    function mostrarEstadoGeneralError(msg) {
+      setEstado('estadoGeneral', msg, 'error');
     }
 
     function mostrarEstadoMemoria(msg) {
-      ponerTexto('estadoMemoria', msg);
+      setEstado('estadoMemoria', msg, '');
+    }
+
+    function mostrarEstadoMemoriaOk(msg) {
+      setEstado('estadoMemoria', msg, 'ok');
+    }
+
+    function mostrarEstadoMemoriaError(msg) {
+      setEstado('estadoMemoria', msg, 'error');
+    }
+
+    function mostrarEstadoDebug(msg) {
+      setEstado('estadoDebug', msg, '');
+    }
+
+    function mostrarEstadoDebugOk(msg) {
+      setEstado('estadoDebug', msg, 'ok');
+    }
+
+    function mostrarEstadoDebugError(msg) {
+      setEstado('estadoDebug', msg, 'error');
     }
 
     function ponerTexto(id, valor) {
