@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <base target="_top">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>ENOS 2026 · Plataforma CZ5</title>
 
   <style>
@@ -19,7 +19,7 @@
       --rojo: #c53030;
       --naranja: #dd6b20;
       --blanco: #ffffff;
-      --sombra: 0 8px 20px rgba(0,0,0,0.08);
+      --sombra: 0 8px 20px rgba(15, 59, 99, 0.10);
     }
 
     * {
@@ -36,63 +36,109 @@
     header {
       background: linear-gradient(135deg, var(--azul), var(--azul2));
       color: white;
-      padding: 18px 28px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
+      padding: 20px 28px;
     }
 
     header h1 {
       margin: 0;
-      font-size: 22px;
+      font-size: 26px;
       line-height: 1.2;
     }
 
     header p {
-      margin: 4px 0 0;
-      font-size: 13px;
-      opacity: 0.9;
-    }
-
-    .contenedor {
-      max-width: 1380px;
-      margin: 0 auto;
-      padding: 22px;
-    }
-
-    .fila {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .fila > * {
-      flex: 1;
-      min-width: 180px;
-    }
-
-    input, select, button {
+      margin: 6px 0 0;
       font-size: 14px;
-      border-radius: 9px;
+      opacity: 0.92;
+    }
+
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .card {
+      background: var(--blanco);
+      border-radius: 18px;
+      box-shadow: var(--sombra);
+      padding: 20px;
+      margin-bottom: 18px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .card h2,
+    .card h3 {
+      margin-top: 0;
+      color: var(--azul);
+    }
+
+    .nota {
+      color: #52606d;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .estado {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: var(--celeste);
+      border-left: 5px solid var(--azul2);
+      color: #0f172a;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .estado.ok {
+      background: #d1fae5;
+      border-left-color: var(--verde);
+      color: #064e3b;
+    }
+
+    .estado.error {
+      background: #fee2e2;
+      border-left-color: var(--rojo);
+      color: #7f1d1d;
+    }
+
+    .filtros {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(150px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    select,
+    input,
+    button {
+      width: 100%;
+      font-size: 14px;
+      border-radius: 10px;
       border: 1px solid var(--gris2);
       padding: 10px 12px;
       outline: none;
     }
 
-    input:focus, select:focus {
+    select:focus,
+    input:focus {
       border-color: var(--azul2);
-      box-shadow: 0 0 0 3px rgba(20,82,127,0.12);
+      box-shadow: 0 0 0 3px rgba(20, 82, 127, 0.12);
+    }
+
+    .acciones {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(160px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
     }
 
     button {
+      border: none;
       background: var(--azul);
       color: white;
-      border: none;
+      font-weight: 700;
       cursor: pointer;
-      font-weight: 600;
     }
 
     button:hover {
@@ -103,99 +149,19 @@
       background: #64748b;
     }
 
-    button.ligero {
-      background: var(--celeste);
-      color: var(--azul);
-      border: 1px solid #b8d8ee;
-    }
-
-    button.rojo {
-      background: var(--rojo);
-    }
-
-    .estado {
-      margin-top: 12px;
-      padding: 10px 12px;
-      background: var(--celeste);
-      border-left: 4px solid var(--azul2);
-      border-radius: 8px;
-      font-size: 13px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-    }
-
-    .estado.error {
-      background: #fee2e2;
-      border-left-color: var(--rojo);
-      color: #7f1d1d;
-    }
-
-    .estado.ok {
-      background: #d1fae5;
-      border-left-color: var(--verde);
-      color: #064e3b;
-    }
-
-    .topbar {
-      background: white;
-      box-shadow: var(--sombra);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 18px;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-
-    .tab-btn {
-      background: #e2e8f0;
-      color: #1e293b;
-      border: 1px solid #cbd5e1;
-    }
-
-    .tab-btn.activo {
-      background: var(--azul);
-      color: white;
-      border-color: var(--azul);
-    }
-
-    .panel {
-      display: none;
-    }
-
-    .panel.activo {
-      display: block;
-    }
-
     .grid-kpi {
       display: grid;
       grid-template-columns: repeat(5, minmax(150px, 1fr));
       gap: 14px;
-      margin: 16px 0;
+      margin: 18px 0;
     }
 
     .kpi {
-      background: white;
+      background: var(--blanco);
       border-radius: 16px;
       box-shadow: var(--sombra);
       padding: 16px;
       border-top: 5px solid var(--azul);
-    }
-
-    .kpi .label {
-      font-size: 13px;
-      color: #52606d;
-      margin-bottom: 8px;
-    }
-
-    .kpi .valor {
-      font-size: 30px;
-      font-weight: 800;
-      color: var(--azul);
     }
 
     .kpi.validado {
@@ -214,24 +180,51 @@
       border-top-color: var(--naranja);
     }
 
-    .card {
-      background: white;
-      border-radius: 16px;
-      box-shadow: var(--sombra);
-      padding: 18px;
-      margin-bottom: 18px;
+    .kpi .label {
+      color: #52606d;
+      font-size: 13px;
+      margin-bottom: 8px;
     }
 
-    .card h2, .card h3 {
-      margin-top: 0;
+    .kpi .valor {
       color: var(--azul);
+      font-size: 34px;
+      font-weight: 800;
     }
 
-    .filtros {
+    .dos-columnas {
       display: grid;
-      grid-template-columns: repeat(5, minmax(160px, 1fr));
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .barra-item {
+      margin-bottom: 10px;
+    }
+
+    .barra-label {
+      display: flex;
+      justify-content: space-between;
       gap: 12px;
-      margin: 14px 0;
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    .barra-label span {
+      overflow-wrap: anywhere;
+    }
+
+    .barra-fondo {
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .barra {
+      height: 100%;
+      background: var(--azul2);
+      width: 0%;
     }
 
     .tabla-wrap {
@@ -243,7 +236,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 900px;
+      min-width: 960px;
       background: white;
     }
 
@@ -301,62 +294,21 @@
       color: #374151;
     }
 
-    .dos-columnas {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-    }
-
-    .barra-item {
-      margin-bottom: 10px;
-    }
-
-    .barra-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      margin-bottom: 4px;
-      gap: 10px;
-    }
-
-    .barra-fondo {
-      height: 10px;
-      background: #e2e8f0;
-      border-radius: 99px;
-      overflow: hidden;
-    }
-
-    .barra {
-      height: 100%;
-      background: var(--azul2);
-      width: 0%;
-    }
-
-    .nota {
-      font-size: 13px;
-      color: #52606d;
-      line-height: 1.5;
-    }
-
-    .debug {
-      font-family: Consolas, monospace;
+    footer {
+      text-align: center;
+      color: #64748b;
       font-size: 12px;
-      background: #0f172a;
-      color: #d1fae5;
-      padding: 12px;
-      border-radius: 10px;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      max-height: 260px;
+      padding: 18px 0 26px;
     }
 
     @media (max-width: 980px) {
-      .grid-kpi {
+      .grid-kpi,
+      .filtros {
         grid-template-columns: repeat(2, minmax(150px, 1fr));
       }
 
-      .filtros {
-        grid-template-columns: repeat(2, minmax(160px, 1fr));
+      .acciones {
+        grid-template-columns: 1fr;
       }
 
       .dos-columnas {
@@ -365,17 +317,17 @@
     }
 
     @media (max-width: 620px) {
+      header {
+        padding: 18px;
+      }
+
+      main {
+        padding: 14px;
+      }
+
       .grid-kpi,
       .filtros {
         grid-template-columns: 1fr;
-      }
-
-      header {
-        padding: 16px;
-      }
-
-      .contenedor {
-        padding: 14px;
       }
     }
   </style>
@@ -384,851 +336,484 @@
 <body>
 
   <header>
-    <div>
-      <h1 id="tituloApp">ENOS 2026 · Plataforma CZ5</h1>
-      <p id="subtituloApp">Seguimiento, consolidación y monitoreo operativo · Acceso abierto temporal</p>
-    </div>
-
-    <div>
-      <button class="ligero" onclick="actualizarPanelActivo()">Actualizar</button>
-      <button class="secundario" onclick="probarServidorCompleto()">Probar conexión</button>
-    </div>
+    <h1>ENOS 2026 · Plataforma CZ5</h1>
+    <p>Seguimiento de planes cantonales y provinciales · Datos conectados desde Google Sheets vía Apps Script</p>
   </header>
 
-  <main class="contenedor">
+  <main>
 
-    <section class="topbar">
-      <strong>Estado del sistema</strong>
-      <div id="estadoSistema" class="estado">Inicializando plataforma...</div>
+    <section class="card">
+      <h2>Seguimiento de planes ENOS</h2>
+      <p class="nota">
+        Fuente: <strong>MATRIZSEGUIM-EL NIÑO (2)</strong>, hoja <strong>Consolidado</strong>.
+        Este tablero consume la API publicada en Apps Script y se visualiza desde GitHub Pages.
+      </p>
 
-      <div class="tabs">
-        <button id="btnTabSeguimiento" class="tab-btn activo" onclick="mostrarPanel('seguimiento')">
-          Seguimiento de planes
-        </button>
+      <div id="estadoSistema" class="estado">
+        Conectando con Apps Script...
+      </div>
 
-        <button id="btnTabGeneral" class="tab-btn" onclick="mostrarPanel('general')">
-          Dashboard general
-        </button>
+      <div class="filtros">
+        <select id="filtroProvincia" onchange="ENOS.aplicarFiltros()">
+          <option value="">Todas las provincias</option>
+        </select>
 
-        <button id="btnTabMemoria" class="tab-btn" onclick="mostrarPanel('memoria')">
-          Base memoria
-        </button>
+        <select id="filtroCanton" onchange="ENOS.aplicarFiltros()">
+          <option value="">Todos los cantones</option>
+        </select>
 
-        <button id="btnTabDebug" class="tab-btn" onclick="mostrarPanel('debug')">
-          Diagnóstico
-        </button>
+        <select id="filtroEstado" onchange="ENOS.aplicarFiltros()">
+          <option value="">Todos los estados</option>
+        </select>
+
+        <select id="filtroTipoGad" onchange="ENOS.aplicarFiltros()">
+          <option value="">Todos los tipos de GAD</option>
+        </select>
+
+        <input id="busquedaTexto" type="text" placeholder="Buscar..." oninput="ENOS.aplicarFiltros()">
+      </div>
+
+      <div class="acciones">
+        <button onclick="ENOS.cargar()">Actualizar datos</button>
+        <button class="secundario" onclick="ENOS.limpiarFiltros()">Limpiar filtros</button>
+        <button class="secundario" onclick="ENOS.exportarCSV()">Exportar CSV</button>
       </div>
     </section>
 
-    <section id="panelSeguimiento" class="panel activo">
+    <section class="grid-kpi">
+      <div class="kpi">
+        <div class="label">Total registros</div>
+        <div id="kpiTotal" class="valor">0</div>
+      </div>
 
-      <section class="card">
-        <h2>Seguimiento de planes ENOS</h2>
-        <p class="nota">
-          Módulo conectado a la hoja <strong>Consolidado</strong> de MATRIZSEGUIM-EL NIÑO (2).
-          Acceso abierto temporalmente para pruebas internas.
-        </p>
+      <div class="kpi validado">
+        <div class="label">Validado</div>
+        <div id="kpiValidado" class="valor">0</div>
+      </div>
 
-        <div class="filtros">
-          <select id="filtroProvincia" onchange="cargarSeguimientoENOS()">
-            <option value="">Todas las provincias</option>
-          </select>
+      <div class="kpi devuelto">
+        <div class="label">Devuelto</div>
+        <div id="kpiDevuelto" class="valor">0</div>
+      </div>
 
-          <select id="filtroCanton" onchange="cargarSeguimientoENOS()">
-            <option value="">Todos los cantones</option>
-          </select>
+      <div class="kpi revision">
+        <div class="label">En revisión</div>
+        <div id="kpiRevision" class="valor">0</div>
+      </div>
 
-          <select id="filtroEstadoCategoria" onchange="cargarSeguimientoENOS()">
-            <option value="">Todos los estados</option>
-          </select>
-
-          <select id="filtroTipoGad" onchange="cargarSeguimientoENOS()">
-            <option value="">Todos los tipos de GAD</option>
-          </select>
-
-          <input id="busquedaSeguimiento" type="text" placeholder="Buscar..." oninput="buscarConEspera()">
-        </div>
-
-        <div class="fila">
-          <button onclick="cargarSeguimientoENOS()">Actualizar seguimiento</button>
-          <button class="ligero" onclick="limpiarFiltrosSeguimiento()">Limpiar filtros</button>
-          <button class="secundario" onclick="exportarSeguimientoCSV()">Exportar CSV</button>
-        </div>
-
-        <div id="estadoSeguimiento" class="estado">
-          Listo para cargar seguimiento.
-        </div>
-      </section>
-
-      <section class="grid-kpi">
-        <div class="kpi">
-          <div class="label">Total registros</div>
-          <div id="segTotal" class="valor">0</div>
-        </div>
-
-        <div class="kpi validado">
-          <div class="label">Validado</div>
-          <div id="segValidado" class="valor">0</div>
-        </div>
-
-        <div class="kpi devuelto">
-          <div class="label">Devuelto</div>
-          <div id="segDevuelto" class="valor">0</div>
-        </div>
-
-        <div class="kpi revision">
-          <div class="label">En revisión</div>
-          <div id="segRevision" class="valor">0</div>
-        </div>
-
-        <div class="kpi falta">
-          <div class="label">Falta</div>
-          <div id="segFalta" class="valor">0</div>
-        </div>
-      </section>
-
-      <section class="dos-columnas">
-        <div class="card">
-          <h3>Registros por provincia</h3>
-          <div id="serieProvincia"></div>
-        </div>
-
-        <div class="card">
-          <h3>Registros por estado</h3>
-          <div id="serieEstado"></div>
-        </div>
-      </section>
-
-      <section class="card">
-        <h3>Tabla de seguimiento</h3>
-
-        <div class="tabla-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Provincia</th>
-                <th>Cantón</th>
-                <th>Tipo GAD</th>
-                <th>Estado revisión</th>
-                <th>Categoría</th>
-                <th>Entrega plan</th>
-                <th>Punto focal</th>
-                <th>Porcentaje</th>
-                <th>Observaciones</th>
-              </tr>
-            </thead>
-            <tbody id="tablaSeguimientoBody">
-              <tr>
-                <td colspan="9">Cargando datos...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
+      <div class="kpi falta">
+        <div class="label">Falta</div>
+        <div id="kpiFalta" class="valor">0</div>
+      </div>
     </section>
 
-    <section id="panelGeneral" class="panel">
+    <section class="dos-columnas">
+      <div class="card">
+        <h3>Registros por provincia</h3>
+        <div id="serieProvincia"></div>
+      </div>
 
-      <section class="card">
-        <h2>Dashboard general ENOS</h2>
-        <p class="nota">
-          Vista combinada del seguimiento de planes y, cuando se configure el ID, la Base Memoria V2.
-        </p>
-
-        <button onclick="cargarDashboardGeneral()">Cargar dashboard general</button>
-
-        <div id="estadoGeneral" class="estado">
-          Pendiente de carga.
-        </div>
-      </section>
-
-      <section class="grid-kpi">
-        <div class="kpi">
-          <div class="label">Planes registrados</div>
-          <div id="genPlanes" class="valor">0</div>
-        </div>
-
-        <div class="kpi validado">
-          <div class="label">Planes validados</div>
-          <div id="genValidados" class="valor">0</div>
-        </div>
-
-        <div class="kpi revision">
-          <div class="label">En revisión</div>
-          <div id="genRevision" class="valor">0</div>
-        </div>
-
-        <div class="kpi devuelto">
-          <div class="label">Devueltos</div>
-          <div id="genDevueltos" class="valor">0</div>
-        </div>
-
-        <div class="kpi falta">
-          <div class="label">Falta</div>
-          <div id="genFalta" class="valor">0</div>
-        </div>
-      </section>
-
+      <div class="card">
+        <h3>Registros por estado</h3>
+        <div id="serieEstado"></div>
+      </div>
     </section>
 
-    <section id="panelMemoria" class="panel">
+    <section class="card">
+      <h3>Tabla de seguimiento</h3>
 
-      <section class="card">
-        <h2>Base Memoria V2</h2>
-        <p class="nota">
-          Este módulo se activará completamente cuando el ID de BASE_MEMORIA_V2 esté colocado en el Code.gs.
-        </p>
-
-        <button onclick="cargarBaseMemoria()">Probar base memoria</button>
-
-        <div id="estadoMemoria" class="estado">
-          Pendiente de prueba.
-        </div>
-      </section>
-
-      <section class="grid-kpi">
-        <div class="kpi">
-          <div class="label">Casos</div>
-          <div id="memCasos" class="valor">0</div>
-        </div>
-
-        <div class="kpi">
-          <div class="label">Sitios críticos</div>
-          <div id="memSitios" class="valor">0</div>
-        </div>
-
-        <div class="kpi">
-          <div class="label">Infraestructura</div>
-          <div id="memInfra" class="valor">0</div>
-        </div>
-
-        <div class="kpi">
-          <div class="label">Alojamientos</div>
-          <div id="memAlojamientos" class="valor">0</div>
-        </div>
-
-        <div class="kpi">
-          <div class="label">Alertas</div>
-          <div id="memAlertas" class="valor">0</div>
-        </div>
-      </section>
-
-    </section>
-
-    <section id="panelDebug" class="panel">
-
-      <section class="card">
-        <h2>Diagnóstico técnico</h2>
-        <p class="nota">
-          Este panel sirve para verificar si el HTML logra comunicarse con Apps Script y si Apps Script logra leer la matriz.
-        </p>
-
-        <div class="fila">
-          <button onclick="probarServidorCompleto()">Probar servidor completo</button>
-          <button class="ligero" onclick="probarSoloPing()">Probar ping</button>
-          <button class="ligero" onclick="probarSoloSeguimiento()">Probar matriz</button>
-          <button class="rojo" onclick="limpiarDiagnostico()">Limpiar diagnóstico</button>
-        </div>
-
-        <div id="estadoDebug" class="estado">Sin diagnóstico ejecutado.</div>
-
-        <h3>Salida técnica</h3>
-        <pre id="salidaDebug" class="debug">Sin datos.</pre>
-      </section>
-
+      <div class="tabla-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Provincia</th>
+              <th>Cantón</th>
+              <th>Tipo GAD</th>
+              <th>Estado revisión</th>
+              <th>Categoría</th>
+              <th>Entrega plan</th>
+              <th>Punto focal</th>
+              <th>Porcentaje</th>
+              <th>Observaciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaBody">
+            <tr>
+              <td colspan="9">Cargando datos...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
   </main>
 
+  <footer>
+    Plataforma ENOS CZ5 · GitHub Pages + Apps Script API
+  </footer>
+
   <script>
-    let SESION_AUTORIZADA = true;
-    let PANEL_ACTIVO = 'seguimiento';
-    let ULTIMO_SEGUIMIENTO = [];
-    let TIMER_BUSQUEDA = null;
+    window.ENOS = (function() {
+      const API_URL = 'https://script.google.com/macros/s/AKfycbzzyyKtfJ-JAPHySJQLbOn1sPhBmuBIXwf_dDDP-SZ7Bb12MsAzbzorrtM4BXIBoGz_ZQ/exec';
 
-    document.addEventListener('DOMContentLoaded', function() {
-      iniciarPlataformaAbierta();
-    });
+      let registrosBase = [];
+      let registrosFiltrados = [];
 
-    function iniciarPlataformaAbierta() {
-      SESION_AUTORIZADA = true;
+      function cargar() {
+        setEstado('Conectando con Apps Script...', '');
 
-      mostrarEstadoSistema('Acceso abierto temporalmente. Conectando con Apps Script...');
-      escribirDebug('Inicio de plataforma abierta.');
-
-      google.script.run
-        .withSuccessHandler(function(res) {
-          escribirDebug('getAppInfo OK', res);
-
-          if (res && res.ok) {
-            ponerTexto('tituloApp', res.nombre || 'ENOS 2026 · Plataforma CZ5');
-            ponerTexto('subtituloApp', 'Versión: ' + (res.version || 'sin versión') + ' · Acceso abierto');
-          }
-
-          mostrarEstadoSistema('Aplicación cargada. Cargando seguimiento ENOS...');
-          cargarSeguimientoENOS();
-        })
-        .withFailureHandler(function(err) {
-          escribirDebug('getAppInfo ERROR', err);
-          mostrarEstadoSistemaError('La interfaz abrió, pero no pudo ejecutar getAppInfo(): ' + err.message);
-          cargarSeguimientoENOS();
-        })
-        .getAppInfo();
-    }
-
-    function cargarSeguimientoENOS() {
-      if (!SESION_AUTORIZADA) return;
-
-      const filtros = leerFiltrosSeguimiento();
-
-      mostrarEstadoSeguimiento('Cargando seguimiento ENOS...');
-      mostrarEstadoSistema('Consultando getDashboardSeguimientoENOS en Apps Script...');
-      escribirDebug('Consultando getDashboardSeguimientoENOS con filtros:', filtros);
-
-      let respondioServidor = false;
-
-      setTimeout(function() {
-        if (!respondioServidor) {
-          mostrarEstadoSeguimientoError(
-            'La consulta no responde después de 20 segundos.\n\n' +
-            'Revisa en Apps Script:\n' +
-            '1. Implementar → Administrar implementaciones.\n' +
-            '2. Ejecutar como: Yo.\n' +
-            '3. Quién tiene acceso: Cualquier usuario con el enlace.\n' +
-            '4. Versión: Nueva versión.\n' +
-            '5. Ejecuta manualmente probarDashboardSeguimiento.'
-          );
-
-          mostrarEstadoSistemaError('Servidor sin respuesta después de 20 segundos.');
-          escribirDebug('TIMEOUT: getDashboardSeguimientoENOS no respondió después de 20 segundos.');
-        }
-      }, 20000);
-
-      google.script.run
-        .withSuccessHandler(function(res) {
-          respondioServidor = true;
-          escribirDebug('getDashboardSeguimientoENOS RESPUESTA:', res);
-
+        jsonp(API_URL, {
+          action: 'dashboard',
+          t: Date.now()
+        }, function(res) {
           if (!res) {
-            mostrarEstadoSeguimientoError('Apps Script respondió vacío.');
-            mostrarEstadoSistemaError('Respuesta vacía desde getDashboardSeguimientoENOS.');
+            setEstado('Apps Script respondió vacío.', 'error');
+            pintarTabla([]);
             return;
           }
 
           if (!res.ok) {
-            mostrarEstadoSeguimientoError(res.mensaje || 'Apps Script respondió con error.');
-            mostrarEstadoSistemaError('Error devuelto por getDashboardSeguimientoENOS.');
+            setEstado(res.mensaje || 'Apps Script respondió con error.', 'error');
+            console.error('Respuesta API ENOS:', res);
+            pintarTabla([]);
             return;
           }
 
-          pintarSeguimiento(res);
+          registrosBase = res.registros || [];
+          registrosFiltrados = registrosBase.slice();
 
-          mostrarEstadoSistemaOk('Seguimiento ENOS cargado correctamente.');
-          mostrarEstadoSeguimientoOk('Seguimiento actualizado: ' + new Date().toLocaleString('es-EC'));
-        })
-        .withFailureHandler(function(err) {
-          respondioServidor = true;
-          escribirDebug('getDashboardSeguimientoENOS ERROR:', err);
+          cargarOpciones(registrosBase);
+          aplicarFiltros();
 
-          mostrarEstadoSeguimientoError('Error cargando seguimiento: ' + err.message);
-          mostrarEstadoSistemaError('Falló la comunicación HTML → Apps Script.');
-        })
-        .getDashboardSeguimientoENOS(filtros);
-    }
-
-    function pintarSeguimiento(res) {
-      const k = res.kpis || {};
-      const opciones = res.opciones || {};
-      const series = res.series || {};
-
-      ponerTexto('segTotal', formatoNumero(k.total));
-      ponerTexto('segValidado', formatoNumero(k.validado));
-      ponerTexto('segDevuelto', formatoNumero(k.devuelto));
-      ponerTexto('segRevision', formatoNumero(k.enRevision));
-      ponerTexto('segFalta', formatoNumero(k.falta));
-
-      cargarSelectConservando('filtroProvincia', opciones.provincias || [], 'Todas las provincias');
-      cargarSelectConservando('filtroCanton', opciones.cantones || [], 'Todos los cantones');
-      cargarSelectConservando('filtroEstadoCategoria', opciones.categoriasEstado || [], 'Todos los estados');
-      cargarSelectConservando('filtroTipoGad', opciones.tiposGad || [], 'Todos los tipos de GAD');
-
-      pintarBarras('serieProvincia', series.porProvincia || []);
-      pintarBarras('serieEstado', series.porCategoriaEstado || series.porEstado || []);
-
-      ULTIMO_SEGUIMIENTO = res.registros || [];
-      pintarTablaSeguimiento(ULTIMO_SEGUIMIENTO);
-    }
-
-    function leerFiltrosSeguimiento() {
-      return {
-        provincia: valorDe('filtroProvincia'),
-        canton: valorDe('filtroCanton'),
-        estado_categoria: valorDe('filtroEstadoCategoria'),
-        tipo_gad: valorDe('filtroTipoGad'),
-        busqueda: valorDe('busquedaSeguimiento')
-      };
-    }
-
-    function limpiarFiltrosSeguimiento() {
-      ponerValor('filtroProvincia', '');
-      ponerValor('filtroCanton', '');
-      ponerValor('filtroEstadoCategoria', '');
-      ponerValor('filtroTipoGad', '');
-      ponerValor('busquedaSeguimiento', '');
-      cargarSeguimientoENOS();
-    }
-
-    function buscarConEspera() {
-      clearTimeout(TIMER_BUSQUEDA);
-      TIMER_BUSQUEDA = setTimeout(function() {
-        cargarSeguimientoENOS();
-      }, 450);
-    }
-
-    function pintarTablaSeguimiento(datos) {
-      const tbody = document.getElementById('tablaSeguimientoBody');
-      tbody.innerHTML = '';
-
-      if (!datos || datos.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9">No hay registros con los filtros aplicados.</td></tr>';
-        return;
-      }
-
-      datos.forEach(function(r) {
-        const tr = document.createElement('tr');
-
-        tr.innerHTML = `
-          <td>${limpiarHtml(r.provincia)}</td>
-          <td>${limpiarHtml(r.canton)}</td>
-          <td>${limpiarHtml(r.tipo_gad)}</td>
-          <td>${limpiarHtml(r.estado_revision)}</td>
-          <td>${badgeEstado(r.estado_categoria)}</td>
-          <td>${limpiarHtml(r.entrega_plan)}</td>
-          <td>${limpiarHtml(r.punto_focal)}</td>
-          <td>${limpiarHtml(r.porcentaje)}</td>
-          <td>${limpiarHtml(r.observaciones)}</td>
-        `;
-
-        tbody.appendChild(tr);
-      });
-    }
-
-    function badgeEstado(estado) {
-      const e = String(estado || 'SIN DATO').toUpperCase();
-
-      let clase = 'sindato';
-      if (e.includes('VALIDADO')) clase = 'validado';
-      if (e.includes('DEVUELTO')) clase = 'devuelto';
-      if (e.includes('REVISION')) clase = 'revision';
-      if (e.includes('FALTA')) clase = 'falta';
-
-      return `<span class="badge ${clase}">${limpiarHtml(e)}</span>`;
-    }
-
-    function pintarBarras(id, datos) {
-      const cont = document.getElementById(id);
-      cont.innerHTML = '';
-
-      if (!datos || datos.length === 0) {
-        cont.innerHTML = '<p class="nota">Sin datos disponibles.</p>';
-        return;
-      }
-
-      const max = Math.max.apply(null, datos.map(x => Number(x.valor || 0)));
-
-      datos.forEach(function(item) {
-        const valor = Number(item.valor || 0);
-        const pct = max > 0 ? Math.round((valor / max) * 100) : 0;
-
-        const div = document.createElement('div');
-        div.className = 'barra-item';
-
-        div.innerHTML = `
-          <div class="barra-label">
-            <span>${limpiarHtml(item.nombre)}</span>
-            <strong>${formatoNumero(valor)}</strong>
-          </div>
-          <div class="barra-fondo">
-            <div class="barra" style="width:${pct}%"></div>
-          </div>
-        `;
-
-        cont.appendChild(div);
-      });
-    }
-
-    function cargarDashboardGeneral() {
-      if (!SESION_AUTORIZADA) return;
-
-      mostrarEstadoGeneral('Cargando dashboard general...');
-
-      google.script.run
-        .withSuccessHandler(function(res) {
-          escribirDebug('getDashboardGeneralENOS RESPUESTA:', res);
-
-          if (!res || !res.ok) {
-            mostrarEstadoGeneralError(res && res.mensaje ? res.mensaje : 'No se pudo cargar el dashboard general.');
-            return;
-          }
-
-          const k = res.seguimiento && res.seguimiento.kpis ? res.seguimiento.kpis : {};
-
-          ponerTexto('genPlanes', formatoNumero(k.total));
-          ponerTexto('genValidados', formatoNumero(k.validado));
-          ponerTexto('genRevision', formatoNumero(k.enRevision));
-          ponerTexto('genDevueltos', formatoNumero(k.devuelto));
-          ponerTexto('genFalta', formatoNumero(k.falta));
-
-          let msg = 'Dashboard general actualizado.';
-
-          if (res.memoria && !res.memoria.ok) {
-            msg += '\nBase memoria pendiente: ' + res.memoria.mensaje;
-          }
-
-          mostrarEstadoGeneralOk(msg);
-        })
-        .withFailureHandler(function(err) {
-          escribirDebug('getDashboardGeneralENOS ERROR:', err);
-          mostrarEstadoGeneralError('Error: ' + err.message);
-        })
-        .getDashboardGeneralENOS({
-          seguimiento: leerFiltrosSeguimiento()
+          const fuente = res.fuente && res.fuente.archivo ? res.fuente.archivo : 'MATRIZSEGUIM';
+          setEstado(
+            'Datos cargados correctamente desde ' + fuente +
+            '. Registros recibidos: ' + formatoNumero(registrosBase.length) +
+            '. Última consulta: ' + new Date().toLocaleString('es-EC'),
+            'ok'
+          );
+        }, function(err) {
+          setEstado('No se pudo conectar con Apps Script: ' + err, 'error');
+          console.error(err);
+          pintarTabla([]);
         });
-    }
-
-    function cargarBaseMemoria() {
-      if (!SESION_AUTORIZADA) return;
-
-      mostrarEstadoMemoria('Probando conexión con Base Memoria V2...');
-
-      google.script.run
-        .withSuccessHandler(function(res) {
-          escribirDebug('getEstadoBaseMemoria RESPUESTA:', res);
-
-          if (!res || !res.ok) {
-            mostrarEstadoMemoriaError(res && res.mensaje ? res.mensaje : 'Base memoria no disponible.');
-            return;
-          }
-
-          const c = res.conteos || {};
-
-          ponerTexto('memCasos', formatoNumero(c.casos));
-          ponerTexto('memSitios', formatoNumero(c.sitiosCriticos));
-          ponerTexto('memInfra', formatoNumero(c.infraestructura));
-          ponerTexto('memAlojamientos', formatoNumero(c.alojamientos));
-          ponerTexto('memAlertas', formatoNumero(c.alertas));
-
-          mostrarEstadoMemoriaOk('Base memoria conectada: ' + (res.archivo || 'sin nombre'));
-        })
-        .withFailureHandler(function(err) {
-          escribirDebug('getEstadoBaseMemoria ERROR:', err);
-          mostrarEstadoMemoriaError('Error probando base memoria: ' + err.message);
-        })
-        .getEstadoBaseMemoria();
-    }
-
-    function probarServidorCompleto() {
-      mostrarPanel('debug');
-      limpiarDiagnostico();
-
-      escribirDebug('Iniciando diagnóstico completo...');
-
-      google.script.run
-        .withSuccessHandler(function(res) {
-          escribirDebug('pingServidor OK:', res);
-
-          google.script.run
-            .withSuccessHandler(function(res2) {
-              escribirDebug('testConexionSeguimiento OK:', res2);
-
-              google.script.run
-                .withSuccessHandler(function(res3) {
-                  escribirDebug('probarDashboardSeguimiento OK:', res3);
-                  mostrarEstadoDebugOk('Diagnóstico completo finalizado. Revisa la salida técnica.');
-                })
-                .withFailureHandler(function(err3) {
-                  escribirDebug('probarDashboardSeguimiento ERROR:', err3);
-                  mostrarEstadoDebugError('Falló probarDashboardSeguimiento: ' + err3.message);
-                })
-                .probarDashboardSeguimiento();
-
-            })
-            .withFailureHandler(function(err2) {
-              escribirDebug('testConexionSeguimiento ERROR:', err2);
-              mostrarEstadoDebugError('Falló testConexionSeguimiento: ' + err2.message);
-            })
-            .testConexionSeguimiento();
-
-        })
-        .withFailureHandler(function(err) {
-          escribirDebug('pingServidor ERROR:', err);
-          mostrarEstadoDebugError('Falló pingServidor: ' + err.message);
-        })
-        .pingServidor();
-    }
-
-    function probarSoloPing() {
-      mostrarPanel('debug');
-      escribirDebug('Probando pingServidor...');
-
-      google.script.run
-        .withSuccessHandler(function(res) {
-          escribirDebug('pingServidor OK:', res);
-          mostrarEstadoDebugOk('pingServidor respondió correctamente.');
-        })
-        .withFailureHandler(function(err) {
-          escribirDebug('pingServidor ERROR:', err);
-          mostrarEstadoDebugError('Falló pingServidor: ' + err.message);
-        })
-        .pingServidor();
-    }
-
-    function probarSoloSeguimiento() {
-      mostrarPanel('debug');
-      escribirDebug('Probando testConexionSeguimiento...');
-
-      google.script.run
-        .withSuccessHandler(function(res) {
-          escribirDebug('testConexionSeguimiento OK:', res);
-          mostrarEstadoDebugOk('testConexionSeguimiento respondió. Revisa salida técnica.');
-        })
-        .withFailureHandler(function(err) {
-          escribirDebug('testConexionSeguimiento ERROR:', err);
-          mostrarEstadoDebugError('Falló testConexionSeguimiento: ' + err.message);
-        })
-        .testConexionSeguimiento();
-    }
-
-    function exportarSeguimientoCSV() {
-      if (!ULTIMO_SEGUIMIENTO || ULTIMO_SEGUIMIENTO.length === 0) {
-        mostrarEstadoSeguimiento('No hay datos para exportar.');
-        return;
       }
 
-      const headers = [
-        'provincia',
-        'canton',
-        'tipo_gad',
-        'estado_revision',
-        'estado_categoria',
-        'entrega_plan',
-        'punto_focal',
-        'porcentaje',
-        'observaciones'
-      ];
+      function aplicarFiltros() {
+        const provincia = normalizar(valorDe('filtroProvincia'));
+        const canton = normalizar(valorDe('filtroCanton'));
+        const estado = normalizar(valorDe('filtroEstado'));
+        const tipoGad = normalizar(valorDe('filtroTipoGad'));
+        const busqueda = normalizar(valorDe('busquedaTexto'));
 
-      const filas = [headers.join(',')];
+        registrosFiltrados = registrosBase.filter(function(r) {
+          const textoFila = normalizar(Object.values(r).join(' '));
 
-      ULTIMO_SEGUIMIENTO.forEach(function(r) {
-        const row = headers.map(function(h) {
-          return '"' + String(r[h] || '').replace(/"/g, '""') + '"';
+          if (provincia && normalizar(r.provincia) !== provincia) return false;
+          if (canton && normalizar(r.canton) !== canton) return false;
+          if (estado && normalizar(r.estado_categoria) !== estado) return false;
+          if (tipoGad && normalizar(r.tipo_gad) !== tipoGad) return false;
+          if (busqueda && !textoFila.includes(busqueda)) return false;
+
+          return true;
         });
-        filas.push(row.join(','));
-      });
 
-      const blob = new Blob([filas.join('\n')], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'seguimiento_enos.csv';
-      a.click();
-
-      URL.revokeObjectURL(url);
-    }
-
-    function mostrarPanel(nombre) {
-      PANEL_ACTIVO = nombre;
-
-      document.getElementById('panelSeguimiento').classList.remove('activo');
-      document.getElementById('panelGeneral').classList.remove('activo');
-      document.getElementById('panelMemoria').classList.remove('activo');
-      document.getElementById('panelDebug').classList.remove('activo');
-
-      document.getElementById('btnTabSeguimiento').classList.remove('activo');
-      document.getElementById('btnTabGeneral').classList.remove('activo');
-      document.getElementById('btnTabMemoria').classList.remove('activo');
-      document.getElementById('btnTabDebug').classList.remove('activo');
-
-      if (nombre === 'seguimiento') {
-        document.getElementById('panelSeguimiento').classList.add('activo');
-        document.getElementById('btnTabSeguimiento').classList.add('activo');
+        pintarKPIs(registrosFiltrados);
+        pintarBarras('serieProvincia', agruparConteo(registrosFiltrados, 'provincia'));
+        pintarBarras('serieEstado', agruparConteo(registrosFiltrados, 'estado_categoria'));
+        pintarTabla(registrosFiltrados);
       }
 
-      if (nombre === 'general') {
-        document.getElementById('panelGeneral').classList.add('activo');
-        document.getElementById('btnTabGeneral').classList.add('activo');
+      function limpiarFiltros() {
+        ponerValor('filtroProvincia', '');
+        ponerValor('filtroCanton', '');
+        ponerValor('filtroEstado', '');
+        ponerValor('filtroTipoGad', '');
+        ponerValor('busquedaTexto', '');
+        aplicarFiltros();
       }
 
-      if (nombre === 'memoria') {
-        document.getElementById('panelMemoria').classList.add('activo');
-        document.getElementById('btnTabMemoria').classList.add('activo');
+      function cargarOpciones(datos) {
+        cargarSelect('filtroProvincia', unicos(datos.map(r => r.provincia)), 'Todas las provincias');
+        cargarSelect('filtroCanton', unicos(datos.map(r => r.canton)), 'Todos los cantones');
+        cargarSelect('filtroEstado', unicos(datos.map(r => r.estado_categoria)), 'Todos los estados');
+        cargarSelect('filtroTipoGad', unicos(datos.map(r => r.tipo_gad)), 'Todos los tipos de GAD');
       }
 
-      if (nombre === 'debug') {
-        document.getElementById('panelDebug').classList.add('activo');
-        document.getElementById('btnTabDebug').classList.add('activo');
+      function cargarSelect(id, valores, textoInicial) {
+        const sel = document.getElementById(id);
+        if (!sel) return;
+
+        sel.innerHTML = '';
+
+        const opt0 = document.createElement('option');
+        opt0.value = '';
+        opt0.textContent = textoInicial;
+        sel.appendChild(opt0);
+
+        valores.forEach(function(v) {
+          const opt = document.createElement('option');
+          opt.value = v;
+          opt.textContent = v;
+          sel.appendChild(opt);
+        });
       }
-    }
 
-    function actualizarPanelActivo() {
-      if (PANEL_ACTIVO === 'seguimiento') cargarSeguimientoENOS();
-      if (PANEL_ACTIVO === 'general') cargarDashboardGeneral();
-      if (PANEL_ACTIVO === 'memoria') cargarBaseMemoria();
-      if (PANEL_ACTIVO === 'debug') probarServidorCompleto();
-    }
+      function pintarKPIs(datos) {
+        ponerTexto('kpiTotal', formatoNumero(datos.length));
+        ponerTexto('kpiValidado', formatoNumero(datos.filter(r => r.estado_categoria === 'VALIDADO').length));
+        ponerTexto('kpiDevuelto', formatoNumero(datos.filter(r => r.estado_categoria === 'DEVUELTO').length));
+        ponerTexto('kpiRevision', formatoNumero(datos.filter(r => r.estado_categoria === 'EN REVISION').length));
+        ponerTexto('kpiFalta', formatoNumero(datos.filter(r => r.estado_categoria === 'FALTA').length));
+      }
 
-    function cargarSelectConservando(id, valores, textoInicial) {
-      const sel = document.getElementById(id);
-      if (!sel) return;
+      function pintarTabla(datos) {
+        const tbody = document.getElementById('tablaBody');
+        tbody.innerHTML = '';
 
-      const actual = sel.value;
-
-      sel.innerHTML = '';
-
-      const opt0 = document.createElement('option');
-      opt0.value = '';
-      opt0.textContent = textoInicial || 'Todos';
-      sel.appendChild(opt0);
-
-      (valores || []).forEach(function(v) {
-        const opt = document.createElement('option');
-        opt.value = v;
-        opt.textContent = v;
-        sel.appendChild(opt);
-      });
-
-      sel.value = actual;
-    }
-
-    function escribirDebug(titulo, obj) {
-      const salida = document.getElementById('salidaDebug');
-      if (!salida) return;
-
-      const fecha = new Date().toLocaleString('es-EC');
-
-      let texto = '\n\n[' + fecha + '] ' + titulo;
-
-      if (obj !== undefined) {
-        try {
-          texto += '\n' + JSON.stringify(obj, null, 2);
-        } catch (e) {
-          texto += '\n' + String(obj);
+        if (!datos || datos.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="9">No hay registros con los filtros aplicados o no se recibió información.</td></tr>';
+          return;
         }
+
+        datos.forEach(function(r) {
+          const tr = document.createElement('tr');
+
+          tr.innerHTML = `
+            <td>${limpiarHtml(r.provincia)}</td>
+            <td>${limpiarHtml(r.canton)}</td>
+            <td>${limpiarHtml(r.tipo_gad)}</td>
+            <td>${limpiarHtml(r.estado_revision)}</td>
+            <td>${badgeEstado(r.estado_categoria)}</td>
+            <td>${limpiarHtml(r.entrega_plan)}</td>
+            <td>${limpiarHtml(r.punto_focal)}</td>
+            <td>${limpiarHtml(r.porcentaje)}</td>
+            <td>${limpiarHtml(r.observaciones)}</td>
+          `;
+
+          tbody.appendChild(tr);
+        });
       }
 
-      if (salida.textContent === 'Sin datos.') {
-        salida.textContent = texto.trim();
-      } else {
-        salida.textContent += texto;
+      function pintarBarras(id, datos) {
+        const cont = document.getElementById(id);
+        cont.innerHTML = '';
+
+        if (!datos || datos.length === 0) {
+          cont.innerHTML = '<p class="nota">Sin datos disponibles.</p>';
+          return;
+        }
+
+        const max = Math.max.apply(null, datos.map(x => Number(x.valor || 0)));
+
+        datos.forEach(function(item) {
+          const valor = Number(item.valor || 0);
+          const pct = max > 0 ? Math.round((valor / max) * 100) : 0;
+
+          const div = document.createElement('div');
+          div.className = 'barra-item';
+
+          div.innerHTML = `
+            <div class="barra-label">
+              <span>${limpiarHtml(item.nombre)}</span>
+              <strong>${formatoNumero(valor)}</strong>
+            </div>
+            <div class="barra-fondo">
+              <div class="barra" style="width:${pct}%"></div>
+            </div>
+          `;
+
+          cont.appendChild(div);
+        });
       }
-    }
 
-    function limpiarDiagnostico() {
-      ponerTexto('salidaDebug', 'Sin datos.');
-      mostrarEstadoDebug('Sin diagnóstico ejecutado.');
-    }
+      function exportarCSV() {
+        if (!registrosFiltrados || registrosFiltrados.length === 0) {
+          setEstado('No hay datos para exportar.', 'error');
+          return;
+        }
 
-    function setEstado(id, msg, tipo) {
-      const el = document.getElementById(id);
-      if (!el) return;
+        const headers = [
+          'provincia',
+          'canton',
+          'tipo_gad',
+          'estado_revision',
+          'estado_categoria',
+          'entrega_plan',
+          'punto_focal',
+          'porcentaje',
+          'observaciones'
+        ];
 
-      el.textContent = msg;
-      el.classList.remove('ok');
-      el.classList.remove('error');
+        const filas = [headers.join(',')];
 
-      if (tipo === 'ok') el.classList.add('ok');
-      if (tipo === 'error') el.classList.add('error');
-    }
+        registrosFiltrados.forEach(function(r) {
+          const row = headers.map(function(h) {
+            return '"' + String(r[h] || '').replace(/"/g, '""') + '"';
+          });
+          filas.push(row.join(','));
+        });
 
-    function mostrarEstadoSistema(msg) {
-      setEstado('estadoSistema', msg, '');
-    }
+        const blob = new Blob([filas.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
 
-    function mostrarEstadoSistemaOk(msg) {
-      setEstado('estadoSistema', msg, 'ok');
-    }
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'seguimiento_enos.csv';
+        a.click();
 
-    function mostrarEstadoSistemaError(msg) {
-      setEstado('estadoSistema', msg, 'error');
-    }
+        URL.revokeObjectURL(url);
 
-    function mostrarEstadoSeguimiento(msg) {
-      setEstado('estadoSeguimiento', msg, '');
-    }
+        setEstado('CSV exportado con ' + formatoNumero(registrosFiltrados.length) + ' registros.', 'ok');
+      }
 
-    function mostrarEstadoSeguimientoOk(msg) {
-      setEstado('estadoSeguimiento', msg, 'ok');
-    }
+      function jsonp(url, params, onSuccess, onError) {
+        const cbName = 'enos_jsonp_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
 
-    function mostrarEstadoSeguimientoError(msg) {
-      setEstado('estadoSeguimiento', msg, 'error');
-    }
+        params = params || {};
+        params.cb = cbName;
 
-    function mostrarEstadoGeneral(msg) {
-      setEstado('estadoGeneral', msg, '');
-    }
+        const query = Object.keys(params)
+          .map(function(k) {
+            return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+          })
+          .join('&');
 
-    function mostrarEstadoGeneralOk(msg) {
-      setEstado('estadoGeneral', msg, 'ok');
-    }
+        const script = document.createElement('script');
+        script.src = url + (url.includes('?') ? '&' : '?') + query;
 
-    function mostrarEstadoGeneralError(msg) {
-      setEstado('estadoGeneral', msg, 'error');
-    }
+        let done = false;
 
-    function mostrarEstadoMemoria(msg) {
-      setEstado('estadoMemoria', msg, '');
-    }
+        const timer = setTimeout(function() {
+          if (done) return;
+          done = true;
+          cleanup();
+          onError('Tiempo de espera agotado al consultar la API.');
+        }, 25000);
 
-    function mostrarEstadoMemoriaOk(msg) {
-      setEstado('estadoMemoria', msg, 'ok');
-    }
+        window[cbName] = function(data) {
+          if (done) return;
+          done = true;
+          clearTimeout(timer);
+          cleanup();
+          onSuccess(data);
+        };
 
-    function mostrarEstadoMemoriaError(msg) {
-      setEstado('estadoMemoria', msg, 'error');
-    }
+        script.onerror = function() {
+          if (done) return;
+          done = true;
+          clearTimeout(timer);
+          cleanup();
+          onError('Error cargando script JSONP.');
+        };
 
-    function mostrarEstadoDebug(msg) {
-      setEstado('estadoDebug', msg, '');
-    }
+        function cleanup() {
+          try {
+            delete window[cbName];
+          } catch (e) {
+            window[cbName] = undefined;
+          }
 
-    function mostrarEstadoDebugOk(msg) {
-      setEstado('estadoDebug', msg, 'ok');
-    }
+          if (script && script.parentNode) {
+            script.parentNode.removeChild(script);
+          }
+        }
 
-    function mostrarEstadoDebugError(msg) {
-      setEstado('estadoDebug', msg, 'error');
-    }
+        document.body.appendChild(script);
+      }
 
-    function ponerTexto(id, valor) {
-      const el = document.getElementById(id);
-      if (el) el.textContent = valor ?? '';
-    }
+      function badgeEstado(estado) {
+        const e = String(estado || 'SIN DATO').toUpperCase();
 
-    function ponerValor(id, valor) {
-      const el = document.getElementById(id);
-      if (el) el.value = valor ?? '';
-    }
+        let clase = 'sindato';
+        if (e.includes('VALIDADO')) clase = 'validado';
+        if (e.includes('DEVUELTO')) clase = 'devuelto';
+        if (e.includes('REVISION')) clase = 'revision';
+        if (e.includes('FALTA')) clase = 'falta';
 
-    function valorDe(id) {
-      const el = document.getElementById(id);
-      return el ? el.value : '';
-    }
+        return `<span class="badge ${clase}">${limpiarHtml(e)}</span>`;
+      }
 
-    function formatoNumero(n) {
-      return Number(n || 0).toLocaleString('es-EC');
-    }
+      function agruparConteo(datos, campo) {
+        const mapa = {};
 
-    function limpiarHtml(v) {
-      return String(v || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
+        datos.forEach(function(r) {
+          const clave = String(r[campo] || 'Sin dato').trim() || 'Sin dato';
+          mapa[clave] = (mapa[clave] || 0) + 1;
+        });
+
+        return Object.keys(mapa)
+          .map(k => ({ nombre: k, valor: mapa[k] }))
+          .sort((a, b) => b.valor - a.valor);
+      }
+
+      function unicos(arr) {
+        return [...new Set(
+          arr.map(v => String(v || '').trim()).filter(v => v !== '')
+        )].sort();
+      }
+
+      function setEstado(msg, tipo) {
+        const el = document.getElementById('estadoSistema');
+        if (!el) return;
+
+        el.textContent = msg;
+        el.classList.remove('ok');
+        el.classList.remove('error');
+
+        if (tipo === 'ok') el.classList.add('ok');
+        if (tipo === 'error') el.classList.add('error');
+      }
+
+      function ponerTexto(id, valor) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = valor ?? '';
+      }
+
+      function ponerValor(id, valor) {
+        const el = document.getElementById(id);
+        if (el) el.value = valor ?? '';
+      }
+
+      function valorDe(id) {
+        const el = document.getElementById(id);
+        return el ? el.value : '';
+      }
+
+      function formatoNumero(n) {
+        return Number(n || 0).toLocaleString('es-EC');
+      }
+
+      function normalizar(txt) {
+        return String(txt || '')
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9]+/g, '_')
+          .replace(/^_+|_+$/g, '');
+      }
+
+      function limpiarHtml(v) {
+        return String(v || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      return {
+        cargar: cargar,
+        aplicarFiltros: aplicarFiltros,
+        limpiarFiltros: limpiarFiltros,
+        exportarCSV: exportarCSV
+      };
+    })();
+
+    document.addEventListener('DOMContentLoaded', function() {
+      ENOS.cargar();
+    });
   </script>
 
 </body>
