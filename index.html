@@ -18,6 +18,7 @@
       --amarillo: #b7791f;
       --rojo: #c53030;
       --naranja: #dd6b20;
+      --morado: #5b21b6;
       --blanco: #ffffff;
       --sombra: 0 8px 20px rgba(15, 59, 99, 0.10);
     }
@@ -36,7 +37,7 @@
     header {
       background: linear-gradient(135deg, var(--azul), var(--azul2));
       color: white;
-      padding: 20px 28px;
+      padding: 22px 28px;
     }
 
     header h1 {
@@ -46,15 +47,46 @@
     }
 
     header p {
-      margin: 6px 0 0;
+      margin: 7px 0 0;
       font-size: 14px;
       opacity: 0.92;
     }
 
     main {
-      max-width: 1400px;
+      max-width: 1450px;
       margin: 0 auto;
       padding: 24px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .tab-btn {
+      width: auto;
+      border: none;
+      border-radius: 999px;
+      padding: 11px 16px;
+      background: #e2e8f0;
+      color: #1e293b;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .tab-btn.activo {
+      background: var(--azul);
+      color: white;
+    }
+
+    .panel {
+      display: none;
+    }
+
+    .panel.activo {
+      display: block;
     }
 
     .card {
@@ -75,7 +107,7 @@
     .nota {
       color: #52606d;
       font-size: 13px;
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
     .estado {
@@ -180,6 +212,10 @@
       border-top-color: var(--naranja);
     }
 
+    .kpi.riesgo {
+      border-top-color: var(--morado);
+    }
+
     .kpi .label {
       color: #52606d;
       font-size: 13px;
@@ -195,6 +231,12 @@
     .dos-columnas {
       display: grid;
       grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .tres-columnas {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 18px;
     }
 
@@ -236,7 +278,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 960px;
+      min-width: 980px;
       background: white;
     }
 
@@ -289,9 +331,78 @@
       color: #9a3412;
     }
 
+    .badge.alta {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .badge.media {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge.baja {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
     .badge.sindato {
       background: #e5e7eb;
       color: #374151;
+    }
+
+    .cabina-header {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .ficha-titulo {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--azul);
+      margin-bottom: 6px;
+    }
+
+    .ficha-sub {
+      color: #52606d;
+      font-size: 14px;
+    }
+
+    .mini-lista {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .criterio {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .indice-box {
+      text-align: center;
+      padding: 18px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+
+    .indice-num {
+      font-size: 46px;
+      font-weight: 900;
+      color: var(--azul);
+    }
+
+    .indice-label {
+      font-size: 13px;
+      color: #52606d;
     }
 
     footer {
@@ -301,6 +412,14 @@
       padding: 18px 0 26px;
     }
 
+    @media (max-width: 1100px) {
+      .cabina-header,
+      .dos-columnas,
+      .tres-columnas {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (max-width: 980px) {
       .grid-kpi,
       .filtros {
@@ -308,10 +427,6 @@
       }
 
       .acciones {
-        grid-template-columns: 1fr;
-      }
-
-      .dos-columnas {
         grid-template-columns: 1fr;
       }
     }
@@ -337,119 +452,268 @@
 
   <header>
     <h1>ENOS 2026 · Plataforma CZ5</h1>
-    <p>Seguimiento de planes cantonales y provinciales · Datos conectados desde Google Sheets vía Apps Script</p>
+    <p>Seguimiento documental y cabina preliminar de análisis territorial del riesgo para decisión zonal/provincial</p>
   </header>
 
   <main>
 
-    <section class="card">
-      <h2>Seguimiento de planes ENOS</h2>
-      <p class="nota">
-        Fuente: <strong>MATRIZSEGUIM-EL NIÑO (2)</strong>, hoja <strong>Consolidado</strong>.
-        Este tablero consume la API publicada en Apps Script y se visualiza desde GitHub Pages.
-      </p>
+    <div class="tabs">
+      <button id="btnDoc" class="tab-btn activo" onclick="ENOS.mostrarPanel('doc')">
+        Análisis documental
+      </button>
+      <button id="btnRiesgo" class="tab-btn" onclick="ENOS.mostrarPanel('riesgo')">
+        Cabina territorial de riesgos
+      </button>
+    </div>
 
-      <div id="estadoSistema" class="estado">
-        Conectando con Apps Script...
-      </div>
+    <section id="panelDoc" class="panel activo">
 
-      <div class="filtros">
-        <select id="filtroProvincia" onchange="ENOS.aplicarFiltros()">
-          <option value="">Todas las provincias</option>
-        </select>
+      <section class="card">
+        <h2>Estado documental de planes de acción cantonales</h2>
+        <p class="nota">
+          Este módulo permite analizar el estado de cada plan: validado, devuelto, en revisión o faltante. Sirve para seguimiento técnico, gestión con GAD y reporte ejecutivo zonal.
+        </p>
 
-        <select id="filtroCanton" onchange="ENOS.aplicarFiltros()">
-          <option value="">Todos los cantones</option>
-        </select>
+        <div id="estadoSistema" class="estado">
+          Conectando con Apps Script...
+        </div>
 
-        <select id="filtroEstado" onchange="ENOS.aplicarFiltros()">
-          <option value="">Todos los estados</option>
-        </select>
+        <div class="filtros">
+          <select id="filtroProvincia" onchange="ENOS.aplicarFiltrosDocumentales()">
+            <option value="">Todas las provincias</option>
+          </select>
 
-        <select id="filtroTipoGad" onchange="ENOS.aplicarFiltros()">
-          <option value="">Todos los tipos de GAD</option>
-        </select>
+          <select id="filtroCanton" onchange="ENOS.aplicarFiltrosDocumentales()">
+            <option value="">Todos los cantones</option>
+          </select>
 
-        <input id="busquedaTexto" type="text" placeholder="Buscar..." oninput="ENOS.aplicarFiltros()">
-      </div>
+          <select id="filtroEstado" onchange="ENOS.aplicarFiltrosDocumentales()">
+            <option value="">Todos los estados</option>
+          </select>
 
-      <div class="acciones">
-        <button onclick="ENOS.cargar()">Actualizar datos</button>
-        <button class="secundario" onclick="ENOS.limpiarFiltros()">Limpiar filtros</button>
-        <button class="secundario" onclick="ENOS.exportarCSV()">Exportar CSV</button>
-      </div>
+          <select id="filtroTipoGad" onchange="ENOS.aplicarFiltrosDocumentales()">
+            <option value="">Todos los tipos de GAD</option>
+          </select>
+
+          <input id="busquedaTexto" type="text" placeholder="Buscar..." oninput="ENOS.aplicarFiltrosDocumentales()">
+        </div>
+
+        <div class="acciones">
+          <button onclick="ENOS.cargar()">Actualizar datos</button>
+          <button class="secundario" onclick="ENOS.limpiarFiltrosDocumentales()">Limpiar filtros</button>
+          <button class="secundario" onclick="ENOS.exportarCSV()">Exportar CSV</button>
+        </div>
+      </section>
+
+      <section class="grid-kpi">
+        <div class="kpi">
+          <div class="label">Total registros</div>
+          <div id="kpiTotal" class="valor">0</div>
+        </div>
+
+        <div class="kpi validado">
+          <div class="label">Validado</div>
+          <div id="kpiValidado" class="valor">0</div>
+        </div>
+
+        <div class="kpi devuelto">
+          <div class="label">Devuelto</div>
+          <div id="kpiDevuelto" class="valor">0</div>
+        </div>
+
+        <div class="kpi revision">
+          <div class="label">En revisión</div>
+          <div id="kpiRevision" class="valor">0</div>
+        </div>
+
+        <div class="kpi falta">
+          <div class="label">Falta</div>
+          <div id="kpiFalta" class="valor">0</div>
+        </div>
+      </section>
+
+      <section class="dos-columnas">
+        <div class="card">
+          <h3>Planes por provincia</h3>
+          <div id="serieProvincia"></div>
+        </div>
+
+        <div class="card">
+          <h3>Estado de revisión</h3>
+          <div id="serieEstado"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Tabla documental de seguimiento</h3>
+
+        <div class="tabla-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Provincia</th>
+                <th>Cantón</th>
+                <th>Tipo GAD</th>
+                <th>Estado revisión</th>
+                <th>Categoría</th>
+                <th>Entrega plan</th>
+                <th>Punto focal</th>
+                <th>Porcentaje</th>
+                <th>Observaciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaBody">
+              <tr>
+                <td colspan="9">Cargando datos...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
     </section>
 
-    <section class="grid-kpi">
-      <div class="kpi">
-        <div class="label">Total registros</div>
-        <div id="kpiTotal" class="valor">0</div>
-      </div>
+    <section id="panelRiesgo" class="panel">
 
-      <div class="kpi validado">
-        <div class="label">Validado</div>
-        <div id="kpiValidado" class="valor">0</div>
-      </div>
+      <section class="card">
+        <h2>Cabina territorial preliminar de gestión del riesgo</h2>
+        <p class="nota">
+          Esta cabina transforma el seguimiento documental actual en criterios de decisión territorial. El índice mostrado es preliminar: mide prioridad de atención técnica según estado del plan, valoración, observaciones y brechas documentales. Al conectar F01/F02 se incorporarán sitios críticos, infraestructura expuesta, alojamientos y capacidades reales.
+        </p>
 
-      <div class="kpi devuelto">
-        <div class="label">Devuelto</div>
-        <div id="kpiDevuelto" class="valor">0</div>
-      </div>
+        <div class="filtros">
+          <select id="riesgoProvincia" onchange="ENOS.actualizarSelectCantonesRiesgo(); ENOS.aplicarCabinaRiesgo();">
+            <option value="">Todas las provincias</option>
+          </select>
 
-      <div class="kpi revision">
-        <div class="label">En revisión</div>
-        <div id="kpiRevision" class="valor">0</div>
-      </div>
+          <select id="riesgoCanton" onchange="ENOS.aplicarCabinaRiesgo()">
+            <option value="">Seleccione cantón</option>
+          </select>
 
-      <div class="kpi falta">
-        <div class="label">Falta</div>
-        <div id="kpiFalta" class="valor">0</div>
-      </div>
-    </section>
+          <select id="riesgoPrioridad" onchange="ENOS.aplicarCabinaRiesgo()">
+            <option value="">Todas las prioridades</option>
+            <option value="ALTA">Prioridad alta</option>
+            <option value="MEDIA">Prioridad media</option>
+            <option value="BAJA">Prioridad baja</option>
+          </select>
 
-    <section class="dos-columnas">
-      <div class="card">
-        <h3>Registros por provincia</h3>
-        <div id="serieProvincia"></div>
-      </div>
+          <input id="riesgoBusqueda" type="text" placeholder="Buscar cantón o brecha..." oninput="ENOS.aplicarCabinaRiesgo()">
 
-      <div class="card">
-        <h3>Registros por estado</h3>
-        <div id="serieEstado"></div>
-      </div>
-    </section>
+          <button onclick="ENOS.limpiarCabinaRiesgo()">Limpiar cabina</button>
+        </div>
+      </section>
 
-    <section class="card">
-      <h3>Tabla de seguimiento</h3>
+      <section class="grid-kpi">
+        <div class="kpi riesgo">
+          <div class="label">Cantones analizados</div>
+          <div id="rkCantones" class="valor">0</div>
+        </div>
 
-      <div class="tabla-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Provincia</th>
-              <th>Cantón</th>
-              <th>Tipo GAD</th>
-              <th>Estado revisión</th>
-              <th>Categoría</th>
-              <th>Entrega plan</th>
-              <th>Punto focal</th>
-              <th>Porcentaje</th>
-              <th>Observaciones</th>
-            </tr>
-          </thead>
-          <tbody id="tablaBody">
-            <tr>
-              <td colspan="9">Cargando datos...</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <div class="kpi falta">
+          <div class="label">Prioridad alta</div>
+          <div id="rkAlta" class="valor">0</div>
+        </div>
+
+        <div class="kpi revision">
+          <div class="label">Prioridad media</div>
+          <div id="rkMedia" class="valor">0</div>
+        </div>
+
+        <div class="kpi validado">
+          <div class="label">Prioridad baja</div>
+          <div id="rkBaja" class="valor">0</div>
+        </div>
+
+        <div class="kpi devuelto">
+          <div class="label">Brecha crítica</div>
+          <div id="rkCritica" class="valor">0</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="cabina-header">
+          <div>
+            <div class="ficha-titulo" id="fichaTitulo">Seleccione un cantón</div>
+            <div class="ficha-sub" id="fichaSubtitulo">
+              La ficha cantonal se construirá con los datos disponibles del seguimiento documental.
+            </div>
+          </div>
+
+          <div class="indice-box">
+            <div class="indice-num" id="fichaIndice">--</div>
+            <div class="indice-label">Índice preliminar de atención</div>
+            <div id="fichaPrioridad" style="margin-top:10px;"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tres-columnas">
+        <div class="card">
+          <h3>Brechas detectadas</h3>
+          <ul id="fichaBrechas" class="mini-lista">
+            <li>Seleccione un cantón para analizar brechas.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Criterio para autoridad</h3>
+          <div id="fichaCriterio" class="criterio">
+            Seleccione un cantón para obtener una lectura técnica orientada a decisión provincial o zonal.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Acción recomendada</h3>
+          <ul id="fichaAcciones" class="mini-lista">
+            <li>Seleccione un cantón para ver acciones sugeridas.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="dos-columnas">
+        <div class="card">
+          <h3>Prioridad por provincia</h3>
+          <div id="serieRiesgoProvincia"></div>
+        </div>
+
+        <div class="card">
+          <h3>Distribución de prioridad</h3>
+          <div id="serieRiesgoPrioridad"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Ranking cantonal de atención técnica</h3>
+
+        <div class="tabla-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Provincia</th>
+                <th>Cantón</th>
+                <th>Estado plan</th>
+                <th>Valoración</th>
+                <th>Índice</th>
+                <th>Prioridad</th>
+                <th>Brecha principal</th>
+                <th>Acción inmediata</th>
+              </tr>
+            </thead>
+            <tbody id="tablaRiesgoBody">
+              <tr>
+                <td colspan="8">Cargando análisis territorial preliminar...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
     </section>
 
   </main>
 
   <footer>
-    Plataforma ENOS CZ5 · GitHub Pages + Apps Script API
+    Plataforma ENOS CZ5 · GitHub Pages + Apps Script API · Análisis documental y cabina territorial preliminar
   </footer>
 
   <script>
@@ -458,6 +722,8 @@
 
       let registrosBase = [];
       let registrosFiltrados = [];
+      let analisisRiesgo = [];
+      let analisisRiesgoFiltrado = [];
 
       function cargar() {
         setEstado('Conectando con Apps Script...', '');
@@ -469,6 +735,7 @@
           if (!res) {
             setEstado('Apps Script respondió vacío.', 'error');
             pintarTabla([]);
+            pintarRankingRiesgo([]);
             return;
           }
 
@@ -476,14 +743,20 @@
             setEstado(res.mensaje || 'Apps Script respondió con error.', 'error');
             console.error('Respuesta API ENOS:', res);
             pintarTabla([]);
+            pintarRankingRiesgo([]);
             return;
           }
 
           registrosBase = res.registros || [];
           registrosFiltrados = registrosBase.slice();
+          analisisRiesgo = construirAnalisisRiesgo(registrosBase);
+          analisisRiesgoFiltrado = analisisRiesgo.slice();
 
-          cargarOpciones(registrosBase);
-          aplicarFiltros();
+          cargarOpcionesDocumentales(registrosBase);
+          cargarOpcionesRiesgo(analisisRiesgo);
+
+          aplicarFiltrosDocumentales();
+          aplicarCabinaRiesgo();
 
           const fuente = res.fuente && res.fuente.archivo ? res.fuente.archivo : 'MATRIZSEGUIM';
           setEstado(
@@ -496,10 +769,27 @@
           setEstado('No se pudo conectar con Apps Script: ' + err, 'error');
           console.error(err);
           pintarTabla([]);
+          pintarRankingRiesgo([]);
         });
       }
 
-      function aplicarFiltros() {
+      function mostrarPanel(panel) {
+        document.getElementById('panelDoc').classList.remove('activo');
+        document.getElementById('panelRiesgo').classList.remove('activo');
+        document.getElementById('btnDoc').classList.remove('activo');
+        document.getElementById('btnRiesgo').classList.remove('activo');
+
+        if (panel === 'doc') {
+          document.getElementById('panelDoc').classList.add('activo');
+          document.getElementById('btnDoc').classList.add('activo');
+        } else {
+          document.getElementById('panelRiesgo').classList.add('activo');
+          document.getElementById('btnRiesgo').classList.add('activo');
+          aplicarCabinaRiesgo();
+        }
+      }
+
+      function aplicarFiltrosDocumentales() {
         const provincia = normalizar(valorDe('filtroProvincia'));
         const canton = normalizar(valorDe('filtroCanton'));
         const estado = normalizar(valorDe('filtroEstado'));
@@ -518,48 +808,29 @@
           return true;
         });
 
-        pintarKPIs(registrosFiltrados);
+        pintarKPIsDocumentales(registrosFiltrados);
         pintarBarras('serieProvincia', agruparConteo(registrosFiltrados, 'provincia'));
         pintarBarras('serieEstado', agruparConteo(registrosFiltrados, 'estado_categoria'));
         pintarTabla(registrosFiltrados);
       }
 
-      function limpiarFiltros() {
+      function limpiarFiltrosDocumentales() {
         ponerValor('filtroProvincia', '');
         ponerValor('filtroCanton', '');
         ponerValor('filtroEstado', '');
         ponerValor('filtroTipoGad', '');
         ponerValor('busquedaTexto', '');
-        aplicarFiltros();
+        aplicarFiltrosDocumentales();
       }
 
-      function cargarOpciones(datos) {
+      function cargarOpcionesDocumentales(datos) {
         cargarSelect('filtroProvincia', unicos(datos.map(r => r.provincia)), 'Todas las provincias');
         cargarSelect('filtroCanton', unicos(datos.map(r => r.canton)), 'Todos los cantones');
         cargarSelect('filtroEstado', unicos(datos.map(r => r.estado_categoria)), 'Todos los estados');
         cargarSelect('filtroTipoGad', unicos(datos.map(r => r.tipo_gad)), 'Todos los tipos de GAD');
       }
 
-      function cargarSelect(id, valores, textoInicial) {
-        const sel = document.getElementById(id);
-        if (!sel) return;
-
-        sel.innerHTML = '';
-
-        const opt0 = document.createElement('option');
-        opt0.value = '';
-        opt0.textContent = textoInicial;
-        sel.appendChild(opt0);
-
-        valores.forEach(function(v) {
-          const opt = document.createElement('option');
-          opt.value = v;
-          opt.textContent = v;
-          sel.appendChild(opt);
-        });
-      }
-
-      function pintarKPIs(datos) {
+      function pintarKPIsDocumentales(datos) {
         ponerTexto('kpiTotal', formatoNumero(datos.length));
         ponerTexto('kpiValidado', formatoNumero(datos.filter(r => r.estado_categoria === 'VALIDADO').length));
         ponerTexto('kpiDevuelto', formatoNumero(datos.filter(r => r.estado_categoria === 'DEVUELTO').length));
@@ -593,6 +864,354 @@
 
           tbody.appendChild(tr);
         });
+      }
+
+      function construirAnalisisRiesgo(registros) {
+        const mapa = {};
+
+        registros.forEach(function(r) {
+          const key = normalizar((r.provincia || '') + '|' + (r.canton || ''));
+
+          if (!mapa[key]) {
+            mapa[key] = {
+              provincia: r.provincia || 'Sin dato',
+              canton: r.canton || 'Sin dato',
+              registros: [],
+              estados: [],
+              observaciones: [],
+              porcentajes: []
+            };
+          }
+
+          mapa[key].registros.push(r);
+          mapa[key].estados.push(r.estado_categoria || 'SIN DATO');
+
+          if (r.observaciones) mapa[key].observaciones.push(r.observaciones);
+
+          const p = extraerPorcentaje(r.porcentaje);
+          if (p !== null) mapa[key].porcentajes.push(p);
+        });
+
+        return Object.keys(mapa).map(function(key) {
+          const item = mapa[key];
+          const estadoDominante = seleccionarEstadoCritico(item.estados);
+          const porcentajePromedio = promedio(item.porcentajes);
+          const textoObs = item.observaciones.join(' | ');
+
+          const indice = calcularIndiceAtencion(estadoDominante, porcentajePromedio, textoObs);
+          const prioridad = clasificarPrioridad(indice);
+          const brechas = generarBrechas(estadoDominante, porcentajePromedio, textoObs);
+          const acciones = generarAcciones(estadoDominante, porcentajePromedio, textoObs);
+          const criterio = generarCriterioAutoridad(item.provincia, item.canton, estadoDominante, porcentajePromedio, indice, prioridad, textoObs);
+
+          return {
+            provincia: item.provincia,
+            canton: item.canton,
+            estado: estadoDominante,
+            porcentaje: porcentajePromedio,
+            indice: indice,
+            prioridad: prioridad,
+            brechas: brechas,
+            acciones: acciones,
+            criterio: criterio,
+            observaciones: textoObs,
+            registros: item.registros
+          };
+        }).sort(function(a, b) {
+          return b.indice - a.indice;
+        });
+      }
+
+      function calcularIndiceAtencion(estado, porcentaje, observaciones) {
+        let estadoScore = 40;
+
+        if (estado === 'VALIDADO') estadoScore = 10;
+        if (estado === 'EN REVISION') estadoScore = 45;
+        if (estado === 'DEVUELTO') estadoScore = 70;
+        if (estado === 'FALTA') estadoScore = 90;
+        if (estado === 'SIN DATO') estadoScore = 75;
+
+        let porcentajeScore = 25;
+
+        if (porcentaje !== null) {
+          if (porcentaje >= 90) porcentajeScore = 0;
+          else if (porcentaje >= 80) porcentajeScore = 10;
+          else if (porcentaje >= 65) porcentajeScore = 25;
+          else if (porcentaje >= 50) porcentajeScore = 40;
+          else porcentajeScore = 60;
+        }
+
+        const obs = normalizar(observaciones);
+        let obsScore = 0;
+
+        const palabrasCriticas = [
+          'falta',
+          'pendiente',
+          'devuelto',
+          'observacion',
+          'no_cumple',
+          'incompleto',
+          'sin',
+          'riesgo',
+          'inundacion',
+          'alojamiento',
+          'evacuacion',
+          'vulnerable',
+          'critico',
+          'emergencia'
+        ];
+
+        palabrasCriticas.forEach(function(p) {
+          if (obs.includes(p)) obsScore += 4;
+        });
+
+        obsScore = Math.min(obsScore, 25);
+
+        const indice = Math.round((estadoScore * 0.60) + (porcentajeScore * 0.25) + (obsScore * 0.15));
+        return Math.max(0, Math.min(100, indice));
+      }
+
+      function clasificarPrioridad(indice) {
+        if (indice >= 70) return 'ALTA';
+        if (indice >= 40) return 'MEDIA';
+        return 'BAJA';
+      }
+
+      function generarBrechas(estado, porcentaje, observaciones) {
+        const brechas = [];
+
+        if (estado === 'FALTA') {
+          brechas.push('No existe plan entregado o el registro está incompleto.');
+          brechas.push('No se puede verificar preparación cantonal con la información actual.');
+        }
+
+        if (estado === 'DEVUELTO') {
+          brechas.push('El plan requiere correcciones técnicas antes de validación.');
+          brechas.push('Persisten observaciones que pueden afectar la capacidad de respuesta documentada.');
+        }
+
+        if (estado === 'EN REVISION') {
+          brechas.push('Plan pendiente de validación técnica final.');
+        }
+
+        if (estado === 'VALIDADO') {
+          brechas.push('Plan validado; mantener seguimiento y actualización de acciones.');
+        }
+
+        if (porcentaje !== null && porcentaje < 80) {
+          brechas.push('Valoración inferior al umbral recomendado para cierre técnico robusto.');
+        }
+
+        const obs = normalizar(observaciones);
+
+        if (obs.includes('alojamiento') || obs.includes('albergue')) {
+          brechas.push('Revisar suficiencia y validación de alojamientos temporales o puntos seguros.');
+        }
+
+        if (obs.includes('evacuacion') || obs.includes('ruta')) {
+          brechas.push('Revisar rutas de evacuación, accesibilidad y logística territorial.');
+        }
+
+        if (obs.includes('inundacion') || obs.includes('riesgo') || obs.includes('critico')) {
+          brechas.push('Profundizar análisis territorial con sitios críticos e infraestructura expuesta.');
+        }
+
+        if (brechas.length === 0) {
+          brechas.push('No se identifican brechas críticas con los datos documentales actuales.');
+        }
+
+        return brechas;
+      }
+
+      function generarAcciones(estado, porcentaje, observaciones) {
+        const acciones = [];
+
+        if (estado === 'FALTA') {
+          acciones.push('Solicitar entrega formal del plan y activar asistencia técnica prioritaria.');
+          acciones.push('Levantar ficha mínima de preparación cantonal para ENOS.');
+        } else if (estado === 'DEVUELTO') {
+          acciones.push('Convocar mesa técnica de ajuste con el GAD y cerrar observaciones.');
+          acciones.push('Definir plazo de reentrega y responsable de seguimiento.');
+        } else if (estado === 'EN REVISION') {
+          acciones.push('Concluir revisión técnica y emitir validación o devolución justificada.');
+        } else if (estado === 'VALIDADO') {
+          acciones.push('Pasar de revisión documental a seguimiento de acciones y capacidades.');
+        }
+
+        if (porcentaje !== null && porcentaje < 80) {
+          acciones.push('Priorizar mejora de los componentes con menor valoración.');
+        }
+
+        const obs = normalizar(observaciones);
+
+        if (obs.includes('alojamiento') || obs.includes('albergue')) {
+          acciones.push('Validar alojamientos temporales, capacidad, accesibilidad y servicios básicos.');
+        }
+
+        if (obs.includes('inundacion') || obs.includes('critico')) {
+          acciones.push('Cruzar el plan con F01 sitios críticos e infraestructura expuesta.');
+        }
+
+        return acciones;
+      }
+
+      function generarCriterioAutoridad(provincia, canton, estado, porcentaje, indice, prioridad, observaciones) {
+        let texto = 'Para ' + canton + ', provincia de ' + provincia + ', la prioridad preliminar de atención es ' + prioridad + ' con índice ' + indice + '/100. ';
+
+        if (estado === 'FALTA') {
+          texto += 'El principal problema no es solo documental: la ausencia o insuficiencia del plan limita la lectura de preparación territorial y dificulta decisiones de respuesta ante ENOS. ';
+        } else if (estado === 'DEVUELTO') {
+          texto += 'El plan existe, pero las observaciones técnicas indican brechas que deben corregirse antes de considerarlo una herramienta confiable de gestión. ';
+        } else if (estado === 'EN REVISION') {
+          texto += 'El plan está en proceso de revisión; se recomienda acelerar la validación para convertirlo en insumo operativo. ';
+        } else if (estado === 'VALIDADO') {
+          texto += 'El plan cuenta con validación documental; la gestión debe pasar a seguimiento de acciones, capacidades y verificación territorial. ';
+        }
+
+        if (porcentaje !== null) {
+          texto += 'La valoración registrada es de aproximadamente ' + porcentaje + '%. ';
+        } else {
+          texto += 'No se identificó una valoración numérica clara en la fuente actual. ';
+        }
+
+        texto += 'Para análisis territorial completo se debe integrar F01 sitios críticos, F02 infraestructura expuesta, alojamientos temporales, capacidades locales y acciones ENOS.';
+
+        return texto;
+      }
+
+      function aplicarCabinaRiesgo() {
+        const provincia = normalizar(valorDe('riesgoProvincia'));
+        const canton = normalizar(valorDe('riesgoCanton'));
+        const prioridad = normalizar(valorDe('riesgoPrioridad'));
+        const busqueda = normalizar(valorDe('riesgoBusqueda'));
+
+        analisisRiesgoFiltrado = analisisRiesgo.filter(function(r) {
+          const texto = normalizar([
+            r.provincia,
+            r.canton,
+            r.estado,
+            r.prioridad,
+            r.brechas.join(' '),
+            r.acciones.join(' '),
+            r.criterio
+          ].join(' '));
+
+          if (provincia && normalizar(r.provincia) !== provincia) return false;
+          if (canton && normalizar(r.canton) !== canton) return false;
+          if (prioridad && normalizar(r.prioridad) !== prioridad) return false;
+          if (busqueda && !texto.includes(busqueda)) return false;
+
+          return true;
+        });
+
+        pintarKPIsRiesgo(analisisRiesgoFiltrado);
+        pintarBarras('serieRiesgoProvincia', agruparPromedioIndice(analisisRiesgoFiltrado, 'provincia'));
+        pintarBarras('serieRiesgoPrioridad', agruparConteo(analisisRiesgoFiltrado, 'prioridad'));
+        pintarRankingRiesgo(analisisRiesgoFiltrado);
+
+        const seleccionado = analisisRiesgoFiltrado.find(function(r) {
+          return canton && normalizar(r.canton) === canton;
+        });
+
+        if (seleccionado) {
+          pintarFichaCantonal(seleccionado);
+        } else if (analisisRiesgoFiltrado.length > 0) {
+          pintarFichaCantonal(analisisRiesgoFiltrado[0]);
+        } else {
+          limpiarFichaCantonal();
+        }
+      }
+
+      function pintarKPIsRiesgo(datos) {
+        ponerTexto('rkCantones', formatoNumero(datos.length));
+        ponerTexto('rkAlta', formatoNumero(datos.filter(r => r.prioridad === 'ALTA').length));
+        ponerTexto('rkMedia', formatoNumero(datos.filter(r => r.prioridad === 'MEDIA').length));
+        ponerTexto('rkBaja', formatoNumero(datos.filter(r => r.prioridad === 'BAJA').length));
+        ponerTexto('rkCritica', formatoNumero(datos.filter(r => r.estado === 'FALTA' || r.estado === 'DEVUELTO').length));
+      }
+
+      function pintarFichaCantonal(r) {
+        ponerTexto('fichaTitulo', r.canton);
+        ponerTexto('fichaSubtitulo', r.provincia + ' · Estado del plan: ' + r.estado + ' · Valoración: ' + (r.porcentaje !== null ? r.porcentaje + '%' : 'sin dato'));
+        ponerTexto('fichaIndice', r.indice);
+        document.getElementById('fichaPrioridad').innerHTML = badgePrioridad(r.prioridad);
+
+        pintarLista('fichaBrechas', r.brechas);
+        pintarLista('fichaAcciones', r.acciones);
+        ponerTexto('fichaCriterio', r.criterio);
+      }
+
+      function limpiarFichaCantonal() {
+        ponerTexto('fichaTitulo', 'Sin cantón seleccionado');
+        ponerTexto('fichaSubtitulo', 'No hay información con los filtros aplicados.');
+        ponerTexto('fichaIndice', '--');
+        document.getElementById('fichaPrioridad').innerHTML = '';
+        pintarLista('fichaBrechas', ['No hay brechas disponibles con los filtros aplicados.']);
+        pintarLista('fichaAcciones', ['No hay acciones sugeridas con los filtros aplicados.']);
+        ponerTexto('fichaCriterio', 'No hay criterio técnico disponible con los filtros aplicados.');
+      }
+
+      function pintarLista(id, items) {
+        const ul = document.getElementById(id);
+        ul.innerHTML = '';
+
+        items.forEach(function(item) {
+          const li = document.createElement('li');
+          li.textContent = item;
+          ul.appendChild(li);
+        });
+      }
+
+      function pintarRankingRiesgo(datos) {
+        const tbody = document.getElementById('tablaRiesgoBody');
+        tbody.innerHTML = '';
+
+        if (!datos || datos.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8">No hay análisis cantonal con los filtros aplicados.</td></tr>';
+          return;
+        }
+
+        datos.forEach(function(r) {
+          const tr = document.createElement('tr');
+
+          tr.innerHTML = `
+            <td>${limpiarHtml(r.provincia)}</td>
+            <td>${limpiarHtml(r.canton)}</td>
+            <td>${badgeEstado(r.estado)}</td>
+            <td>${limpiarHtml(r.porcentaje !== null ? r.porcentaje + '%' : 'Sin dato')}</td>
+            <td><strong>${limpiarHtml(r.indice)}</strong></td>
+            <td>${badgePrioridad(r.prioridad)}</td>
+            <td>${limpiarHtml(r.brechas[0] || '')}</td>
+            <td>${limpiarHtml(r.acciones[0] || '')}</td>
+          `;
+
+          tbody.appendChild(tr);
+        });
+      }
+
+      function cargarOpcionesRiesgo(datos) {
+        cargarSelect('riesgoProvincia', unicos(datos.map(r => r.provincia)), 'Todas las provincias');
+        actualizarSelectCantonesRiesgo();
+      }
+
+      function actualizarSelectCantonesRiesgo() {
+        const provincia = normalizar(valorDe('riesgoProvincia'));
+
+        const datos = analisisRiesgo.filter(function(r) {
+          if (!provincia) return true;
+          return normalizar(r.provincia) === provincia;
+        });
+
+        cargarSelect('riesgoCanton', unicos(datos.map(r => r.canton)), 'Seleccione cantón');
+      }
+
+      function limpiarCabinaRiesgo() {
+        ponerValor('riesgoProvincia', '');
+        actualizarSelectCantonesRiesgo();
+        ponerValor('riesgoCanton', '');
+        ponerValor('riesgoPrioridad', '');
+        ponerValor('riesgoBusqueda', '');
+        aplicarCabinaRiesgo();
       }
 
       function pintarBarras(id, datos) {
@@ -659,7 +1278,7 @@
 
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'seguimiento_enos.csv';
+        a.download = 'seguimiento_documental_enos.csv';
         a.click();
 
         URL.revokeObjectURL(url);
@@ -722,16 +1341,49 @@
         document.body.appendChild(script);
       }
 
-      function badgeEstado(estado) {
-        const e = String(estado || 'SIN DATO').toUpperCase();
+      function cargarSelect(id, valores, textoInicial) {
+        const sel = document.getElementById(id);
+        if (!sel) return;
 
-        let clase = 'sindato';
-        if (e.includes('VALIDADO')) clase = 'validado';
-        if (e.includes('DEVUELTO')) clase = 'devuelto';
-        if (e.includes('REVISION')) clase = 'revision';
-        if (e.includes('FALTA')) clase = 'falta';
+        sel.innerHTML = '';
 
-        return `<span class="badge ${clase}">${limpiarHtml(e)}</span>`;
+        const opt0 = document.createElement('option');
+        opt0.value = '';
+        opt0.textContent = textoInicial;
+        sel.appendChild(opt0);
+
+        valores.forEach(function(v) {
+          const opt = document.createElement('option');
+          opt.value = v;
+          opt.textContent = v;
+          sel.appendChild(opt);
+        });
+      }
+
+      function seleccionarEstadoCritico(estados) {
+        if (estados.includes('FALTA')) return 'FALTA';
+        if (estados.includes('DEVUELTO')) return 'DEVUELTO';
+        if (estados.includes('EN REVISION')) return 'EN REVISION';
+        if (estados.includes('SIN DATO')) return 'SIN DATO';
+        if (estados.includes('VALIDADO')) return 'VALIDADO';
+        return estados[0] || 'SIN DATO';
+      }
+
+      function extraerPorcentaje(valor) {
+        const s = String(valor || '').replace(',', '.');
+        const match = s.match(/\d+(\.\d+)?/);
+        if (!match) return null;
+
+        const n = Number(match[0]);
+        if (isNaN(n)) return null;
+
+        return Math.max(0, Math.min(100, Math.round(n)));
+      }
+
+      function promedio(arr) {
+        if (!arr || arr.length === 0) return null;
+        const suma = arr.reduce(function(acc, n) { return acc + Number(n || 0); }, 0);
+        return Math.round(suma / arr.length);
       }
 
       function agruparConteo(datos, campo) {
@@ -745,6 +1397,48 @@
         return Object.keys(mapa)
           .map(k => ({ nombre: k, valor: mapa[k] }))
           .sort((a, b) => b.valor - a.valor);
+      }
+
+      function agruparPromedioIndice(datos, campo) {
+        const mapa = {};
+
+        datos.forEach(function(r) {
+          const clave = String(r[campo] || 'Sin dato').trim() || 'Sin dato';
+          if (!mapa[clave]) mapa[clave] = [];
+          mapa[clave].push(Number(r.indice || 0));
+        });
+
+        return Object.keys(mapa)
+          .map(function(k) {
+            return {
+              nombre: k,
+              valor: Math.round(mapa[k].reduce((a, b) => a + b, 0) / mapa[k].length)
+            };
+          })
+          .sort((a, b) => b.valor - a.valor);
+      }
+
+      function badgeEstado(estado) {
+        const e = String(estado || 'SIN DATO').toUpperCase();
+
+        let clase = 'sindato';
+        if (e.includes('VALIDADO')) clase = 'validado';
+        if (e.includes('DEVUELTO')) clase = 'devuelto';
+        if (e.includes('REVISION')) clase = 'revision';
+        if (e.includes('FALTA')) clase = 'falta';
+
+        return `<span class="badge ${clase}">${limpiarHtml(e)}</span>`;
+      }
+
+      function badgePrioridad(prioridad) {
+        const p = String(prioridad || 'SIN DATO').toUpperCase();
+
+        let clase = 'sindato';
+        if (p === 'ALTA') clase = 'alta';
+        if (p === 'MEDIA') clase = 'media';
+        if (p === 'BAJA') clase = 'baja';
+
+        return `<span class="badge ${clase}">${limpiarHtml(p)}</span>`;
       }
 
       function unicos(arr) {
@@ -805,8 +1499,12 @@
 
       return {
         cargar: cargar,
-        aplicarFiltros: aplicarFiltros,
-        limpiarFiltros: limpiarFiltros,
+        mostrarPanel: mostrarPanel,
+        aplicarFiltrosDocumentales: aplicarFiltrosDocumentales,
+        limpiarFiltrosDocumentales: limpiarFiltrosDocumentales,
+        aplicarCabinaRiesgo: aplicarCabinaRiesgo,
+        actualizarSelectCantonesRiesgo: actualizarSelectCantonesRiesgo,
+        limpiarCabinaRiesgo: limpiarCabinaRiesgo,
         exportarCSV: exportarCSV
       };
     })();
