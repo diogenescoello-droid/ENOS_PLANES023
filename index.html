@@ -1,2182 +1,315 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BASE 01 · ENOS Zona 5 · Dashboard con análisis detallado</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<style>
-:root{
-  --azul:#0b3f63;
-  --azul2:#114f78;
-  --azul3:#0a3555;
-  --celeste:#eaf6ff;
-  --borde:#cfe1ef;
-  --rojo:#d83a2e;
-  --rojo2:#ef5b4f;
-  --verde:#2e8b57;
-  --ambar:#f2b84b;
-  --fondo:#eef4f8;
-  --panel:#ffffff;
-  --texto:#15324a;
-  --muted:#4d6173;
-  --soft:#f7fbff;
-  --shadow:0 18px 38px rgba(12,45,72,.12);
-  --radius:22px;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial, Helvetica, sans-serif;
-  background:var(--fondo);
-  color:var(--texto);
-}
-.header{
-  background:linear-gradient(105deg,var(--azul3),var(--azul2));
-  color:#fff;
-  border-bottom:5px solid var(--rojo2);
-}
-.header-inner{
-  max-width:1220px;
-  margin:0 auto;
-  padding:18px 18px 32px;
-}
-.topline{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:14px;
-  margin-bottom:22px;
-}
-.brandline{
-  display:flex;
-  align-items:center;
-  gap:13px;
-  font-size:13px;
-  text-transform:uppercase;
-  letter-spacing:.06em;
-  font-weight:800;
-}
-.logo{
-  width:42px;
-  height:42px;
-  border-radius:11px;
-  background:linear-gradient(135deg,#d62e28,#e95b55);
-  display:grid;
-  place-items:center;
-  font-weight:900;
-  border:1px solid rgba(255,255,255,.4);
-  box-shadow:0 5px 14px rgba(0,0,0,.18);
-}
-.clock{
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.22);
-  border-radius:999px;
-  padding:9px 15px;
-  font-weight:800;
-  font-size:13px;
-}
-h1{
-  margin:0 0 14px;
-  font-size:31px;
-  letter-spacing:-.02em;
-}
-.header p{
-  margin:0;
-  max-width:980px;
-  line-height:1.45;
-  font-weight:700;
-  font-size:14px;
-}
-.wrap{
-  max-width:1220px;
-  margin:24px auto 56px;
-  padding:0 18px;
-}
-.platform{
-  background:#fff;
-  border:1px solid var(--borde);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.role-panel{
-  padding:22px 22px 20px;
-}
-.role-panel h2{
-  margin:0 0 8px;
-  font-size:20px;
-  color:var(--azul3);
-}
-.role-panel > p{
-  margin:0 0 18px;
-  color:var(--muted);
-  font-size:14px;
-}
-.roles{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-}
-.role{
-  border:1px solid var(--borde);
-  background:linear-gradient(180deg,#fff,#fbfdff);
-  border-radius:20px;
-  min-height:292px;
-  padding:17px;
-  cursor:pointer;
-  transition:.18s ease;
-}
-.role.active{
-  border-color:var(--rojo2);
-  box-shadow:0 0 0 3px rgba(216,58,46,.08);
-}
-.role:hover{transform:translateY(-1px)}
-.role .badge{
-  width:40px;
-  height:40px;
-  border-radius:12px;
-  display:grid;
-  place-items:center;
-  background:#dff1ff;
-  color:var(--azul3);
-  font-weight:900;
-  font-size:13px;
-  margin-bottom:10px;
-  border:1px solid #b8daf3;
-}
-.role.active .badge{
-  background:#c93a2d;
-  color:white;
-  border-color:#c93a2d;
-}
-.role h3{
-  margin:0 0 12px;
-  color:var(--azul3);
-  font-size:16px;
-  line-height:1.25;
-}
-.role p{
-  margin:0 0 28px;
-  color:#47596a;
-  line-height:1.35;
-  font-weight:700;
-  font-size:13px;
-}
-.role small{
-  display:block;
-  color:#6b7e90;
-  line-height:1.25;
-  font-weight:700;
-  font-size:12px;
-}
-.divider{height:1px;background:var(--borde)}
-.flow{
-  margin:40px 20px 22px;
-  border:1px solid var(--borde);
-  border-radius:21px;
-  overflow:hidden;
-}
-.flow-head{
-  background:var(--azul2);
-  color:#fff;
-  padding:18px 20px;
-  display:flex;
-  justify-content:space-between;
-  gap:16px;
-  align-items:flex-start;
-}
-.flow-head h2{
-  margin:0 0 7px;
-  font-size:20px;
-}
-.flow-head p{
-  margin:0;
-  font-size:14px;
-  line-height:1.4;
-}
-.actor-chip{
-  border:1px solid rgba(255,255,255,.32);
-  background:rgba(255,255,255,.12);
-  color:#fff;
-  border-radius:999px;
-  padding:9px 15px;
-  font-weight:900;
-  font-size:12px;
-  white-space:nowrap;
-}
-.tabs{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:8px;
-  padding:14px;
-  background:#fff;
-  border-bottom:1px solid var(--borde);
-}
-.tab{
-  border:1px solid var(--borde);
-  background:#fff;
-  color:var(--azul3);
-  border-radius:14px;
-  padding:14px 12px;
-  font-weight:900;
-  cursor:pointer;
-}
-.tab.active{
-  background:var(--azul3);
-  color:white;
-  border-color:#1284ff;
-  box-shadow:inset 0 0 0 1px #1284ff;
-}
-.tab-content{
-  display:none;
-  padding:20px 18px 22px;
-}
-.tab-content.active{display:block}
-.two{
-  display:grid;
-  grid-template-columns:1.35fr 1fr;
-  gap:18px;
-}
-.tab-content h2{
-  margin:0 0 8px;
-  color:var(--azul3);
-  font-size:22px;
-}
-.tab-content p{
-  margin:0 0 14px;
-  color:var(--muted);
-  line-height:1.45;
-  font-size:14px;
-}
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-.form-card, .info-card, .kpi-card, .detail-card{
-  border:1px solid var(--borde);
-  border-radius:16px;
-  background:linear-gradient(180deg,#fff,#fbfdff);
-  padding:14px;
-}
-.form-card h3,.info-card h3,.detail-card h3{
-  margin:0 0 11px;
-  color:var(--azul3);
-  font-size:16px;
-}
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  border:0;
-  border-radius:12px;
-  padding:11px 15px;
-  font-weight:900;
-  cursor:pointer;
-  text-decoration:none;
-  font-size:14px;
-}
-.btn.primary{background:var(--azul3);color:white;box-shadow:0 8px 18px rgba(10,53,85,.18)}
-.btn.red{background:var(--rojo);color:white}
-.btn.green{background:var(--verde);color:white}
-.btn.soft{background:#e8f5ff;color:var(--azul3);border:1px solid #bcdcf2}
-.btn.white{background:#fff;color:var(--azul3);border:1px solid var(--borde)}
-.note{
-  border:1px solid #f1cf85;
-  background:#fff5dc;
-  color:#734700;
-  border-radius:14px;
-  padding:13px;
-  font-size:13px;
-  line-height:1.35;
-}
-.inputline{
-  margin:8px 0 13px;
-}
-.inputline label{
-  display:block;
-  font-size:13px;
-  font-weight:900;
-  color:var(--azul3);
-  margin-bottom:6px;
-}
-.inputline input{
-  width:100%;
-  border:1px solid var(--borde);
-  border-radius:13px;
-  padding:12px;
-  font-size:14px;
-}
-.actions{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}
-.status{
-  border:1px solid var(--borde);
-  border-radius:13px;
-  background:#f2f8fd;
-  padding:12px;
-  display:flex;
-  align-items:center;
-  gap:9px;
-  color:#2c4053;
-  font-size:13px;
-}
-.dot{
-  width:11px;height:11px;border-radius:999px;background:#2e8b57;display:inline-block;
-}
-textarea{
-  width:100%;
-  min-height:245px;
-  border:1px solid var(--borde);
-  border-radius:13px;
-  background:#f8fbff;
-  padding:12px;
-  resize:vertical;
-  font-family:Consolas,monospace;
-}
-.steps{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-}
-.step{
-  border:1px solid var(--borde);
-  border-radius:14px;
-  padding:12px;
-  background:#fff;
-}
-.step strong{
-  display:block;
-  color:var(--azul3);
-  font-size:16px;
-  margin-bottom:5px;
-}
-.repo{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin-top:12px;
-}
-.dashboard-actions{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0 13px}
-.kpi-row{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  margin-top:13px;
-}
-.kpi-card h4{
-  margin:0 0 10px;
-  color:#526577;
-  font-size:12px;
-  text-transform:uppercase;
-}
-.kpi-card .num{
-  font-size:31px;
-  font-weight:900;
-  color:var(--azul3);
-}
-.kpi-card small{
-  display:block;
-  color:var(--muted);
-  margin-top:8px;
-  line-height:1.3;
-}
-.executive{
-  display:grid;
-  grid-template-columns:1.05fr 1fr;
-  gap:14px;
-  margin-top:14px;
-}
-.gauge{
-  border:1px solid var(--borde);
-  border-radius:18px;
-  padding:18px;
-  background:linear-gradient(180deg,#fff,#f8fbff);
-}
-.gauge-title{
-  font-size:13px;
-  color:#526577;
-  font-weight:900;
-  text-transform:uppercase;
-}
-.gauge-number{
-  margin:10px 0 13px;
-  color:var(--azul3);
-  font-size:52px;
-  line-height:1;
-  font-weight:900;
-  letter-spacing:-.04em;
-}
-.track{height:14px;border-radius:999px;background:#e2edf5;overflow:hidden}
-.fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--verde),var(--ambar));width:68%}
-.alert{
-  border:1px solid #f1cf85;
-  background:#fff6dd;
-  border-radius:18px;
-  padding:17px;
-  color:#634000;
-  line-height:1.38;
-}
-.alert strong{display:block;margin-bottom:7px;color:#4e3300}
-.table-wrap{
-  border:1px solid var(--borde);
-  border-radius:15px;
-  overflow:auto;
-  max-height:390px;
-  margin-top:14px;
-}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{
-  background:var(--azul3);
-  color:white;
-  text-align:left;
-  padding:11px 10px;
-}
-td{
-  border-bottom:1px solid #d9e5ef;
-  padding:12px 10px;
-  vertical-align:top;
-}
-.tag{
-  display:inline-flex;
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:900;
-  white-space:nowrap;
-}
-.tag.ok{background:#e3f7ec;color:#217347}
-.tag.warn{background:#fff3d2;color:#8a5a00}
-.tag.bad{background:#ffe5e1;color:#a3281d}
-.tag.info{background:#e6f3ff;color:#0d4f7a}
-.detail-section{
-  display:none;
-  margin-top:24px;
-  animation:show .2s ease both;
-}
-.detail-section.active{display:block}
-@keyframes show{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.detail-shell{
-  background:white;
-  border:1px solid var(--borde);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.detail-head{
-  background:linear-gradient(105deg,var(--azul3),var(--azul2));
-  color:white;
-  padding:19px 22px;
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:16px;
-}
-.detail-head h2{margin:0 0 7px;font-size:24px}
-.detail-head p{margin:0;max-width:850px;font-size:14px;line-height:1.4}
-.detail-body{padding:18px}
-.detail-tabs{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-bottom:16px;
-}
-.detail-tab{
-  border:1px solid var(--borde);
-  background:#fff;
-  color:var(--azul3);
-  border-radius:999px;
-  padding:10px 13px;
-  font-weight:900;
-  cursor:pointer;
-}
-.detail-tab.active{background:var(--azul3);color:white}
-.detail-module{display:none}
-.detail-module.active{display:block}
-.filters{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr auto;
-  gap:10px;
-  margin-bottom:14px;
-}
-select,input{
-  border:1px solid var(--borde);
-  border-radius:12px;
-  background:#fff;
-  padding:11px;
-  color:var(--texto);
-}
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.bars{display:grid;gap:10px}
-.barline{
-  display:grid;
-  grid-template-columns:180px 1fr 52px;
-  gap:9px;
-  align-items:center;
-  font-size:13px;
-}
-.barline .track{height:11px}
-.map{
-  min-height:300px;
-  border-radius:16px;
-  border:1px solid #c8dff0;
-  background:
-    radial-gradient(circle at 20% 32%, rgba(46,139,87,.28) 0 6%, transparent 7%),
-    radial-gradient(circle at 48% 42%, rgba(242,184,75,.35) 0 7%, transparent 8%),
-    radial-gradient(circle at 75% 58%, rgba(216,58,46,.25) 0 6%, transparent 7%),
-    radial-gradient(circle at 34% 72%, rgba(17,79,120,.25) 0 6%, transparent 7%),
-    linear-gradient(145deg,#e9f6ff,#f9fdff);
-  position:relative;
-}
-.map:before{
-  content:"Vista territorial simulada · futura conexión ArcGIS Online / GeoJSON";
-  position:absolute;
-  top:14px;left:14px;
-  background:#fff;
-  border:1px solid var(--borde);
-  border-radius:999px;
-  padding:8px 12px;
-  font-size:12px;
-  font-weight:900;
-  color:var(--azul3);
-}
-.point{
-  position:absolute;width:17px;height:17px;border-radius:999px;border:3px solid white;box-shadow:0 5px 10px rgba(0,0,0,.18);background:var(--verde);
-}
-.p1{left:21%;top:36%}.p2{left:49%;top:48%;background:var(--ambar)}.p3{left:76%;top:62%;background:var(--rojo)}.p4{left:35%;top:75%;background:var(--azul2)}
-.criteria{
-  display:grid;
-  gap:10px;
-}
-.criterion{
-  border:1px solid var(--borde);
-  border-radius:14px;
-  padding:12px;
-  background:var(--soft);
-}
-.criterion strong{display:block;color:var(--azul3);margin-bottom:5px}
-.criterion span{color:var(--muted);font-size:13px;line-height:1.35}
-.footer-note{
-  color:#66798a;
-  font-size:12px;
-  text-align:right;
-  padding:12px 0 0;
-}
-@media(max-width:980px){
-  .roles,.tabs,.kpi-row,.two,.executive,.detail-grid,.filters{grid-template-columns:1fr}
-  .role{min-height:auto}
-  .flow{margin:20px 10px}
-  .topline,.flow-head,.detail-head{flex-direction:column}
-}
-
-.small-num{font-size:18px!important;line-height:1.15!important;word-break:break-word}.carto-map{min-height:340px;border-radius:16px;border:1px solid #c8dff0;background:radial-gradient(circle at 21% 24%, rgba(46,139,87,.14) 0 5%, transparent 6%),radial-gradient(circle at 66% 56%, rgba(242,184,75,.16) 0 7%, transparent 8%),linear-gradient(145deg,#e9f6ff,#f9fdff);position:relative;overflow:hidden}.carto-map-label{position:absolute;top:14px;left:14px;background:#fff;border:1px solid var(--borde);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:900;color:var(--azul3);z-index:3}.carto-point{position:absolute;width:18px;height:18px;border-radius:999px;border:3px solid #fff;box-shadow:0 5px 12px rgba(0,0,0,.22);background:var(--rojo);cursor:pointer;z-index:2}.carto-point.f01{background:var(--rojo)}.carto-point.f02{background:var(--ambar)}.carto-point.f03{background:var(--azul2)}.carto-point.f04{background:var(--verde)}.carto-point.f05{background:#744bc2}.carto-point.f06{background:#2b7a78}.carto-point.f07{background:#555}.carto-tooltip{position:absolute;display:none;max-width:260px;background:#fff;border:1px solid var(--borde);box-shadow:0 12px 28px rgba(12,45,72,.16);border-radius:12px;padding:10px;font-size:12px;color:var(--texto);z-index:5}.carto-point:hover + .carto-tooltip{display:block}.muted-text{color:var(--muted);font-size:13px;line-height:1.35}.case-action{white-space:nowrap}.record-json{white-space:pre-wrap;font-family:Consolas,monospace;font-size:12px;background:#f7fbff;border:1px solid var(--borde);border-radius:12px;padding:10px;max-height:260px;overflow:auto}.score-ok{color:var(--verde)}.score-warn{color:#8a5a00}.score-bad{color:var(--rojo)}
-
-
-/* AJUSTE SUTIL 20260622: Leaflet dentro del módulo cartográfico existente, sin cambiar arquitectura */
-.carto-map.leaflet-ready{
-  background:#e9f6ff;
-}
-.carto-map.leaflet-ready .leaflet-container{
-  border-radius:16px;
-}
-.leaflet-popup-content{
-  font-family:Arial, Helvetica, sans-serif;
-  font-size:12px;
-  color:var(--texto);
-}
-.leaflet-popup-content strong{
-  color:var(--azul3);
-}
-.prompt-lookup{
-  margin:8px 0 12px;
-}
-.prompt-lookup select,
-.prompt-lookup input{
-  width:100%;
-}
-.case-title-main{
-  display:block;
-  color:var(--azul3);
-  font-weight:900;
-  line-height:1.25;
-}
-.case-code-secondary{
-  display:block;
-  margin-top:4px;
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.25;
-}
-
-
-
-/* MODULO RIESGO ZONAL ENOS CZ5 · Integración 20260630 */
-.tabs{grid-template-columns:repeat(6,1fr)}
-.riskz-shell{display:grid;gap:14px}
-.riskz-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;border:1px solid var(--borde);border-radius:16px;background:linear-gradient(180deg,#fff,#fbfdff);padding:15px}
-.riskz-head h3{margin:0 0 7px;color:var(--azul3);font-size:18px}
-.riskz-head p{margin:0;color:var(--muted);font-size:13px;line-height:1.35}
-.riskz-status{border:1px solid var(--borde);border-radius:999px;background:#f2f8fd;padding:9px 13px;font-size:12px;font-weight:900;color:var(--azul3);white-space:nowrap}
-.riskz-status.ok{background:#eef9f2;border-color:#bfe5ca;color:#217347}
-.riskz-status.warn{background:#fff8e8;border-color:#f1d28b;color:#734700}
-.riskz-status.bad{background:#ffe5e1;border-color:#f1aaa2;color:#a3281d}
-.riskz-themebar{display:flex;flex-wrap:wrap;gap:8px}
-.riskz-theme{border:1px solid var(--borde);background:#fff;color:var(--azul3);border-radius:999px;padding:10px 12px;font-weight:900;cursor:pointer}
-.riskz-theme.active{background:var(--azul3);color:#fff;border-color:var(--azul3)}
-.riskz-kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
-.riskz-card{border:1px solid var(--borde);border-radius:16px;background:#fff;padding:13px;box-shadow:0 8px 18px rgba(10,53,85,.08)}
-.riskz-card small{display:block;color:var(--muted);text-transform:uppercase;font-size:11px;font-weight:900;margin-bottom:7px}
-.riskz-card strong{display:block;color:var(--azul3);font-size:26px;line-height:1}
-.riskz-layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px;align-items:stretch}
-.riskz-mapbox,.riskz-panel,.riskz-tablebox{border:1px solid var(--borde);border-radius:16px;background:#fff;padding:14px;box-shadow:0 8px 18px rgba(10,53,85,.08)}
-.riskz-title{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}
-.riskz-title h3{margin:0;color:var(--azul3);font-size:16px}
-.riskz-title p{margin:4px 0 0;color:var(--muted);font-size:12px}
-.riskz-legend{display:flex;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:12px;font-weight:900}
-.riskz-dot{display:inline-block;width:10px;height:10px;border-radius:999px;margin-right:4px;border:1px solid rgba(0,0,0,.08)}
-.riskz-verde{background:#2e8b57}.riskz-amarillo{background:#f2b84b}.riskz-rojo{background:#d83a2e}.riskz-sindato{background:#9aa7b2}
-#riskzMap{height:520px;min-height:520px;border:1px solid #c8dff0;border-radius:14px;background:#e9f6ff;overflow:hidden}
-.riskz-detail-grid{display:grid;gap:9px;margin-top:10px}
-.riskz-detail-item{border:1px solid var(--borde);border-radius:12px;background:#f7fbff;padding:10px}
-.riskz-detail-item span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;font-weight:900;margin-bottom:4px}
-.riskz-detail-item strong,.riskz-detail-item p{margin:0;color:var(--texto);font-size:13px;line-height:1.35}
-.riskz-badge{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:900}
-.riskz-badge.rojo{background:#ffe5e1;color:#a3281d}.riskz-badge.amarillo{background:#fff3d2;color:#8a5a00}.riskz-badge.verde{background:#e3f7ec;color:#217347}.riskz-badge.sin_dato{background:#e6edf3;color:#526577}
-.riskz-tablebox{margin-top:0}
-.riskz-tablebox .table-wrap{max-height:360px}
-.riskz-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-@media(max-width:980px){.tabs{grid-template-columns:1fr}.riskz-kpis,.riskz-layout{grid-template-columns:1fr}.riskz-head,.riskz-title{flex-direction:column}#riskzMap{height:420px;min-height:420px}}
-
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CZ5 | Seguimiento ENOS 2026-2027</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d9e2ef;
+      --brand: #0b5f8a;
+      --brand2: #0f766e;
+      --warn: #b45309;
+      --bad: #b91c1c;
+      --ok: #15803d;
+      --info: #1d4ed8;
+      --shadow: 0 12px 32px rgba(16,24,40,.08);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font-family: Inter, Segoe UI, Arial, sans-serif; }
+    header {
+      background: linear-gradient(135deg, #083344 0%, #0b5f8a 55%, #0f766e 100%);
+      color:white; padding:28px 32px 24px; box-shadow: var(--shadow);
+    }
+    header h1 { margin:0 0 8px; font-size: clamp(24px, 4vw, 38px); letter-spacing:-.03em; }
+    header p { margin: 0; color: rgba(255,255,255,.86); max-width: 1050px; }
+    main { padding: 24px; max-width: 1440px; margin: 0 auto; }
+    .toolbar { display:grid; grid-template-columns: 1.2fr .8fr .8fr auto; gap:12px; margin: 0 0 18px; }
+    .toolbar input, .toolbar select, button {
+      border:1px solid var(--line); border-radius: 12px; padding:12px 14px; background:white; font-size:14px;
+    }
+    button { cursor:pointer; font-weight:700; color:var(--brand); }
+    button.active { background:var(--brand); color:white; border-color:var(--brand); }
+    .grid { display:grid; grid-template-columns: repeat(12, 1fr); gap:16px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:18px; box-shadow: var(--shadow); }
+    .kpis { grid-column: 1 / -1; display:grid; grid-template-columns: repeat(8, minmax(120px, 1fr)); gap:14px; }
+    .kpi { padding:16px; border-radius:16px; border:1px solid var(--line); background:#fff; }
+    .kpi .label { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.06em; }
+    .kpi .value { font-size:30px; font-weight:800; margin-top:4px; letter-spacing:-.04em; }
+    .kpi small { color:var(--muted); }
+    .map { grid-column: span 5; min-height:420px; }
+    .panel { grid-column: span 7; min-height:420px; }
+    .wide { grid-column: 1 / -1; }
+    .section-title { margin:0 0 12px; font-size:18px; }
+    .province-buttons { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0 16px; }
+    .province-buttons button { min-width: 128px; }
+    .schematic {
+      position:relative; min-height:260px; border-radius:16px; border:1px dashed #b8c7d9; background:
+      radial-gradient(circle at 20% 30%, rgba(14,165,233,.12), transparent 28%),
+      radial-gradient(circle at 70% 70%, rgba(16,185,129,.12), transparent 30%),
+      #f8fafc; overflow:hidden; padding:16px;
+    }
+    .region {
+      position:absolute; border:2px solid rgba(11,95,138,.35); background:rgba(11,95,138,.08);
+      color:#0b4361; border-radius:26px; display:flex; align-items:center; justify-content:center;
+      font-weight:800; text-align:center; padding:8px; transition:.15s; user-select:none;
+    }
+    .region:hover, .region.active { transform: scale(1.03); background: rgba(15,118,110,.18); border-color: var(--brand2); }
+    .r-bolivar { left:8%; top:14%; width:30%; height:24%; }
+    .r-losrios { left:25%; top:42%; width:34%; height:28%; }
+    .r-guayas { left:44%; top:18%; width:38%; height:30%; }
+    .r-santaelena { left:54%; top:62%; width:32%; height:22%; }
+    .r-galapagos { left:4%; top:72%; width:24%; height:16%; }
+    .legend { display:flex; gap:12px; flex-wrap:wrap; color:var(--muted); font-size:13px; margin-top:12px; }
+    .dot { width:11px; height:11px; border-radius:50%; display:inline-block; margin-right:5px; }
+    .dot.ok { background:var(--ok); } .dot.warn { background:var(--warn); } .dot.bad { background:var(--bad); } .dot.info { background:var(--info); }
+    .bars { display:grid; gap:12px; }
+    .bar-row { display:grid; grid-template-columns: 140px 1fr 58px; gap:10px; align-items:center; }
+    .bar-label { font-weight:700; font-size:13px; }
+    .bar-track { height:16px; border-radius:99px; background:#eef2f7; overflow:hidden; }
+    .bar-fill { height:100%; background:linear-gradient(90deg, var(--brand), var(--brand2)); border-radius:99px; }
+    table { width:100%; border-collapse: collapse; font-size:13px; }
+    th, td { padding:10px 9px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { position:sticky; top:0; background:#f8fafc; z-index:1; color:#334155; font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+    .table-wrap { max-height:560px; overflow:auto; border:1px solid var(--line); border-radius:16px; }
+    .badge { display:inline-flex; align-items:center; padding:4px 8px; border-radius:999px; font-weight:800; font-size:12px; white-space:nowrap; }
+    .VALIDADO { background:#dcfce7; color:#166534; }
+    .DEVUELTO { background:#fee2e2; color:#991b1b; }
+    .EN-REVISION, .EN-REVISIÓN { background:#dbeafe; color:#1e40af; }
+    .FALTA { background:#fef3c7; color:#92400e; }
+    .SIN-DATO { background:#f1f5f9; color:#475569; }
+    a { color:var(--brand); font-weight:700; text-decoration:none; }
+    .insight { display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; margin-top:14px; }
+    .mini { background:#f8fafc; border:1px solid var(--line); border-radius:14px; padding:12px; }
+    .mini b { display:block; font-size:22px; }
+    .mini span { color:var(--muted); font-size:12px; }
+    .note { color:var(--muted); font-size:12px; margin-top:10px; }
+    @media (max-width: 1050px) {
+      .toolbar { grid-template-columns: 1fr 1fr; }
+      .kpis { grid-template-columns: repeat(2, 1fr); }
+      .map, .panel { grid-column: 1 / -1; }
+      .insight { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      main { padding: 14px; }
+      header { padding:22px 16px; }
+      .toolbar { grid-template-columns: 1fr; }
+      .kpis { grid-template-columns: 1fr; }
+      table { font-size:12px; }
+    }
+  </style>
 </head>
 <body>
-<header class="header">
-  <div class="header-inner">
-    <div class="topline">
-      <div class="brandline"><div class="logo">CZ5</div><span>Secretaría Nacional de Gestión de Riesgos · Coordinación Zonal 5</span></div>
-      <div class="clock">20 jun 2026, 4:10 p. m.</div>
-    </div>
-    <h1>BASE 01 · Ecosistema digital ENOS Zona 5</h1>
-    <p>Ambiente operativo para levantamiento de información F01-F07 en Bolívar, Guayas, Los Ríos, Santa Elena y Galápagos, consolidación Kobo, generación de paquete GPT, elaboración de plan de acción y cierre de ciclo.</p>
-  </div>
+<header>
+  <h1>Seguimiento CZ5 · Planes de Acción ENOS 2026-2027</h1>
+  <p>Módulo actualizado con la matriz de seguimiento documental: socialización, entrega, valoración y estado de revisión de planes por provincia y cantón.</p>
 </header>
 
-<main class="wrap">
-  <section class="platform">
-    <div class="role-panel">
-      <h2>Seleccione el actor que usará el sistema</h2>
-      <p>El sistema muestra formularios y acciones según el rol seleccionado. La Coordinación Zonal mantiene la trazabilidad del ciclo completo.</p>
-      <div class="roles">
-        <article class="role active" onclick="selectActor('GAD', this)"><div class="badge">GAD</div><h3>GAD municipal / parroquial</h3><p>Levanta información territorial, puntos críticos, infraestructura expuesta, aporte cartográfico, acciones preventivas, alojamientos, capacidades y seguimiento del plan.</p><small>Uso recomendado para unidades de gestión de riesgos, planificación, catastro, obras públicas y equipos parroquiales o municipales.</small></article>
-        <article class="role" onclick="selectActor('MTT', this)"><div class="badge">MTT</div><h3>Mesa Técnica de Trabajo</h3><p>Aporta información sectorial, infraestructura, cartografía institucional, acciones, capacidades, recursos y seguimiento según su competencia.</p><small>Uso recomendado para instituciones rectoras o sectoriales que integran las mesas técnicas.</small></article>
-        <article class="role" onclick="selectActor('GT', this)"><div class="badge">GT</div><h3>Grupos de Trabajo - Soporte Operativo</h3><p>Brindan soporte logístico, seguridad y control, movilización de recursos, telecomunicaciones, abastecimiento y apoyo de primera respuesta.</p><small>Uso recomendado para Fuerzas Armadas, Policía Nacional, Bomberos, ECU 911, ANT, Cruz Roja, MSP y grupos voluntarios.</small></article>
-        <article class="role" onclick="selectActor('CZ5', this)"><div class="badge">CZ5</div><h3>Coordinación Zonal 5 SNGR</h3><p>Consolida, verifica, controla calidad, genera paquetes GPT, monitorea el total de planes y mantiene trazabilidad zonal.</p><small>Uso recomendado para seguimiento integral, suficiencia técnica, consolidación, generación de planes y control del ciclo.</small></article>
+<main>
+  <section class="toolbar">
+    <input id="search" type="search" placeholder="Buscar cantón, provincia, responsable, particularidad…">
+    <select id="provinceSelect"><option value="">Todas las provincias</option></select>
+    <select id="statusSelect"><option value="">Todos los estados</option></select>
+    <button id="exportCsv">Exportar CSV</button>
+  </section>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="grid">
+    <div class="card map">
+      <h2 class="section-title">Filtro territorial CZ5</h2>
+      <div class="province-buttons" id="provinceButtons"></div>
+      <div class="schematic" aria-label="Mapa esquemático CZ5">
+        <div class="region r-bolivar" data-provincia="BOLÍVAR">BOLÍVAR</div>
+        <div class="region r-losrios" data-provincia="LOS RÍOS">LOS RÍOS</div>
+        <div class="region r-guayas" data-provincia="GUAYAS">GUAYAS</div>
+        <div class="region r-santaelena" data-provincia="SANTA ELENA">SANTA ELENA</div>
+        <div class="region r-galapagos" data-provincia="GALÁPAGOS">GALÁPAGOS</div>
+      </div>
+      <p class="note">Mapa esquemático para control operativo; no reemplaza cartografía oficial ni límites geográficos.</p>
+      <div class="legend">
+        <span><i class="dot ok"></i>Validado</span>
+        <span><i class="dot bad"></i>Devuelto</span>
+        <span><i class="dot info"></i>En revisión</span>
+        <span><i class="dot warn"></i>Falta</span>
       </div>
     </div>
 
-    <div class="divider"></div>
+    <div class="card panel">
+      <h2 class="section-title">Avance por provincia</h2>
+      <div class="bars" id="provinceBars"></div>
+      <div class="insight" id="provinceInsights"></div>
+    </div>
 
-    <section class="flow">
-      <div class="flow-head">
-        <div><h2 id="flowTitle">Flujo operativo · GAD municipal / parroquial</h2><p id="flowDescription">Levanta información territorial, puntos críticos, infraestructura expuesta, aporte cartográfico, acciones preventivas, alojamientos, capacidades y seguimiento del plan.</p></div>
-        <span class="actor-chip" id="actorChip">Actor territorial</span>
+    <div class="card wide">
+      <h2 class="section-title">Detalle operativo</h2>
+      <div class="table-wrap">
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th>Provincia</th>
+              <th>Cantón / entidad</th>
+              <th>Tipo GAD</th>
+              <th>Entrega</th>
+              <th>Estado revisión</th>
+              <th>Fecha entrega</th>
+              <th>Responsable</th>
+              <th>Particularidades</th>
+              <th>Enlaces</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
-
-      <div class="tabs">
-        <button class="tab active" onclick="openTab('datos',this)">1. Llenar datos</button>
-        <button class="tab" onclick="openTab('actualizar',this)">2. Actualizar y prompt</button>
-        <button class="tab" onclick="openTab('gpt',this)">3. GPT y descarga</button>
-        <button class="tab" onclick="openTab('bibliografia',this)">4. Bibliografía</button>
-        <button class="tab" onclick="openTab('dashboard',this)">5. Dashboard</button>
-        <button class="tab" onclick="openTab('riesgozonal',this)">6. Riesgo zonal</button>
-      </div>
-
-      <div id="datos" class="tab-content active">
-        <div class="two">
-          <div>
-            <h2>Formularios Kobo disponibles</h2>
-            <p>Use los formularios según el tipo de actor y el momento del ciclo. Todos alimentan la base consolidada F01-F07.</p>
-            <div class="form-grid" id="formGrid"></div>
-          </div>
-          <div class="info-card">
-            <h3>Uso práctico</h3>
-            <p id="usoPractico">1. Seleccione el actor.<br>2. Abra el formulario correspondiente.<br>3. Use el mismo código de caso en todos los formularios.<br>4. Al finalizar, vuelva al módulo “Actualizar y prompt”.</p>
-            <div class="note">El código de caso es la llave para integrar información de GAD, MTT, Grupo Técnico y CZ5.</div>
-          </div>
-        </div>
-      </div>
-
-      <div id="actualizar" class="tab-content">
-        <div class="two">
-          <div>
-            <h2>Actualizar base y generar prompt GPT</h2>
-            <p>Ingrese el código de caso y genere el prompt técnico para el asistente ENOS Zona 5. Esta versión mantiene la plataforma original y no usa buscador dinámico.</p>
-            <div class="inputline"><label>Código de caso</label><input id="codigoCasoInput" placeholder="Ejemplo: GADSALINAS_PAENOS_2026_2027|PUNTO-1"></div>
-            <div class="note" style="margin:8px 0 12px">Si el usuario no conoce el código, puede identificar el caso por provincia, cantón e institución/GAD. El código se mantiene solo como llave técnica para generar el prompt.</div>
-            <div class="filters prompt-lookup" style="grid-template-columns:1fr 1fr 1.25fr auto">
-              <select id="promptProvinciaFilter" onchange="renderPromptCaseLookup()"><option value="">Provincia: todas</option></select>
-              <select id="promptCantonFilter" onchange="renderPromptCaseLookup()"><option value="">Cantón: todos</option></select>
-              <input id="promptCaseSearch" oninput="renderPromptCaseLookup()" placeholder="Buscar GAD, institución, cantón o número">
-              <button class="btn soft" onclick="usarCasoSeleccionadoParaPrompt()">Usar caso</button>
-            </div>
-            <div class="inputline"><label>Casos encontrados por territorio o institución</label><select id="promptCaseSelect"><option value="">Actualice el dashboard para cargar casos disponibles.</option></select></div>
-            <div class="actions"><button class="btn red" onclick="actualizarBaseF01F07()">Actualizar base F01-F07</button><button class="btn soft" onclick="verCasosDashboard()">Ver casos</button><button class="btn primary" onclick="generarPromptGPT()">Generar y copiar prompt</button><button class="btn white" onclick="cargarUltimoPrompt()">Cargar último prompt</button><button class="btn white" onclick="limpiarPrompt()">Limpiar prompt</button></div>
-            <div id="promptStatus" class="status" style="display:none"><span class="dot"></span><span id="promptStatusText"></span></div>
-            <div class="inputline"><label>Prompt GPT generado</label><textarea id="promptOutput" placeholder="Aquí aparecerá el prompt técnico generado."></textarea></div>
-            <div class="actions"><button class="btn primary" onclick="copiarPromptActual()">Copiar prompt</button><button class="btn green" onclick="abrirGPTInstitucional()">Ingresar al GPT institucional</button></div>
-          </div>
-          <div class="info-card">
-            <h3>Control de suficiencia</h3>
-            <p>• F01 identifica el caso y los puntos críticos.<br>• F02 incorpora infraestructura esencial expuesta.<br>• F03-F07 completan cartografía, acciones, preparación, capacidades y seguimiento.<br>• Si faltan datos, el GPT debe declarar limitaciones y brechas.</p>
-          </div>
-        </div>
-      </div>
-
-      <div id="gpt" class="tab-content">
-        <div class="two">
-          <div>
-            <h2>GPT institucional y cierre práctico</h2>
-            <p>Ingrese al asistente técnico ENOS Zona 5, pegue el prompt generado y descargue el plan de acción desde el GPT.</p>
-            <button class="btn primary" onclick="abrirGPTInstitucional()">Ingresar al GPT institucional</button>
-            <div class="note" style="margin-top:13px">Cierre del ciclo en esta plataforma: el usuario genera el plan con el GPT y descarga el archivo final. La firma, envío por Quipux, archivo institucional o socialización se gestiona fuera de esta página.</div>
-            <h3 style="color:var(--azul3)">Flujo de cierre práctico</h3>
-            <div class="steps"><div class="step"><strong>1. Generar</strong><p>Pegue el prompt en el GPT institucional y solicite el plan de acción.</p></div><div class="step"><strong>2. Revisar</strong><p>Verifique datos, conclusiones, recomendaciones y responsabilidades antes de usarlo oficialmente.</p></div><div class="step"><strong>3. Descargar</strong><p>Descargue el archivo final desde el GPT en Word, PDF o el formato que corresponda.</p></div></div>
-          </div>
-          <div class="info-card"><h3>Criterio operativo</h3><p>1. La página no registra cierres administrativos.<br>2. No se exige carpeta de cierre de ciclo.<br>3. No se utiliza F08.<br>4. El cierre funcional es la descarga del plan desde el GPT.<br>5. La trazabilidad formal queda en los procedimientos institucionales externos.</p></div>
-        </div>
-      </div>
-
-      <div id="bibliografia" class="tab-content">
-        <div class="two">
-          <div>
-            <h2>Bibliografía e insumos de apoyo</h2>
-            <p>Acceso directo a normativa, lineamientos, cartografía, fuentes institucionales y respaldos técnicos que acompañan la construcción del plan.</p>
-            <div class="repo"><div class="step"><strong>Cartografía</strong><p>F03 alimenta mapas, capas, fuentes, formatos y limitaciones.</p></div><div class="step"><strong>Insumos técnicos</strong><p>F01-F06 consolidan amenazas, infraestructura, acciones y capacidades.</p></div><div class="step"><strong>Seguimiento</strong><p>F07 documenta avance mensual, evidencias y escalamiento.</p></div></div>
-            <div class="actions"><button class="btn white">Abrir normativa y lineamientos</button></div>
-          </div>
-          <div class="info-card"><h3>Repositorio técnico</h3><p>Este botón abre directamente la carpeta oficial de Drive con normativa, lineamientos e insumos de apoyo para la elaboración del plan.</p><button class="btn green">Abrir carpeta Drive</button><div class="note" style="margin-top:13px">El cierre práctico del ciclo se realiza mediante descarga directa del plan desde el GPT. La biblioteca queda como repositorio de consulta técnica.</div></div>
-        </div>
-      </div>
-
-      <div id="dashboard" class="tab-content">
-        <h2>Dashboard consolidado ENOS CZ5</h2>
-        <p>Vista ejecutiva conectada a la matriz maestra de seguimiento de planes ENOS CZ5. Presenta el consolidado territorial por GAD, gestión documental, validación técnica, planes faltantes, planes en revisión y planes devueltos.</p>
-        <div class="dashboard-actions">
-          <button class="btn primary" onclick="probarConexionConsolidado()">Probar conexión consolidado</button>
-          <button class="btn soft" onclick="cargarDashboardConsolidado()">Actualizar consolidado</button>
-          <button class="btn red" onclick="actualizarBaseF01F07()">Sincronizar índice F01-F07</button>
-          <button class="btn green" onclick="abrirTabRiesgoZonal()">Ir a riesgo zonal</button>
-          <button class="btn white" onclick="openDetailed()">Información ampliada F01-F07</button>
-        </div>
-        <div id="dashboardStatus" class="status" style="display:none"><span class="dot"></span><span id="dashboardStatusText"></span></div>
-
-        <div class="kpi-row">
-          <div class="kpi-card"><h4>Total GAD CZ5</h4><div class="num" id="dashCasos">—</div><small>Universo territorial consolidado para seguimiento ENOS.</small></div>
-          <div class="kpi-card"><h4>Planes gestionados</h4><div class="num" id="dashRegistros">—</div><small>GAD con gestión documental o plan registrado.</small></div>
-          <div class="kpi-card"><h4>Planes validados</h4><div class="num" id="dashPromedio">—</div><small>Planes con revisión técnica validada por CZ5/SNGR.</small></div>
-          <div class="kpi-card"><h4>Planes faltantes</h4><div class="num" id="dashGeo">—</div><small>GAD sin plan o con estado pendiente/faltante.</small></div>
-        </div>
-
-        <div class="executive">
-          <div class="gauge">
-            <div class="gauge-title">Avance de validación técnica</div>
-            <div class="gauge-number" id="dashGaugeNumber">—</div>
-            <div class="track"><div class="fill" id="dashGaugeFill" style="width:0%"></div></div>
-            <p id="dashLectura" style="margin-top:12px">Actualice el consolidado para leer los datos oficiales de la matriz maestra.</p>
-          </div>
-          <div class="alert">
-            <strong>Lectura ejecutiva consolidada</strong>
-            <span id="dashAlertaEjecutiva">El tablero consolidado permitirá priorizar planes faltantes, devueltos y en revisión por provincia.</span>
-            <div class="actions" style="margin-bottom:0"><button class="btn primary" onclick="cargarDashboardConsolidado()">Actualizar lectura</button></div>
-          </div>
-        </div>
-
-        <div class="detail-grid" style="margin-top:14px">
-          <div class="detail-card">
-            <h3>1. Resumen provincial consolidado</h3>
-            <p>Distribución por provincia del universo de GAD, planes gestionados, validados, en revisión, devueltos y faltantes.</p>
-            <div class="table-wrap" style="max-height:390px">
-              <table>
-                <thead><tr><th>Provincia</th><th>Total GAD</th><th>Gestionados</th><th>Validados</th><th>En revisión</th><th>Devueltos</th><th>Faltantes</th><th>% validado</th></tr></thead>
-                <tbody id="dashProvinciaBody"><tr><td colspan="8">Actualice el consolidado para cargar datos.</td></tr></tbody>
-              </table>
-            </div>
-          </div>
-          <div class="detail-card">
-            <h3>2. Seguimiento por estado</h3>
-            <p>Lectura rápida para toma de decisiones: qué está validado, qué requiere devolución, qué sigue en revisión y qué falta por gestionar.</p>
-            <div class="table-wrap" style="max-height:390px">
-              <table>
-                <thead><tr><th>Estado</th><th>Total</th><th>Lectura operativa</th></tr></thead>
-                <tbody id="dashEstadoBody"><tr><td colspan="3">Actualice el consolidado para cargar datos.</td></tr></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <div id="riesgozonal" class="tab-content">
-        <h2>Análisis de riesgo zonal ENOS CZ5</h2>
-        <p>Módulo conectado a la API de riesgo cantonal. Permite revisar riesgo general, brechas, amenazas, vulnerabilidad, capacidad de respuesta y elementos críticos expuestos desde la matriz maestra.</p>
-
-        <div class="riskz-shell">
-          <div class="riskz-head">
-            <div>
-              <h3>Lectura territorial por semáforo</h3>
-              <p>Use los botones temáticos para cambiar la variable de análisis. Al seleccionar un cantón en el mapa se abre la lectura técnica resumida y la ficha completa.</p>
-            </div>
-            <div id="riskzStatus" class="riskz-status warn">Sin consultar</div>
-          </div>
-
-          <div class="riskz-themebar">
-            <button class="riskz-theme active" type="button" data-tema="RIESGO_GENERAL">Riesgo general</button>
-            <button class="riskz-theme" type="button" data-tema="BRECHAS">Brechas</button>
-            <button class="riskz-theme" type="button" data-tema="AMENAZAS">Amenazas</button>
-            <button class="riskz-theme" type="button" data-tema="VULNERABILIDAD">Vulnerabilidad</button>
-            <button class="riskz-theme" type="button" data-tema="CAPACIDAD">Capacidad</button>
-            <button class="riskz-theme" type="button" data-tema="ELEMENTOS_EXPOSTOS">Elementos expuestos</button>
-          </div>
-
-          <div class="riskz-kpis">
-            <div class="riskz-card"><small>Total GAD</small><strong id="riskzKpiTotal">—</strong></div>
-            <div class="riskz-card"><small>Riesgo alto</small><strong id="riskzKpiAlto">—</strong></div>
-            <div class="riskz-card"><small>Riesgo medio</small><strong id="riskzKpiMedio">—</strong></div>
-            <div class="riskz-card"><small>Riesgo bajo</small><strong id="riskzKpiBajo">—</strong></div>
-            <div class="riskz-card"><small>Prom. brechas</small><strong id="riskzKpiBrechas">—</strong></div>
-            <div class="riskz-card"><small>Prom. amenaza</small><strong id="riskzKpiAmenaza">—</strong></div>
-          </div>
-
-          <div class="riskz-layout">
-            <div class="riskz-mapbox">
-              <div class="riskz-title">
-                <div><h3>Mapa interactivo Zona 5</h3><p id="riskzTemaLabel">Tema activo: Riesgo general</p></div>
-                <div class="riskz-legend"><span><i class="riskz-dot riskz-verde"></i>Bajo</span><span><i class="riskz-dot riskz-amarillo"></i>Medio</span><span><i class="riskz-dot riskz-rojo"></i>Alto</span><span><i class="riskz-dot riskz-sindato"></i>Sin dato</span></div>
-              </div>
-              <div id="riskzMap"></div>
-              <div class="footer-note" id="riskzMapNote">Pendiente de carga.</div>
-            </div>
-
-            <aside class="riskz-panel" id="riskzDetailPanel">
-              <h3>Seleccione un cantón</h3>
-              <p class="muted-text">Toque un punto o polígono del mapa para ver la lectura técnica del territorio.</p>
-            </aside>
-          </div>
-
-          <div class="riskz-tablebox">
-            <div class="riskz-title"><div><h3>Ranking cantonal del tema seleccionado</h3><p>Orden descendente por puntaje.</p></div></div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Provincia</th><th>GAD / Cantón</th><th>Tema</th><th>Puntaje</th><th>Semáforo</th><th>Descripción</th><th>Acción</th></tr></thead>
-                <tbody id="riskzRankingBody"><tr><td colspan="7">Abra el módulo para cargar la información de riesgo.</td></tr></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </section>
-  </section>
-
-  <section id="detalle" class="detail-section">
-    <div class="detail-shell">
-      <div class="detail-head">
-        <div>
-          <h2>Información ampliada ENOS 2026</h2>
-          <p>Módulo conectado al índice para revisar un caso seleccionado: resumen técnico, formularios, registros, brechas, cartografía disponible y calidad de datos. Esta vista no reemplaza al GPT: prepara la lectura antes de generar el plan.</p>
-        </div>
-        <button class="btn white" onclick="closeDetailed()">Volver al dashboard</button>
-      </div>
-      <div class="detail-body">
-        <div class="filters">
-          <input id="detalleCodigoCaso" placeholder="Código de caso para consultar">
-          <select id="detalleActor"><option value="GAD municipal / parroquial">GAD municipal / parroquial</option><option value="Mesa Técnica de Trabajo">Mesa Técnica de Trabajo</option><option value="Grupo de Trabajo / soporte operativo">Grupo de Trabajo / soporte operativo</option><option value="Coordinación Zonal 5 SNGR">Coordinación Zonal 5 SNGR</option></select>
-          <button class="btn primary" onclick="cargarDetalleCaso()">Consultar caso</button>
-          <button class="btn green" onclick="generarPromptDesdeDetalle()">Generar prompt del caso</button>
-        </div>
-        <div id="detalleStatus" class="status" style="display:none"><span class="dot"></span><span id="detalleStatusText"></span></div>
-
-        <div class="detail-tabs" style="margin-top:16px">
-          <button class="detail-tab active" onclick="openDetailTab('dresumen',this)">Resumen</button>
-          <button class="detail-tab" onclick="openDetailTab('dformularios',this)">Formularios</button>
-          <button class="detail-tab" onclick="openDetailTab('dbrechas',this)">Brechas / calidad</button>
-          <button class="detail-tab" onclick="openDetailTab('dterritorio',this)">Cartografía</button>
-          <button class="detail-tab" onclick="openDetailTab('dregistros',this)">Registros índice</button>
-        </div>
-
-        <div id="dresumen" class="detail-module active">
-          <div class="kpi-row">
-            <div class="kpi-card"><h4>Código</h4><div class="num small-num" id="detCodigo">—</div><small>Caso seleccionado.</small></div>
-            <div class="kpi-card"><h4>Registros</h4><div class="num" id="detRegistros">—</div><small>Total asociado al caso.</small></div>
-            <div class="kpi-card"><h4>Formularios</h4><div class="num" id="detFormularios">—</div><small>F01-F07 detectados.</small></div>
-            <div class="kpi-card"><h4>Suficiencia</h4><div class="num small-num" id="detSuficiencia">—</div><small>Lectura automática.</small></div>
-          </div>
-          <div class="detail-card" style="margin-top:14px">
-            <h3>Lectura técnica del caso</h3>
-            <div id="detLectura" class="criteria"><div class="criterion"><strong>Sin caso seleccionado</strong><span>Seleccione un caso desde el dashboard o ingrese el código manualmente.</span></div></div>
-          </div>
-        </div>
-
-        <div id="dformularios" class="detail-module">
-          <div class="detail-card"><h3>Formularios detectados y cobertura</h3><div id="detFormGrid" class="form-grid"></div></div>
-        </div>
-
-        <div id="dbrechas" class="detail-module">
-          <div class="detail-grid">
-            <div class="detail-card"><h3>Faltantes críticos</h3><div id="detFaltantes" class="criteria"></div></div>
-            <div class="detail-card"><h3>Advertencias</h3><div id="detAdvertencias" class="criteria"></div></div>
-          </div>
-        </div>
-
-        <div id="dterritorio" class="detail-module">
-          <div class="detail-grid">
-            <div class="detail-card"><h3>Puntos cartográficos del caso</h3><div class="carto-map" id="detMapLayer"><div class="carto-map-label">Puntos del caso seleccionado</div></div><div class="footer-note" id="detMapNote">Sin caso seleccionado.</div></div>
-            <div class="detail-card"><h3>Tabla territorial</h3><div class="table-wrap" style="max-height:330px"><table><thead><tr><th>Formulario</th><th>Nombre</th><th>Provincia</th><th>Cantón</th><th>Coordenada</th></tr></thead><tbody id="detMapRows"><tr><td colspan="5">Sin datos.</td></tr></tbody></table></div></div>
-          </div>
-        </div>
-
-        <div id="dregistros" class="detail-module">
-          <div class="detail-card"><h3>Registros recuperados desde INDICE_MEMORIA_ENOS</h3><textarea id="detJson" style="min-height:360px" readonly></textarea></div>
-        </div>
-      </div>
+      <p class="note" id="resultNote"></p>
     </div>
   </section>
-
 </main>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="application/json" id="cz5-data">{"metadata": {"nombre": "Plataforma CZ5 - Seguimiento ENOS 2026-2027", "fecha_generacion": "2026-06-30", "zona": "CZ5", "fuente_excel": "MATRIZSEGUIM-EL NIÑO(2)(8).xlsx", "hoja_principal": "Consolidado", "nota": "Base generada a partir de la matriz cargada en esta conversación."}, "summary": {"total_registros": 56, "gad_cantonal": 51, "gad_provincial": 5, "socializados": 56, "participaron": 53, "planes_entregados": 35, "planes_no_entregados": 21, "planes_validados": 37, "planes_devueltos": 10, "planes_en_revision": 7, "planes_faltantes": 2, "porc_entrega": 62.5, "porc_validacion": 66.1, "provincias": ["BOLÍVAR", "GALÁPAGOS", "GUAYAS", "LOS RÍOS", "SANTA ELENA"], "fecha_actualizacion": "2026-06-30", "fuente": "MATRIZSEGUIM-EL NIÑO(2)(8).xlsx / hoja Consolidado"}, "province_summary": [{"provincia": "BOLÍVAR", "registros": 8, "cantones_expuestos": 7, "gad_provincial": 1, "gad_cantonal": 7, "planes_entregados": 6, "planes_no_entregados": 2, "planes_validados": 6, "planes_devueltos": 1, "planes_en_revision": 0, "planes_faltantes": 1, "porc_entrega": 75.0, "porc_validacion": 75.0, "estados": {"VALIDADO": 6, "DEVUELTO": 1, "FALTA": 1}, "entregas": {"SI": 6, "NO": 2}}, {"provincia": "GALÁPAGOS", "registros": 4, "cantones_expuestos": 3, "gad_provincial": 1, "gad_cantonal": 3, "planes_entregados": 0, "planes_no_entregados": 4, "planes_validados": 0, "planes_devueltos": 1, "planes_en_revision": 3, "planes_faltantes": 0, "porc_entrega": 0.0, "porc_validacion": 0.0, "estados": {"EN REVISIÓN": 3, "DEVUELTO": 1}, "entregas": {"NO": 4}}, {"provincia": "GUAYAS", "registros": 26, "cantones_expuestos": 25, "gad_provincial": 1, "gad_cantonal": 25, "planes_entregados": 21, "planes_no_entregados": 5, "planes_validados": 19, "planes_devueltos": 6, "planes_en_revision": 0, "planes_faltantes": 1, "porc_entrega": 80.8, "porc_validacion": 73.1, "estados": {"VALIDADO": 19, "DEVUELTO": 6, "FALTA": 1}, "entregas": {"SI": 21, "NO": 5}}, {"provincia": "LOS RÍOS", "registros": 14, "cantones_expuestos": 13, "gad_provincial": 1, "gad_cantonal": 13, "planes_entregados": 8, "planes_no_entregados": 6, "planes_validados": 11, "planes_devueltos": 2, "planes_en_revision": 1, "planes_faltantes": 0, "porc_entrega": 57.1, "porc_validacion": 78.6, "estados": {"VALIDADO": 11, "DEVUELTO": 2, "EN REVISIÓN": 1}, "entregas": {"SI": 8, "NO": 6}}, {"provincia": "SANTA ELENA", "registros": 4, "cantones_expuestos": 3, "gad_provincial": 1, "gad_cantonal": 3, "planes_entregados": 0, "planes_no_entregados": 4, "planes_validados": 1, "planes_devueltos": 0, "planes_en_revision": 3, "planes_faltantes": 0, "porc_entrega": 0.0, "porc_validacion": 25.0, "estados": {"EN REVISIÓN": 3, "VALIDADO": 1}, "entregas": {"NO": 4}}], "records": [{"_fila_excel": 2, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "BOLÍVAR", "canton": "BOLIVAR", "tipo_de_gad": "PROVINCIAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1UcMuoXuEvXF-p9uoBdV00MYX7kJjljB4", "particularidades": "Por correo, sin quipux", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "PROVINCIAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 3, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "BOLÍVAR", "canton": "CALUMA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1O5n2eDFG4PZnOHS97Jg6N6qSLpk0G2UP/view?usp=sharing", "particularidades": "A destiempo", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1g4imxzfnuN2mT-CP0MdHCT-fUAWkvX6p", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 4, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "BOLÍVAR", "canton": "CHILLANES", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "https://drive.google.com/drive/folders/1byZ5FquCO73torJtW79ftQtdRvepMj3K", "particularidades": "A destiempo", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 5, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "BOLÍVAR", "canton": "CHIMBO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "22/06/2026", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/148p7xLfZ0K72RfZ5-1aKro0PZh99jbaI", "particularidades": "Por correo, sin quipux", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://docs.google.com/document/d/1eufGZTBHur7097y-2BpOdRzL44QTCjkE/edit#bookmark=id.e0ncqbspm3iv", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 6, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "BOLÍVAR", "canton": "ECHEANDÍA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46202.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1t3QQQGJtOLNycEJoX3TFsjB4ssaDd9Du", "particularidades": "", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 7, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "BOLÍVAR", "canton": "GUARANDA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1-Eu4F6k0-CjFTWsK8yDhbDQ_2mXIFfnO", "particularidades": "Falta quipux", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://docs.google.com/document/d/1patrvlY_MGN-CaVLFjmDVTLQRNBsjni3/edit?usp=sharing&ouid=108481756373198582418&rtpof=true&sd=true", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 8, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "BOLÍVAR", "canton": "LAS NAVES", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46176.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "NO PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1RzIis7dL7HSylFQceM1mwEvvtZIJjWEZ/view?usp=sharing", "particularidades": "A destiempo", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "NO PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 9, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "BOLÍVAR", "canton": "SAN MIGUEL", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "0.0", "fecha_de_entrega_del_plan": "", "estado_de_la_revision_del_plan_cz_sngr": "FALTA", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "FALTA", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 0.0}, {"_fila_excel": 10, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GALÁPAGOS", "canton": "ISABELA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46202.0", "estado_de_la_revision_del_plan_cz_sngr": "EN REVISIÓN", "enlace_plan_final": "https://drive.google.com/drive/folders/1ebQ6W950EGROFWq6D9yhQq-HXSTouZwf", "particularidades": "A destiempo", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "EN REVISIÓN", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 11, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GALÁPAGOS", "canton": "SAN CRISTÓBAL", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "", "particularidades": "A destiempo", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 12, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GALÁPAGOS", "canton": "SANTA CRUZ", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46198.0", "estado_de_la_revision_del_plan_cz_sngr": "EN REVISIÓN", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "EN REVISIÓN", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 13, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GALÁPAGOS", "canton": "GALÁPAGOS", "tipo_de_gad": "PROVINCIAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "EN REVISIÓN", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "PROVINCIAL", "estado_revision": "EN REVISIÓN", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 14, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "ALFREDO BAQUERIZO MORENO (JUJÁN)", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1TSbTzQyb2fjMQfg1nB1iilCbwcuox9W8", "particularidades": "", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://docs.google.com/document/d/18spZnxDQzaC5VUG1h-YsOnE8kPmfOJtk/edit", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 15, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "BALAO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1WwLTqC3Hx5_qx89Ysk81AbP1cFbGDTV5", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 16, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "BALZAR", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1JXBjpky8d4QYWuwEdPlWg7jJhgR3MtAP", "particularidades": "Falta quipux", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://docs.google.com/document/d/1VcNpiVXGHU7hixZy8cvXL6gCrYGcDWyc/edit", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 17, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "COLIMES", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1IqBk_ND2MJnyFrwcFqZnWInZP6u4KExl/view?usp=sharing", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 18, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "CORONEL MARCELINO MARIDUEÑA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 19, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "DAULE", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "22/06/2026", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1WPmo9qLgWW-utvlDml0KELGGZRWichTI", "particularidades": "Sin novedad / Con oficio de Quipux entregado", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://docs.google.com/document/d/1lUYagv0xfQMC4TpRNr_g5MMLZM1iAshI/edit", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 20, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "DURÁN", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "46190.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1mCNvLychqdev111JJ7VEhzrWD7DGfU1f", "particularidades": "El archivo no se descarga", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "No hay plan", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1yXtD_MFMZeg7UCcnf9xm_QDN_Z2mT-gB", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 21, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "EL EMPALME", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "46190.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1hksdsG1tW_ucPl6BVE2av5NPnGxqRCQi", "particularidades": "Devuelto al GAD para los ajustes respectivos.", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "Falta Oficio", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1s1J1kTPumao6fbdFrKDtYzclLiW3GSEj", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 22, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "EL TRIUNFO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "", "modalidad": "", "observacion_de_la_socializacion": "", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "0.0", "fecha_de_entrega_del_plan": "", "estado_de_la_revision_del_plan_cz_sngr": "FALTA", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "FALTA", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "", "valoracion_plan_num": 0.0}, {"_fila_excel": 23, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "GENERAL ANTONIO ELIZALDE", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "", "modalidad": "", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "46190.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1FJHTfpCPJ-TG6ZNd-08AEVrwcMKwQ3XC", "particularidades": "FALTA QUIPUX", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "Falta oficio", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1FJHTfpCPJ-TG6ZNd-08AEVrwcMKwQ3XC", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 24, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "GUAYAQUIL", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "46190.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1Tne_qjWfeOVo0B2fFKm6pTGHWxKJAKNt?usp=sharing", "particularidades": "Recivido por parte de la directirora no por la alcaldeza", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1zLBA5U3Wk6fomxdEs6vx3x36tU6nazDH", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 25, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "ISIDRO AYORA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 26, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "LOMAS DE SARGENTILLO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "46190.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1J4Ifu8XyZXuX91FoipNV0C8XI5wCCwk3?usp=sharing", "particularidades": "Devuelto al GAD para los ajustes respectivos.", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "Falta oficio", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1s1J1kTPumao6fbdFrKDtYzclLiW3GSEj", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 27, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "MILAGRO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1fzy3b4DBOB1uNrsSMKJjG8_N37R8lDro", "particularidades": "SIN NOVEDAD - ENVIADO POR QUIPUX", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1fzy3b4DBOB1uNrsSMKJjG8_N37R8lDro", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 28, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "NARANJAL", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "", "particularidades": "Devuelto al GAD para los ajustes respectivos.", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "me han cambiado de fecha", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://docs.google.com/document/d/1m_VVP-Uo5OaZkqaD8WA8EEgt4BuBYq8o/edit", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 29, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "NARANJITO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "0.0", "fecha_de_entrega_del_plan": "46198.0", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 0.0}, {"_fila_excel": 30, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "NOBOL", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1lN6jAdUztGupBCQ-MnRig13ZV__lYbdi/view?usp=drive_link", "particularidades": "falta quipux", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 31, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "PALESTINA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1J7Od-89lhcwxbeBEJe2Gkj3NjkO_N61C/view?usp=sharing", "particularidades": "", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 32, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "PEDRO CARBO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1xbKTrj8HatuDcTU5c0uczfQQCm4JjrHO/view?usp=sharing", "particularidades": "Falta quipux", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "me han cambiado de fecha", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://docs.google.com/document/d/14-m7GO0JC8Iit2OhOsDJeJvHPvB84hIc/edit", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 33, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "PLAYAS", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1gDJ52ZnrHaMV6NH0Wt40eq8fEu46_kgT", "particularidades": "Falta quipux", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1gDJ52ZnrHaMV6NH0Wt40eq8fEu46_kgT", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 34, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "SALITRE", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 35, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "SAMBORONDÓN", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "0.0", "fecha_de_entrega_del_plan": "23/062026", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 0.0}, {"_fila_excel": 36, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "SAN JACINTO DE YAGUACHI", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/16tdxwNl4EuhzCJ2_L2nWkQ3TjoEUY1Dh", "particularidades": "Falta quipux", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/16tdxwNl4EuhzCJ2_L2nWkQ3TjoEUY1Dh", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 37, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "SANTA LUCÍA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1QbOqhWiR8jZ03PQKPfn5TAgCH2SN5oXF/view?usp=drive_link", "particularidades": "Falta quipux", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1jTN8bq6p5GwIW2b7TB7ePzO1rSE-LtIE", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 38, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "SIMÓN BOLÍVAR", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1oXIfhFryLGRpYG7EDMr06FuKC-XpmyyG", "particularidades": "FALTA QUIPUX", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1oXIfhFryLGRpYG7EDMr06FuKC-XpmyyG", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 39, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "GUAYAS", "tipo_de_gad": "PROVINCIAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "46189.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1QnrVSNXHdz8uTSZ0VRAR-efC_b2qkYUB/view?usp=sharing", "particularidades": "Sin Novedad", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1yDacV9w3837MAeycEIK8Gyz9HNAPnrmw?usp=drive_link", "tipo_gad": "PROVINCIAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 40, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "BABA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "", "modalidad": "", "observacion_de_la_socializacion": "", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1J3nub1__bA4LKPWqMa4XpfOjE4sdEp-w", "particularidades": "ENVIO POR QUIPUX", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "cambian de fecha", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1J3nub1__bA4LKPWqMa4XpfOjE4sdEp-w", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "", "valoracion_plan_num": 1.0}, {"_fila_excel": 41, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "BABAHOYO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1LzNQWeaK-btg5C1zAMMMvtUgEEt8ZKgf", "particularidades": "Falta firma", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1LzNQWeaK-btg5C1zAMMMvtUgEEt8ZKgf", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 42, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "BUENA FE", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1M8u7f4MdhU5TPqs8df6mjyOx-RbCmhWT", "particularidades": "ENVIO POR QUIPUX", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1M8u7f4MdhU5TPqs8df6mjyOx-RbCmhWT", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 43, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "MOCACHE", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46198.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/11p3bGKUFIVzuHuQcTII4XtHplb8jHqkG/view?usp=sharing", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 44, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "MONTALVO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1ec4FSsCvjUnbzNwalpfpUVM_Exucy28Z", "particularidades": "", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1gGXbaXQGjJyxsx2FqV-aZ3qq6q9t9Lgm", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 45, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "PALENQUE", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1c4pOARXWhu3vejHM6AR7rJiqnweyvZDf", "particularidades": "FALTA QUIPUX", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1c4pOARXWhu3vejHM6AR7rJiqnweyvZDf", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 46, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "PUEBLOVIEJO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1xcK4aReeF_kLaCYLWwbu9i9MIj6El8jJ", "particularidades": "", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1K-emewzme36v5pR0OmNEjaNP-d9iZ1VO", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 47, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "QUEVEDO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46198.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1OlvpH_-E1Y_tVyL_MzyLm_5bILdEQlWC/view?usp=sharing", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 48, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "QUINSALOMA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "22/06/2026", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "https://drive.google.com/drive/folders/1utF83sgtbHfQou-XaN2kckojiT--Fqb7", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://docs.google.com/document/d/1_liKvDd7w83zmtWyMHgLtjJkTkHQd9L4/edit", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 49, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "URDANETA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1BtaCNqXrcyCmCVckZiy1vYYHHcvLfhhq/view?usp=sharing", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1Q9IDeYZHpSVosTU07D-qZdnnEOZ8mEWo", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 50, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "VALENCIA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "No hay link", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1jNxdXdxk1ChWeHJRE6hQDCjmYN57NSyl", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 51, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "VENTANAS", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1YlpnN963jpU6vvqEDl829pinv_E-KG7Z/view?usp=sharing", "particularidades": "", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1MDNrI1Yzm298EqsAEqRPMCBFht0HiFdz", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 52, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "VINCES", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "EN REVISIÓN", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/12O_x5qwJx7cu9Kmji2JYq7_oFEXg3PBR", "tipo_gad": "CANTONAL", "estado_revision": "EN REVISIÓN", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 53, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "LOS RÍOS", "tipo_de_gad": "PROVINCIAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46198.0", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1LzNQWeaK-btg5C1zAMMMvtUgEEt8ZKgf", "tipo_gad": "PROVINCIAL", "estado_revision": "DEVUELTO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 54, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "SANTA ELENA", "canton": "SALINAS", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "EN REVISIÓN", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "EN REVISIÓN", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 55, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "SANTA ELENA", "canton": "LA LIBERTAD", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "EN REVISIÓN", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1vlAU8R2d5vWWj6-aWtjgGEK2d76tSdTP", "tipo_gad": "CANTONAL", "estado_revision": "EN REVISIÓN", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 56, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "SANTA ELENA", "canton": "SANTA ELENA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1nGenRrQ2frynFfENWXgXGlrVeumFHi0C/view?usp=drive_link", "particularidades": "A destiempo", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 57, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "SANTA ELENA", "canton": "SANTA ELENA", "tipo_de_gad": "PROVINCIAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "EN REVISIÓN", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "PROVINCIAL", "estado_revision": "EN REVISIÓN", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}], "expuestos": [{"provincia": "BOLÍVAR", "provincia_expuesta": "EXPUESTO", "canton": "CALUMA", "canton_expuesto": "EXPUESTO"}, {"provincia": "BOLÍVAR", "provincia_expuesta": "", "canton": "CHILLANES", "canton_expuesto": "EXPUESTO"}, {"provincia": "BOLÍVAR", "provincia_expuesta": "", "canton": "CHIMBO", "canton_expuesto": "EXPUESTO"}, {"provincia": "BOLÍVAR", "provincia_expuesta": "", "canton": "ECHEANDÍA", "canton_expuesto": "EXPUESTO"}, {"provincia": "BOLÍVAR", "provincia_expuesta": "", "canton": "GUARANDA", "canton_expuesto": "EXPUESTO"}, {"provincia": "BOLÍVAR", "provincia_expuesta": "", "canton": "LAS NAVES", "canton_expuesto": "EXPUESTO"}, {"provincia": "BOLÍVAR", "provincia_expuesta": "", "canton": "SAN MIGUEL", "canton_expuesto": "EXPUESTO"}, {"provincia": "GALÁPAGOS", "provincia_expuesta": "EXPUESTO", "canton": "ISABELA", "canton_expuesto": "EXPUESTO"}, {"provincia": "GALÁPAGOS", "provincia_expuesta": "", "canton": "SAN CRISTÓBAL", "canton_expuesto": "EXPUESTO"}, {"provincia": "GALÁPAGOS", "provincia_expuesta": "", "canton": "SANTA CRUZ", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "EXPUESTO", "canton": "ALFREDO BAQUERIZO MORENO (JUJÁN)", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "BALAO", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "BALZAR", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "COLIMES", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "CORONEL MARCELINO MARIDUEÑA", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "DAULE", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "DURÁN", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "EL EMPALME", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "EL TRIUNFO", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "GENERAL ANTONIO ELIZALDE", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "GUAYAQUIL", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "ISIDRO AYORA", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "LOMAS DE SARGENTILLO", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "MILAGRO", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "NARANJAL", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "NARANJITO", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "NOBOL", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "PALESTINA", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "PEDRO CARBO", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "PLAYAS", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "SALITRE", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "SAMBORONDÓN", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "SAN JACINTO DE YAGUACHI", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "SANTA LUCÍA", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "SIMÓN BOLÍVAR", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "EXPUESTO", "canton": "BABA", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "BABAHOYO", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "BUENA FE", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "MOCACHE", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "MONTALVO", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "PALENQUE", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "PUEBLOVIEJO", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "QUEVEDO", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "QUINSALOMA", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "URDANETA", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "VALENCIA", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "VENTANAS", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "VINCES", "canton_expuesto": "EXPUESTO"}, {"provincia": "SANTA ELENA", "provincia_expuesta": "EXPUESTO", "canton": "LA LIBERTAD", "canton_expuesto": "EXPUESTO"}, {"provincia": "SANTA ELENA", "provincia_expuesta": "", "canton": "SALINAS", "canton_expuesto": "EXPUESTO"}, {"provincia": "SANTA ELENA", "provincia_expuesta": "", "canton": "SANTA ELENA", "canton_expuesto": "EXPUESTO"}], "diccionario_campos": {"provincia": "Provincia del GAD o territorio de seguimiento", "canton": "Cantón; en registros provinciales se usa la provincia como entidad operativa", "tipo_gad": "CANTONAL o PROVINCIAL", "socializacion": "Socialización personalizada realizada", "entrega_plan": "Entrega del plan de acción", "estado_revision": "Estado de revisión técnica en CZ SNGR", "valoracion_plan_num": "Valoración numérica del plan cuando fue registrada", "enlace_plan_final": "Enlace al plan final, cuando existe", "enlace_plan_borrador": "Enlace al plan borrador, cuando existe"}}</script>
 <script>
+const DATA = JSON.parse(document.getElementById('cz5-data').textContent);
+let state = { province: '', status: '', search: '' };
 
-// VERSION_ORIGINAL_FORMULARIOS_POR_ACTOR_PROMPT_FIX_20260622_01
-const GPT_INSTITUCIONAL_URL = 'https://chatgpt.com/g/g-6a1db50eb650819185c06255c6850509-asistente-tecnico-enos-guayas-2-0';
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+const norm = v => (v || '').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().trim();
+const slug = v => norm(v).replace(/[^A-Z0-9]+/g,'-').replace(/(^-|-$)/g,'') || 'SIN-DATO';
+const pct = (a,b) => b ? Math.round((a/b)*1000)/10 : 0;
 
-const FORM_LINKS = {
-  F01: 'https://ee.kobotoolbox.org/x/XuixUrMH',
-  F02: 'https://ee.kobotoolbox.org/x/HxbqyITN',
-  F03: 'https://ee.kobotoolbox.org/x/BMR6RaE1',
-  F04: 'https://ee.kobotoolbox.org/x/xo3JtPm9',
-  F05: 'https://ee.kobotoolbox.org/x/lgXrZHzb',
-  F06: 'https://ee.kobotoolbox.org/x/NL8gKLLD',
-  F07: 'https://ee.kobotoolbox.org/x/0pXtskTZ'
-};
-
-const FORM_CARDS = {
-  F01: {title:'F01 - Punto crítico territorial', desc:'Identifica caso, puntos críticos, amenazas, brechas, elementos expuestos y acciones iniciales.'},
-  F02: {title:'F02 - Infraestructura esencial expuesta', desc:'Registra infraestructura expuesta, criticidad, vulnerabilidad, brechas y acciones requeridas.'},
-  F03: {title:'F03 - Aporte cartográfico institucional', desc:'Registra capas, mapas, fuentes, formatos, cobertura y limitaciones cartográficas aportadas por GAD, instituciones técnicas o CZ5.'},
-  F04: {title:'F04 - Acciones preventivas y mitigación', desc:'Documenta acciones propuestas, responsables, prioridad, plazo, recursos y estado.'},
-  F05: {title:'F05 - Alojamientos, rutas y puntos seguros', desc:'Registra alojamientos temporales, rutas, puntos seguros, brechas y responsables.'},
-  F06: {title:'F06 - Capacidades y recursos', desc:'Registra recursos disponibles, capacidades institucionales, logística y brechas operativas.'},
-  F07: {title:'F07 - Seguimiento mensual del plan', desc:'Actualiza avance mensual, evidencias, nudos críticos, estado de cumplimiento y necesidades de escalamiento.'}
-};
-
-const ACTOR_CONFIG = {
-  GAD: {
-    title:'Flujo operativo · GAD municipal / parroquial',
-    chip:'Actor territorial',
-    description:'Levanta información territorial, puntos críticos, infraestructura expuesta, aporte cartográfico, acciones preventivas, alojamientos, capacidades y seguimiento del plan.',
-    forms:['F01','F02','F03','F04','F05','F06','F07'],
-    uso:'1. Seleccione GAD municipal/parroquial.<br>2. Abra los formularios requeridos del ciclo completo F01-F07.<br>3. Use el mismo código de caso en todos los formularios.<br>4. Al finalizar, vuelva al módulo “Actualizar y prompt”.'
-  },
-  MTT: {
-    title:'Flujo operativo · Mesa Técnica de Trabajo',
-    chip:'Actor sectorial',
-    description:'Aporta información sectorial sobre infraestructura, cartografía, acciones, capacidades, recursos y seguimiento según su competencia.',
-    forms:['F02','F03','F04','F06','F07'],
-    uso:'1. Seleccione Mesa Técnica de Trabajo.<br>2. Registre solo la información sectorial aplicable a su competencia.<br>3. Use el mismo código de caso entregado por el GAD o CZ5.<br>4. F01 no se muestra porque la MTT no crea el caso territorial padre.'
-  },
-  GT: {
-    title:'Flujo operativo · Grupo de Trabajo / soporte operativo',
-    chip:'Soporte operativo',
-    description:'Registra acciones, alojamientos, rutas, puntos seguros, capacidades, recursos operativos y seguimiento de respuesta/preparación.',
-    forms:['F04','F05','F06','F07'],
-    uso:'1. Seleccione Grupo de Trabajo / soporte operativo.<br>2. Registre acciones, preparación, capacidades y seguimiento.<br>3. Use el código de caso entregado por el GAD, MTT o CZ5.<br>4. No se muestran F01-F03 salvo que el equipo tenga competencia técnica para levantarlos.'
-  },
-  CZ5: {
-    title:'Flujo operativo · Coordinación Zonal 5 SNGR',
-    chip:'Control CZ5',
-    description:'Consolida, verifica, controla calidad, genera paquetes GPT, monitorea el total de planes y mantiene trazabilidad zonal.',
-    forms:['F01','F02','F03','F04','F05','F06','F07'],
-    uso:'1. Seleccione Coordinación Zonal 5.<br>2. Revise o complete cualquier formulario F01-F07 cuando corresponda asistencia técnica.<br>3. Use el código de caso para consolidación y paquete GPT.<br>4. Verifique calidad antes de seguimiento o descarga.'
-  }
-};
-
-let selectedActor = 'GAD';
-
-function renderActorForms(actorKey){
-  const cfg = ACTOR_CONFIG[actorKey] || ACTOR_CONFIG.GAD;
-  selectedActor = actorKey;
-  document.getElementById('flowTitle').textContent = cfg.title;
-  document.getElementById('flowDescription').textContent = cfg.description;
-  document.getElementById('actorChip').textContent = cfg.chip;
-  const uso = document.getElementById('usoPractico');
-  if(uso) uso.innerHTML = cfg.uso;
-
-  const grid = document.getElementById('formGrid');
-  grid.innerHTML = '';
-
-  cfg.forms.forEach(id => {
-    const data = FORM_CARDS[id];
-    const card = document.createElement('div');
-    card.className = 'form-card';
-    card.innerHTML = '<h3>' + data.title + '</h3><p>' + data.desc + '</p>';
-    const a = document.createElement('a');
-    a.className = 'btn primary';
-    a.textContent = 'Abrir Kobo';
-    a.href = FORM_LINKS[id] || '#';
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    if(!FORM_LINKS[id] || FORM_LINKS[id] === '#'){
-      a.addEventListener('click', function(e){
-        e.preventDefault();
-        alert('Enlace pendiente para ' + id + '.');
-      });
-    }
-    card.appendChild(a);
-    grid.appendChild(card);
+function filteredRecords() {
+  const q = norm(state.search);
+  return DATA.records.filter(r => {
+    const matchProv = !state.province || r.provincia === state.province;
+    const matchStatus = !state.status || r.estado_revision === state.status;
+    const haystack = norm([r.provincia, r.canton, r.tipo_gad, r.pf_que_reporta_la_informacion, r.particularidades, r.estado_revision].join(' '));
+    const matchSearch = !q || haystack.includes(q);
+    return matchProv && matchStatus && matchSearch;
   });
 }
 
-function selectActor(actorKey, el){
-  document.querySelectorAll('.role').forEach(r=>r.classList.remove('active'));
-  if(el) el.classList.add('active');
-  renderActorForms(actorKey);
+function count(records, field, value) {
+  return records.filter(r => r[field] === value).length;
 }
 
-document.addEventListener('DOMContentLoaded', function(){
-  renderActorForms('GAD');
-  renderPromptCaseLookup();
-});
-
-function openTab(id, btn){
-  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
-  btn.classList.add('active');
-  if(id === 'dashboard'){
-    setTimeout(function(){
-      renderDashboardMap();
-      if(window.ENOS_LEAFLET_MAP){ window.ENOS_LEAFLET_MAP.invalidateSize(); }
-    }, 250);
-  }
-}
-function openDetailed(){
-  const d=document.getElementById('detalle');
-  d.classList.add('active');
-  d.scrollIntoView({behavior:'smooth',block:'start'});
-}
-function closeDetailed(){
-  document.getElementById('detalle').classList.remove('active');
-  document.getElementById('dashboard').scrollIntoView({behavior:'smooth',block:'start'});
-}
-function openDetailTab(id,btn){
-  document.querySelectorAll('.detail-module').forEach(el=>el.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.detail-tab').forEach(el=>el.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-function setPromptStatus(message, ok){
-  const box = document.getElementById('promptStatus');
-  const txt = document.getElementById('promptStatusText');
-  if(!box || !txt) return;
-  txt.textContent = message || '';
-  box.style.display = message ? 'flex' : 'none';
-  box.style.background = ok ? '#eef9f2' : '#fff8e8';
-  box.style.borderColor = ok ? '#bfe5ca' : '#f1d28b';
-}
-
-
-// VERSION_INDICE_MEMORIA_PROMPT_REAL_20260622_02
-const ENOS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzp-apAS0-u3JPrVzjIk3KgmGeK5ISx61rqM9amLtXmIz3XWWdplhpgbHe4srPXDlHi/exec';
-const ENOS_WEBAPP_KEY = 'CZ5_ENOS_2026';
-
-function extraerCodigoCaso(valor){
-  let txt = String(valor || '').trim();
-  if(!txt) return '';
-
-  // Si por error se pegó un prompt completo, se extrae solo el código.
-  const patrones = [
-    /Código de caso:\s*([A-Za-z0-9_\-|\.]+)/i,
-    /Código solicitado:\s*([A-Za-z0-9_\-|\.]+)/i,
-    /codigo_caso["']?\s*[:=]\s*["']?([A-Za-z0-9_\-|\.]+)/i
+function renderKpis(records) {
+  const total = records.length;
+  const cards = [
+    ['Registros', total, 'GAD cantonales y provinciales'],
+    ['Socializados', count(records,'socializacion','SI'), pct(count(records,'socializacion','SI'), total) + '%'],
+    ['Planes entregados', count(records,'entrega_plan','SI'), pct(count(records,'entrega_plan','SI'), total) + '%'],
+    ['Validados', count(records,'estado_revision','VALIDADO'), pct(count(records,'estado_revision','VALIDADO'), total) + '%'],
+    ['Devueltos', count(records,'estado_revision','DEVUELTO'), 'requieren ajuste'],
+    ['En revisión', records.filter(r => ['EN REVISIÓN','EN REVISION'].includes(r.estado_revision)).length, 'pendiente dictamen'],
+    ['Faltantes', count(records,'estado_revision','FALTA'), 'sin cierre'],
+    ['No entregados', count(records,'entrega_plan','NO'), 'brecha documental']
   ];
-
-  for(const patron of patrones){
-    const m = txt.match(patron);
-    if(m && m[1]) return m[1].trim();
-  }
-
-  // Si no es prompt, se limpia el valor como código.
-  txt = txt.split(/\s+/)[0].trim();
-  return txt;
+  $('#kpis').innerHTML = cards.map(c => `
+    <div class="kpi">
+      <div class="label">${c[0]}</div>
+      <div class="value">${c[1]}</div>
+      <small>${c[2]}</small>
+    </div>`).join('');
 }
 
-function obtenerActorPlataforma(){
-  const cfg = ACTOR_CONFIG[selectedActor] || ACTOR_CONFIG.GAD;
-  return cfg.title.replace('Flujo operativo · ', '');
+function renderFilters() {
+  const provinces = DATA.summary.provincias;
+  $('#provinceSelect').innerHTML = '<option value="">Todas las provincias</option>' + provinces.map(p => `<option value="${p}">${p}</option>`).join('');
+  const statuses = Array.from(new Set(DATA.records.map(r => r.estado_revision).filter(Boolean))).sort();
+  $('#statusSelect').innerHTML = '<option value="">Todos los estados</option>' + statuses.map(s => `<option value="${s}">${s}</option>`).join('');
+  $('#provinceButtons').innerHTML = '<button data-provincia="" class="active">Todas</button>' + provinces.map(p => `<button data-provincia="${p}">${p}</button>`).join('');
 }
 
-function jsonpENOS(action, params){
-  return new Promise(function(resolve, reject){
-    if(!ENOS_WEBAPP_URL || ENOS_WEBAPP_URL.indexOf('script.google.com') === -1){
-      reject(new Error('No está configurada la URL del Web App de Apps Script.'));
-      return;
-    }
-
-    const callbackName = 'enosCallback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
-    const url = new URL(ENOS_WEBAPP_URL);
-    url.searchParams.set('action', action);
-    url.searchParams.set('webapp_key', ENOS_WEBAPP_KEY);
-    url.searchParams.set('callback', callbackName);
-    url.searchParams.set('_t', Date.now());
-
-    Object.keys(params || {}).forEach(function(k){
-      url.searchParams.set(k, params[k]);
-    });
-
-    const script = document.createElement('script');
-    let finished = false;
-
-    const timeout = setTimeout(function(){
-      if(finished) return;
-      finished = true;
-      cleanup();
-      reject(new Error('Tiempo de espera agotado consultando Apps Script.'));
-    }, 45000);
-
-    function cleanup(){
-      clearTimeout(timeout);
-      try { delete window[callbackName]; } catch(e) { window[callbackName] = undefined; }
-      if(script && script.parentNode) script.parentNode.removeChild(script);
-    }
-
-    window[callbackName] = function(response){
-      if(finished) return;
-      finished = true;
-      cleanup();
-      resolve(response);
-    };
-
-    script.onerror = function(){
-      if(finished) return;
-      finished = true;
-      cleanup();
-      reject(new Error('No se pudo conectar con Apps Script. Revise implementación y permisos del Web App.'));
-    };
-
-    script.src = url.toString();
-    document.body.appendChild(script);
-  });
-}
-
-function construirPromptDesdeRespuestaIndice(codigoCaso, response){
-  if(response && response.prompt) return response.prompt;
-
-  if(response && response.paquete){
-    return [
-      'INSTRUCCIÓN PARA GPT:',
-      'Actúa como asistente técnico ENOS Zona 5 de la Secretaría Nacional de Gestión de Riesgos.',
-      '',
-      'Usa únicamente la información contenida en el PAQUETE GPT CZ5 DEL CASO.',
-      '',
-      'DATOS DE CONTROL DE LA PLATAFORMA:',
-      '- Código solicitado: ' + codigoCaso,
-      '- Actor seleccionado: ' + obtenerActorPlataforma(),
-      '- Registros detectados: ' + (response.total_registros || response.total || ''),
-      '',
-      'PAQUETE GPT CZ5 DEL CASO:',
-      JSON.stringify(response.paquete, null, 2),
-      '',
-      'ESTRUCTURA ESPERADA:',
-      '- Antecedentes',
-      '- Objetivo general y específicos',
-      '- Alcance y limitaciones',
-      '- Metodología',
-      '- Insumos utilizados',
-      '- Caracterización territorial',
-      '- Análisis de amenazas, exposición, vulnerabilidad, infraestructura y capacidades',
-      '- Matriz de hallazgos',
-      '- Plan de acción',
-      '- Seguimiento mensual y cierre',
-      '- Conclusiones',
-      '- Recomendaciones',
-      '- Anexos'
-    ].join(String.fromCharCode(10));
-  }
-
-  throw new Error('Apps Script respondió, pero no devolvió prompt ni paquete GPT.');
-}
-
-async function generarPromptGPT(){
-  const input = document.getElementById('codigoCasoInput');
-  const output = document.getElementById('promptOutput');
-  const codigo = extraerCodigoCaso(input && input.value ? input.value : '');
-
-  if(!codigo){
-    alert('Ingrese primero el código de caso.');
-    if(input) input.focus();
-    return;
-  }
-
-  if(input) input.value = codigo;
-  if(output) output.value = '';
-
-  setPromptStatus('Consultando INDICE_MEMORIA_ENOS para el caso: ' + codigo + ' ...', true);
-
-  try{
-    const response = await jsonpENOS('generatePromptFromIndex', {
-      codigo_caso: codigo,
-      actor: obtenerActorPlataforma()
-    });
-
-    if(!response || response.ok === false){
-      const msg = (response && (response.message || response.error)) || 'No se encontró el caso o Apps Script no devolvió respuesta válida.';
-      setPromptStatus(msg, false);
-      if(output) output.value = 'NO SE GENERÓ PROMPT.\n\n' + msg + '\n\nCódigo buscado: ' + codigo + '\n\nRevise que el caso exista en INDICE_MEMORIA_ENOS y que el Web App esté implementado como nueva versión.';
-      return;
-    }
-
-    const prompt = construirPromptDesdeRespuestaIndice(codigo, response);
-    if(!prompt || prompt.indexOf('PAQUETE GPT CZ5 DEL CASO') === -1){
-      setPromptStatus('La respuesta no contiene PAQUETE GPT CZ5 DEL CASO. No se usará plantilla genérica.', false);
-      if(output) output.value = JSON.stringify(response, null, 2);
-      return;
-    }
-
-    if(output) output.value = prompt;
-    try { localStorage.setItem('ENOS_ULTIMO_PROMPT_GPT', prompt); } catch(e) {}
-    copiarTextoSeguro(prompt);
-
-    const total = response.total_registros || response.total || (response.paquete && response.paquete.resumen_control ? response.paquete.resumen_control.total_registros_indice : '');
-    setPromptStatus('Prompt real generado desde INDICE_MEMORIA_ENOS para: ' + codigo + (total ? ' · Registros: ' + total : ''), true);
-
-  }catch(error){
-    const msg = error && error.message ? error.message : String(error);
-    setPromptStatus('Error consultando índice: ' + msg, false);
-    if(output) output.value = 'NO SE GENERÓ PROMPT.\n\nError consultando Apps Script / INDICE_MEMORIA_ENOS:\n' + msg + '\n\nCódigo buscado: ' + codigo;
-  }
-}
-
-function copiarTextoSeguro(texto){
-  if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(texto).catch(function(){});
-    return;
-  }
-  const area = document.createElement('textarea');
-  area.value = texto;
-  document.body.appendChild(area);
-  area.focus();
-  area.select();
-  try { document.execCommand('copy'); } catch(e) {}
-  document.body.removeChild(area);
-}
-
-function copiarPromptActual(){
-  const output = document.getElementById('promptOutput');
-  const prompt = output ? output.value.trim() : '';
-  if(!prompt){
-    alert('No hay prompt generado para copiar.');
-    return;
-  }
-  copiarTextoSeguro(prompt);
-  setPromptStatus('Prompt copiado al portapapeles.', true);
-}
-
-function cargarUltimoPrompt(){
-  let prompt = '';
-  try { prompt = localStorage.getItem('ENOS_ULTIMO_PROMPT_GPT') || ''; } catch(e) {}
-  if(!prompt){
-    alert('No hay prompt guardado en este navegador.');
-    return;
-  }
-  const output = document.getElementById('promptOutput');
-  if(output) output.value = prompt;
-  setPromptStatus('Último prompt cargado.', true);
-}
-
-function limpiarPrompt(){
-  const input = document.getElementById('codigoCasoInput');
-  const output = document.getElementById('promptOutput');
-  if(input) input.value = '';
-  if(output) output.value = '';
-  setPromptStatus('', true);
-}
-
-
-async function verCasosDashboard(){
-  setPromptStatus('Consultando casos disponibles desde INDICE_MEMORIA_ENOS...', true);
-  try{
-    const response = await jsonpENOS('listCases', {});
-    if(!response || response.ok === false){
-      setPromptStatus((response && (response.message || response.error)) || 'No se pudo listar casos.', false);
-      return;
-    }
-    const total = response.total_casos || (response.data ? response.data.length : 0);
-    setPromptStatus('Casos disponibles desde INDICE_MEMORIA_ENOS: ' + total, true);
-    const tab = Array.from(document.querySelectorAll('.tab')).find(b => b.textContent.includes('Dashboard'));
-    if(tab) openTab('dashboard', tab);
-  }catch(error){
-    setPromptStatus('Error consultando casos: ' + (error.message || error), false);
-  }
-}
-
-async function actualizarBaseF01F07(){
-  setPromptStatus('Reconstruyendo INDICE_MEMORIA_ENOS desde todas las hojas...', true);
-  try{
-    const response = await jsonpENOS('rebuildIndex', {});
-    if(!response || response.ok === false){
-      setPromptStatus((response && (response.message || response.error)) || 'No se pudo reconstruir el índice.', false);
-      return;
-    }
-    const total = response.total_registros || response.total || response.registros_indexados || '';
-    setPromptStatus('INDICE_MEMORIA_ENOS reconstruido correctamente' + (total ? ' · Registros: ' + total : '') + '.', true);
-  }catch(error){
-    setPromptStatus('Error reconstruyendo índice: ' + (error.message || error), false);
-  }
-}
-
-function abrirGPTInstitucional(){
-  window.open(GPT_INSTITUCIONAL_URL, '_blank', 'noopener,noreferrer');
-}
-
-
-
-// VERSION_DASHBOARD_OPERATIVO_INFO_AMPLIADA_20260622_01
-let ENOS_DASHBOARD_DATA = {summary:null, map:[], cases:[], selectedCase:null};
-window.ENOS_LEAFLET_MAP = null;
-window.ENOS_LEAFLET_LAYER = null;
-window.ENOS_LEAFLET_BASES = null;
-
-function setDashboardStatus(message, ok){
-  const box=document.getElementById('dashboardStatus');
-  const txt=document.getElementById('dashboardStatusText');
-  if(!box||!txt) return;
-  txt.textContent=message||'';
-  box.style.display=message?'flex':'none';
-  box.style.background=ok?'#eef9f2':'#fff8e8';
-  box.style.borderColor=ok?'#bfe5ca':'#f1d28b';
-}
-function setDetalleStatus(message, ok){
-  const box=document.getElementById('detalleStatus');
-  const txt=document.getElementById('detalleStatusText');
-  if(!box||!txt) return;
-  txt.textContent=message||'';
-  box.style.display=message?'flex':'none';
-  box.style.background=ok?'#eef9f2':'#fff8e8';
-  box.style.borderColor=ok?'#bfe5ca':'#f1d28b';
-}
-
-async function probarConexionConsolidado(){
-  setDashboardStatus('Probando conexión con API consolidada de planes ENOS CZ5...', true);
-  try{
-    const data = await apiConsolidadoCZ5('resumen', {});
-    const r = data.resumen || {};
-    setDashboardStatus('Conexión consolidada OK · Total GAD: '+(r.total_gad||0)+' · Validados: '+(r.planes_validados||0), true);
-  }catch(e){
-    setDashboardStatus('Error de conexión consolidada: ' + (e.message || e), false);
-  }
-}
-
-async function cargarDashboardConsolidado(){
-  setDashboardStatus('Cargando consolidado de planes ENOS CZ5 desde la matriz maestra...', true);
-  try{
-    const data = await apiConsolidadoCZ5('resumen', {});
-    if(!data || data.ok === false) throw new Error((data && (data.mensaje || data.message || data.error)) || 'La API consolidada no devolvió una respuesta válida.');
-    renderDashboardConsolidadoPlanes(data);
-    const r = data.resumen || {};
-    setDashboardStatus('Consolidado actualizado. Total GAD: '+(r.total_gad||0)+' · Gestionados: '+(r.planes_gestionados||0)+' · Validados: '+(r.planes_validados||0)+' · Faltantes: '+(r.planes_faltantes||0), true);
-  }catch(e){
-    setDashboardStatus('Error cargando consolidado: ' + (e.message || e), false);
-  }
-}
-
-async function apiConsolidadoCZ5(vista, params){
-  const apiUrl = (typeof RIESGO_API_URL !== 'undefined' && RIESGO_API_URL) ? RIESGO_API_URL : 'https://script.google.com/macros/s/AKfycbw9pDFZv6HBseCNILV90w8XfZL043inXnG0kvXDdgXl35N2vdKYIrYGh5HgAsXjfRbxEA/exec';
-  const token = (typeof RIESGO_API_TOKEN !== 'undefined' && RIESGO_API_TOKEN) ? RIESGO_API_TOKEN : '';
-  if(!token || token === 'CAMBIAR_TOKEN_AQUI') throw new Error('Falta configurar RIESGO_API_TOKEN dentro del index.html.');
-  const url = new URL(apiUrl);
-  url.searchParams.set('token', token);
-  url.searchParams.set('vista', vista);
-  Object.keys(params || {}).forEach(function(k){
-    if(params[k] !== undefined && params[k] !== null && params[k] !== '') url.searchParams.set(k, params[k]);
-  });
-  const r = await fetch(url.toString(), {method:'GET', cache:'no-store'});
-  if(!r.ok) throw new Error('HTTP '+r.status+' consultando vista='+vista);
-  const data = await r.json();
-  if(!data || data.ok === false) throw new Error((data && (data.mensaje || data.message || data.error)) || 'Respuesta no válida de vista='+vista);
-  return data;
-}
-
-function renderDashboardConsolidadoPlanes(data){
-  const r = data.resumen || {};
-  const total = Number(r.total_gad || 0);
-  const gestionados = Number(r.planes_gestionados || 0);
-  const validados = Number(r.planes_validados || 0);
-  const faltantes = Number(r.planes_faltantes || 0);
-  const revision = Number(r.planes_en_revision || 0);
-  const devueltos = Number(r.planes_devueltos || 0);
-  const observados = Number(r.observados_calidad_dato || 0);
-  const pctGestionados = Number(r.porcentaje_gestionados || porcentajeSeguro(gestionados, total));
-  const pctValidados = Number(r.porcentaje_validados || porcentajeSeguro(validados, total));
-  const pctFaltantes = Number(r.porcentaje_faltantes || porcentajeSeguro(faltantes, total));
-
-  setText('dashCasos', total);
-  setText('dashRegistros', gestionados);
-  setText('dashPromedio', validados);
-  setText('dashGeo', faltantes);
-  setText('dashGaugeNumber', pctValidados + '%');
-
-  const fill = document.getElementById('dashGaugeFill');
-  if(fill) fill.style.width = Math.max(0, Math.min(100, pctValidados)) + '%';
-
-  setText('dashLectura', 'Validación técnica: '+validados+' de '+total+' GAD ('+pctValidados+'%). Gestión documental: '+gestionados+' de '+total+' ('+pctGestionados+'%). Faltantes: '+faltantes+' ('+pctFaltantes+'%).');
-  setText('dashAlertaEjecutiva', 'Prioridad operativa: '+faltantes+' faltantes, '+revision+' en revisión y '+devueltos+' devueltos. Observados por calidad de dato: '+observados+'.');
-
-  renderDashboardProvinciaConsolidada(data.por_provincia || []);
-  renderDashboardEstadosConsolidado({total, gestionados, validados, faltantes, revision, devueltos, observados});
-}
-
-function renderDashboardProvinciaConsolidada(lista){
-  const body = document.getElementById('dashProvinciaBody');
-  if(!body) return;
-  if(!lista || !lista.length){
-    body.innerHTML = '<tr><td colspan="8">La API respondió sin detalle provincial.</td></tr>';
-    return;
-  }
-  body.innerHTML = lista.map(function(p){
-    const pct = Number(p.porcentaje_validados || porcentajeSeguro(p.planes_validados, p.total_gad));
-    return '<tr>'+
-      '<td><strong>'+escapeHtml(p.provincia || 'S/D')+'</strong></td>'+
-      '<td>'+escapeHtml(p.total_gad || 0)+'</td>'+
-      '<td>'+escapeHtml(p.planes_gestionados || 0)+'</td>'+
-      '<td><span class="tag ok">'+escapeHtml(p.planes_validados || 0)+'</span></td>'+
-      '<td><span class="tag warn">'+escapeHtml(p.planes_en_revision || 0)+'</span></td>'+
-      '<td><span class="tag bad">'+escapeHtml(p.planes_devueltos || 0)+'</span></td>'+
-      '<td><span class="tag info">'+escapeHtml(p.planes_faltantes || 0)+'</span></td>'+
-      '<td><strong>'+pct+'%</strong></td>'+
-    '</tr>';
+function renderProvinceBars(records) {
+  const summaries = DATA.province_summary.filter(p => !state.province || p.provincia === state.province);
+  $('#provinceBars').innerHTML = summaries.map(p => {
+    const total = p.registros || 1;
+    const valid = p.planes_validados || 0;
+    const w = pct(valid,total);
+    return `<div class="bar-row">
+      <div class="bar-label">${p.provincia}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${w}%"></div></div>
+      <div><b>${w}%</b></div>
+    </div>`;
   }).join('');
+
+  const recs = records;
+  const total = recs.length;
+  $('#provinceInsights').innerHTML = [
+    ['Entregados', count(recs,'entrega_plan','SI'), pct(count(recs,'entrega_plan','SI'), total)+'%'],
+    ['Validados', count(recs,'estado_revision','VALIDADO'), pct(count(recs,'estado_revision','VALIDADO'), total)+'%'],
+    ['Devueltos', count(recs,'estado_revision','DEVUELTO'), 'corregir'],
+    ['Sin entrega', count(recs,'entrega_plan','NO'), 'gestionar']
+  ].map(x => `<div class="mini"><b>${x[1]}</b><span>${x[0]} · ${x[2]}</span></div>`).join('');
 }
 
-function renderDashboardEstadosConsolidado(e){
-  const body = document.getElementById('dashEstadoBody');
-  if(!body) return;
-  const rows = [
-    {estado:'Validado', total:e.validados, cls:'ok', lectura:'Planes listos o técnicamente aceptados para seguimiento institucional.'},
-    {estado:'En revisión', total:e.revision, cls:'warn', lectura:'Requieren cierre de revisión CZ5/SNGR y confirmación técnica.'},
-    {estado:'Devuelto', total:e.devueltos, cls:'bad', lectura:'Requieren corrección del GAD y nueva remisión.'},
-    {estado:'Faltante', total:e.faltantes, cls:'info', lectura:'Prioridad de gestión: asistencia técnica, oficio o seguimiento directo.'},
-    {estado:'Observado por calidad de dato', total:e.observados, cls:'warn', lectura:'Revisar consistencia, campos vacíos, enlaces, fechas o clasificación territorial.'}
-  ];
-  body.innerHTML = rows.map(function(r){
-    return '<tr><td><span class="tag '+r.cls+'">'+escapeHtml(r.estado)+'</span></td><td><strong>'+escapeHtml(r.total || 0)+'</strong></td><td>'+escapeHtml(r.lectura)+'</td></tr>';
-  }).join('');
+function linkCell(r) {
+  const links = [];
+  if (r.enlace_plan_final) links.push(`<a target="_blank" href="${r.enlace_plan_final}">Final</a>`);
+  if (r.enlace_plan_borrador) links.push(`<a target="_blank" href="${r.enlace_plan_borrador}">Borrador</a>`);
+  return links.join(' · ') || '—';
 }
 
-function porcentajeSeguro(valor, total){
-  valor = Number(valor || 0);
-  total = Number(total || 0);
-  if(!total) return 0;
-  return Math.round((valor / total) * 1000) / 10;
+function renderTable(records) {
+  const tbody = $('#dataTable tbody');
+  tbody.innerHTML = records.map(r => `
+    <tr>
+      <td>${r.provincia || '—'}</td>
+      <td><b>${r.canton || '—'}</b></td>
+      <td>${r.tipo_gad || '—'}</td>
+      <td>${r.entrega_plan || '—'}</td>
+      <td><span class="badge ${slug(r.estado_revision)}">${r.estado_revision || 'SIN DATO'}</span></td>
+      <td>${r.fecha_de_entrega_del_plan || '—'}</td>
+      <td>${r.pf_que_reporta_la_informacion || '—'}</td>
+      <td>${r.particularidades || '—'}</td>
+      <td>${linkCell(r)}</td>
+    </tr>`).join('');
+  $('#resultNote').textContent = `${records.length} registros mostrados de ${DATA.records.length}. Fuente: ${DATA.metadata.fuente_excel}, hoja ${DATA.metadata.hoja_principal}.`;
 }
 
-function abrirTabRiesgoZonal(){
-  const btn = Array.from(document.querySelectorAll('.tab')).find(function(b){ return b.textContent.includes('Riesgo'); });
-  if(btn) openTab('riesgozonal', btn);
-  setTimeout(function(){ if(window.RiskZonalCZ5 && RiskZonalCZ5.init) RiskZonalCZ5.init(); }, 180);
+function setProvince(prov) {
+  state.province = prov || '';
+  $('#provinceSelect').value = state.province;
+  $$('#provinceButtons button').forEach(b => b.classList.toggle('active', b.dataset.provincia === state.province));
+  $$('.region').forEach(r => r.classList.toggle('active', r.dataset.provincia === state.province));
+  render();
 }
 
-async function probarConexionENOS(){
-  setDashboardStatus('Probando conexión con Apps Script...', true);
-  try{
-    const r=await jsonpENOS('indexHealth', {});
-    setDashboardStatus(r && r.ok ? 'Conexión OK · ' + (r.spreadsheet_name || 'Spreadsheet conectado') : 'Respuesta no válida de Apps Script.', !!(r&&r.ok));
-  }catch(e){ setDashboardStatus('Error de conexión: ' + (e.message||e), false); }
-}
-async function cargarDashboardOperativo(){
-  setDashboardStatus('Cargando dashboard desde INDICE_MEMORIA_ENOS...', true);
-  try{
-    const summary=await jsonpENOS('dashboardSummary', {});
-    if(!summary || summary.ok===false) throw new Error((summary && (summary.message||summary.error)) || 'No se pudo obtener dashboardSummary.');
-    const map=await jsonpENOS('dashboardMapData', {});
-    ENOS_DASHBOARD_DATA.summary=summary;
-    ENOS_DASHBOARD_DATA.map=(map && map.ok!==false && map.data) ? map.data : [];
-    ENOS_DASHBOARD_DATA.cases=summary.casos || [];
-    renderDashboardSummary(summary);
-    renderDashboardFilters(summary);
-    renderPromptCaseLookup();
-    renderDashboardMap();
-    renderDashboardCases();
-    setDashboardStatus('Dashboard actualizado. Casos: ' + (summary.total_casos||0) + ' · Registros: ' + (summary.total_registros_indice||0), true);
-  }catch(e){ setDashboardStatus('Error cargando dashboard: ' + (e.message||e), false); }
-}
-function renderDashboardSummary(s){
-  const totalCasos=s.total_casos||0;
-  const totalRegs=s.total_registros_indice||0;
-  const prom=s.promedio_cobertura||0;
-  const geo=s.registros_georreferenciados||0;
-  setText('dashCasos', totalCasos);
-  setText('dashRegistros', totalRegs);
-  setText('dashPromedio', prom + '%');
-  setText('dashGeo', geo);
-  setText('dashGaugeNumber', prom + '%');
-  const fill=document.getElementById('dashGaugeFill'); if(fill) fill.style.width=Math.max(0,Math.min(100,prom))+'%';
-  setText('dashLectura', s.lectura_ejecutiva || 'Cobertura calculada por formularios detectados en cada caso.');
-  setText('dashAlertaEjecutiva', s.alerta_ejecutiva || 'Sin alerta ejecutiva generada.');
-}
-function setText(id, value){ const el=document.getElementById(id); if(el) el.textContent=value; }
-function renderDashboardFilters(summary){
-  const prov=document.getElementById('dashProvinciaFilter');
-  const form=document.getElementById('dashFormularioFilter');
-  if(prov){
-    const current=prov.value;
-    const opts=['<option value="">Provincia: todas</option>'].concat((summary.provincias||[]).map(p=>'<option value="'+escapeHtml(p)+'">'+escapeHtml(p)+'</option>'));
-    prov.innerHTML=opts.join(''); prov.value=current || '';
-  }
-  if(form){
-    const current=form.value;
-    const formularios=['F01','F02','F03','F04','F05','F06','F07','BASE_CASOS','OTRO'];
-    form.innerHTML='<option value="">Formulario: todos</option>'+formularios.map(f=>'<option value="'+f+'">'+f+'</option>').join('');
-    form.value=current || '';
-  }
-}
-function renderDashboardMap(){
-  const mapEl=document.getElementById('cartoMapLayer');
-  const note=document.getElementById('cartoMapNote');
-  if(!mapEl) return;
-
-  const prov=(document.getElementById('dashProvinciaFilter')||{}).value || '';
-  const form=(document.getElementById('dashFormularioFilter')||{}).value || '';
-  const registros=(ENOS_DASHBOARD_DATA.map||[]).filter(p=>(!prov || p.provincia===prov) && (!form || p.formulario===form));
-
-  // Si Leaflet no carga por conectividad, se conserva el mapa simulado original como respaldo.
-  if(!window.L){
-    renderDashboardMapFallback(registros, mapEl, note);
-    return;
-  }
-
-  mapEl.classList.add('leaflet-ready');
-
-  if(!window.ENOS_LEAFLET_MAP){
-    mapEl.innerHTML='';
-    window.ENOS_LEAFLET_MAP = L.map('cartoMapLayer', {
-      zoomControl:true,
-      attributionControl:true
-    }).setView([-1.85, -79.8], 7);
-
-    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom:19,
-      attribution:'&copy; OpenStreetMap'
-    });
-
-    const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      maxZoom:19,
-      attribution:'Tiles &copy; Esri'
-    });
-
-    const esriGray = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-      maxZoom:16,
-      attribution:'Tiles &copy; Esri'
-    });
-
-    osm.addTo(window.ENOS_LEAFLET_MAP);
-    window.ENOS_LEAFLET_BASES = {"OpenStreetMap":osm, "Satélite Esri":esriSat, "Gris claro Esri":esriGray};
-    L.control.layers(window.ENOS_LEAFLET_BASES, {}, {collapsed:true}).addTo(window.ENOS_LEAFLET_MAP);
-    window.ENOS_LEAFLET_LAYER = L.layerGroup().addTo(window.ENOS_LEAFLET_MAP);
-  }
-
-  const map=window.ENOS_LEAFLET_MAP;
-  const layerGroup=window.ENOS_LEAFLET_LAYER;
-  layerGroup.clearLayers();
-
-  let totalGeo=0;
-  let totalPuntos=0;
-  let totalLineas=0;
-  let totalPoligonos=0;
-  const capas=[];
-
-  registros.forEach(function(p){
-    const geom = obtenerGeometriaDashboard(p);
-    if(!geom) return;
-
-    const tipo = obtenerTipoGeometriaDashboard(geom);
-    if(tipo === 'Point') totalPuntos++;
-    if(tipo === 'LineString' || tipo === 'MultiLineString') totalLineas++;
-    if(tipo === 'Polygon' || tipo === 'MultiPolygon') totalPoligonos++;
-    totalGeo++;
-
-    const geoLayer = L.geoJSON(geom, {
-      pointToLayer:function(feature, latlng){
-        return L.circleMarker(latlng, {
-          radius:7,
-          weight:2,
-          opacity:.95,
-          fillOpacity:.82
-        });
-      },
-      style:function(feature){
-        const t = obtenerTipoGeometriaDashboard(feature);
-        if(t === 'Polygon' || t === 'MultiPolygon'){
-          return {weight:3, opacity:.95, fillOpacity:.20};
-        }
-        return {weight:4, opacity:.95};
-      }
-    });
-
-    geoLayer.bindPopup(htmlPopupDashboard(p, tipo));
-    geoLayer.on('click', function(){
-      if(p.codigo_caso) {
-        const input=document.getElementById('dashCaseSearch');
-        if(input){ input.value=p.codigo_caso; renderDashboardCases(); }
-      }
-    });
-
-    geoLayer.addTo(layerGroup);
-    capas.push(geoLayer);
-  });
-
-  setTimeout(function(){ map.invalidateSize(); }, 120);
-
-  if(capas.length){
-    try{
-      const grupo=L.featureGroup(capas);
-      map.fitBounds(grupo.getBounds(), {padding:[22,22], maxZoom:13});
-    }catch(e){}
-  }else{
-    map.setView([-1.85, -79.8], 7);
-  }
-
-  if(note){
-    note.textContent = registros.length
-      ? 'Elementos con geometría: '+totalGeo+' de '+registros.length+' · Puntos: '+totalPuntos+' · Líneas: '+totalLineas+' · Polígonos: '+totalPoligonos+'.'
-      : 'No hay registros para el filtro seleccionado.';
-  }
+function render() {
+  const recs = filteredRecords();
+  renderKpis(recs);
+  renderProvinceBars(recs);
+  renderTable(recs);
 }
 
-function renderDashboardMapFallback(pts, map, note){
-  map.innerHTML='<div class="carto-map-label">Mapa operativo · puntos desde INDICE_MEMORIA_ENOS</div>';
-  pts.slice(0,180).forEach((p,i)=>{
-    if(!p.lat || !p.lng) return;
-    const pos=coordToMapPosition(p.lat, p.lng);
-    const dot=document.createElement('div');
-    dot.className='carto-point '+String(p.formulario||'').toLowerCase();
-    dot.style.left=pos.x+'%'; dot.style.top=pos.y+'%';
-    const tt=document.createElement('div');
-    tt.className='carto-tooltip';
-    tt.style.left='calc('+pos.x+'% + 10px)'; tt.style.top='calc('+pos.y+'% + 10px)';
-    tt.innerHTML='<strong>'+escapeHtml(p.codigo_caso||'Sin código')+'</strong><br>'+escapeHtml(p.formulario||'')+' · '+escapeHtml(p.nombre_visible||'')+'<br>'+escapeHtml([p.provincia,p.canton].filter(Boolean).join(' / '))+'<br>'+Number(p.lat).toFixed(5)+', '+Number(p.lng).toFixed(5);
-    map.appendChild(dot); map.appendChild(tt);
-  });
-  if(note) note.textContent = pts.length ? ('Puntos visibles: '+Math.min(pts.length,180)+' de '+pts.length+'.') : 'No hay registros con coordenadas para el filtro seleccionado.';
+function exportCsv() {
+  const records = filteredRecords();
+  const headers = ['provincia','canton','tipo_gad','entrega_plan','estado_revision','fecha_de_entrega_del_plan','pf_que_reporta_la_informacion','particularidades','enlace_plan_final','enlace_plan_borrador'];
+  const csv = [headers.join(',')].concat(records.map(r => headers.map(h => {
+    const v = (r[h] || '').toString().replace(/"/g,'""');
+    return `"${v}"`;
+  }).join(','))).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'seguimiento_cz5_filtrado.csv'; a.click();
+  URL.revokeObjectURL(url);
 }
 
-function obtenerGeometriaDashboard(p){
-  if(!p) return null;
+renderFilters();
+render();
 
-  const candidatos = [
-    p.geojson, p.geometry, p.geometria, p.geom, p.shape,
-    p.geoshape, p.geotrace, p.coordenadas_geojson
-  ];
-
-  for(const raw of candidatos){
-    const geom = normalizarGeometriaDashboard(raw);
-    if(geom) return geom;
-  }
-
-  const lat = Number(p.lat || p.latitude || p.latitud);
-  const lng = Number(p.lng || p.lon || p.long || p.longitude || p.longitud);
-  if(Number.isFinite(lat) && Number.isFinite(lng)){
-    return {type:'Feature', properties:{}, geometry:{type:'Point', coordinates:[lng, lat]}};
-  }
-
-  const geopoint = p.geopoint || p.coordenada || p.coordenadas || p.ubicacion;
-  if(typeof geopoint === 'string'){
-    const nums = geopoint.trim().split(/[,\s]+/).map(Number).filter(Number.isFinite);
-    if(nums.length >= 2){
-      // Kobo suele guardar geopoint como lat lon alt accuracy.
-      return {type:'Feature', properties:{}, geometry:{type:'Point', coordinates:[nums[1], nums[0]]}};
-    }
-  }
-
-  return null;
-}
-
-function normalizarGeometriaDashboard(raw){
-  if(!raw) return null;
-  let g = raw;
-  if(typeof raw === 'string'){
-    const txt = raw.trim();
-    if(!txt) return null;
-    try { g = JSON.parse(txt); } catch(e) { return null; }
-  }
-  if(!g || typeof g !== 'object') return null;
-
-  if(g.type === 'FeatureCollection' && Array.isArray(g.features)){
-    return g;
-  }
-
-  if(g.type === 'Feature' && g.geometry){
-    return g;
-  }
-
-  if(g.type && g.coordinates){
-    return {type:'Feature', properties:{}, geometry:g};
-  }
-
-  return null;
-}
-
-function obtenerTipoGeometriaDashboard(geo){
-  if(!geo) return '';
-  if(geo.type === 'Feature') return geo.geometry ? geo.geometry.type : '';
-  if(geo.type === 'FeatureCollection' && geo.features && geo.features[0]){
-    return obtenerTipoGeometriaDashboard(geo.features[0]);
-  }
-  return geo.type || '';
-}
-
-function htmlPopupDashboard(p, tipo){
-  const nombre = p.nombre_visible || p.institucion || p.gad || p.canton || 'Registro ENOS';
-  const codigo = p.codigo_caso || p.codigo || '';
-  const territorio = [p.provincia, p.canton].filter(Boolean).join(' / ');
-  return '<strong>'+escapeHtml(nombre)+'</strong><br>'
-    + escapeHtml(territorio || 'Territorio sin clasificar') + '<br>'
-    + 'Formulario: <strong>'+escapeHtml(p.formulario || 'S/D')+'</strong><br>'
-    + 'Geometría: '+escapeHtml(etiquetaGeometriaDashboard(tipo))+'<br>'
-    + '<span style="font-size:11px;color:#4d6173">Código: '+escapeHtml(codigo || 'S/D')+'</span><br><br>'
-    + (codigo ? "<button class=\"btn soft\" onclick=\"seleccionarCasoDashboard(\'"+escapeAttr(codigo)+"\')\">Abrir caso</button>" : '');
-}
-
-function etiquetaGeometriaDashboard(tipo){
-  if(tipo === 'Point' || tipo === 'MultiPoint') return 'Punto';
-  if(tipo === 'LineString' || tipo === 'MultiLineString') return 'Línea';
-  if(tipo === 'Polygon' || tipo === 'MultiPolygon') return 'Polígono';
-  return tipo || 'Geometría';
-}
-
-function coordToMapPosition(lat,lng){
-  const minLat=-5.2,maxLat=1.8,minLng=-82.2,maxLng=-74.5;
-  const x=Math.max(2,Math.min(96,((Number(lng)-minLng)/(maxLng-minLng))*100));
-  const y=Math.max(4,Math.min(94,((maxLat-Number(lat))/(maxLat-minLat))*100));
-  return {x:x,y:y};
-}
-function renderDashboardCases(){
-  const body=document.getElementById('dashCasesBody'); if(!body) return;
-  const q=(document.getElementById('dashCaseSearch')||{}).value || '';
-  const nq=normalizeTextClient(q);
-  const cases=(ENOS_DASHBOARD_DATA.cases||[]).filter(c=>!nq || normalizeTextClient([
-    c.codigo_caso,c.codigo,c.nombre_visible,c.institucion,c.gad,c.actor,c.provincia,c.canton,c.formularios,c.numero
-  ].join(' ')).includes(nq));
-  if(!cases.length){ body.innerHTML='<tr><td colspan="5">No hay casos para mostrar.</td></tr>'; return; }
-  body.innerHTML=cases.slice(0,80).map(c=>{
-    const nombre=c.nombre_visible || c.institucion || c.gad || c.canton || c.codigo_caso || 'Caso ENOS';
-    const codigo=c.codigo_caso || c.codigo || '';
-    const territorio=[c.provincia,c.canton].filter(Boolean).join(' / ') || c.canton || '';
-    return '<tr><td><span class="case-title-main">'+escapeHtml(nombre)+'</span><span class="case-code-secondary">Código: '+escapeHtml(codigo || 'S/D')+'</span></td><td>'+escapeHtml(territorio)+'</td><td>'+escapeHtml(c.formularios||'')+'</td><td>'+escapeHtml(c.registros||0)+'</td><td class="case-action"><button class="btn soft" onclick="seleccionarCasoDashboard(\''+escapeAttr(codigo)+'\')">Abrir</button></td></tr>';
-  }).join('');
-}
-
-function renderPromptCaseLookup(){
-  const provSel=document.getElementById('promptProvinciaFilter');
-  const cantonSel=document.getElementById('promptCantonFilter');
-  const searchInput=document.getElementById('promptCaseSearch');
-  const caseSel=document.getElementById('promptCaseSelect');
-  if(!provSel || !cantonSel || !caseSel) return;
-
-  const cases=ENOS_DASHBOARD_DATA.cases || [];
-  const provActual=provSel.value || '';
-  const cantonActual=cantonSel.value || '';
-  const q=normalizeTextClient((searchInput||{}).value || '');
-
-  const provincias=[...new Set(cases.map(c=>c.provincia).filter(Boolean))].sort();
-  provSel.innerHTML='<option value="">Provincia: todas</option>'+provincias.map(p=>'<option value="'+escapeAttr(p)+'">'+escapeHtml(p)+'</option>').join('');
-  provSel.value=provincias.includes(provActual) ? provActual : '';
-
-  const cantones=[...new Set(cases.filter(c=>!provSel.value || c.provincia===provSel.value).map(c=>c.canton).filter(Boolean))].sort();
-  cantonSel.innerHTML='<option value="">Cantón: todos</option>'+cantones.map(c=>'<option value="'+escapeAttr(c)+'">'+escapeHtml(c)+'</option>').join('');
-  cantonSel.value=cantones.includes(cantonActual) ? cantonActual : '';
-
-  const filtrados=cases.filter(c=>{
-    const okProv=!provSel.value || c.provincia===provSel.value;
-    const okCanton=!cantonSel.value || c.canton===cantonSel.value;
-    const texto=normalizeTextClient([c.codigo_caso,c.nombre_visible,c.institucion,c.gad,c.provincia,c.canton,c.formularios,c.numero].join(' '));
-    const okQ=!q || texto.includes(q);
-    return okProv && okCanton && okQ;
-  });
-
-  if(!filtrados.length){
-    caseSel.innerHTML='<option value="">No hay casos con esos criterios.</option>';
-    return;
-  }
-
-  caseSel.innerHTML='<option value="">Seleccione un caso...</option>'+filtrados.slice(0,120).map(c=>{
-    const nombre=c.nombre_visible || c.institucion || c.gad || c.canton || c.codigo_caso || 'Caso ENOS';
-    const codigo=c.codigo_caso || c.codigo || '';
-    const etiqueta=[nombre, c.canton, c.provincia, codigo].filter(Boolean).join(' · ');
-    return '<option value="'+escapeAttr(codigo)+'">'+escapeHtml(etiqueta)+'</option>';
-  }).join('');
-}
-
-function usarCasoSeleccionadoParaPrompt(){
-  const sel=document.getElementById('promptCaseSelect');
-  const input=document.getElementById('codigoCasoInput');
-  const codigo=sel ? sel.value : '';
-  if(!codigo){
-    alert('Seleccione primero un caso desde provincia, cantón o institución.');
-    return;
-  }
-  if(input) input.value=codigo;
-  setPromptStatus('Caso identificado por territorio/institución. Código cargado para generar prompt: '+codigo, true);
-}
-
-function seleccionarCasoDashboard(codigo){
-  const inp=document.getElementById('detalleCodigoCaso'); if(inp) inp.value=codigo;
-  openDetailed();
-  cargarDetalleCaso(codigo);
-}
-async function cargarDetalleCaso(codigoManual){
-  const input=document.getElementById('detalleCodigoCaso');
-  const codigo=extraerCodigoCaso(codigoManual || (input&&input.value) || '');
-  if(!codigo){ setDetalleStatus('Ingrese o seleccione un código de caso.', false); return; }
-  if(input) input.value=codigo;
-  setDetalleStatus('Consultando información ampliada del caso '+codigo+'...', true);
-  try{
-    const actor=(document.getElementById('detalleActor')||{}).value || obtenerActorPlataforma();
-    const response=await jsonpENOS('caseDetailsFromIndex', {codigo_caso:codigo, actor:actor});
-    if(!response || response.ok===false) throw new Error((response && (response.message||response.error)) || 'No se pudo consultar el caso.');
-    ENOS_DASHBOARD_DATA.selectedCase=response;
-    renderDetalleCaso(response);
-    setDetalleStatus('Caso cargado: '+codigo+' · Registros: '+(response.total_registros||0), true);
-  }catch(e){ setDetalleStatus('Error consultando caso: '+(e.message||e), false); }
-}
-function renderDetalleCaso(r){
-  const p=r.paquete || {};
-  const rc=p.resumen_control || {};
-  const suf=p.criterio_suficiencia || {};
-  setText('detCodigo', r.codigo_buscado || p.codigo_buscado || '—');
-  setText('detRegistros', r.total_registros || rc.total_registros_indice || 0);
-  setText('detFormularios', (rc.formularios_detectados||[]).length || 0);
-  setText('detSuficiencia', suf.clasificacion || '—');
-  const lectura=document.getElementById('detLectura');
-  if(lectura){
-    lectura.innerHTML = [
-      criterionHtml('Formularios detectados', (rc.formularios_detectados||[]).join(', ') || 'Sin formularios detectados'),
-      criterionHtml('Actores detectados', (rc.actores_detectados||[]).join(', ') || 'Sin actor detectado'),
-      criterionHtml('Territorio', [rc.provincias_detectadas, rc.cantones_detectados].map(a=>(a||[]).join(', ')).filter(Boolean).join(' / ') || 'Sin provincia/cantón detectado'),
-      criterionHtml('Recomendación', suf.recomendacion_para_gpt || 'Generar lectura técnica con las limitaciones disponibles.')
-    ].join('');
-  }
-  renderDetalleFormularios(p);
-  renderDetalleBrechas(p);
-  renderDetalleMap(r);
-  const json=document.getElementById('detJson'); if(json) json.value=JSON.stringify(p, null, 2);
-}
-function renderDetalleFormularios(p){
-  const grid=document.getElementById('detFormGrid'); if(!grid) return;
-  const keys=[['F01','puntos_riesgo'],['F02','infraestructura_esencial'],['F03','cartografia_institucional'],['F04','acciones_preventivas_mitigacion'],['F05','alojamientos_rutas_puntos_seguros'],['F06','capacidades_recursos'],['F07','seguimiento_mensual']];
-  grid.innerHTML=keys.map(([f,k])=>{
-    const n=(p[k]||[]).length;
-    const cls=n?'ok':'warn';
-    return '<div class="form-card"><h3>'+f+'</h3><p>'+escapeHtml((FORM_CARDS[f]||{}).desc||'Registro asociado')+'</p><span class="tag '+cls+'">'+n+' registros</span></div>';
-  }).join('');
-}
-function renderDetalleBrechas(p){
-  const suf=p.criterio_suficiencia || {};
-  const falt=document.getElementById('detFaltantes');
-  const adv=document.getElementById('detAdvertencias');
-  const faltantes=suf.faltantes_criticos || [];
-  const advert=suf.advertencias || [];
-  if(falt) falt.innerHTML = faltantes.length ? faltantes.map(x=>criterionHtml('Faltante', x)).join('') : criterionHtml('Sin faltantes críticos', 'No se detectaron faltantes críticos automáticos.');
-  if(adv) adv.innerHTML = advert.length ? advert.map(x=>criterionHtml('Advertencia', x)).join('') : criterionHtml('Sin advertencias', 'No se detectaron advertencias automáticas.');
-}
-function renderDetalleMap(r){
-  const map=document.getElementById('detMapLayer');
-  const rows=document.getElementById('detMapRows');
-  const note=document.getElementById('detMapNote');
-  if(!map) return;
-  const pts=(r.puntos_cartograficos || []);
-  map.innerHTML='<div class="carto-map-label">Puntos del caso seleccionado</div>';
-  pts.forEach(p=>{
-    const pos=coordToMapPosition(p.lat, p.lng);
-    const dot=document.createElement('div'); dot.className='carto-point '+String(p.formulario||'').toLowerCase(); dot.style.left=pos.x+'%'; dot.style.top=pos.y+'%';
-    const tt=document.createElement('div'); tt.className='carto-tooltip'; tt.style.left='calc('+pos.x+'% + 10px)'; tt.style.top='calc('+pos.y+'% + 10px)'; tt.innerHTML='<strong>'+escapeHtml(p.formulario||'')+'</strong><br>'+escapeHtml(p.nombre_visible||'')+'<br>'+Number(p.lat).toFixed(5)+', '+Number(p.lng).toFixed(5);
-    map.appendChild(dot); map.appendChild(tt);
-  });
-  if(note) note.textContent = pts.length ? 'Puntos cartográficos del caso: '+pts.length : 'El caso no tiene coordenadas limpias detectadas en el índice.';
-  if(rows) rows.innerHTML = pts.length ? pts.map(p=>'<tr><td>'+escapeHtml(p.formulario||'')+'</td><td>'+escapeHtml(p.nombre_visible||'')+'</td><td>'+escapeHtml(p.provincia||'')+'</td><td>'+escapeHtml(p.canton||'')+'</td><td>'+Number(p.lat).toFixed(5)+', '+Number(p.lng).toFixed(5)+'</td></tr>').join('') : '<tr><td colspan="5">Sin puntos georreferenciados para este caso.</td></tr>';
-}
-function generarPromptDesdeDetalle(){
-  const codigo=(document.getElementById('detalleCodigoCaso')||{}).value || '';
-  const mainInput=document.getElementById('codigoCasoInput'); if(mainInput) mainInput.value=codigo;
-  const tab = Array.from(document.querySelectorAll('.tab')).find(b => b.textContent.includes('Actualizar'));
-  if(tab) openTab('actualizar', tab);
-  generarPromptGPT();
-}
-function criterionHtml(t, s){ return '<div class="criterion"><strong>'+escapeHtml(t||'')+'</strong><span>'+escapeHtml(s||'')+'</span></div>'; }
-function normalizeTextClient(v){ return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase(); }
-function escapeHtml(v){ return String(v===undefined||v===null?'':v).replace(/[&<>"]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
-function escapeAttr(v){ return escapeHtml(v).replace(/'/g,'&#39;'); }
-
-document.addEventListener('DOMContentLoaded', function(){
-  setTimeout(function(){ cargarDashboardConsolidado().catch(function(){}); }, 900);
-});
-
-
-// MODULO RIESGO ZONAL ENOS CZ5 · Integración 20260630
-const RIESGO_API_URL = 'https://script.google.com/macros/s/AKfycbw9pDFZv6HBseCNILV90w8XfZL043inXnG0kvXDdgXl35N2vdKYIrYGh5HgAsXjfRbxEA/exec';
-let RIESGO_API_TOKEN = 'Lamiend0mentes'; // Cambiar por token vigente antes de publicar.
-
-const RiskZonalCZ5 = (function(){
-  let initialized = false;
-  let map = null;
-  let markerLayer = null;
-  let geoLayer = null;
-  let currentTema = 'RIESGO_GENERAL';
-  let currentItems = [];
-  const labels = {
-    RIESGO_GENERAL:'Riesgo general',
-    BRECHAS:'Brechas',
-    AMENAZAS:'Amenazas',
-    VULNERABILIDAD:'Vulnerabilidad',
-    CAPACIDAD:'Capacidad',
-    ELEMENTOS_EXPOSTOS:'Elementos expuestos'
-  };
-  const colores = {VERDE:'#2e8b57', AMARILLO:'#f2b84b', ROJO:'#d83a2e', SIN_DATO:'#9aa7b2'};
-
-  function init(){
-    if(initialized){ setTimeout(function(){ if(map) map.invalidateSize(); }, 150); return; }
-    initialized = true;
-    bindThemeButtons();
-    initMap();
-    cargarResumen();
-    cargarTema(currentTema);
-  }
-
-  function reload(){
-    cargarResumen();
-    cargarTema(currentTema);
-  }
-
-  function bindThemeButtons(){
-    document.querySelectorAll('.riskz-theme').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        document.querySelectorAll('.riskz-theme').forEach(function(b){ b.classList.remove('active'); });
-        btn.classList.add('active');
-        currentTema = btn.dataset.tema || 'RIESGO_GENERAL';
-        cargarTema(currentTema);
-      });
-    });
-  }
-
-  function initMap(){
-    const el = document.getElementById('riskzMap');
-    if(!el || !window.L) return;
-    map = L.map('riskzMap', {zoomControl:true, attributionControl:true}).setView([-1.85, -79.8], 7);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:19, attribution:'&copy; OpenStreetMap'}).addTo(map);
-    markerLayer = L.layerGroup().addTo(map);
-    fetch('assets/data/zonas_cantones.geojson', {cache:'no-store'})
-      .then(function(r){ return r.ok ? r.json() : null; })
-      .then(function(g){
-        if(!g || !g.features || !g.features.length) return;
-        geoLayer = L.geoJSON(g, {style:estiloFeature, onEachFeature:onEachFeature}).addTo(map);
-        try{ map.fitBounds(geoLayer.getBounds(), {padding:[18,18]}); }catch(e){}
-      })
-      .catch(function(){});
-    setTimeout(function(){ if(map) map.invalidateSize(); }, 300);
-  }
-
-  async function api(vista, params){
-    if(!RIESGO_API_TOKEN || RIESGO_API_TOKEN === 'CAMBIAR_TOKEN_AQUI'){
-      throw new Error('Falta configurar RIESGO_API_TOKEN dentro del index.html.');
-    }
-    const url = new URL(RIESGO_API_URL);
-    url.searchParams.set('token', RIESGO_API_TOKEN);
-    url.searchParams.set('vista', vista);
-    Object.keys(params || {}).forEach(function(k){ if(params[k] !== undefined && params[k] !== null && params[k] !== '') url.searchParams.set(k, params[k]); });
-    const r = await fetch(url.toString(), {method:'GET', cache:'no-store'});
-    if(!r.ok) throw new Error('HTTP '+r.status+' consultando '+vista);
-    const data = await r.json();
-    if(!data || data.ok === false) throw new Error((data && (data.mensaje || data.error)) || 'Respuesta no válida de '+vista);
-    return data;
-  }
-
-  async function cargarResumen(){
-    try{
-      setStatus('Consultando resumen de riesgo...', 'warn');
-      const data = await api('riesgo_resumen', {});
-      const r = data.resumen_riesgo || data.resumen || data;
-      setText('riskzKpiTotal', val(r,'total_gad,total,total_cantones') || 0);
-      setText('riskzKpiAlto', val(r,'riesgo_alto,alto,total_alto') || 0);
-      setText('riskzKpiMedio', val(r,'riesgo_medio,medio,total_medio') || 0);
-      setText('riskzKpiBajo', val(r,'riesgo_bajo,bajo,total_bajo') || 0);
-      setText('riskzKpiBrechas', formatNum(val(r,'promedio_brechas,prom_brechas')));
-      setText('riskzKpiAmenaza', formatNum(val(r,'promedio_amenaza,prom_amenaza')));
-      setStatus('Resumen de riesgo conectado', 'ok');
-    }catch(e){ setStatus(e.message || e, 'bad'); }
-  }
-
-  async function cargarTema(tema){
-    try{
-      setStatus('Consultando tema: '+(labels[tema] || tema)+'...', 'warn');
-      let data;
-      if(tema === 'RIESGO_GENERAL'){
-        data = await api('riesgo_cantones', {});
-        currentItems = normalizarListaGeneral(data.cantones || data.detalle || data.riesgo || []);
-      }else{
-        data = await api('riesgo_tema', {tema:tema});
-        currentItems = normalizarListaTema(data.cantones || [], tema);
-      }
-      document.getElementById('riskzTemaLabel').textContent = 'Tema activo: '+(labels[tema] || tema);
-      actualizarMapa(currentItems);
-      renderRanking(currentItems, tema);
-      setStatus('Tema cargado: '+(labels[tema] || tema)+' · '+currentItems.length+' registros', 'ok');
-    }catch(e){
-      setStatus(e.message || e, 'bad');
-      const body = document.getElementById('riskzRankingBody');
-      if(body) body.innerHTML = '<tr><td colspan="7">'+escapeHtml(e.message || e)+'</td></tr>';
-    }
-  }
-
-  function normalizarListaGeneral(lista){
-    return (lista || []).map(function(x){
-      return {
-        id_canton: val(x,'id_canton,ID_CANTON'), provincia: val(x,'provincia,PROVINCIA'), canton: val(x,'canton,CANTON,gad_canton'), tipo_gad: val(x,'tipo_gad,TIPO_GAD'),
-        lat_centro: val(x,'lat_centro,LAT_CENTRO,lat'), lon_centro: val(x,'lon_centro,LON_CENTRO,lon,lng'),
-        tema:'RIESGO_GENERAL', puntaje: val(x,'puntaje_riesgo,puntaje_riesgo_general,puntaje'), semaforo: val(x,'semaforo_riesgo,semaforo'),
-        descripcion_tema: val(x,'nivel_riesgo_general,observacion_tecnica,descripcion_tema')
-      };
-    });
-  }
-
-  function normalizarListaTema(lista, tema){
-    return (lista || []).map(function(x){
-      return {
-        id_canton: val(x,'id_canton,ID_CANTON'), provincia: val(x,'provincia,PROVINCIA'), canton: val(x,'canton,CANTON,gad_canton'), tipo_gad: val(x,'tipo_gad,TIPO_GAD'),
-        lat_centro: val(x,'lat_centro,LAT_CENTRO,lat'), lon_centro: val(x,'lon_centro,LON_CENTRO,lon,lng'),
-        tema: tema, puntaje: val(x,'puntaje,puntaje_tema'), semaforo: val(x,'semaforo,semaforo_tema'), descripcion_tema: val(x,'descripcion_tema,descripcion,detalle')
-      };
-    });
-  }
-
-  function actualizarMapa(items){
-    if(markerLayer) markerLayer.clearLayers();
-    const index = {};
-    items.forEach(function(item){ index[norm(item.id_canton || (item.provincia+'_'+item.canton))] = item; });
-    if(geoLayer){
-      geoLayer.eachLayer(function(layer){
-        const props = layer.feature && layer.feature.properties ? layer.feature.properties : {};
-        const id = props.ID_CANTON || props.id_canton || props.ID || props.codigo || '';
-        const item = index[norm(id)];
-        layer.setStyle({color:'#344054', weight:1, fillColor:color(item ? item.semaforo : 'SIN_DATO'), fillOpacity:.72});
-        layer.off('click');
-        layer.on('click', function(){ if(item) mostrarDetalle(item); });
-        layer.bindTooltip(item ? ((item.provincia || '')+' · '+(item.canton || '')) : (id || 'Sin ID_CANTON'), {sticky:true});
-      });
-    }
-    const bounds = [];
-    items.forEach(function(item){
-      const lat = Number(item.lat_centro), lon = Number(item.lon_centro);
-      if(Number.isFinite(lat) && Number.isFinite(lon) && markerLayer && window.L){
-        const m = L.circleMarker([lat, lon], {radius:8, color:'#344054', weight:1, fillColor:color(item.semaforo), fillOpacity:.88});
-        m.bindTooltip((item.provincia || '')+' · '+(item.canton || ''));
-        m.on('click', function(){ mostrarDetalle(item); });
-        m.addTo(markerLayer);
-        bounds.push([lat, lon]);
-      }
-    });
-    if(map){
-      setTimeout(function(){ map.invalidateSize(); }, 100);
-      if(bounds.length && !geoLayer){ try{ map.fitBounds(bounds, {padding:[20,20]}); }catch(e){} }
-    }
-    const note = document.getElementById('riskzMapNote');
-    if(note) note.textContent = 'Registros cargados: '+items.length+'. Marcadores con coordenadas: '+bounds.length+'.';
-  }
-
-  function renderRanking(items, tema){
-    const body = document.getElementById('riskzRankingBody');
-    if(!body) return;
-    const sorted = (items || []).slice().sort(function(a,b){ return Number(b.puntaje || 0) - Number(a.puntaje || 0); });
-    if(!sorted.length){ body.innerHTML = '<tr><td colspan="7">Sin registros para este tema.</td></tr>'; return; }
-    body.innerHTML = sorted.slice(0,100).map(function(item){
-      return '<tr><td>'+escapeHtml(item.provincia)+'</td><td>'+escapeHtml(item.canton)+'</td><td>'+escapeHtml(labels[tema] || tema)+'</td><td>'+formatNum(item.puntaje)+'</td><td>'+badge(item.semaforo)+'</td><td>'+escapeHtml(item.descripcion_tema || '')+'</td><td><button class="btn soft" onclick="RiskZonalCZ5.verFicha(\''+escapeAttr(item.id_canton || '')+'\')">Ver ficha</button></td></tr>';
-    }).join('');
-  }
-
-  function mostrarDetalle(item){
-    const panel = document.getElementById('riskzDetailPanel');
-    if(!panel) return;
-    panel.innerHTML = '<h3>'+escapeHtml(item.canton || 'GAD')+'</h3><p class="muted-text">'+escapeHtml(item.provincia || '')+' · '+escapeHtml(item.tipo_gad || '')+'</p><div class="riskz-detail-grid">'
-      + detalleItem('Tema activo', labels[item.tema] || item.tema)
-      + detalleItem('Puntaje del tema', formatNum(item.puntaje))
-      + '<div class="riskz-detail-item"><span>Semáforo del tema</span><p>'+badge(item.semaforo)+'</p></div>'
-      + detalleItem('Descripción', item.descripcion_tema || 'Sin dato')
-      + detalleItem('ID cantón', item.id_canton || '')
-      + '</div><div class="riskz-actions"><button class="btn primary" onclick="RiskZonalCZ5.verFicha(\''+escapeAttr(item.id_canton || '')+'\')">Ver ficha completa</button></div>';
-  }
-
-  async function verFicha(idCanton){
-    if(!idCanton){ return; }
-    try{
-      setStatus('Consultando ficha: '+idCanton+'...', 'warn');
-      const data = await api('riesgo_detalle', {id_canton:idCanton});
-      const raw = Array.isArray(data.detalle) ? data.detalle[0] : data.detalle;
-      const item = raw || {};
-      const panel = document.getElementById('riskzDetailPanel');
-      if(!panel) return;
-      panel.innerHTML = '<h3>'+escapeHtml(val(item,'canton,CANTON') || idCanton)+'</h3><p class="muted-text">'+escapeHtml(val(item,'provincia,PROVINCIA') || '')+' · '+escapeHtml(val(item,'tipo_gad,TIPO_GAD') || '')+'</p><div class="riskz-detail-grid">'
-        + detalleItem('Nivel de riesgo', val(item,'nivel_riesgo_general,NIVEL_RIESGO_GENERAL'))
-        + detalleItem('Semáforo', val(item,'semaforo_riesgo,SEMAFORO_RIESGO'))
-        + detalleItem('Puntaje riesgo', val(item,'puntaje_riesgo,PUNTAJE_RIESGO'))
-        + detalleItem('Brecha principal', val(item,'brecha_principal,BRECHA_PRINCIPAL'))
-        + detalleItem('Amenaza principal', val(item,'amenaza_principal,AMENAZA_PRINCIPAL'))
-        + detalleItem('Vulnerabilidad institucional', val(item,'vulnerabilidad_institucional,VULNERABILIDAD_INSTITUCIONAL'))
-        + detalleItem('Capacidad de respuesta', val(item,'capacidad_respuesta,CAPACIDAD_RESPUESTA'))
-        + detalleItem('Elementos críticos expuestos', val(item,'elementos_criticos_expuestos,ELEMENTOS_CRITICOS_EXPOSTOS'))
-        + detalleItem('Acciones corto plazo', val(item,'acciones_corto_plazo,ACCIONES_CORTO_PLAZO'))
-        + detalleItem('Acciones mediano plazo', val(item,'acciones_mediano_plazo,ACCIONES_MEDIANO_PLAZO'))
-        + detalleItem('Acciones largo plazo', val(item,'acciones_largo_plazo,ACCIONES_LARGO_PLAZO'))
-        + enlaceItem('Informe', val(item,'enlace_informe,ENLACE_INFORME'))
-        + enlaceItem('Cartografía', val(item,'enlace_cartografia,ENLACE_CARTOGRAFIA'))
-        + '</div>';
-      setStatus('Ficha cargada: '+idCanton, 'ok');
-    }catch(e){ setStatus(e.message || e, 'bad'); }
-  }
-
-  function onEachFeature(feature, layer){
-    layer.on('click', function(){
-      const props = feature.properties || {};
-      const id = props.ID_CANTON || props.id_canton || props.ID || props.codigo || '';
-      const item = currentItems.find(function(x){ return norm(x.id_canton) === norm(id); });
-      if(item) mostrarDetalle(item);
-    });
-  }
-  function estiloFeature(feature){ return {color:'#344054', weight:1, fillColor:colores.SIN_DATO, fillOpacity:.65}; }
-  function color(s){ const n = norm(s || 'SIN_DATO'); return colores[n] || colores.SIN_DATO; }
-  function badge(s){ const n = norm(s || 'SIN_DATO').toLowerCase(); return '<span class="riskz-badge '+n+'">'+escapeHtml(s || 'SIN_DATO')+'</span>'; }
-  function detalleItem(label, value){ return '<div class="riskz-detail-item"><span>'+escapeHtml(label)+'</span><p>'+escapeHtml(value || 'Sin dato')+'</p></div>'; }
-  function enlaceItem(label, url){ return url ? '<div class="riskz-detail-item"><span>'+escapeHtml(label)+'</span><p><a href="'+escapeAttr(url)+'" target="_blank" rel="noopener">Abrir enlace</a></p></div>' : detalleItem(label, 'Sin enlace'); }
-  function setStatus(msg, tipo){ const el = document.getElementById('riskzStatus'); if(!el) return; el.textContent = msg; el.className = 'riskz-status '+(tipo || 'warn'); }
-  function setText(id, value){ const el = document.getElementById(id); if(el) el.textContent = value; }
-  function val(obj, keys){
-    if(!obj) return '';
-    return String(keys).split(',').map(function(k){ return k.trim(); }).reduce(function(found,k){ return found !== '' && found !== undefined && found !== null ? found : obj[k]; }, '');
-  }
-  function formatNum(v){ if(v === '' || v === null || v === undefined) return '—'; const n = Number(v); return Number.isFinite(n) ? String(Math.round(n * 10) / 10) : String(v); }
-  function norm(v){ return String(v || '').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/Ñ/g,'N').replace(/\s+/g,'_').replace(/[^A-Z0-9_]/g,'').replace(/_+/g,'_'); }
-  function escapeHtml(v){ return String(v === undefined || v === null ? '' : v).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
-  function escapeAttr(v){ return escapeHtml(v).replace(/`/g,'&#096;'); }
-  return {init:init, reload:reload, verFicha:verFicha};
-})();
-
-(function(){
-  const originalOpenTab = window.openTab;
-  window.openTab = function(id, btn){
-    if(typeof originalOpenTab === 'function') originalOpenTab(id, btn);
-    if(id === 'riesgozonal') setTimeout(function(){ RiskZonalCZ5.init(); }, 250);
-  };
-})();
-
+$('#search').addEventListener('input', e => { state.search = e.target.value; render(); });
+$('#provinceSelect').addEventListener('change', e => setProvince(e.target.value));
+$('#statusSelect').addEventListener('change', e => { state.status = e.target.value; render(); });
+$('#exportCsv').addEventListener('click', exportCsv);
+$('#provinceButtons').addEventListener('click', e => { if (e.target.matches('button')) setProvince(e.target.dataset.provincia); });
+$$('.region').forEach(el => el.addEventListener('click', () => setProvince(el.dataset.provincia)));
 </script>
 </body>
 </html>
