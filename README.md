@@ -1,20 +1,42 @@
-# Interfaz ENOS Zona 5 · Consulta y análisis
+# ENOS CZ5 Dashboard Frontend
 
-Generada desde: `PAQUETE_ENOS_ZONA5_2026_2027-20260630T051557Z-3-001.zip`
+Paquete estático para cargar en GitHub o integrar dentro de la plataforma ENOS 2026.
 
-Contenido:
-- `index.html`: interfaz estática lista para GitHub Pages.
-- `enos_package_data.json`: índice estructurado de archivos y entidades.
-- `resumen_cantonal.csv`: tabla de entidades/cantones con brechas, prioridad e índice.
-- `catalogo_archivos.csv`: catálogo de todos los archivos indexados.
+## Módulos incluidos
 
-Resumen:
-- Archivos indexados: 302
-- Entidades/cantones: 55
-- Provincias: Bolívar, Galápagos, Guayas, Los Ríos, Santa Elena
-- Tamaño del paquete indexado: 419.3 MB
+1. Análisis de riesgo zonal.
+2. Seguimiento documental.
 
-Uso:
-1. Subir `index.html` a GitHub Pages para reemplazar el actual.
-2. Opcionalmente subir también los CSV/JSON como respaldo y trazabilidad.
-3. La cabina territorial es preliminar/documental. Para riesgo territorial completo se debe integrar F01/F02 georreferenciado.
+## Configuración
+
+Abra:
+
+```text
+assets/js/config.js
+```
+
+Cambie:
+
+```javascript
+API_TOKEN: "CAMBIAR_TOKEN_AQUI"
+```
+
+Use el token solo en repositorio privado o ambiente controlado.
+
+## Carga en GitHub
+
+1. Cree un repositorio privado.
+2. Suba todos los archivos de esta carpeta.
+3. Edite `assets/js/config.js`.
+4. Active GitHub Pages desde `Settings -> Pages`.
+5. Seleccione branch `main` y carpeta `/root`.
+
+## GIS
+
+Reemplace `assets/data/zonas_cantones.geojson` con polígonos reales. Cada feature debe tener `ID_CANTON`.
+
+## URL base API
+
+```text
+https://script.google.com/macros/s/AKfycbw9pDFZv6HBseCNILV90w8XfZL043inXnG0kvXDdgXl35N2vdKYIrYGh5HgAsXjfRbxEA/exec
+```
