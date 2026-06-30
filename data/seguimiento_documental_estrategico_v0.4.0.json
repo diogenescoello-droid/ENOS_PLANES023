@@ -1,0 +1,92 @@
+{
+  "metadata": {
+    "project": "SNGR-CZ5-ENOS",
+    "version": "v0.4.0",
+    "module": "seguimiento_documental_estrategico",
+    "generated_at": "2026-06-30",
+    "scope": "Indicadores estratégicos del estado documental de planes ENOS 2026-2027",
+    "source": "MATRIZSEGUIM-EL NIÑO(2)(8).xlsx / hoja Consolidado",
+    "architecture_note": "Se reemplazó únicamente el contenido del tab Dashboard por una vista estratégica documental. No se modificó la estructura principal de roles, flujo, pestañas base ni módulo de riesgo zonal.",
+    "base_file": "index.html cargado por el usuario el 2026-06-30",
+    "integration_type": "Integración directa sobre arquitectura base recibida"
+  },
+  "summary": {
+    "total_registros": 56,
+    "gad_cantonal": 51,
+    "gad_provincial": 5,
+    "socializados": 56,
+    "planes_entregados": 35,
+    "planes_no_entregados": 21,
+    "planes_validados": 37,
+    "planes_devueltos": 10,
+    "planes_en_revision": 7,
+    "planes_faltantes": 2,
+    "porc_socializacion": 100.0,
+    "porc_entrega": 62.5,
+    "porc_validacion": 66.1,
+    "brecha_documental": 40,
+    "fecha_actualizacion": "2026-06-30"
+  },
+  "province_summary": [
+    {
+      "provincia": "BOLÍVAR",
+      "registros": 8,
+      "planes_entregados": 6,
+      "planes_no_entregados": 2,
+      "planes_validados": 6,
+      "planes_devueltos": 1,
+      "planes_en_revision": 0,
+      "planes_faltantes": 1,
+      "porc_entrega": 75.0,
+      "porc_validacion": 75.0
+    },
+    {
+      "provincia": "GALÁPAGOS",
+      "registros": 4,
+      "planes_entregados": 0,
+      "planes_no_entregados": 4,
+      "planes_validados": 0,
+      "planes_devueltos": 1,
+      "planes_en_revision": 3,
+      "planes_faltantes": 0,
+      "porc_entrega": 0.0,
+      "porc_validacion": 0.0
+    },
+    {
+      "provincia": "GUAYAS",
+      "registros": 26,
+      "planes_entregados": 21,
+      "planes_no_entregados": 5,
+      "planes_validados": 19,
+      "planes_devueltos": 6,
+      "planes_en_revision": 0,
+      "planes_faltantes": 1,
+      "porc_entrega": 80.8,
+      "porc_validacion": 73.1
+    },
+    {
+      "provincia": "LOS RÍOS",
+      "registros": 14,
+      "planes_entregados": 8,
+      "planes_no_entregados": 6,
+      "planes_validados": 11,
+      "planes_devueltos": 2,
+      "planes_en_revision": 1,
+      "planes_faltantes": 0,
+      "porc_entrega": 57.1,
+      "porc_validacion": 78.6
+    },
+    {
+      "provincia": "SANTA ELENA",
+      "registros": 4,
+      "planes_entregados": 0,
+      "planes_no_entregados": 4,
+      "planes_validados": 1,
+      "planes_devueltos": 0,
+      "planes_en_revision": 3,
+      "planes_faltantes": 0,
+      "porc_entrega": 0.0,
+      "porc_validacion": 25.0
+    }
+  ]
+}

@@ -1,23 +1,9 @@
-# ENOS_PLANES023 · Dashboard consolidado + riesgo zonal
+# SNGR-CZ5-ENOS v0.4.0
 
-Versión ajustada para que la pestaña **5. Dashboard** muestre el consolidado documental de planes ENOS CZ5 desde la API de la matriz maestra, y la pestaña **6. Riesgo zonal** mantenga el análisis territorial por semáforo.
+Actualización controlada sobre el `index.html` base cargado por el usuario.
 
-## Cambios principales
+## Uso
+Abrir `index.html` para revisar la plataforma. El cambio visible está únicamente en el tab `5. Dashboard`, ahora enfocado en el estado documental estratégico de los planes ENOS 2026-2027.
 
-- La pestaña **Dashboard** ahora muestra: Total GAD CZ5, planes gestionados, planes validados y planes faltantes.
-- Se agregó tabla de resumen provincial consolidado.
-- Se agregó lectura por estado: validado, en revisión, devuelto, faltante y observado por calidad de dato.
-- Se conserva el módulo F01-F07 original para prompt, información ampliada y sincronización.
-- Se conserva el módulo de riesgo zonal.
-
-## Archivo principal
-
-Subir/reemplazar en GitHub:
-
-```text
-index.html
-```
-
-## Token
-
-Esta versión deja configurado el token de prueba en `RIESGO_API_TOKEN`. Para producción, reemplazarlo por un token nuevo o mover la consulta a backend/proxy.
+## No cambia
+No se cambia la arquitectura principal de la página ni se agrega una maqueta externa.

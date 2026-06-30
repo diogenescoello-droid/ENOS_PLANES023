@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BASE 01 · ENOS Zona 5 · Dashboard documental estratégico</title>
-<!-- SNGR-CZ5-ENOS v0.4.0 · actualización controlada sobre index.html base cargado por el usuario -->
+<title>BASE 01 · ENOS Zona 5 · Dashboard con análisis detallado</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 :root{
@@ -648,46 +647,6 @@ select,input{
 .riskz-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 @media(max-width:980px){.tabs{grid-template-columns:1fr}.riskz-kpis,.riskz-layout{grid-template-columns:1fr}.riskz-head,.riskz-title{flex-direction:column}#riskzMap{height:420px;min-height:420px}}
 
-
-/* MODULO SEGUIMIENTO DOCUMENTAL ESTRATEGICO · v0.4.0 · Integrado sobre BASE 01 sin cambio de arquitectura */
-.docseg-shell{display:grid;gap:14px}
-.docseg-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;border:1px solid var(--borde);border-radius:16px;background:linear-gradient(180deg,#fff,#fbfdff);padding:16px;box-shadow:0 8px 18px rgba(10,53,85,.06)}
-.docseg-head h3{margin:0 0 7px;color:var(--azul3);font-size:18px}
-.docseg-head p{margin:0;color:var(--muted);font-size:13px;line-height:1.38}
-.docseg-version{border:1px solid #bcdcf2;background:#e8f5ff;color:var(--azul3);border-radius:999px;padding:9px 13px;font-weight:900;font-size:12px;white-space:nowrap}
-.docseg-kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
-.docseg-card{border:1px solid var(--borde);border-radius:16px;background:#fff;padding:13px;box-shadow:0 8px 18px rgba(10,53,85,.07)}
-.docseg-card small{display:block;color:var(--muted);text-transform:uppercase;font-size:11px;font-weight:900;margin-bottom:7px;line-height:1.2}
-.docseg-card strong{display:block;color:var(--azul3);font-size:28px;line-height:1}
-.docseg-card span{display:block;color:var(--muted);font-size:12px;line-height:1.25;margin-top:8px}
-.docseg-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}
-.docseg-panel{border:1px solid var(--borde);border-radius:16px;background:#fff;padding:16px;box-shadow:0 8px 18px rgba(10,53,85,.07)}
-.docseg-panel h3{margin:0 0 8px;color:var(--azul3);font-size:16px}
-.docseg-panel p{margin:0;color:var(--muted);font-size:13px;line-height:1.4}
-.docseg-reading{border:1px solid #f1cf85;background:#fff8e8;border-radius:16px;padding:15px;color:#634000;line-height:1.42;font-size:13px}
-.docseg-reading strong{display:block;color:#4e3300;margin-bottom:6px}
-.docseg-bars{display:grid;gap:12px;margin-top:12px}
-.docseg-barline{display:grid;grid-template-columns:160px 1fr 52px;gap:10px;align-items:center;font-size:13px;color:var(--texto)}
-.docseg-track{height:12px;border-radius:999px;background:#e2edf5;overflow:hidden}
-.docseg-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--azul2),var(--verde));width:0%}
-.docseg-fill.warn{background:linear-gradient(90deg,var(--ambar),var(--rojo2))}
-.docseg-fill.bad{background:linear-gradient(90deg,var(--rojo2),var(--rojo))}
-.docseg-status-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
-.docseg-status{border:1px solid var(--borde);border-radius:14px;padding:12px;background:#f7fbff}
-.docseg-status b{display:block;color:var(--azul3);font-size:22px;line-height:1;margin-bottom:6px}
-.docseg-status span{font-size:12px;color:var(--muted);font-weight:800}
-.docseg-provinces{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.docseg-province{border:1px solid var(--borde);border-radius:14px;background:#fff;padding:12px}
-.docseg-province strong{display:block;color:var(--azul3);font-size:13px;margin-bottom:8px}
-.docseg-province small{display:block;color:var(--muted);font-size:12px;line-height:1.25;margin-top:7px}
-.docseg-semaforo{display:grid;gap:10px;margin-top:12px}
-.docseg-semaforo-item{display:grid;grid-template-columns:14px 1fr;gap:10px;align-items:start;border:1px solid var(--borde);border-radius:12px;background:#f7fbff;padding:10px;font-size:13px;color:var(--texto);line-height:1.35}
-.docseg-dot{width:12px;height:12px;border-radius:999px;margin-top:3px;background:var(--verde)}
-.docseg-dot.warn{background:var(--ambar)}
-.docseg-dot.bad{background:var(--rojo)}
-.docseg-foot{color:#66798a;font-size:12px;text-align:right}
-@media(max-width:980px){.docseg-kpis,.docseg-layout,.docseg-status-grid,.docseg-provinces{grid-template-columns:1fr}.docseg-head{flex-direction:column}.docseg-barline{grid-template-columns:1fr}}
-
 </style>
 </head>
 <body>
@@ -799,60 +758,63 @@ select,input{
         </div>
       </div>
 
-
       <div id="dashboard" class="tab-content">
-        <h2>Dashboard estratégico · Estado documental de planes ENOS</h2>
-        <p>Vista ejecutiva del avance documental de los planes ENOS 2026-2027 en la Zona 5. Esta sección mantiene la arquitectura base de la plataforma y muestra únicamente indicadores estratégicos del proceso, sin tabla cantonal, buscador ni filtros operativos.</p>
+        <h2>Dashboard operativo conectado al índice</h2>
+        <p>Vista viva desde <strong>INDICE_MEMORIA_ENOS</strong>: resume casos, formularios, registros, calidad, brechas y datos con georreferencia. Mantiene la plataforma original y agrega los dos módulos acordados: cartográfico operativo e información ampliada.</p>
+        <div class="dashboard-actions">
+          <button class="btn primary" onclick="probarConexionENOS()">Probar conexión</button>
+          <button class="btn red" onclick="actualizarBaseF01F07()">Sincronizar base F01-F07</button>
+          <button class="btn soft" onclick="cargarDashboardOperativo()">Actualizar dashboard</button>
+          <button class="btn green" onclick="openDetailed()">Información ampliada</button>
+        </div>
+        <div id="dashboardStatus" class="status" style="display:none"><span class="dot"></span><span id="dashboardStatusText"></span></div>
 
-        <div class="docseg-shell" id="docsegModulo">
-          <div class="docseg-head">
-            <div>
-              <h3>Seguimiento documental consolidado CZ5</h3>
-              <p>Lectura agregada para toma de decisiones: socialización, entrega documental, validación técnica, devoluciones, revisión y faltantes críticos.</p>
+        <div class="kpi-row">
+          <div class="kpi-card"><h4>Casos</h4><div class="num" id="dashCasos">—</div><small>Total de códigos de caso detectados en el índice.</small></div>
+          <div class="kpi-card"><h4>Registros</h4><div class="num" id="dashRegistros">—</div><small>Filas útiles indexadas desde hojas F01-F07 y bases.</small></div>
+          <div class="kpi-card"><h4>Promedio técnico</h4><div class="num" id="dashPromedio">—</div><small>Estimación por cobertura de formularios por caso.</small></div>
+          <div class="kpi-card"><h4>Georreferenciados</h4><div class="num" id="dashGeo">—</div><small>Registros con coordenada utilizable para mapa operativo.</small></div>
+        </div>
+
+        <div class="executive">
+          <div class="gauge">
+            <div class="gauge-title">Cobertura técnica promedio</div>
+            <div class="gauge-number" id="dashGaugeNumber">—</div>
+            <div class="track"><div class="fill" id="dashGaugeFill" style="width:0%"></div></div>
+            <p id="dashLectura" style="margin-top:12px">Actualice el dashboard para leer los datos reales del índice.</p>
+          </div>
+          <div class="alert">
+            <strong>Lectura ejecutiva automática</strong>
+            <span id="dashAlertaEjecutiva">El tablero está listo para consultar el índice y detectar casos con baja cobertura, seguimiento faltante o falta de georreferencia.</span>
+            <div class="actions" style="margin-bottom:0"><button class="btn primary" onclick="openDetailed()">Abrir información ampliada</button></div>
+          </div>
+        </div>
+
+        <div class="detail-grid" style="margin-top:14px">
+          <div class="detail-card">
+            <h3>1. Módulo cartográfico operativo</h3>
+            <p>Mapa liviano calculado desde los registros con coordenadas. Si el caso no tiene coordenadas limpias, se muestra en la tabla territorial para depuración.</p>
+            <div class="filters" style="grid-template-columns:1fr 1fr auto">
+              <select id="dashProvinciaFilter" onchange="renderDashboardMap()"><option value="">Provincia: todas</option></select>
+              <select id="dashFormularioFilter" onchange="renderDashboardMap()"><option value="">Formulario: todos</option></select>
+              <button class="btn white" onclick="renderDashboardMap()">Refrescar mapa</button>
             </div>
-            <div class="docseg-version">v0.4.0 · corte 30 jun 2026</div>
-          </div>
-
-          <div class="docseg-kpis">
-            <div class="docseg-card"><small>Universo CZ5</small><strong id="docsegTotal">—</strong><span>GAD cantonales y provinciales registrados.</span></div>
-            <div class="docseg-card"><small>Socialización</small><strong id="docsegSocializacion">—</strong><span>Proceso socializado en el universo registrado.</span></div>
-            <div class="docseg-card"><small>Planes entregados</small><strong id="docsegEntrega">—</strong><span id="docsegEntregaTxt">Avance de entrega documental.</span></div>
-            <div class="docseg-card"><small>Validación técnica</small><strong id="docsegValidacion">—</strong><span id="docsegValidacionTxt">Planes validados técnicamente.</span></div>
-            <div class="docseg-card"><small>Gestión técnica</small><strong id="docsegGestion">—</strong><span>Devueltos o en revisión.</span></div>
-            <div class="docseg-card"><small>Faltantes críticos</small><strong id="docsegFaltantes">—</strong><span>Registros sin plan/documento pendiente.</span></div>
-          </div>
-
-          <div class="docseg-layout">
-            <div class="docseg-panel">
-              <h3>Lectura ejecutiva del proceso</h3>
-              <div class="docseg-reading" id="docsegLectura">Actualizando lectura estratégica...</div>
-              <div class="docseg-status-grid">
-                <div class="docseg-status"><b id="docsegValidadosNum">—</b><span>Validados</span></div>
-                <div class="docseg-status"><b id="docsegDevueltosNum">—</b><span>Devueltos</span></div>
-                <div class="docseg-status"><b id="docsegRevisionNum">—</b><span>En revisión</span></div>
-                <div class="docseg-status"><b id="docsegFaltantesNum">—</b><span>Faltantes</span></div>
-              </div>
+            <div class="carto-map" id="cartoMapLayer">
+              <div class="carto-map-label">Mapa operativo · puntos desde INDICE_MEMORIA_ENOS</div>
             </div>
-
-            <div class="docseg-panel">
-              <h3>Semáforo de prioridad</h3>
-              <p>Lectura para orientar seguimiento zonal sin entrar al detalle cantonal.</p>
-              <div class="docseg-semaforo" id="docsegSemaforo"></div>
+            <div class="footer-note" id="cartoMapNote">Sin datos cartográficos cargados todavía.</div>
+          </div>
+          <div class="detail-card">
+            <h3>2. Casos para análisis ampliado</h3>
+            <p>Seleccione un caso para abrir su paquete, formularios detectados, registros, brechas y soporte cartográfico.</p>
+            <div class="inputline"><label>Buscar caso, GAD o cantón</label><input id="dashCaseSearch" oninput="renderDashboardCases()" placeholder="Ejemplo: Empalme, Daule, GADMELEMPALME..."></div>
+            <div class="table-wrap" style="max-height:360px">
+              <table>
+                <thead><tr><th>Institución / caso</th><th>Territorio</th><th>Formularios</th><th>Registros</th><th>Acción</th></tr></thead>
+                <tbody id="dashCasesBody"><tr><td colspan="5">Actualice el dashboard para cargar casos reales.</td></tr></tbody>
+              </table>
             </div>
           </div>
-
-          <div class="docseg-panel">
-            <h3>Avance agregado por provincia</h3>
-            <p>Se muestra el porcentaje de entrega documental por provincia. No se despliega tabla cantonal para mantener lectura estratégica.</p>
-            <div class="docseg-provinces" id="docsegProvincias"></div>
-          </div>
-
-          <div class="docseg-panel">
-            <h3>Distribución documental general</h3>
-            <div class="docseg-bars" id="docsegBarras"></div>
-          </div>
-
-          <div class="docseg-foot">Fuente: MATRIZSEGUIM-EL NIÑO(2)(8).xlsx · hoja Consolidado · integración v0.4.0 sobre BASE 01.</div>
         </div>
       </div>
 
@@ -1842,184 +1804,6 @@ document.addEventListener('DOMContentLoaded', function(){
   setTimeout(function(){ cargarDashboardOperativo().catch(function(){}); }, 900);
 });
 
-
-
-// MODULO SEGUIMIENTO DOCUMENTAL ESTRATEGICO · v0.4.0 · datos agregados sin tabla cantonal
-const DOCSEG_DATA_V040 = {
-  "metadata": {
-    "project": "SNGR-CZ5-ENOS",
-    "version": "v0.4.0",
-    "module": "seguimiento_documental_estrategico",
-    "generated_at": "2026-06-30",
-    "scope": "Indicadores estratégicos del estado documental de planes ENOS 2026-2027",
-    "source": "MATRIZSEGUIM-EL NIÑO(2)(8).xlsx / hoja Consolidado",
-    "architecture_note": "Se reemplazó únicamente el contenido del tab Dashboard por una vista estratégica documental. No se modificó la estructura principal de roles, flujo, pestañas base ni módulo de riesgo zonal.",
-    "base_file": "index.html cargado por el usuario el 2026-06-30",
-    "integration_type": "Integración directa sobre arquitectura base recibida"
-  },
-  "summary": {
-    "total_registros": 56,
-    "gad_cantonal": 51,
-    "gad_provincial": 5,
-    "socializados": 56,
-    "planes_entregados": 35,
-    "planes_no_entregados": 21,
-    "planes_validados": 37,
-    "planes_devueltos": 10,
-    "planes_en_revision": 7,
-    "planes_faltantes": 2,
-    "porc_socializacion": 100.0,
-    "porc_entrega": 62.5,
-    "porc_validacion": 66.1,
-    "brecha_documental": 40,
-    "fecha_actualizacion": "2026-06-30"
-  },
-  "province_summary": [
-    {
-      "provincia": "BOLÍVAR",
-      "registros": 8,
-      "planes_entregados": 6,
-      "planes_no_entregados": 2,
-      "planes_validados": 6,
-      "planes_devueltos": 1,
-      "planes_en_revision": 0,
-      "planes_faltantes": 1,
-      "porc_entrega": 75.0,
-      "porc_validacion": 75.0
-    },
-    {
-      "provincia": "GALÁPAGOS",
-      "registros": 4,
-      "planes_entregados": 0,
-      "planes_no_entregados": 4,
-      "planes_validados": 0,
-      "planes_devueltos": 1,
-      "planes_en_revision": 3,
-      "planes_faltantes": 0,
-      "porc_entrega": 0.0,
-      "porc_validacion": 0.0
-    },
-    {
-      "provincia": "GUAYAS",
-      "registros": 26,
-      "planes_entregados": 21,
-      "planes_no_entregados": 5,
-      "planes_validados": 19,
-      "planes_devueltos": 6,
-      "planes_en_revision": 0,
-      "planes_faltantes": 1,
-      "porc_entrega": 80.8,
-      "porc_validacion": 73.1
-    },
-    {
-      "provincia": "LOS RÍOS",
-      "registros": 14,
-      "planes_entregados": 8,
-      "planes_no_entregados": 6,
-      "planes_validados": 11,
-      "planes_devueltos": 2,
-      "planes_en_revision": 1,
-      "planes_faltantes": 0,
-      "porc_entrega": 57.1,
-      "porc_validacion": 78.6
-    },
-    {
-      "provincia": "SANTA ELENA",
-      "registros": 4,
-      "planes_entregados": 0,
-      "planes_no_entregados": 4,
-      "planes_validados": 1,
-      "planes_devueltos": 0,
-      "planes_en_revision": 3,
-      "planes_faltantes": 0,
-      "porc_entrega": 0.0,
-      "porc_validacion": 25.0
-    }
-  ]
-};
-
-function docsegSetText(id, value){
-  const el = document.getElementById(id);
-  if(el) el.textContent = value;
-}
-
-function docsegPct(value){
-  const n = Number(value || 0);
-  return (Math.round(n * 10) / 10).toString().replace('.', ',') + '%';
-}
-
-function renderSeguimientoDocumentalEstrategico(){
-  const data = DOCSEG_DATA_V040 || {};
-  const s = data.summary || {};
-  const provincias = data.province_summary || [];
-  const gestion = Number(s.planes_devueltos || 0) + Number(s.planes_en_revision || 0);
-
-  docsegSetText('docsegTotal', s.total_registros || '—');
-  docsegSetText('docsegSocializacion', docsegPct(s.porc_socializacion || 100));
-  docsegSetText('docsegEntrega', docsegPct(s.porc_entrega));
-  docsegSetText('docsegEntregaTxt', (s.planes_entregados || 0) + ' entregados de ' + (s.total_registros || 0) + ' registros.');
-  docsegSetText('docsegValidacion', docsegPct(s.porc_validacion));
-  docsegSetText('docsegValidacionTxt', (s.planes_validados || 0) + ' planes validados técnicamente.');
-  docsegSetText('docsegGestion', gestion);
-  docsegSetText('docsegFaltantes', s.planes_faltantes || 0);
-  docsegSetText('docsegValidadosNum', s.planes_validados || 0);
-  docsegSetText('docsegDevueltosNum', s.planes_devueltos || 0);
-  docsegSetText('docsegRevisionNum', s.planes_en_revision || 0);
-  docsegSetText('docsegFaltantesNum', s.planes_faltantes || 0);
-
-  const lectura = document.getElementById('docsegLectura');
-  if(lectura){
-    lectura.innerHTML = '<strong>Estado del proceso documental</strong>'
-      + 'El proceso está socializado en el universo registrado. La entrega documental alcanza '
-      + docsegPct(s.porc_entrega) + ' y la validación técnica alcanza ' + docsegPct(s.porc_validacion)
-      + '. La prioridad de gestión se concentra en ' + gestion + ' registros con gestión técnica pendiente ('
-      + (s.planes_devueltos || 0) + ' devueltos y ' + (s.planes_en_revision || 0)
-      + ' en revisión), además de ' + (s.planes_faltantes || 0) + ' faltantes críticos.';
-  }
-
-  const sem = document.getElementById('docsegSemaforo');
-  if(sem){
-    sem.innerHTML = [
-      '<div class="docseg-semaforo-item"><i class="docseg-dot"></i><div><strong>Continuar validación</strong><br>Consolidar los ' + (s.planes_validados || 0) + ' planes ya validados como línea de avance del proceso.</div></div>',
-      '<div class="docseg-semaforo-item"><i class="docseg-dot warn"></i><div><strong>Resolver gestión técnica</strong><br>Atender ' + gestion + ' registros que requieren devolución corregida o cierre de revisión.</div></div>',
-      '<div class="docseg-semaforo-item"><i class="docseg-dot bad"></i><div><strong>Cierre crítico</strong><br>Priorizar los ' + (s.planes_faltantes || 0) + ' faltantes y las provincias con 0% de entrega documental.</div></div>'
-    ].join('');
-  }
-
-  const provBox = document.getElementById('docsegProvincias');
-  if(provBox){
-    provBox.innerHTML = provincias.map(function(p){
-      const pct = Number(p.porc_entrega || 0);
-      const cls = pct < 40 ? 'bad' : (pct < 70 ? 'warn' : '');
-      return '<div class="docseg-province"><strong>' + docsegEscape(p.provincia) + '</strong>'
-        + '<div class="docseg-track"><div class="docseg-fill ' + cls + '" style="width:' + Math.max(0, Math.min(100, pct)) + '%"></div></div>'
-        + '<small>Entrega: ' + docsegPct(p.porc_entrega) + ' · Validación: ' + docsegPct(p.porc_validacion) + '</small></div>';
-    }).join('');
-  }
-
-  const barras = document.getElementById('docsegBarras');
-  if(barras){
-    const total = Number(s.total_registros || 1);
-    const items = [
-      ['Validados', Number(s.planes_validados || 0), ''],
-      ['Devueltos', Number(s.planes_devueltos || 0), 'warn'],
-      ['En revisión', Number(s.planes_en_revision || 0), 'warn'],
-      ['Faltantes', Number(s.planes_faltantes || 0), 'bad']
-    ];
-    barras.innerHTML = items.map(function(item){
-      const pct = total ? (item[1] / total * 100) : 0;
-      return '<div class="docseg-barline"><strong>' + item[0] + '</strong><div class="docseg-track"><div class="docseg-fill ' + item[2] + '" style="width:' + Math.max(0, Math.min(100, pct)) + '%"></div></div><span>' + item[1] + '</span></div>';
-    }).join('');
-  }
-}
-
-function docsegEscape(v){
-  return String(v === undefined || v === null ? '' : v).replace(/[&<>"']/g, function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];});
-}
-
-document.addEventListener('DOMContentLoaded', function(){
-  renderSeguimientoDocumentalEstrategico();
-});
 
 // MODULO RIESGO ZONAL ENOS CZ5 · Integración 20260630
 const RIESGO_API_URL = 'https://script.google.com/macros/s/AKfycbw9pDFZv6HBseCNILV90w8XfZL043inXnG0kvXDdgXl35N2vdKYIrYGh5HgAsXjfRbxEA/exec';

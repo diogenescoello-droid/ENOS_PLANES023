@@ -1,0 +1,9 @@
+{
+  "project": "SNGR-CZ5-ENOS",
+  "version": "v0.4.0",
+  "date": "2026-06-30",
+  "base": "index.html cargado por el usuario",
+  "change_type": "B/C - ajuste visual/contenido dentro de módulo existente sin cambio de arquitectura",
+  "main_file": "index.html",
+  "status": "Entregado para revisión"
+}
