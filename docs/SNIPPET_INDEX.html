@@ -1,5 +1,249 @@
-<!-- Botón sugerido para el index.html principal -->
-<a class="module-card" href="./plataforma_cz5_enos_actualizada/index.html">
-  <h3>Seguimiento documental ENOS 2026-2027</h3>
-  <p>Avance de socialización, entrega, revisión y validación de planes CZ5.</p>
-</a>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CZ5 | Estado documental ENOS 2026-2027</title>
+  <style>
+    :root {
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --ink:#162033;
+      --muted:#667085;
+      --line:#d9e2ef;
+      --brand:#0b5f8a;
+      --brand2:#0f766e;
+      --ok:#15803d;
+      --warn:#b45309;
+      --bad:#b91c1c;
+      --info:#1d4ed8;
+      --soft:#f8fafc;
+      --shadow:0 12px 32px rgba(16,24,40,.08);
+      --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font-family:Inter, Segoe UI, Arial, sans-serif; }
+    header {
+      background:linear-gradient(135deg,#083344 0%,#0b5f8a 55%,#0f766e 100%);
+      color:white; padding:28px 32px 24px; box-shadow:var(--shadow);
+    }
+    header h1 { margin:0 0 8px; font-size:clamp(24px,4vw,38px); letter-spacing:-.035em; }
+    header p { margin:0; color:rgba(255,255,255,.88); max-width:1060px; line-height:1.48; }
+    main { padding:24px; max-width:1440px; margin:0 auto; }
+    .grid { display:grid; grid-template-columns:repeat(12,1fr); gap:16px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); }
+    .wide { grid-column:1/-1; }
+    .half { grid-column:span 6; }
+    .third { grid-column:span 4; }
+    .section-title { margin:0 0 12px; font-size:18px; letter-spacing:-.01em; }
+    .eyebrow { margin:0 0 4px; color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.08em; font-weight:800; }
+    .kpis { grid-column:1/-1; display:grid; grid-template-columns:repeat(6,minmax(140px,1fr)); gap:14px; }
+    .kpi { padding:16px; border-radius:16px; border:1px solid var(--line); background:#fff; min-height:112px; }
+    .kpi .label { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.06em; font-weight:800; }
+    .kpi .value { font-size:34px; font-weight:900; margin-top:6px; letter-spacing:-.045em; }
+    .kpi small { color:var(--muted); display:block; margin-top:3px; line-height:1.35; }
+    .executive { grid-column:1/-1; display:grid; grid-template-columns:1.15fr .85fr; gap:16px; }
+    .status-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:12px; }
+    .status-box { border:1px solid var(--line); border-radius:15px; padding:14px; background:var(--soft); }
+    .status-box b { display:block; font-size:25px; letter-spacing:-.035em; }
+    .status-box span { color:var(--muted); font-size:12px; line-height:1.35; }
+    .callout { border-left:5px solid var(--brand2); background:#f0fdfa; padding:14px 16px; border-radius:14px; line-height:1.5; }
+    .callout b { color:#0f5132; }
+    .bar { margin:14px 0 4px; }
+    .bar-head { display:flex; justify-content:space-between; gap:12px; font-size:13px; color:var(--muted); font-weight:800; margin-bottom:7px; }
+    .bar-track { height:18px; border-radius:999px; background:#eef2f7; overflow:hidden; border:1px solid #e5edf7; }
+    .bar-fill { height:100%; border-radius:999px; background:linear-gradient(90deg,var(--brand),var(--brand2)); }
+    .stack { display:flex; height:28px; overflow:hidden; border-radius:999px; background:#eef2f7; border:1px solid #e5edf7; margin:14px 0 12px; }
+    .seg { height:100%; }
+    .seg.ok { background:var(--ok); }
+    .seg.bad { background:var(--bad); }
+    .seg.info { background:var(--info); }
+    .seg.warn { background:var(--warn); }
+    .legend { display:flex; gap:12px; flex-wrap:wrap; color:var(--muted); font-size:13px; }
+    .dot { width:11px; height:11px; border-radius:50%; display:inline-block; margin-right:5px; vertical-align:-1px; }
+    .dot.ok { background:var(--ok); } .dot.bad { background:var(--bad); } .dot.info { background:var(--info); } .dot.warn { background:var(--warn); }
+    .province-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; }
+    .province-card { border:1px solid var(--line); border-radius:16px; padding:14px; background:#fff; }
+    .province-card h3 { margin:0 0 10px; font-size:16px; letter-spacing:-.015em; }
+    .province-card .meta { color:var(--muted); font-size:12px; margin-bottom:10px; }
+    .minirow { display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:8px 0; font-size:13px; }
+    .tiny-track { height:10px; border-radius:99px; background:#eef2f7; overflow:hidden; margin-top:4px; }
+    .tiny-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,var(--brand),var(--brand2)); }
+    .chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+    .chip { padding:4px 7px; border-radius:999px; font-weight:800; font-size:11px; }
+    .chip.ok { color:#166534; background:#dcfce7; }
+    .chip.bad { color:#991b1b; background:#fee2e2; }
+    .chip.info { color:#1e40af; background:#dbeafe; }
+    .chip.warn { color:#92400e; background:#fef3c7; }
+    .note { color:var(--muted); font-size:12px; margin-top:12px; line-height:1.45; }
+    .schematic {
+      position:relative; min-height:280px; border-radius:16px; border:1px dashed #b8c7d9; background:
+      radial-gradient(circle at 20% 30%,rgba(14,165,233,.12),transparent 28%),
+      radial-gradient(circle at 70% 70%,rgba(16,185,129,.12),transparent 30%),
+      #f8fafc; overflow:hidden; padding:16px;
+    }
+    .region {
+      position:absolute; border:2px solid rgba(11,95,138,.35); background:rgba(11,95,138,.08);
+      color:#0b4361; border-radius:26px; display:flex; align-items:center; justify-content:center;
+      font-weight:900; text-align:center; padding:8px; user-select:none;
+    }
+    .r-bolivar { left:8%; top:14%; width:30%; height:24%; }
+    .r-losrios { left:25%; top:42%; width:34%; height:28%; }
+    .r-guayas { left:44%; top:18%; width:38%; height:30%; }
+    .r-santaelena { left:54%; top:62%; width:32%; height:22%; }
+    .r-galapagos { left:4%; top:72%; width:24%; height:16%; }
+    .priority-list { display:grid; gap:10px; }
+    .priority { border:1px solid var(--line); border-radius:14px; padding:12px; background:var(--soft); display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:start; }
+    .rank { width:30px; height:30px; border-radius:10px; background:#e0f2fe; color:#075985; display:grid; place-items:center; font-weight:900; }
+    .priority b { display:block; margin-bottom:2px; }
+    .priority span { color:var(--muted); font-size:13px; line-height:1.4; }
+    footer { max-width:1440px; margin:0 auto; padding:0 24px 24px; color:var(--muted); font-size:12px; }
+    @media (max-width:1150px) {
+      .kpis { grid-template-columns:repeat(3,1fr); }
+      .executive { grid-template-columns:1fr; }
+      .province-grid { grid-template-columns:repeat(2,1fr); }
+      .half,.third { grid-column:1/-1; }
+    }
+    @media (max-width:680px) {
+      main { padding:14px; } header { padding:22px 16px; }
+      .kpis,.status-grid,.province-grid { grid-template-columns:1fr; }
+      .card { padding:15px; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <p class="eyebrow">Plataforma CZ5 · ENOS 2026-2027</p>
+  <h1>Estado documental estratégico de los planes</h1>
+  <p>Vista ejecutiva para seguimiento del proceso: socialización, entrega, validación, devolución, revisión pendiente y brecha documental. Sin detalle cantonal operativo.</p>
+</header>
+
+<main>
+  <section class="grid">
+    <div class="kpis" id="kpis"></div>
+
+    <div class="executive">
+      <div class="card">
+        <p class="eyebrow">Lectura ejecutiva</p>
+        <h2 class="section-title">Estado general del proceso documental</h2>
+        <div class="callout" id="mainInsight"></div>
+        <div class="status-grid" id="statusBoxes"></div>
+      </div>
+      <div class="card">
+        <p class="eyebrow">Distribución técnica</p>
+        <h2 class="section-title">Estado de revisión</h2>
+        <div class="stack" id="statusStack" aria-label="Distribución de estados de revisión"></div>
+        <div class="legend">
+          <span><i class="dot ok"></i>Validado</span>
+          <span><i class="dot bad"></i>Devuelto</span>
+          <span><i class="dot info"></i>En revisión</span>
+          <span><i class="dot warn"></i>Faltante</span>
+        </div>
+        <p class="note" id="statusNote"></p>
+      </div>
+    </div>
+
+    <div class="card half">
+      <p class="eyebrow">Cobertura territorial</p>
+      <h2 class="section-title">Zona CZ5</h2>
+      <div class="schematic" aria-label="Mapa esquemático CZ5">
+        <div class="region r-bolivar">BOLÍVAR</div>
+        <div class="region r-losrios">LOS RÍOS</div>
+        <div class="region r-guayas">GUAYAS</div>
+        <div class="region r-santaelena">SANTA ELENA</div>
+        <div class="region r-galapagos">GALÁPAGOS</div>
+      </div>
+      <p class="note">Mapa esquemático de referencia visual para conservar la arquitectura territorial de la plataforma; no reemplaza cartografía oficial.</p>
+    </div>
+
+    <div class="card half">
+      <p class="eyebrow">Semáforo de gestión</p>
+      <h2 class="section-title">Prioridades estratégicas</h2>
+      <div class="priority-list" id="priorities"></div>
+    </div>
+
+    <div class="card wide">
+      <p class="eyebrow">Avance provincial</p>
+      <h2 class="section-title">Indicadores estratégicos por provincia</h2>
+      <div class="province-grid" id="provinceGrid"></div>
+      <p class="note" id="sourceNote"></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Este módulo muestra únicamente indicadores estratégicos del estado documental. La base completa puede mantenerse como respaldo interno, pero no se expone en la vista pública del tablero.
+</footer>
+
+<script type="application/json" id="cz5-data">{"metadata":{"nombre":"Plataforma CZ5 - Seguimiento ENOS 2026-2027","fecha_generacion":"2026-06-30","zona":"CZ5","fuente_excel":"MATRIZSEGUIM-EL NIÑO(2)(8).xlsx","hoja_principal":"Consolidado","nota":"Base generada a partir de la matriz cargada en esta conversación."},"summary":{"total_registros":56,"gad_cantonal":51,"gad_provincial":5,"socializados":56,"participaron":53,"planes_entregados":35,"planes_no_entregados":21,"planes_validados":37,"planes_devueltos":10,"planes_en_revision":7,"planes_faltantes":2,"porc_entrega":62.5,"porc_validacion":66.1,"provincias":["BOLÍVAR","GALÁPAGOS","GUAYAS","LOS RÍOS","SANTA ELENA"],"fecha_actualizacion":"2026-06-30","fuente":"MATRIZSEGUIM-EL NIÑO(2)(8).xlsx / hoja Consolidado"},"province_summary":[{"provincia":"BOLÍVAR","registros":8,"cantones_expuestos":7,"gad_provincial":1,"gad_cantonal":7,"planes_entregados":6,"planes_no_entregados":2,"planes_validados":6,"planes_devueltos":1,"planes_en_revision":0,"planes_faltantes":1,"porc_entrega":75.0,"porc_validacion":75.0,"estados":{"VALIDADO":6,"DEVUELTO":1,"FALTA":1},"entregas":{"SI":6,"NO":2}},{"provincia":"GALÁPAGOS","registros":4,"cantones_expuestos":3,"gad_provincial":1,"gad_cantonal":3,"planes_entregados":0,"planes_no_entregados":4,"planes_validados":0,"planes_devueltos":1,"planes_en_revision":3,"planes_faltantes":0,"porc_entrega":0.0,"porc_validacion":0.0,"estados":{"EN REVISIÓN":3,"DEVUELTO":1},"entregas":{"NO":4}},{"provincia":"GUAYAS","registros":26,"cantones_expuestos":25,"gad_provincial":1,"gad_cantonal":25,"planes_entregados":21,"planes_no_entregados":5,"planes_validados":19,"planes_devueltos":6,"planes_en_revision":0,"planes_faltantes":1,"porc_entrega":80.8,"porc_validacion":73.1,"estados":{"VALIDADO":19,"DEVUELTO":6,"FALTA":1},"entregas":{"SI":21,"NO":5}},{"provincia":"LOS RÍOS","registros":14,"cantones_expuestos":13,"gad_provincial":1,"gad_cantonal":13,"planes_entregados":8,"planes_no_entregados":6,"planes_validados":11,"planes_devueltos":2,"planes_en_revision":1,"planes_faltantes":0,"porc_entrega":57.1,"porc_validacion":78.6,"estados":{"VALIDADO":11,"DEVUELTO":2,"EN REVISIÓN":1},"entregas":{"SI":8,"NO":6}},{"provincia":"SANTA ELENA","registros":4,"cantones_expuestos":3,"gad_provincial":1,"gad_cantonal":3,"planes_entregados":0,"planes_no_entregados":4,"planes_validados":1,"planes_devueltos":0,"planes_en_revision":3,"planes_faltantes":0,"porc_entrega":0.0,"porc_validacion":25.0,"estados":{"EN REVISIÓN":3,"VALIDADO":1},"entregas":{"NO":4}}]}</script>
+<script>
+const DATA = JSON.parse(document.getElementById('cz5-data').textContent);
+const S = DATA.summary;
+const provinces = DATA.province_summary;
+const pct = (n, d) => d ? Math.round((n / d) * 1000) / 10 : 0;
+const fmtPct = n => `${Number(n).toFixed(1)}%`;
+const statusTotal = S.planes_validados + S.planes_devueltos + S.planes_en_revision + S.planes_faltantes;
+
+function kpi(label, value, detail) {
+  return `<article class="kpi"><div class="label">${label}</div><div class="value">${value}</div><small>${detail}</small></article>`;
+}
+
+document.getElementById('kpis').innerHTML = [
+  kpi('Universo CZ5', S.total_registros, `${S.gad_cantonal} GAD cantonales · ${S.gad_provincial} provinciales`),
+  kpi('Socialización', fmtPct(pct(S.socializados, S.total_registros)), `${S.socializados} de ${S.total_registros} registros`),
+  kpi('Entrega documental', fmtPct(S.porc_entrega), `${S.planes_entregados} entregados · ${S.planes_no_entregados} no entregados`),
+  kpi('Validación técnica', fmtPct(S.porc_validacion), `${S.planes_validados} planes validados`),
+  kpi('Corrección requerida', S.planes_devueltos, 'planes devueltos para ajuste'),
+  kpi('Pendiente crítico', S.planes_en_revision + S.planes_faltantes, `${S.planes_en_revision} en revisión · ${S.planes_faltantes} faltantes`)
+].join('');
+
+document.getElementById('mainInsight').innerHTML = `
+  <b>Corte estratégico:</b> el proceso tiene socialización completa y una validación técnica de <b>${fmtPct(S.porc_validacion)}</b>. La brecha principal ya no es de socialización, sino de <b>cierre documental</b>: ${S.planes_no_entregados} planes no entregados, ${S.planes_devueltos} devueltos para corrección y ${S.planes_en_revision} en revisión técnica.`;
+
+document.getElementById('statusBoxes').innerHTML = [
+  ['Validados', S.planes_validados, fmtPct(pct(S.planes_validados, statusTotal))],
+  ['Devueltos', S.planes_devueltos, fmtPct(pct(S.planes_devueltos, statusTotal))],
+  ['En revisión', S.planes_en_revision, fmtPct(pct(S.planes_en_revision, statusTotal))],
+  ['Faltantes', S.planes_faltantes, fmtPct(pct(S.planes_faltantes, statusTotal))]
+].map(x => `<div class="status-box"><b>${x[1]}</b><span>${x[0]} · ${x[2]}</span></div>`).join('');
+
+document.getElementById('statusStack').innerHTML = `
+  <div class="seg ok" style="width:${pct(S.planes_validados,statusTotal)}%"></div>
+  <div class="seg bad" style="width:${pct(S.planes_devueltos,statusTotal)}%"></div>
+  <div class="seg info" style="width:${pct(S.planes_en_revision,statusTotal)}%"></div>
+  <div class="seg warn" style="width:${pct(S.planes_faltantes,statusTotal)}%"></div>`;
+
+document.getElementById('statusNote').textContent = `${S.planes_validados} validados, ${S.planes_devueltos} devueltos, ${S.planes_en_revision} en revisión y ${S.planes_faltantes} faltantes, sobre ${statusTotal} registros con estado de revisión.`;
+
+const noEntrega = provinces.slice().sort((a,b) => b.planes_no_entregados - a.planes_no_entregados)[0];
+const devoluciones = provinces.slice().sort((a,b) => b.planes_devueltos - a.planes_devueltos)[0];
+const revision = provinces.slice().sort((a,b) => b.planes_en_revision - a.planes_en_revision)[0];
+const validacion = provinces.slice().sort((a,b) => a.porc_validacion - b.porc_validacion)[0];
+
+document.getElementById('priorities').innerHTML = [
+  ['1', 'Cerrar entregas pendientes', `${noEntrega.provincia} concentra ${noEntrega.planes_no_entregados} registros sin entrega documental.`],
+  ['2', 'Acelerar correcciones', `${devoluciones.provincia} registra ${devoluciones.planes_devueltos} devoluciones para ajuste técnico.`],
+  ['3', 'Resolver revisión técnica', `${revision.provincia} mantiene ${revision.planes_en_revision} planes en revisión.`],
+  ['4', 'Subir validación provincial', `${validacion.provincia} presenta el menor porcentaje de validación: ${fmtPct(validacion.porc_validacion)}.`]
+].map(x => `<div class="priority"><div class="rank">${x[0]}</div><div><b>${x[1]}</b><span>${x[2]}</span></div></div>`).join('');
+
+function provinceCard(p) {
+  return `<article class="province-card">
+    <h3>${p.provincia}</h3>
+    <div class="meta">${p.registros} registros · ${p.gad_cantonal} cantonales · ${p.gad_provincial} provincial</div>
+    <div class="minirow"><div>Entrega<div class="tiny-track"><div class="tiny-fill" style="width:${p.porc_entrega}%"></div></div></div><b>${fmtPct(p.porc_entrega)}</b></div>
+    <div class="minirow"><div>Validación<div class="tiny-track"><div class="tiny-fill" style="width:${p.porc_validacion}%"></div></div></div><b>${fmtPct(p.porc_validacion)}</b></div>
+    <div class="chips">
+      <span class="chip ok">${p.planes_validados} validados</span>
+      <span class="chip bad">${p.planes_devueltos} devueltos</span>
+      <span class="chip info">${p.planes_en_revision} revisión</span>
+      <span class="chip warn">${p.planes_no_entregados} sin entrega</span>
+    </div>
+  </article>`;
+}
+
+document.getElementById('provinceGrid').innerHTML = provinces.map(provinceCard).join('');
+document.getElementById('sourceNote').textContent = `Fuente: ${S.fuente}. Fecha de actualización: ${S.fecha_actualizacion}.`;
+</script>
+</body>
+</html>

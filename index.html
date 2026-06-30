@@ -3,313 +3,247 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CZ5 | Seguimiento ENOS 2026-2027</title>
+  <title>CZ5 | Estado documental ENOS 2026-2027</title>
   <style>
     :root {
-      --bg: #f5f7fb;
-      --panel: #ffffff;
-      --ink: #172033;
-      --muted: #667085;
-      --line: #d9e2ef;
-      --brand: #0b5f8a;
-      --brand2: #0f766e;
-      --warn: #b45309;
-      --bad: #b91c1c;
-      --ok: #15803d;
-      --info: #1d4ed8;
-      --shadow: 0 12px 32px rgba(16,24,40,.08);
-      --radius: 18px;
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --ink:#162033;
+      --muted:#667085;
+      --line:#d9e2ef;
+      --brand:#0b5f8a;
+      --brand2:#0f766e;
+      --ok:#15803d;
+      --warn:#b45309;
+      --bad:#b91c1c;
+      --info:#1d4ed8;
+      --soft:#f8fafc;
+      --shadow:0 12px 32px rgba(16,24,40,.08);
+      --radius:18px;
     }
-    * { box-sizing: border-box; }
-    body { margin:0; background:var(--bg); color:var(--ink); font-family: Inter, Segoe UI, Arial, sans-serif; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font-family:Inter, Segoe UI, Arial, sans-serif; }
     header {
-      background: linear-gradient(135deg, #083344 0%, #0b5f8a 55%, #0f766e 100%);
-      color:white; padding:28px 32px 24px; box-shadow: var(--shadow);
+      background:linear-gradient(135deg,#083344 0%,#0b5f8a 55%,#0f766e 100%);
+      color:white; padding:28px 32px 24px; box-shadow:var(--shadow);
     }
-    header h1 { margin:0 0 8px; font-size: clamp(24px, 4vw, 38px); letter-spacing:-.03em; }
-    header p { margin: 0; color: rgba(255,255,255,.86); max-width: 1050px; }
-    main { padding: 24px; max-width: 1440px; margin: 0 auto; }
-    .toolbar { display:grid; grid-template-columns: 1.2fr .8fr .8fr auto; gap:12px; margin: 0 0 18px; }
-    .toolbar input, .toolbar select, button {
-      border:1px solid var(--line); border-radius: 12px; padding:12px 14px; background:white; font-size:14px;
-    }
-    button { cursor:pointer; font-weight:700; color:var(--brand); }
-    button.active { background:var(--brand); color:white; border-color:var(--brand); }
-    .grid { display:grid; grid-template-columns: repeat(12, 1fr); gap:16px; }
-    .card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:18px; box-shadow: var(--shadow); }
-    .kpis { grid-column: 1 / -1; display:grid; grid-template-columns: repeat(8, minmax(120px, 1fr)); gap:14px; }
-    .kpi { padding:16px; border-radius:16px; border:1px solid var(--line); background:#fff; }
-    .kpi .label { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.06em; }
-    .kpi .value { font-size:30px; font-weight:800; margin-top:4px; letter-spacing:-.04em; }
-    .kpi small { color:var(--muted); }
-    .map { grid-column: span 5; min-height:420px; }
-    .panel { grid-column: span 7; min-height:420px; }
-    .wide { grid-column: 1 / -1; }
-    .section-title { margin:0 0 12px; font-size:18px; }
-    .province-buttons { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0 16px; }
-    .province-buttons button { min-width: 128px; }
+    header h1 { margin:0 0 8px; font-size:clamp(24px,4vw,38px); letter-spacing:-.035em; }
+    header p { margin:0; color:rgba(255,255,255,.88); max-width:1060px; line-height:1.48; }
+    main { padding:24px; max-width:1440px; margin:0 auto; }
+    .grid { display:grid; grid-template-columns:repeat(12,1fr); gap:16px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); }
+    .wide { grid-column:1/-1; }
+    .half { grid-column:span 6; }
+    .third { grid-column:span 4; }
+    .section-title { margin:0 0 12px; font-size:18px; letter-spacing:-.01em; }
+    .eyebrow { margin:0 0 4px; color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.08em; font-weight:800; }
+    .kpis { grid-column:1/-1; display:grid; grid-template-columns:repeat(6,minmax(140px,1fr)); gap:14px; }
+    .kpi { padding:16px; border-radius:16px; border:1px solid var(--line); background:#fff; min-height:112px; }
+    .kpi .label { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.06em; font-weight:800; }
+    .kpi .value { font-size:34px; font-weight:900; margin-top:6px; letter-spacing:-.045em; }
+    .kpi small { color:var(--muted); display:block; margin-top:3px; line-height:1.35; }
+    .executive { grid-column:1/-1; display:grid; grid-template-columns:1.15fr .85fr; gap:16px; }
+    .status-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:12px; }
+    .status-box { border:1px solid var(--line); border-radius:15px; padding:14px; background:var(--soft); }
+    .status-box b { display:block; font-size:25px; letter-spacing:-.035em; }
+    .status-box span { color:var(--muted); font-size:12px; line-height:1.35; }
+    .callout { border-left:5px solid var(--brand2); background:#f0fdfa; padding:14px 16px; border-radius:14px; line-height:1.5; }
+    .callout b { color:#0f5132; }
+    .bar { margin:14px 0 4px; }
+    .bar-head { display:flex; justify-content:space-between; gap:12px; font-size:13px; color:var(--muted); font-weight:800; margin-bottom:7px; }
+    .bar-track { height:18px; border-radius:999px; background:#eef2f7; overflow:hidden; border:1px solid #e5edf7; }
+    .bar-fill { height:100%; border-radius:999px; background:linear-gradient(90deg,var(--brand),var(--brand2)); }
+    .stack { display:flex; height:28px; overflow:hidden; border-radius:999px; background:#eef2f7; border:1px solid #e5edf7; margin:14px 0 12px; }
+    .seg { height:100%; }
+    .seg.ok { background:var(--ok); }
+    .seg.bad { background:var(--bad); }
+    .seg.info { background:var(--info); }
+    .seg.warn { background:var(--warn); }
+    .legend { display:flex; gap:12px; flex-wrap:wrap; color:var(--muted); font-size:13px; }
+    .dot { width:11px; height:11px; border-radius:50%; display:inline-block; margin-right:5px; vertical-align:-1px; }
+    .dot.ok { background:var(--ok); } .dot.bad { background:var(--bad); } .dot.info { background:var(--info); } .dot.warn { background:var(--warn); }
+    .province-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; }
+    .province-card { border:1px solid var(--line); border-radius:16px; padding:14px; background:#fff; }
+    .province-card h3 { margin:0 0 10px; font-size:16px; letter-spacing:-.015em; }
+    .province-card .meta { color:var(--muted); font-size:12px; margin-bottom:10px; }
+    .minirow { display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:8px 0; font-size:13px; }
+    .tiny-track { height:10px; border-radius:99px; background:#eef2f7; overflow:hidden; margin-top:4px; }
+    .tiny-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,var(--brand),var(--brand2)); }
+    .chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+    .chip { padding:4px 7px; border-radius:999px; font-weight:800; font-size:11px; }
+    .chip.ok { color:#166534; background:#dcfce7; }
+    .chip.bad { color:#991b1b; background:#fee2e2; }
+    .chip.info { color:#1e40af; background:#dbeafe; }
+    .chip.warn { color:#92400e; background:#fef3c7; }
+    .note { color:var(--muted); font-size:12px; margin-top:12px; line-height:1.45; }
     .schematic {
-      position:relative; min-height:260px; border-radius:16px; border:1px dashed #b8c7d9; background:
-      radial-gradient(circle at 20% 30%, rgba(14,165,233,.12), transparent 28%),
-      radial-gradient(circle at 70% 70%, rgba(16,185,129,.12), transparent 30%),
+      position:relative; min-height:280px; border-radius:16px; border:1px dashed #b8c7d9; background:
+      radial-gradient(circle at 20% 30%,rgba(14,165,233,.12),transparent 28%),
+      radial-gradient(circle at 70% 70%,rgba(16,185,129,.12),transparent 30%),
       #f8fafc; overflow:hidden; padding:16px;
     }
     .region {
       position:absolute; border:2px solid rgba(11,95,138,.35); background:rgba(11,95,138,.08);
       color:#0b4361; border-radius:26px; display:flex; align-items:center; justify-content:center;
-      font-weight:800; text-align:center; padding:8px; transition:.15s; user-select:none;
+      font-weight:900; text-align:center; padding:8px; user-select:none;
     }
-    .region:hover, .region.active { transform: scale(1.03); background: rgba(15,118,110,.18); border-color: var(--brand2); }
     .r-bolivar { left:8%; top:14%; width:30%; height:24%; }
     .r-losrios { left:25%; top:42%; width:34%; height:28%; }
     .r-guayas { left:44%; top:18%; width:38%; height:30%; }
     .r-santaelena { left:54%; top:62%; width:32%; height:22%; }
     .r-galapagos { left:4%; top:72%; width:24%; height:16%; }
-    .legend { display:flex; gap:12px; flex-wrap:wrap; color:var(--muted); font-size:13px; margin-top:12px; }
-    .dot { width:11px; height:11px; border-radius:50%; display:inline-block; margin-right:5px; }
-    .dot.ok { background:var(--ok); } .dot.warn { background:var(--warn); } .dot.bad { background:var(--bad); } .dot.info { background:var(--info); }
-    .bars { display:grid; gap:12px; }
-    .bar-row { display:grid; grid-template-columns: 140px 1fr 58px; gap:10px; align-items:center; }
-    .bar-label { font-weight:700; font-size:13px; }
-    .bar-track { height:16px; border-radius:99px; background:#eef2f7; overflow:hidden; }
-    .bar-fill { height:100%; background:linear-gradient(90deg, var(--brand), var(--brand2)); border-radius:99px; }
-    table { width:100%; border-collapse: collapse; font-size:13px; }
-    th, td { padding:10px 9px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
-    th { position:sticky; top:0; background:#f8fafc; z-index:1; color:#334155; font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
-    .table-wrap { max-height:560px; overflow:auto; border:1px solid var(--line); border-radius:16px; }
-    .badge { display:inline-flex; align-items:center; padding:4px 8px; border-radius:999px; font-weight:800; font-size:12px; white-space:nowrap; }
-    .VALIDADO { background:#dcfce7; color:#166534; }
-    .DEVUELTO { background:#fee2e2; color:#991b1b; }
-    .EN-REVISION, .EN-REVISIÓN { background:#dbeafe; color:#1e40af; }
-    .FALTA { background:#fef3c7; color:#92400e; }
-    .SIN-DATO { background:#f1f5f9; color:#475569; }
-    a { color:var(--brand); font-weight:700; text-decoration:none; }
-    .insight { display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; margin-top:14px; }
-    .mini { background:#f8fafc; border:1px solid var(--line); border-radius:14px; padding:12px; }
-    .mini b { display:block; font-size:22px; }
-    .mini span { color:var(--muted); font-size:12px; }
-    .note { color:var(--muted); font-size:12px; margin-top:10px; }
-    @media (max-width: 1050px) {
-      .toolbar { grid-template-columns: 1fr 1fr; }
-      .kpis { grid-template-columns: repeat(2, 1fr); }
-      .map, .panel { grid-column: 1 / -1; }
-      .insight { grid-template-columns: repeat(2, 1fr); }
+    .priority-list { display:grid; gap:10px; }
+    .priority { border:1px solid var(--line); border-radius:14px; padding:12px; background:var(--soft); display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:start; }
+    .rank { width:30px; height:30px; border-radius:10px; background:#e0f2fe; color:#075985; display:grid; place-items:center; font-weight:900; }
+    .priority b { display:block; margin-bottom:2px; }
+    .priority span { color:var(--muted); font-size:13px; line-height:1.4; }
+    footer { max-width:1440px; margin:0 auto; padding:0 24px 24px; color:var(--muted); font-size:12px; }
+    @media (max-width:1150px) {
+      .kpis { grid-template-columns:repeat(3,1fr); }
+      .executive { grid-template-columns:1fr; }
+      .province-grid { grid-template-columns:repeat(2,1fr); }
+      .half,.third { grid-column:1/-1; }
     }
-    @media (max-width: 640px) {
-      main { padding: 14px; }
-      header { padding:22px 16px; }
-      .toolbar { grid-template-columns: 1fr; }
-      .kpis { grid-template-columns: 1fr; }
-      table { font-size:12px; }
+    @media (max-width:680px) {
+      main { padding:14px; } header { padding:22px 16px; }
+      .kpis,.status-grid,.province-grid { grid-template-columns:1fr; }
+      .card { padding:15px; }
     }
   </style>
 </head>
 <body>
 <header>
-  <h1>Seguimiento CZ5 · Planes de Acción ENOS 2026-2027</h1>
-  <p>Módulo actualizado con la matriz de seguimiento documental: socialización, entrega, valoración y estado de revisión de planes por provincia y cantón.</p>
+  <p class="eyebrow">Plataforma CZ5 · ENOS 2026-2027</p>
+  <h1>Estado documental estratégico de los planes</h1>
+  <p>Vista ejecutiva para seguimiento del proceso: socialización, entrega, validación, devolución, revisión pendiente y brecha documental. Sin detalle cantonal operativo.</p>
 </header>
 
 <main>
-  <section class="toolbar">
-    <input id="search" type="search" placeholder="Buscar cantón, provincia, responsable, particularidad…">
-    <select id="provinceSelect"><option value="">Todas las provincias</option></select>
-    <select id="statusSelect"><option value="">Todos los estados</option></select>
-    <button id="exportCsv">Exportar CSV</button>
-  </section>
-
-  <section class="kpis" id="kpis"></section>
-
   <section class="grid">
-    <div class="card map">
-      <h2 class="section-title">Filtro territorial CZ5</h2>
-      <div class="province-buttons" id="provinceButtons"></div>
-      <div class="schematic" aria-label="Mapa esquemático CZ5">
-        <div class="region r-bolivar" data-provincia="BOLÍVAR">BOLÍVAR</div>
-        <div class="region r-losrios" data-provincia="LOS RÍOS">LOS RÍOS</div>
-        <div class="region r-guayas" data-provincia="GUAYAS">GUAYAS</div>
-        <div class="region r-santaelena" data-provincia="SANTA ELENA">SANTA ELENA</div>
-        <div class="region r-galapagos" data-provincia="GALÁPAGOS">GALÁPAGOS</div>
+    <div class="kpis" id="kpis"></div>
+
+    <div class="executive">
+      <div class="card">
+        <p class="eyebrow">Lectura ejecutiva</p>
+        <h2 class="section-title">Estado general del proceso documental</h2>
+        <div class="callout" id="mainInsight"></div>
+        <div class="status-grid" id="statusBoxes"></div>
       </div>
-      <p class="note">Mapa esquemático para control operativo; no reemplaza cartografía oficial ni límites geográficos.</p>
-      <div class="legend">
-        <span><i class="dot ok"></i>Validado</span>
-        <span><i class="dot bad"></i>Devuelto</span>
-        <span><i class="dot info"></i>En revisión</span>
-        <span><i class="dot warn"></i>Falta</span>
+      <div class="card">
+        <p class="eyebrow">Distribución técnica</p>
+        <h2 class="section-title">Estado de revisión</h2>
+        <div class="stack" id="statusStack" aria-label="Distribución de estados de revisión"></div>
+        <div class="legend">
+          <span><i class="dot ok"></i>Validado</span>
+          <span><i class="dot bad"></i>Devuelto</span>
+          <span><i class="dot info"></i>En revisión</span>
+          <span><i class="dot warn"></i>Faltante</span>
+        </div>
+        <p class="note" id="statusNote"></p>
       </div>
     </div>
 
-    <div class="card panel">
-      <h2 class="section-title">Avance por provincia</h2>
-      <div class="bars" id="provinceBars"></div>
-      <div class="insight" id="provinceInsights"></div>
+    <div class="card half">
+      <p class="eyebrow">Cobertura territorial</p>
+      <h2 class="section-title">Zona CZ5</h2>
+      <div class="schematic" aria-label="Mapa esquemático CZ5">
+        <div class="region r-bolivar">BOLÍVAR</div>
+        <div class="region r-losrios">LOS RÍOS</div>
+        <div class="region r-guayas">GUAYAS</div>
+        <div class="region r-santaelena">SANTA ELENA</div>
+        <div class="region r-galapagos">GALÁPAGOS</div>
+      </div>
+      <p class="note">Mapa esquemático de referencia visual para conservar la arquitectura territorial de la plataforma; no reemplaza cartografía oficial.</p>
+    </div>
+
+    <div class="card half">
+      <p class="eyebrow">Semáforo de gestión</p>
+      <h2 class="section-title">Prioridades estratégicas</h2>
+      <div class="priority-list" id="priorities"></div>
     </div>
 
     <div class="card wide">
-      <h2 class="section-title">Detalle operativo</h2>
-      <div class="table-wrap">
-        <table id="dataTable">
-          <thead>
-            <tr>
-              <th>Provincia</th>
-              <th>Cantón / entidad</th>
-              <th>Tipo GAD</th>
-              <th>Entrega</th>
-              <th>Estado revisión</th>
-              <th>Fecha entrega</th>
-              <th>Responsable</th>
-              <th>Particularidades</th>
-              <th>Enlaces</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <p class="note" id="resultNote"></p>
+      <p class="eyebrow">Avance provincial</p>
+      <h2 class="section-title">Indicadores estratégicos por provincia</h2>
+      <div class="province-grid" id="provinceGrid"></div>
+      <p class="note" id="sourceNote"></p>
     </div>
   </section>
 </main>
 
-<script type="application/json" id="cz5-data">{"metadata": {"nombre": "Plataforma CZ5 - Seguimiento ENOS 2026-2027", "fecha_generacion": "2026-06-30", "zona": "CZ5", "fuente_excel": "MATRIZSEGUIM-EL NIÑO(2)(8).xlsx", "hoja_principal": "Consolidado", "nota": "Base generada a partir de la matriz cargada en esta conversación."}, "summary": {"total_registros": 56, "gad_cantonal": 51, "gad_provincial": 5, "socializados": 56, "participaron": 53, "planes_entregados": 35, "planes_no_entregados": 21, "planes_validados": 37, "planes_devueltos": 10, "planes_en_revision": 7, "planes_faltantes": 2, "porc_entrega": 62.5, "porc_validacion": 66.1, "provincias": ["BOLÍVAR", "GALÁPAGOS", "GUAYAS", "LOS RÍOS", "SANTA ELENA"], "fecha_actualizacion": "2026-06-30", "fuente": "MATRIZSEGUIM-EL NIÑO(2)(8).xlsx / hoja Consolidado"}, "province_summary": [{"provincia": "BOLÍVAR", "registros": 8, "cantones_expuestos": 7, "gad_provincial": 1, "gad_cantonal": 7, "planes_entregados": 6, "planes_no_entregados": 2, "planes_validados": 6, "planes_devueltos": 1, "planes_en_revision": 0, "planes_faltantes": 1, "porc_entrega": 75.0, "porc_validacion": 75.0, "estados": {"VALIDADO": 6, "DEVUELTO": 1, "FALTA": 1}, "entregas": {"SI": 6, "NO": 2}}, {"provincia": "GALÁPAGOS", "registros": 4, "cantones_expuestos": 3, "gad_provincial": 1, "gad_cantonal": 3, "planes_entregados": 0, "planes_no_entregados": 4, "planes_validados": 0, "planes_devueltos": 1, "planes_en_revision": 3, "planes_faltantes": 0, "porc_entrega": 0.0, "porc_validacion": 0.0, "estados": {"EN REVISIÓN": 3, "DEVUELTO": 1}, "entregas": {"NO": 4}}, {"provincia": "GUAYAS", "registros": 26, "cantones_expuestos": 25, "gad_provincial": 1, "gad_cantonal": 25, "planes_entregados": 21, "planes_no_entregados": 5, "planes_validados": 19, "planes_devueltos": 6, "planes_en_revision": 0, "planes_faltantes": 1, "porc_entrega": 80.8, "porc_validacion": 73.1, "estados": {"VALIDADO": 19, "DEVUELTO": 6, "FALTA": 1}, "entregas": {"SI": 21, "NO": 5}}, {"provincia": "LOS RÍOS", "registros": 14, "cantones_expuestos": 13, "gad_provincial": 1, "gad_cantonal": 13, "planes_entregados": 8, "planes_no_entregados": 6, "planes_validados": 11, "planes_devueltos": 2, "planes_en_revision": 1, "planes_faltantes": 0, "porc_entrega": 57.1, "porc_validacion": 78.6, "estados": {"VALIDADO": 11, "DEVUELTO": 2, "EN REVISIÓN": 1}, "entregas": {"SI": 8, "NO": 6}}, {"provincia": "SANTA ELENA", "registros": 4, "cantones_expuestos": 3, "gad_provincial": 1, "gad_cantonal": 3, "planes_entregados": 0, "planes_no_entregados": 4, "planes_validados": 1, "planes_devueltos": 0, "planes_en_revision": 3, "planes_faltantes": 0, "porc_entrega": 0.0, "porc_validacion": 25.0, "estados": {"EN REVISIÓN": 3, "VALIDADO": 1}, "entregas": {"NO": 4}}], "records": [{"_fila_excel": 2, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "BOLÍVAR", "canton": "BOLIVAR", "tipo_de_gad": "PROVINCIAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1UcMuoXuEvXF-p9uoBdV00MYX7kJjljB4", "particularidades": "Por correo, sin quipux", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "PROVINCIAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 3, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "BOLÍVAR", "canton": "CALUMA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1O5n2eDFG4PZnOHS97Jg6N6qSLpk0G2UP/view?usp=sharing", "particularidades": "A destiempo", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1g4imxzfnuN2mT-CP0MdHCT-fUAWkvX6p", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 4, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "BOLÍVAR", "canton": "CHILLANES", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "https://drive.google.com/drive/folders/1byZ5FquCO73torJtW79ftQtdRvepMj3K", "particularidades": "A destiempo", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 5, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "BOLÍVAR", "canton": "CHIMBO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "22/06/2026", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/148p7xLfZ0K72RfZ5-1aKro0PZh99jbaI", "particularidades": "Por correo, sin quipux", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://docs.google.com/document/d/1eufGZTBHur7097y-2BpOdRzL44QTCjkE/edit#bookmark=id.e0ncqbspm3iv", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 6, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "BOLÍVAR", "canton": "ECHEANDÍA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46202.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1t3QQQGJtOLNycEJoX3TFsjB4ssaDd9Du", "particularidades": "", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 7, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "BOLÍVAR", "canton": "GUARANDA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1-Eu4F6k0-CjFTWsK8yDhbDQ_2mXIFfnO", "particularidades": "Falta quipux", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://docs.google.com/document/d/1patrvlY_MGN-CaVLFjmDVTLQRNBsjni3/edit?usp=sharing&ouid=108481756373198582418&rtpof=true&sd=true", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 8, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "BOLÍVAR", "canton": "LAS NAVES", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46176.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "NO PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1RzIis7dL7HSylFQceM1mwEvvtZIJjWEZ/view?usp=sharing", "particularidades": "A destiempo", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "NO PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 9, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "BOLÍVAR", "canton": "SAN MIGUEL", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "0.0", "fecha_de_entrega_del_plan": "", "estado_de_la_revision_del_plan_cz_sngr": "FALTA", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "FALTA", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 0.0}, {"_fila_excel": 10, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GALÁPAGOS", "canton": "ISABELA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46202.0", "estado_de_la_revision_del_plan_cz_sngr": "EN REVISIÓN", "enlace_plan_final": "https://drive.google.com/drive/folders/1ebQ6W950EGROFWq6D9yhQq-HXSTouZwf", "particularidades": "A destiempo", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "EN REVISIÓN", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 11, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GALÁPAGOS", "canton": "SAN CRISTÓBAL", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "", "particularidades": "A destiempo", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 12, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GALÁPAGOS", "canton": "SANTA CRUZ", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46198.0", "estado_de_la_revision_del_plan_cz_sngr": "EN REVISIÓN", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "EN REVISIÓN", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 13, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GALÁPAGOS", "canton": "GALÁPAGOS", "tipo_de_gad": "PROVINCIAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "EN REVISIÓN", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "PROVINCIAL", "estado_revision": "EN REVISIÓN", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 14, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "ALFREDO BAQUERIZO MORENO (JUJÁN)", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1TSbTzQyb2fjMQfg1nB1iilCbwcuox9W8", "particularidades": "", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://docs.google.com/document/d/18spZnxDQzaC5VUG1h-YsOnE8kPmfOJtk/edit", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 15, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "BALAO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1WwLTqC3Hx5_qx89Ysk81AbP1cFbGDTV5", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 16, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "BALZAR", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1JXBjpky8d4QYWuwEdPlWg7jJhgR3MtAP", "particularidades": "Falta quipux", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://docs.google.com/document/d/1VcNpiVXGHU7hixZy8cvXL6gCrYGcDWyc/edit", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 17, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "COLIMES", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1IqBk_ND2MJnyFrwcFqZnWInZP6u4KExl/view?usp=sharing", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 18, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "CORONEL MARCELINO MARIDUEÑA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 19, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "DAULE", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "22/06/2026", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1WPmo9qLgWW-utvlDml0KELGGZRWichTI", "particularidades": "Sin novedad / Con oficio de Quipux entregado", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://docs.google.com/document/d/1lUYagv0xfQMC4TpRNr_g5MMLZM1iAshI/edit", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 20, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "DURÁN", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "46190.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1mCNvLychqdev111JJ7VEhzrWD7DGfU1f", "particularidades": "El archivo no se descarga", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "No hay plan", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1yXtD_MFMZeg7UCcnf9xm_QDN_Z2mT-gB", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 21, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "EL EMPALME", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "46190.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1hksdsG1tW_ucPl6BVE2av5NPnGxqRCQi", "particularidades": "Devuelto al GAD para los ajustes respectivos.", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "Falta Oficio", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1s1J1kTPumao6fbdFrKDtYzclLiW3GSEj", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 22, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "EL TRIUNFO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "", "modalidad": "", "observacion_de_la_socializacion": "", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "0.0", "fecha_de_entrega_del_plan": "", "estado_de_la_revision_del_plan_cz_sngr": "FALTA", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "FALTA", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "", "valoracion_plan_num": 0.0}, {"_fila_excel": 23, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "GENERAL ANTONIO ELIZALDE", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "", "modalidad": "", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "46190.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1FJHTfpCPJ-TG6ZNd-08AEVrwcMKwQ3XC", "particularidades": "FALTA QUIPUX", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "Falta oficio", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1FJHTfpCPJ-TG6ZNd-08AEVrwcMKwQ3XC", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 24, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "GUAYAQUIL", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "46190.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1Tne_qjWfeOVo0B2fFKm6pTGHWxKJAKNt?usp=sharing", "particularidades": "Recivido por parte de la directirora no por la alcaldeza", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1zLBA5U3Wk6fomxdEs6vx3x36tU6nazDH", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 25, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "ISIDRO AYORA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 26, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "LOMAS DE SARGENTILLO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "46190.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1J4Ifu8XyZXuX91FoipNV0C8XI5wCCwk3?usp=sharing", "particularidades": "Devuelto al GAD para los ajustes respectivos.", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "Falta oficio", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1s1J1kTPumao6fbdFrKDtYzclLiW3GSEj", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 27, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "MILAGRO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1fzy3b4DBOB1uNrsSMKJjG8_N37R8lDro", "particularidades": "SIN NOVEDAD - ENVIADO POR QUIPUX", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1fzy3b4DBOB1uNrsSMKJjG8_N37R8lDro", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 28, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "NARANJAL", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "", "particularidades": "Devuelto al GAD para los ajustes respectivos.", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "me han cambiado de fecha", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://docs.google.com/document/d/1m_VVP-Uo5OaZkqaD8WA8EEgt4BuBYq8o/edit", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 29, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "NARANJITO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "0.0", "fecha_de_entrega_del_plan": "46198.0", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 0.0}, {"_fila_excel": 30, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "NOBOL", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1lN6jAdUztGupBCQ-MnRig13ZV__lYbdi/view?usp=drive_link", "particularidades": "falta quipux", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 31, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "PALESTINA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1J7Od-89lhcwxbeBEJe2Gkj3NjkO_N61C/view?usp=sharing", "particularidades": "", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 32, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "PEDRO CARBO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1xbKTrj8HatuDcTU5c0uczfQQCm4JjrHO/view?usp=sharing", "particularidades": "Falta quipux", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "me han cambiado de fecha", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://docs.google.com/document/d/14-m7GO0JC8Iit2OhOsDJeJvHPvB84hIc/edit", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 33, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "PLAYAS", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1gDJ52ZnrHaMV6NH0Wt40eq8fEu46_kgT", "particularidades": "Falta quipux", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1gDJ52ZnrHaMV6NH0Wt40eq8fEu46_kgT", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 34, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "SALITRE", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 35, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "SAMBORONDÓN", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "0.0", "fecha_de_entrega_del_plan": "23/062026", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 0.0}, {"_fila_excel": 36, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "SAN JACINTO DE YAGUACHI", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/16tdxwNl4EuhzCJ2_L2nWkQ3TjoEUY1Dh", "particularidades": "Falta quipux", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/16tdxwNl4EuhzCJ2_L2nWkQ3TjoEUY1Dh", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 37, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "SANTA LUCÍA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1QbOqhWiR8jZ03PQKPfn5TAgCH2SN5oXF/view?usp=drive_link", "particularidades": "Falta quipux", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1jTN8bq6p5GwIW2b7TB7ePzO1rSE-LtIE", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 38, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "SIMÓN BOLÍVAR", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1oXIfhFryLGRpYG7EDMr06FuKC-XpmyyG", "particularidades": "FALTA QUIPUX", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1oXIfhFryLGRpYG7EDMr06FuKC-XpmyyG", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 39, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "GUAYAS", "canton": "GUAYAS", "tipo_de_gad": "PROVINCIAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1", "fecha_de_entrega_del_plan": "46189.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1QnrVSNXHdz8uTSZ0VRAR-efC_b2qkYUB/view?usp=sharing", "particularidades": "Sin Novedad", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1yDacV9w3837MAeycEIK8Gyz9HNAPnrmw?usp=drive_link", "tipo_gad": "PROVINCIAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 40, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "BABA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "", "modalidad": "", "observacion_de_la_socializacion": "", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1J3nub1__bA4LKPWqMa4XpfOjE4sdEp-w", "particularidades": "ENVIO POR QUIPUX", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "cambian de fecha", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1J3nub1__bA4LKPWqMa4XpfOjE4sdEp-w", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "", "valoracion_plan_num": 1.0}, {"_fila_excel": 41, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "BABAHOYO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1LzNQWeaK-btg5C1zAMMMvtUgEEt8ZKgf", "particularidades": "Falta firma", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1LzNQWeaK-btg5C1zAMMMvtUgEEt8ZKgf", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 42, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "BUENA FE", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1M8u7f4MdhU5TPqs8df6mjyOx-RbCmhWT", "particularidades": "ENVIO POR QUIPUX", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1M8u7f4MdhU5TPqs8df6mjyOx-RbCmhWT", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 43, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "MOCACHE", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46198.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/11p3bGKUFIVzuHuQcTII4XtHplb8jHqkG/view?usp=sharing", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 44, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "MONTALVO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1ec4FSsCvjUnbzNwalpfpUVM_Exucy28Z", "particularidades": "", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1gGXbaXQGjJyxsx2FqV-aZ3qq6q9t9Lgm", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 45, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "PALENQUE", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1c4pOARXWhu3vejHM6AR7rJiqnweyvZDf", "particularidades": "FALTA QUIPUX", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1c4pOARXWhu3vejHM6AR7rJiqnweyvZDf", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 46, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "PUEBLOVIEJO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/drive/folders/1xcK4aReeF_kLaCYLWwbu9i9MIj6El8jJ", "particularidades": "", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1K-emewzme36v5pR0OmNEjaNP-d9iZ1VO", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 47, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "QUEVEDO", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "SI", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46198.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1OlvpH_-E1Y_tVyL_MzyLm_5bILdEQlWC/view?usp=sharing", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "SI", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 48, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "QUINSALOMA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "22/06/2026", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "https://drive.google.com/drive/folders/1utF83sgtbHfQou-XaN2kckojiT--Fqb7", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://docs.google.com/document/d/1_liKvDd7w83zmtWyMHgLtjJkTkHQd9L4/edit", "tipo_gad": "CANTONAL", "estado_revision": "DEVUELTO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 49, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "URDANETA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1BtaCNqXrcyCmCVckZiy1vYYHHcvLfhhq/view?usp=sharing", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1Q9IDeYZHpSVosTU07D-qZdnnEOZ8mEWo", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 50, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "VALENCIA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "No hay link", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1jNxdXdxk1ChWeHJRE6hQDCjmYN57NSyl", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 51, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "VENTANAS", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1YlpnN963jpU6vvqEDl829pinv_E-KG7Z/view?usp=sharing", "particularidades": "", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1MDNrI1Yzm298EqsAEqRPMCBFht0HiFdz", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 52, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "VINCES", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "EN REVISIÓN", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/12O_x5qwJx7cu9Kmji2JYq7_oFEXg3PBR", "tipo_gad": "CANTONAL", "estado_revision": "EN REVISIÓN", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 53, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "LOS RÍOS", "canton": "LOS RÍOS", "tipo_de_gad": "PROVINCIAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46198.0", "estado_de_la_revision_del_plan_cz_sngr": "DEVUELTO", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DAVID VINCES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1LzNQWeaK-btg5C1zAMMMvtUgEEt8ZKgf", "tipo_gad": "PROVINCIAL", "estado_revision": "DEVUELTO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 54, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "SANTA ELENA", "canton": "SALINAS", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "EN REVISIÓN", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIEL COELLO", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "EN REVISIÓN", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 55, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "SANTA ELENA", "canton": "LA LIBERTAD", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "EN REVISIÓN", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "https://drive.google.com/drive/folders/1vlAU8R2d5vWWj6-aWtjgGEK2d76tSdTP", "tipo_gad": "CANTONAL", "estado_revision": "EN REVISIÓN", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 56, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "SANTA ELENA", "canton": "SANTA ELENA", "tipo_de_gad": "CANTONAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46197.0", "estado_de_la_revision_del_plan_cz_sngr": "VALIDADO", "enlace_plan_final": "https://drive.google.com/file/d/1nGenRrQ2frynFfENWXgXGlrVeumFHi0C/view?usp=drive_link", "particularidades": "A destiempo", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "CANTONAL", "estado_revision": "VALIDADO", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}, {"_fila_excel": 57, "coordinacion_zonal": "CZ5", "bajo_alerta_amarilla": "EXPUESTO", "provincia": "SANTA ELENA", "canton": "SANTA ELENA", "tipo_de_gad": "PROVINCIAL", "remitido_por_oficio_nro": "Memorando Nro. SNGR-CZ5GR-2026-0205-M", "socializacion_personalizada": "SI", "valor_cumplimiento": "1", "fecha": "46175.0", "modalidad": "PRESENCIAL", "observacion_de_la_socializacion": "PARTICIPÓ", "entrega_del_plan_de_accion": "NO", "valoracion_del_plan": "1.0", "fecha_de_entrega_del_plan": "46196.0", "estado_de_la_revision_del_plan_cz_sngr": "EN REVISIÓN", "enlace_plan_final": "", "particularidades": "", "pf_que_reporta_la_informacion": "DANIELA REYES", "col_s": "", "col_t": "", "col_u": "", "enlace_plan_borrador": "", "tipo_gad": "PROVINCIAL", "estado_revision": "EN REVISIÓN", "entrega_plan": "NO", "socializacion": "SI", "observacion_socializacion": "PARTICIPÓ", "valoracion_plan_num": 1.0}], "expuestos": [{"provincia": "BOLÍVAR", "provincia_expuesta": "EXPUESTO", "canton": "CALUMA", "canton_expuesto": "EXPUESTO"}, {"provincia": "BOLÍVAR", "provincia_expuesta": "", "canton": "CHILLANES", "canton_expuesto": "EXPUESTO"}, {"provincia": "BOLÍVAR", "provincia_expuesta": "", "canton": "CHIMBO", "canton_expuesto": "EXPUESTO"}, {"provincia": "BOLÍVAR", "provincia_expuesta": "", "canton": "ECHEANDÍA", "canton_expuesto": "EXPUESTO"}, {"provincia": "BOLÍVAR", "provincia_expuesta": "", "canton": "GUARANDA", "canton_expuesto": "EXPUESTO"}, {"provincia": "BOLÍVAR", "provincia_expuesta": "", "canton": "LAS NAVES", "canton_expuesto": "EXPUESTO"}, {"provincia": "BOLÍVAR", "provincia_expuesta": "", "canton": "SAN MIGUEL", "canton_expuesto": "EXPUESTO"}, {"provincia": "GALÁPAGOS", "provincia_expuesta": "EXPUESTO", "canton": "ISABELA", "canton_expuesto": "EXPUESTO"}, {"provincia": "GALÁPAGOS", "provincia_expuesta": "", "canton": "SAN CRISTÓBAL", "canton_expuesto": "EXPUESTO"}, {"provincia": "GALÁPAGOS", "provincia_expuesta": "", "canton": "SANTA CRUZ", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "EXPUESTO", "canton": "ALFREDO BAQUERIZO MORENO (JUJÁN)", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "BALAO", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "BALZAR", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "COLIMES", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "CORONEL MARCELINO MARIDUEÑA", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "DAULE", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "DURÁN", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "EL EMPALME", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "EL TRIUNFO", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "GENERAL ANTONIO ELIZALDE", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "GUAYAQUIL", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "ISIDRO AYORA", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "LOMAS DE SARGENTILLO", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "MILAGRO", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "NARANJAL", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "NARANJITO", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "NOBOL", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "PALESTINA", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "PEDRO CARBO", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "PLAYAS", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "SALITRE", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "SAMBORONDÓN", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "SAN JACINTO DE YAGUACHI", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "SANTA LUCÍA", "canton_expuesto": "EXPUESTO"}, {"provincia": "GUAYAS", "provincia_expuesta": "", "canton": "SIMÓN BOLÍVAR", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "EXPUESTO", "canton": "BABA", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "BABAHOYO", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "BUENA FE", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "MOCACHE", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "MONTALVO", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "PALENQUE", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "PUEBLOVIEJO", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "QUEVEDO", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "QUINSALOMA", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "URDANETA", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "VALENCIA", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "VENTANAS", "canton_expuesto": "EXPUESTO"}, {"provincia": "LOS RÍOS", "provincia_expuesta": "", "canton": "VINCES", "canton_expuesto": "EXPUESTO"}, {"provincia": "SANTA ELENA", "provincia_expuesta": "EXPUESTO", "canton": "LA LIBERTAD", "canton_expuesto": "EXPUESTO"}, {"provincia": "SANTA ELENA", "provincia_expuesta": "", "canton": "SALINAS", "canton_expuesto": "EXPUESTO"}, {"provincia": "SANTA ELENA", "provincia_expuesta": "", "canton": "SANTA ELENA", "canton_expuesto": "EXPUESTO"}], "diccionario_campos": {"provincia": "Provincia del GAD o territorio de seguimiento", "canton": "Cantón; en registros provinciales se usa la provincia como entidad operativa", "tipo_gad": "CANTONAL o PROVINCIAL", "socializacion": "Socialización personalizada realizada", "entrega_plan": "Entrega del plan de acción", "estado_revision": "Estado de revisión técnica en CZ SNGR", "valoracion_plan_num": "Valoración numérica del plan cuando fue registrada", "enlace_plan_final": "Enlace al plan final, cuando existe", "enlace_plan_borrador": "Enlace al plan borrador, cuando existe"}}</script>
+<footer>
+  Este módulo muestra únicamente indicadores estratégicos del estado documental. La base completa puede mantenerse como respaldo interno, pero no se expone en la vista pública del tablero.
+</footer>
+
+<script type="application/json" id="cz5-data">{"metadata":{"nombre":"Plataforma CZ5 - Seguimiento ENOS 2026-2027","fecha_generacion":"2026-06-30","zona":"CZ5","fuente_excel":"MATRIZSEGUIM-EL NIÑO(2)(8).xlsx","hoja_principal":"Consolidado","nota":"Base generada a partir de la matriz cargada en esta conversación."},"summary":{"total_registros":56,"gad_cantonal":51,"gad_provincial":5,"socializados":56,"participaron":53,"planes_entregados":35,"planes_no_entregados":21,"planes_validados":37,"planes_devueltos":10,"planes_en_revision":7,"planes_faltantes":2,"porc_entrega":62.5,"porc_validacion":66.1,"provincias":["BOLÍVAR","GALÁPAGOS","GUAYAS","LOS RÍOS","SANTA ELENA"],"fecha_actualizacion":"2026-06-30","fuente":"MATRIZSEGUIM-EL NIÑO(2)(8).xlsx / hoja Consolidado"},"province_summary":[{"provincia":"BOLÍVAR","registros":8,"cantones_expuestos":7,"gad_provincial":1,"gad_cantonal":7,"planes_entregados":6,"planes_no_entregados":2,"planes_validados":6,"planes_devueltos":1,"planes_en_revision":0,"planes_faltantes":1,"porc_entrega":75.0,"porc_validacion":75.0,"estados":{"VALIDADO":6,"DEVUELTO":1,"FALTA":1},"entregas":{"SI":6,"NO":2}},{"provincia":"GALÁPAGOS","registros":4,"cantones_expuestos":3,"gad_provincial":1,"gad_cantonal":3,"planes_entregados":0,"planes_no_entregados":4,"planes_validados":0,"planes_devueltos":1,"planes_en_revision":3,"planes_faltantes":0,"porc_entrega":0.0,"porc_validacion":0.0,"estados":{"EN REVISIÓN":3,"DEVUELTO":1},"entregas":{"NO":4}},{"provincia":"GUAYAS","registros":26,"cantones_expuestos":25,"gad_provincial":1,"gad_cantonal":25,"planes_entregados":21,"planes_no_entregados":5,"planes_validados":19,"planes_devueltos":6,"planes_en_revision":0,"planes_faltantes":1,"porc_entrega":80.8,"porc_validacion":73.1,"estados":{"VALIDADO":19,"DEVUELTO":6,"FALTA":1},"entregas":{"SI":21,"NO":5}},{"provincia":"LOS RÍOS","registros":14,"cantones_expuestos":13,"gad_provincial":1,"gad_cantonal":13,"planes_entregados":8,"planes_no_entregados":6,"planes_validados":11,"planes_devueltos":2,"planes_en_revision":1,"planes_faltantes":0,"porc_entrega":57.1,"porc_validacion":78.6,"estados":{"VALIDADO":11,"DEVUELTO":2,"EN REVISIÓN":1},"entregas":{"SI":8,"NO":6}},{"provincia":"SANTA ELENA","registros":4,"cantones_expuestos":3,"gad_provincial":1,"gad_cantonal":3,"planes_entregados":0,"planes_no_entregados":4,"planes_validados":1,"planes_devueltos":0,"planes_en_revision":3,"planes_faltantes":0,"porc_entrega":0.0,"porc_validacion":25.0,"estados":{"EN REVISIÓN":3,"VALIDADO":1},"entregas":{"NO":4}}]}</script>
 <script>
 const DATA = JSON.parse(document.getElementById('cz5-data').textContent);
-let state = { province: '', status: '', search: '' };
+const S = DATA.summary;
+const provinces = DATA.province_summary;
+const pct = (n, d) => d ? Math.round((n / d) * 1000) / 10 : 0;
+const fmtPct = n => `${Number(n).toFixed(1)}%`;
+const statusTotal = S.planes_validados + S.planes_devueltos + S.planes_en_revision + S.planes_faltantes;
 
-const $ = sel => document.querySelector(sel);
-const $$ = sel => Array.from(document.querySelectorAll(sel));
-const norm = v => (v || '').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().trim();
-const slug = v => norm(v).replace(/[^A-Z0-9]+/g,'-').replace(/(^-|-$)/g,'') || 'SIN-DATO';
-const pct = (a,b) => b ? Math.round((a/b)*1000)/10 : 0;
-
-function filteredRecords() {
-  const q = norm(state.search);
-  return DATA.records.filter(r => {
-    const matchProv = !state.province || r.provincia === state.province;
-    const matchStatus = !state.status || r.estado_revision === state.status;
-    const haystack = norm([r.provincia, r.canton, r.tipo_gad, r.pf_que_reporta_la_informacion, r.particularidades, r.estado_revision].join(' '));
-    const matchSearch = !q || haystack.includes(q);
-    return matchProv && matchStatus && matchSearch;
-  });
+function kpi(label, value, detail) {
+  return `<article class="kpi"><div class="label">${label}</div><div class="value">${value}</div><small>${detail}</small></article>`;
 }
 
-function count(records, field, value) {
-  return records.filter(r => r[field] === value).length;
+document.getElementById('kpis').innerHTML = [
+  kpi('Universo CZ5', S.total_registros, `${S.gad_cantonal} GAD cantonales · ${S.gad_provincial} provinciales`),
+  kpi('Socialización', fmtPct(pct(S.socializados, S.total_registros)), `${S.socializados} de ${S.total_registros} registros`),
+  kpi('Entrega documental', fmtPct(S.porc_entrega), `${S.planes_entregados} entregados · ${S.planes_no_entregados} no entregados`),
+  kpi('Validación técnica', fmtPct(S.porc_validacion), `${S.planes_validados} planes validados`),
+  kpi('Corrección requerida', S.planes_devueltos, 'planes devueltos para ajuste'),
+  kpi('Pendiente crítico', S.planes_en_revision + S.planes_faltantes, `${S.planes_en_revision} en revisión · ${S.planes_faltantes} faltantes`)
+].join('');
+
+document.getElementById('mainInsight').innerHTML = `
+  <b>Corte estratégico:</b> el proceso tiene socialización completa y una validación técnica de <b>${fmtPct(S.porc_validacion)}</b>. La brecha principal ya no es de socialización, sino de <b>cierre documental</b>: ${S.planes_no_entregados} planes no entregados, ${S.planes_devueltos} devueltos para corrección y ${S.planes_en_revision} en revisión técnica.`;
+
+document.getElementById('statusBoxes').innerHTML = [
+  ['Validados', S.planes_validados, fmtPct(pct(S.planes_validados, statusTotal))],
+  ['Devueltos', S.planes_devueltos, fmtPct(pct(S.planes_devueltos, statusTotal))],
+  ['En revisión', S.planes_en_revision, fmtPct(pct(S.planes_en_revision, statusTotal))],
+  ['Faltantes', S.planes_faltantes, fmtPct(pct(S.planes_faltantes, statusTotal))]
+].map(x => `<div class="status-box"><b>${x[1]}</b><span>${x[0]} · ${x[2]}</span></div>`).join('');
+
+document.getElementById('statusStack').innerHTML = `
+  <div class="seg ok" style="width:${pct(S.planes_validados,statusTotal)}%"></div>
+  <div class="seg bad" style="width:${pct(S.planes_devueltos,statusTotal)}%"></div>
+  <div class="seg info" style="width:${pct(S.planes_en_revision,statusTotal)}%"></div>
+  <div class="seg warn" style="width:${pct(S.planes_faltantes,statusTotal)}%"></div>`;
+
+document.getElementById('statusNote').textContent = `${S.planes_validados} validados, ${S.planes_devueltos} devueltos, ${S.planes_en_revision} en revisión y ${S.planes_faltantes} faltantes, sobre ${statusTotal} registros con estado de revisión.`;
+
+const noEntrega = provinces.slice().sort((a,b) => b.planes_no_entregados - a.planes_no_entregados)[0];
+const devoluciones = provinces.slice().sort((a,b) => b.planes_devueltos - a.planes_devueltos)[0];
+const revision = provinces.slice().sort((a,b) => b.planes_en_revision - a.planes_en_revision)[0];
+const validacion = provinces.slice().sort((a,b) => a.porc_validacion - b.porc_validacion)[0];
+
+document.getElementById('priorities').innerHTML = [
+  ['1', 'Cerrar entregas pendientes', `${noEntrega.provincia} concentra ${noEntrega.planes_no_entregados} registros sin entrega documental.`],
+  ['2', 'Acelerar correcciones', `${devoluciones.provincia} registra ${devoluciones.planes_devueltos} devoluciones para ajuste técnico.`],
+  ['3', 'Resolver revisión técnica', `${revision.provincia} mantiene ${revision.planes_en_revision} planes en revisión.`],
+  ['4', 'Subir validación provincial', `${validacion.provincia} presenta el menor porcentaje de validación: ${fmtPct(validacion.porc_validacion)}.`]
+].map(x => `<div class="priority"><div class="rank">${x[0]}</div><div><b>${x[1]}</b><span>${x[2]}</span></div></div>`).join('');
+
+function provinceCard(p) {
+  return `<article class="province-card">
+    <h3>${p.provincia}</h3>
+    <div class="meta">${p.registros} registros · ${p.gad_cantonal} cantonales · ${p.gad_provincial} provincial</div>
+    <div class="minirow"><div>Entrega<div class="tiny-track"><div class="tiny-fill" style="width:${p.porc_entrega}%"></div></div></div><b>${fmtPct(p.porc_entrega)}</b></div>
+    <div class="minirow"><div>Validación<div class="tiny-track"><div class="tiny-fill" style="width:${p.porc_validacion}%"></div></div></div><b>${fmtPct(p.porc_validacion)}</b></div>
+    <div class="chips">
+      <span class="chip ok">${p.planes_validados} validados</span>
+      <span class="chip bad">${p.planes_devueltos} devueltos</span>
+      <span class="chip info">${p.planes_en_revision} revisión</span>
+      <span class="chip warn">${p.planes_no_entregados} sin entrega</span>
+    </div>
+  </article>`;
 }
 
-function renderKpis(records) {
-  const total = records.length;
-  const cards = [
-    ['Registros', total, 'GAD cantonales y provinciales'],
-    ['Socializados', count(records,'socializacion','SI'), pct(count(records,'socializacion','SI'), total) + '%'],
-    ['Planes entregados', count(records,'entrega_plan','SI'), pct(count(records,'entrega_plan','SI'), total) + '%'],
-    ['Validados', count(records,'estado_revision','VALIDADO'), pct(count(records,'estado_revision','VALIDADO'), total) + '%'],
-    ['Devueltos', count(records,'estado_revision','DEVUELTO'), 'requieren ajuste'],
-    ['En revisión', records.filter(r => ['EN REVISIÓN','EN REVISION'].includes(r.estado_revision)).length, 'pendiente dictamen'],
-    ['Faltantes', count(records,'estado_revision','FALTA'), 'sin cierre'],
-    ['No entregados', count(records,'entrega_plan','NO'), 'brecha documental']
-  ];
-  $('#kpis').innerHTML = cards.map(c => `
-    <div class="kpi">
-      <div class="label">${c[0]}</div>
-      <div class="value">${c[1]}</div>
-      <small>${c[2]}</small>
-    </div>`).join('');
-}
-
-function renderFilters() {
-  const provinces = DATA.summary.provincias;
-  $('#provinceSelect').innerHTML = '<option value="">Todas las provincias</option>' + provinces.map(p => `<option value="${p}">${p}</option>`).join('');
-  const statuses = Array.from(new Set(DATA.records.map(r => r.estado_revision).filter(Boolean))).sort();
-  $('#statusSelect').innerHTML = '<option value="">Todos los estados</option>' + statuses.map(s => `<option value="${s}">${s}</option>`).join('');
-  $('#provinceButtons').innerHTML = '<button data-provincia="" class="active">Todas</button>' + provinces.map(p => `<button data-provincia="${p}">${p}</button>`).join('');
-}
-
-function renderProvinceBars(records) {
-  const summaries = DATA.province_summary.filter(p => !state.province || p.provincia === state.province);
-  $('#provinceBars').innerHTML = summaries.map(p => {
-    const total = p.registros || 1;
-    const valid = p.planes_validados || 0;
-    const w = pct(valid,total);
-    return `<div class="bar-row">
-      <div class="bar-label">${p.provincia}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${w}%"></div></div>
-      <div><b>${w}%</b></div>
-    </div>`;
-  }).join('');
-
-  const recs = records;
-  const total = recs.length;
-  $('#provinceInsights').innerHTML = [
-    ['Entregados', count(recs,'entrega_plan','SI'), pct(count(recs,'entrega_plan','SI'), total)+'%'],
-    ['Validados', count(recs,'estado_revision','VALIDADO'), pct(count(recs,'estado_revision','VALIDADO'), total)+'%'],
-    ['Devueltos', count(recs,'estado_revision','DEVUELTO'), 'corregir'],
-    ['Sin entrega', count(recs,'entrega_plan','NO'), 'gestionar']
-  ].map(x => `<div class="mini"><b>${x[1]}</b><span>${x[0]} · ${x[2]}</span></div>`).join('');
-}
-
-function linkCell(r) {
-  const links = [];
-  if (r.enlace_plan_final) links.push(`<a target="_blank" href="${r.enlace_plan_final}">Final</a>`);
-  if (r.enlace_plan_borrador) links.push(`<a target="_blank" href="${r.enlace_plan_borrador}">Borrador</a>`);
-  return links.join(' · ') || '—';
-}
-
-function renderTable(records) {
-  const tbody = $('#dataTable tbody');
-  tbody.innerHTML = records.map(r => `
-    <tr>
-      <td>${r.provincia || '—'}</td>
-      <td><b>${r.canton || '—'}</b></td>
-      <td>${r.tipo_gad || '—'}</td>
-      <td>${r.entrega_plan || '—'}</td>
-      <td><span class="badge ${slug(r.estado_revision)}">${r.estado_revision || 'SIN DATO'}</span></td>
-      <td>${r.fecha_de_entrega_del_plan || '—'}</td>
-      <td>${r.pf_que_reporta_la_informacion || '—'}</td>
-      <td>${r.particularidades || '—'}</td>
-      <td>${linkCell(r)}</td>
-    </tr>`).join('');
-  $('#resultNote').textContent = `${records.length} registros mostrados de ${DATA.records.length}. Fuente: ${DATA.metadata.fuente_excel}, hoja ${DATA.metadata.hoja_principal}.`;
-}
-
-function setProvince(prov) {
-  state.province = prov || '';
-  $('#provinceSelect').value = state.province;
-  $$('#provinceButtons button').forEach(b => b.classList.toggle('active', b.dataset.provincia === state.province));
-  $$('.region').forEach(r => r.classList.toggle('active', r.dataset.provincia === state.province));
-  render();
-}
-
-function render() {
-  const recs = filteredRecords();
-  renderKpis(recs);
-  renderProvinceBars(recs);
-  renderTable(recs);
-}
-
-function exportCsv() {
-  const records = filteredRecords();
-  const headers = ['provincia','canton','tipo_gad','entrega_plan','estado_revision','fecha_de_entrega_del_plan','pf_que_reporta_la_informacion','particularidades','enlace_plan_final','enlace_plan_borrador'];
-  const csv = [headers.join(',')].concat(records.map(r => headers.map(h => {
-    const v = (r[h] || '').toString().replace(/"/g,'""');
-    return `"${v}"`;
-  }).join(','))).join('\n');
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'seguimiento_cz5_filtrado.csv'; a.click();
-  URL.revokeObjectURL(url);
-}
-
-renderFilters();
-render();
-
-$('#search').addEventListener('input', e => { state.search = e.target.value; render(); });
-$('#provinceSelect').addEventListener('change', e => setProvince(e.target.value));
-$('#statusSelect').addEventListener('change', e => { state.status = e.target.value; render(); });
-$('#exportCsv').addEventListener('click', exportCsv);
-$('#provinceButtons').addEventListener('click', e => { if (e.target.matches('button')) setProvince(e.target.dataset.provincia); });
-$$('.region').forEach(el => el.addEventListener('click', () => setProvince(el.dataset.provincia)));
+document.getElementById('provinceGrid').innerHTML = provinces.map(provinceCard).join('');
+document.getElementById('sourceNote').textContent = `Fuente: ${S.fuente}. Fecha de actualización: ${S.fecha_actualizacion}.`;
 </script>
 </body>
 </html>
