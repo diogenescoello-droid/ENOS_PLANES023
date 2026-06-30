@@ -1,7 +1,23 @@
-# ENOS_PLANES023 · Módulo de riesgo zonal integrado
+# ENOS_PLANES023 · Dashboard consolidado + riesgo zonal
 
-Paquete listo para cargar al repositorio `ENOS_PLANES023`.
+Versión ajustada para que la pestaña **5. Dashboard** muestre el consolidado documental de planes ENOS CZ5 desde la API de la matriz maestra, y la pestaña **6. Riesgo zonal** mantenga el análisis territorial por semáforo.
 
-Use `index.html` para reemplazar el archivo principal cuando ya tenga respaldo.
+## Cambios principales
 
-Antes de probar en GitHub Pages, cambie el token de la API de riesgo dentro del propio `index.html`.
+- La pestaña **Dashboard** ahora muestra: Total GAD CZ5, planes gestionados, planes validados y planes faltantes.
+- Se agregó tabla de resumen provincial consolidado.
+- Se agregó lectura por estado: validado, en revisión, devuelto, faltante y observado por calidad de dato.
+- Se conserva el módulo F01-F07 original para prompt, información ampliada y sincronización.
+- Se conserva el módulo de riesgo zonal.
+
+## Archivo principal
+
+Subir/reemplazar en GitHub:
+
+```text
+index.html
+```
+
+## Token
+
+Esta versión deja configurado el token de prueba en `RIESGO_API_TOKEN`. Para producción, reemplazarlo por un token nuevo o mover la consulta a backend/proxy.

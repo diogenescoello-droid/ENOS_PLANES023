@@ -759,59 +759,56 @@ select,input{
       </div>
 
       <div id="dashboard" class="tab-content">
-        <h2>Dashboard operativo conectado al índice</h2>
-        <p>Vista viva desde <strong>INDICE_MEMORIA_ENOS</strong>: resume casos, formularios, registros, calidad, brechas y datos con georreferencia. Mantiene la plataforma original y agrega los dos módulos acordados: cartográfico operativo e información ampliada.</p>
+        <h2>Dashboard consolidado ENOS CZ5</h2>
+        <p>Vista ejecutiva conectada a la matriz maestra de seguimiento de planes ENOS CZ5. Presenta el consolidado territorial por GAD, gestión documental, validación técnica, planes faltantes, planes en revisión y planes devueltos.</p>
         <div class="dashboard-actions">
-          <button class="btn primary" onclick="probarConexionENOS()">Probar conexión</button>
-          <button class="btn red" onclick="actualizarBaseF01F07()">Sincronizar base F01-F07</button>
-          <button class="btn soft" onclick="cargarDashboardOperativo()">Actualizar dashboard</button>
-          <button class="btn green" onclick="openDetailed()">Información ampliada</button>
+          <button class="btn primary" onclick="probarConexionConsolidado()">Probar conexión consolidado</button>
+          <button class="btn soft" onclick="cargarDashboardConsolidado()">Actualizar consolidado</button>
+          <button class="btn red" onclick="actualizarBaseF01F07()">Sincronizar índice F01-F07</button>
+          <button class="btn green" onclick="abrirTabRiesgoZonal()">Ir a riesgo zonal</button>
+          <button class="btn white" onclick="openDetailed()">Información ampliada F01-F07</button>
         </div>
         <div id="dashboardStatus" class="status" style="display:none"><span class="dot"></span><span id="dashboardStatusText"></span></div>
 
         <div class="kpi-row">
-          <div class="kpi-card"><h4>Casos</h4><div class="num" id="dashCasos">—</div><small>Total de códigos de caso detectados en el índice.</small></div>
-          <div class="kpi-card"><h4>Registros</h4><div class="num" id="dashRegistros">—</div><small>Filas útiles indexadas desde hojas F01-F07 y bases.</small></div>
-          <div class="kpi-card"><h4>Promedio técnico</h4><div class="num" id="dashPromedio">—</div><small>Estimación por cobertura de formularios por caso.</small></div>
-          <div class="kpi-card"><h4>Georreferenciados</h4><div class="num" id="dashGeo">—</div><small>Registros con coordenada utilizable para mapa operativo.</small></div>
+          <div class="kpi-card"><h4>Total GAD CZ5</h4><div class="num" id="dashCasos">—</div><small>Universo territorial consolidado para seguimiento ENOS.</small></div>
+          <div class="kpi-card"><h4>Planes gestionados</h4><div class="num" id="dashRegistros">—</div><small>GAD con gestión documental o plan registrado.</small></div>
+          <div class="kpi-card"><h4>Planes validados</h4><div class="num" id="dashPromedio">—</div><small>Planes con revisión técnica validada por CZ5/SNGR.</small></div>
+          <div class="kpi-card"><h4>Planes faltantes</h4><div class="num" id="dashGeo">—</div><small>GAD sin plan o con estado pendiente/faltante.</small></div>
         </div>
 
         <div class="executive">
           <div class="gauge">
-            <div class="gauge-title">Cobertura técnica promedio</div>
+            <div class="gauge-title">Avance de validación técnica</div>
             <div class="gauge-number" id="dashGaugeNumber">—</div>
             <div class="track"><div class="fill" id="dashGaugeFill" style="width:0%"></div></div>
-            <p id="dashLectura" style="margin-top:12px">Actualice el dashboard para leer los datos reales del índice.</p>
+            <p id="dashLectura" style="margin-top:12px">Actualice el consolidado para leer los datos oficiales de la matriz maestra.</p>
           </div>
           <div class="alert">
-            <strong>Lectura ejecutiva automática</strong>
-            <span id="dashAlertaEjecutiva">El tablero está listo para consultar el índice y detectar casos con baja cobertura, seguimiento faltante o falta de georreferencia.</span>
-            <div class="actions" style="margin-bottom:0"><button class="btn primary" onclick="openDetailed()">Abrir información ampliada</button></div>
+            <strong>Lectura ejecutiva consolidada</strong>
+            <span id="dashAlertaEjecutiva">El tablero consolidado permitirá priorizar planes faltantes, devueltos y en revisión por provincia.</span>
+            <div class="actions" style="margin-bottom:0"><button class="btn primary" onclick="cargarDashboardConsolidado()">Actualizar lectura</button></div>
           </div>
         </div>
 
         <div class="detail-grid" style="margin-top:14px">
           <div class="detail-card">
-            <h3>1. Módulo cartográfico operativo</h3>
-            <p>Mapa liviano calculado desde los registros con coordenadas. Si el caso no tiene coordenadas limpias, se muestra en la tabla territorial para depuración.</p>
-            <div class="filters" style="grid-template-columns:1fr 1fr auto">
-              <select id="dashProvinciaFilter" onchange="renderDashboardMap()"><option value="">Provincia: todas</option></select>
-              <select id="dashFormularioFilter" onchange="renderDashboardMap()"><option value="">Formulario: todos</option></select>
-              <button class="btn white" onclick="renderDashboardMap()">Refrescar mapa</button>
+            <h3>1. Resumen provincial consolidado</h3>
+            <p>Distribución por provincia del universo de GAD, planes gestionados, validados, en revisión, devueltos y faltantes.</p>
+            <div class="table-wrap" style="max-height:390px">
+              <table>
+                <thead><tr><th>Provincia</th><th>Total GAD</th><th>Gestionados</th><th>Validados</th><th>En revisión</th><th>Devueltos</th><th>Faltantes</th><th>% validado</th></tr></thead>
+                <tbody id="dashProvinciaBody"><tr><td colspan="8">Actualice el consolidado para cargar datos.</td></tr></tbody>
+              </table>
             </div>
-            <div class="carto-map" id="cartoMapLayer">
-              <div class="carto-map-label">Mapa operativo · puntos desde INDICE_MEMORIA_ENOS</div>
-            </div>
-            <div class="footer-note" id="cartoMapNote">Sin datos cartográficos cargados todavía.</div>
           </div>
           <div class="detail-card">
-            <h3>2. Casos para análisis ampliado</h3>
-            <p>Seleccione un caso para abrir su paquete, formularios detectados, registros, brechas y soporte cartográfico.</p>
-            <div class="inputline"><label>Buscar caso, GAD o cantón</label><input id="dashCaseSearch" oninput="renderDashboardCases()" placeholder="Ejemplo: Empalme, Daule, GADMELEMPALME..."></div>
-            <div class="table-wrap" style="max-height:360px">
+            <h3>2. Seguimiento por estado</h3>
+            <p>Lectura rápida para toma de decisiones: qué está validado, qué requiere devolución, qué sigue en revisión y qué falta por gestionar.</p>
+            <div class="table-wrap" style="max-height:390px">
               <table>
-                <thead><tr><th>Institución / caso</th><th>Territorio</th><th>Formularios</th><th>Registros</th><th>Acción</th></tr></thead>
-                <tbody id="dashCasesBody"><tr><td colspan="5">Actualice el dashboard para cargar casos reales.</td></tr></tbody>
+                <thead><tr><th>Estado</th><th>Total</th><th>Lectura operativa</th></tr></thead>
+                <tbody id="dashEstadoBody"><tr><td colspan="3">Actualice el consolidado para cargar datos.</td></tr></tbody>
               </table>
             </div>
           </div>
@@ -1369,6 +1366,127 @@ function setDetalleStatus(message, ok){
   box.style.background=ok?'#eef9f2':'#fff8e8';
   box.style.borderColor=ok?'#bfe5ca':'#f1d28b';
 }
+
+async function probarConexionConsolidado(){
+  setDashboardStatus('Probando conexión con API consolidada de planes ENOS CZ5...', true);
+  try{
+    const data = await apiConsolidadoCZ5('resumen', {});
+    const r = data.resumen || {};
+    setDashboardStatus('Conexión consolidada OK · Total GAD: '+(r.total_gad||0)+' · Validados: '+(r.planes_validados||0), true);
+  }catch(e){
+    setDashboardStatus('Error de conexión consolidada: ' + (e.message || e), false);
+  }
+}
+
+async function cargarDashboardConsolidado(){
+  setDashboardStatus('Cargando consolidado de planes ENOS CZ5 desde la matriz maestra...', true);
+  try{
+    const data = await apiConsolidadoCZ5('resumen', {});
+    if(!data || data.ok === false) throw new Error((data && (data.mensaje || data.message || data.error)) || 'La API consolidada no devolvió una respuesta válida.');
+    renderDashboardConsolidadoPlanes(data);
+    const r = data.resumen || {};
+    setDashboardStatus('Consolidado actualizado. Total GAD: '+(r.total_gad||0)+' · Gestionados: '+(r.planes_gestionados||0)+' · Validados: '+(r.planes_validados||0)+' · Faltantes: '+(r.planes_faltantes||0), true);
+  }catch(e){
+    setDashboardStatus('Error cargando consolidado: ' + (e.message || e), false);
+  }
+}
+
+async function apiConsolidadoCZ5(vista, params){
+  const apiUrl = (typeof RIESGO_API_URL !== 'undefined' && RIESGO_API_URL) ? RIESGO_API_URL : 'https://script.google.com/macros/s/AKfycbw9pDFZv6HBseCNILV90w8XfZL043inXnG0kvXDdgXl35N2vdKYIrYGh5HgAsXjfRbxEA/exec';
+  const token = (typeof RIESGO_API_TOKEN !== 'undefined' && RIESGO_API_TOKEN) ? RIESGO_API_TOKEN : '';
+  if(!token || token === 'CAMBIAR_TOKEN_AQUI') throw new Error('Falta configurar RIESGO_API_TOKEN dentro del index.html.');
+  const url = new URL(apiUrl);
+  url.searchParams.set('token', token);
+  url.searchParams.set('vista', vista);
+  Object.keys(params || {}).forEach(function(k){
+    if(params[k] !== undefined && params[k] !== null && params[k] !== '') url.searchParams.set(k, params[k]);
+  });
+  const r = await fetch(url.toString(), {method:'GET', cache:'no-store'});
+  if(!r.ok) throw new Error('HTTP '+r.status+' consultando vista='+vista);
+  const data = await r.json();
+  if(!data || data.ok === false) throw new Error((data && (data.mensaje || data.message || data.error)) || 'Respuesta no válida de vista='+vista);
+  return data;
+}
+
+function renderDashboardConsolidadoPlanes(data){
+  const r = data.resumen || {};
+  const total = Number(r.total_gad || 0);
+  const gestionados = Number(r.planes_gestionados || 0);
+  const validados = Number(r.planes_validados || 0);
+  const faltantes = Number(r.planes_faltantes || 0);
+  const revision = Number(r.planes_en_revision || 0);
+  const devueltos = Number(r.planes_devueltos || 0);
+  const observados = Number(r.observados_calidad_dato || 0);
+  const pctGestionados = Number(r.porcentaje_gestionados || porcentajeSeguro(gestionados, total));
+  const pctValidados = Number(r.porcentaje_validados || porcentajeSeguro(validados, total));
+  const pctFaltantes = Number(r.porcentaje_faltantes || porcentajeSeguro(faltantes, total));
+
+  setText('dashCasos', total);
+  setText('dashRegistros', gestionados);
+  setText('dashPromedio', validados);
+  setText('dashGeo', faltantes);
+  setText('dashGaugeNumber', pctValidados + '%');
+
+  const fill = document.getElementById('dashGaugeFill');
+  if(fill) fill.style.width = Math.max(0, Math.min(100, pctValidados)) + '%';
+
+  setText('dashLectura', 'Validación técnica: '+validados+' de '+total+' GAD ('+pctValidados+'%). Gestión documental: '+gestionados+' de '+total+' ('+pctGestionados+'%). Faltantes: '+faltantes+' ('+pctFaltantes+'%).');
+  setText('dashAlertaEjecutiva', 'Prioridad operativa: '+faltantes+' faltantes, '+revision+' en revisión y '+devueltos+' devueltos. Observados por calidad de dato: '+observados+'.');
+
+  renderDashboardProvinciaConsolidada(data.por_provincia || []);
+  renderDashboardEstadosConsolidado({total, gestionados, validados, faltantes, revision, devueltos, observados});
+}
+
+function renderDashboardProvinciaConsolidada(lista){
+  const body = document.getElementById('dashProvinciaBody');
+  if(!body) return;
+  if(!lista || !lista.length){
+    body.innerHTML = '<tr><td colspan="8">La API respondió sin detalle provincial.</td></tr>';
+    return;
+  }
+  body.innerHTML = lista.map(function(p){
+    const pct = Number(p.porcentaje_validados || porcentajeSeguro(p.planes_validados, p.total_gad));
+    return '<tr>'+
+      '<td><strong>'+escapeHtml(p.provincia || 'S/D')+'</strong></td>'+
+      '<td>'+escapeHtml(p.total_gad || 0)+'</td>'+
+      '<td>'+escapeHtml(p.planes_gestionados || 0)+'</td>'+
+      '<td><span class="tag ok">'+escapeHtml(p.planes_validados || 0)+'</span></td>'+
+      '<td><span class="tag warn">'+escapeHtml(p.planes_en_revision || 0)+'</span></td>'+
+      '<td><span class="tag bad">'+escapeHtml(p.planes_devueltos || 0)+'</span></td>'+
+      '<td><span class="tag info">'+escapeHtml(p.planes_faltantes || 0)+'</span></td>'+
+      '<td><strong>'+pct+'%</strong></td>'+
+    '</tr>';
+  }).join('');
+}
+
+function renderDashboardEstadosConsolidado(e){
+  const body = document.getElementById('dashEstadoBody');
+  if(!body) return;
+  const rows = [
+    {estado:'Validado', total:e.validados, cls:'ok', lectura:'Planes listos o técnicamente aceptados para seguimiento institucional.'},
+    {estado:'En revisión', total:e.revision, cls:'warn', lectura:'Requieren cierre de revisión CZ5/SNGR y confirmación técnica.'},
+    {estado:'Devuelto', total:e.devueltos, cls:'bad', lectura:'Requieren corrección del GAD y nueva remisión.'},
+    {estado:'Faltante', total:e.faltantes, cls:'info', lectura:'Prioridad de gestión: asistencia técnica, oficio o seguimiento directo.'},
+    {estado:'Observado por calidad de dato', total:e.observados, cls:'warn', lectura:'Revisar consistencia, campos vacíos, enlaces, fechas o clasificación territorial.'}
+  ];
+  body.innerHTML = rows.map(function(r){
+    return '<tr><td><span class="tag '+r.cls+'">'+escapeHtml(r.estado)+'</span></td><td><strong>'+escapeHtml(r.total || 0)+'</strong></td><td>'+escapeHtml(r.lectura)+'</td></tr>';
+  }).join('');
+}
+
+function porcentajeSeguro(valor, total){
+  valor = Number(valor || 0);
+  total = Number(total || 0);
+  if(!total) return 0;
+  return Math.round((valor / total) * 1000) / 10;
+}
+
+function abrirTabRiesgoZonal(){
+  const btn = Array.from(document.querySelectorAll('.tab')).find(function(b){ return b.textContent.includes('Riesgo'); });
+  if(btn) openTab('riesgozonal', btn);
+  setTimeout(function(){ if(window.RiskZonalCZ5 && RiskZonalCZ5.init) RiskZonalCZ5.init(); }, 180);
+}
+
 async function probarConexionENOS(){
   setDashboardStatus('Probando conexión con Apps Script...', true);
   try{
@@ -1801,13 +1919,13 @@ function escapeHtml(v){ return String(v===undefined||v===null?'':v).replace(/[&<
 function escapeAttr(v){ return escapeHtml(v).replace(/'/g,'&#39;'); }
 
 document.addEventListener('DOMContentLoaded', function(){
-  setTimeout(function(){ cargarDashboardOperativo().catch(function(){}); }, 900);
+  setTimeout(function(){ cargarDashboardConsolidado().catch(function(){}); }, 900);
 });
 
 
 // MODULO RIESGO ZONAL ENOS CZ5 · Integración 20260630
 const RIESGO_API_URL = 'https://script.google.com/macros/s/AKfycbw9pDFZv6HBseCNILV90w8XfZL043inXnG0kvXDdgXl35N2vdKYIrYGh5HgAsXjfRbxEA/exec';
-const RIESGO_API_TOKEN = 'Lamiend0mentes'; // Cambiar por token vigente antes de publicar.
+let RIESGO_API_TOKEN = 'Lamiend0mentes'; // Cambiar por token vigente antes de publicar.
 
 const RiskZonalCZ5 = (function(){
   let initialized = false;
