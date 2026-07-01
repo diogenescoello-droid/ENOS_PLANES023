@@ -1,7 +1,6 @@
 {
-  "project": "SNGR-CZ5-ENOS",
-  "version": "v0.5.9",
-  "module": "riesgo_zonal",
-  "status": "seleccion territorial y capas conmutables",
-  "base": "index.html arquitectura original"
+  "version": "0.5.11",
+  "estado": "ficha_cantonal_dinamica_demo",
+  "fecha": "2026-07-01",
+  "base": "index.html arquitectura existente"
 }
