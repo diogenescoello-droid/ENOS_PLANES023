@@ -1,7 +1,7 @@
 {
-  "version": "v0.5.7",
-  "fecha": "2026-07-01",
-  "estado": "en_revision",
-  "tipo_cambio": "C - modulo sin cambio de arquitectura base",
-  "descripcion": "Activa Elementos operativos con capa demostrativa de puntos, lineas y poligonos, ficha tecnica y semaforizacion."
+  "project": "SNGR-CZ5-ENOS",
+  "version": "v0.5.9",
+  "module": "riesgo_zonal",
+  "status": "seleccion territorial y capas conmutables",
+  "base": "index.html arquitectura original"
 }

@@ -1,17 +1,16 @@
-# SNGR-CZ5-ENOS v0.5.7
+# SNGR-CZ5-ENOS v0.5.9
 
-Versión de integración cartográfica para el módulo **6. Riesgo zonal**.
+Versión de ajuste funcional del módulo 6. Riesgo zonal.
 
-## Estado
+La actualización mantiene la arquitectura base y agrega control interactivo de capas, selección/deselección territorial y KPI contextual.
 
-- Arquitectura base respetada.
-- Vista cantonal activa por defecto.
-- Capa provincial como apoyo territorial.
-- Botón **Elementos operativos** funcional.
-- Capa demostrativa con puntos, líneas y polígonos.
-- Ficha técnica lateral por elemento.
-- Filtros por tipo de elemento.
+## Uso
 
-## Advertencia
+Abrir `index.html`, entrar al tab **6. Riesgo zonal** y probar:
 
-Los elementos operativos cargados son muestra técnica no oficial. Deben ser reemplazados por datos reales provenientes de Kobo, planes firmados, inspecciones técnicas o ArcGIS Online.
+1. Encender/apagar Provincias, Cantones y Elementos operativos.
+2. Tocar una provincia o cantón para seleccionarlo.
+3. Tocar nuevamente el mismo territorio para apagar la selección.
+4. Revisar que los indicadores superiores cambien el alcance de cálculo.
+
+Los valores técnicos de riesgo permanecen pendientes hasta alimentar la base con PDF firmados, Kobo o ArcGIS Online.

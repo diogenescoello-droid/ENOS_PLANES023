@@ -1,0 +1,238 @@
+{
+  "version": "v0.5.9",
+  "estado": "cartografia_multicapa_toggle_seleccion_territorial_kpi_contextual",
+  "fecha_corte": "2026-07-01",
+  "fuente_primaria": "Planes de Acción Territorial ENOS 2026-2027 firmados por alcaldes/GAD y revisados por la Coordinación Zonal 5.",
+  "lectura_base": "El módulo mantiene la arquitectura de riesgo, muestra cartografía provincial y cantonal local, y activa una capa demostrativa de elementos operativos con puntos, líneas y polígonos para validar ficha técnica, semaforización y selección en mapa.",
+  "kpis": {
+    "total_gad": 51,
+    "riesgo_alto": "Pend.",
+    "riesgo_medio": "Pend.",
+    "riesgo_bajo": "Pend.",
+    "brechas_criticas": "Pend.",
+    "amenazas_prioritarias": "Pend."
+  },
+  "componentes": [
+    {
+      "id": "RESUMEN",
+      "nombre": "Resumen ejecutivo",
+      "descripcion": "Lectura integrada para autoridades: territorios priorizados, brechas dominantes, acciones críticas y necesidades de decisión zonal.",
+      "datos_clave": [
+        "Nivel de riesgo territorial",
+        "brechas recurrentes",
+        "acciones críticas",
+        "estado del acompañamiento",
+        "alertas de monitoreo"
+      ],
+      "salida": "Ficha ejecutiva provincial/cantonal y lectura zonal consolidada."
+    },
+    {
+      "id": "ANALISIS",
+      "nombre": "Análisis de riesgo",
+      "descripcion": "Consolida amenazas, exposición, vulnerabilidad, capacidades y brechas técnicas descritas en los planes cantonales.",
+      "datos_clave": [
+        "amenaza principal",
+        "sitios críticos",
+        "elementos expuestos",
+        "vulnerabilidad institucional",
+        "brechas de información"
+      ],
+      "salida": "Semáforo de riesgo, ficha técnica territorial y ranking de prioridad."
+    },
+    {
+      "id": "RESPUESTA",
+      "nombre": "Respuesta",
+      "descripcion": "Ordena acciones de preparación y respuesta: COE, alojamientos temporales, rutas, recursos, activación operativa y coordinación interinstitucional.",
+      "datos_clave": [
+        "acciones de corto plazo",
+        "responsables",
+        "plazos",
+        "recursos",
+        "alojamientos/rutas",
+        "nudos críticos"
+      ],
+      "salida": "Matriz ejecutiva de acciones operativas y necesidades de escalamiento."
+    },
+    {
+      "id": "FORTALECIMIENTO",
+      "nombre": "Fortalecimiento",
+      "descripcion": "Identifica necesidades de asistencia técnica, capacitación, actualización de planes, organización COE, simulaciones, protocolos y capacidades locales.",
+      "datos_clave": [
+        "necesidad de capacitación",
+        "brecha normativa",
+        "brecha de planificación",
+        "asistencia técnica requerida",
+        "prioridad de fortalecimiento"
+      ],
+      "salida": "Agenda de acompañamiento CZ5 por provincia/cantón."
+    },
+    {
+      "id": "MONITOREO",
+      "nombre": "Monitoreo",
+      "descripcion": "Da seguimiento a acciones comprometidas, alertas hidrometeorológicas, avances, evidencias, actualización de planes y puntos críticos recurrentes.",
+      "datos_clave": [
+        "estado de avance",
+        "evidencia",
+        "frecuencia de actualización",
+        "alertas",
+        "responsable de seguimiento"
+      ],
+      "salida": "Tablero mensual de avance y alerta temprana para la coordinación."
+    }
+  ],
+  "temas": [
+    {
+      "id": "RIESGO_GENERAL",
+      "nombre": "Riesgo general",
+      "descripcion": "Resultado integrado de amenaza, exposición, vulnerabilidad, capacidad y brechas."
+    },
+    {
+      "id": "BRECHAS",
+      "nombre": "Brechas",
+      "descripcion": "Faltantes técnicos, operativos, institucionales y de información detectados en los planes."
+    },
+    {
+      "id": "AMENAZAS",
+      "nombre": "Amenazas",
+      "descripcion": "Amenazas ENOS priorizadas: inundación, deslizamiento, socavación, erosión, afectación vial, sanitaria u otras reportadas."
+    },
+    {
+      "id": "VULNERABILIDAD",
+      "nombre": "Vulnerabilidad",
+      "descripcion": "Condiciones de exposición social, física, institucional y funcional."
+    },
+    {
+      "id": "RESPUESTA",
+      "nombre": "Respuesta",
+      "descripcion": "Acciones operativas, recursos, rutas, alojamientos y coordinación de emergencia."
+    },
+    {
+      "id": "FORTALECIMIENTO",
+      "nombre": "Fortalecimiento",
+      "descripcion": "Necesidades de asistencia técnica, capacitación, planificación, simulacros y protocolos."
+    },
+    {
+      "id": "MONITOREO",
+      "nombre": "Monitoreo",
+      "descripcion": "Seguimiento de acciones, evidencias, alertas y actualización periódica."
+    }
+  ],
+  "provincias": [
+    {
+      "id": "BOLIVAR",
+      "nombre": "Bolívar",
+      "cantones_estimados": 7,
+      "estado": "Cantones conectados · pendiente extracción PDF",
+      "lat": -1.59,
+      "lon": -79.0,
+      "lectura": "Se consolidarán amenazas de ladera, inundación, puntos críticos viales, brechas de respuesta y necesidades de fortalecimiento local.",
+      "capa_cartografica": "provincial_y_cantonal_conectada",
+      "geojson_id": "BOLIVAR"
+    },
+    {
+      "id": "GUAYAS",
+      "nombre": "Guayas",
+      "cantones_estimados": 25,
+      "estado": "Cantones conectados · pendiente extracción PDF",
+      "lat": -2.18,
+      "lon": -79.88,
+      "lectura": "Se consolidarán inundaciones, drenaje, zonas bajas, infraestructura expuesta, alojamientos, coordinación COE y acciones de corto plazo.",
+      "capa_cartografica": "provincial_y_cantonal_conectada",
+      "geojson_id": "GUAYAS"
+    },
+    {
+      "id": "LOS_RIOS",
+      "nombre": "Los Ríos",
+      "cantones_estimados": 13,
+      "estado": "Cantones conectados · pendiente extracción PDF",
+      "lat": -1.45,
+      "lon": -79.47,
+      "lectura": "Se consolidarán exposición fluvial, afectación agrícola, rutas, alojamientos, puntos críticos y brechas operativas de respuesta.",
+      "capa_cartografica": "provincial_y_cantonal_conectada",
+      "geojson_id": "LOS_RIOS"
+    },
+    {
+      "id": "SANTA_ELENA",
+      "nombre": "Santa Elena",
+      "cantones_estimados": 3,
+      "estado": "Cantones conectados · pendiente extracción PDF",
+      "lat": -2.23,
+      "lon": -80.86,
+      "lectura": "Se consolidarán afectaciones por escorrentía, drenaje, vías, infraestructura esencial, agua segura y capacidades locales.",
+      "capa_cartografica": "provincial_y_cantonal_conectada",
+      "geojson_id": "SANTA_ELENA"
+    },
+    {
+      "id": "GALAPAGOS",
+      "nombre": "Galápagos",
+      "cantones_estimados": 3,
+      "estado": "Cantones conectados · pendiente extracción PDF",
+      "lat": -0.74,
+      "lon": -90.32,
+      "lectura": "Se consolidarán particularidades insulares, logística, comunicación, abastecimiento, rutas, recursos y coordinación territorial.",
+      "capa_cartografica": "provincial_y_cantonal_conectada",
+      "geojson_id": "GALAPAGOS"
+    }
+  ],
+  "estructura_datos_requerida": [
+    "codigo_plan",
+    "provincia",
+    "canton",
+    "gad",
+    "fecha_firma",
+    "url_pdf_firmado",
+    "estado_revision",
+    "amenaza_principal",
+    "amenazas_secundarias",
+    "sitios_criticos",
+    "elementos_expuestos",
+    "brechas_analisis",
+    "brechas_respuesta",
+    "brechas_fortalecimiento",
+    "brechas_monitoreo",
+    "acciones_corto_plazo",
+    "acciones_mediano_plazo",
+    "acciones_largo_plazo",
+    "responsables",
+    "plazos",
+    "recursos",
+    "alojamientos_temporales",
+    "rutas_evacuacion",
+    "puntos_seguros",
+    "capacidad_respuesta",
+    "necesidad_asistencia_tecnica",
+    "puntaje_riesgo",
+    "semaforo_riesgo",
+    "puntaje_brechas",
+    "semaforo_brechas",
+    "puntaje_fortalecimiento",
+    "semaforo_fortalecimiento",
+    "id_elemento",
+    "categoria_id",
+    "categoria",
+    "subcategoria",
+    "componente",
+    "tipo_geometria",
+    "geojson_geometry",
+    "enlace_evidencia",
+    "fecha_registro"
+  ],
+  "cartografia": {
+    "provincias_geojson": "assets/data/provincias_zonal5_wgs84_v0.5.9.geojson",
+    "cantones_geojson": "assets/data/cantones_zonal5_wgs84_v0.5.9.geojson",
+    "elementos_operativos_geojson": "assets/data/elementos_operativos_enos_v0.5.9.geojson",
+    "estado_provincias": "activo_toggle_multicapa",
+    "estado_cantones": "activo_toggle_multicapa_51_cantones",
+    "estado_elementos": "activo_toggle_demo_puntos_lineas_poligonos",
+    "arcgis_online_url": "",
+    "observacion": "v0.5.9 habilita encendido/apagado independiente de provincias, cantones y elementos; selección/deselección por clic territorial; KPI contextual por CZ5, provincia o cantón seleccionado. Los valores de riesgo se mantienen pendientes hasta cargar PDF/Kobo.",
+    "resumen_cantonal": {
+      "BOLIVAR": 7,
+      "GALAPAGOS": 3,
+      "GUAYAS": 25,
+      "LOS RIOS": 13,
+      "SANTA ELENA": 3
+    },
+    "elementos_demo": 7
+  }
+}
