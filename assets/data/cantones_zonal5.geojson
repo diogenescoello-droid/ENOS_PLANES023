@@ -1,0 +1,36 @@
+{
+  "type": "FeatureCollection",
+  "name": "cantones_zonal5_pendiente",
+  "features": [],
+  "metadata": {
+    "version": "v0.5.1",
+    "status": "pendiente",
+    "reason": "El archivo cantonesZonal5gr.geojson cargado contiene 5 polígonos provinciales y no campos cantonales detectables. Se requiere GeoJSON cantonal real para activar esta capa.",
+    "uploaded_summary": {
+      "features": 5,
+      "keys": [
+        "AREA_KM2",
+        "DPA_ANIO",
+        "DPA_DESPRO",
+        "DPA_PROVIN",
+        "DPA_VALOR",
+        "OBJECTID",
+        "REN_CODIGO",
+        "REN_REGION",
+        "Shape__Area",
+        "Shape__Length",
+        "TOTPOP"
+      ],
+      "geometry_types": {
+        "MultiPolygon": 5
+      },
+      "names": [
+        "SANTA ELENA",
+        "BOLIVAR",
+        "LOS RIOS",
+        "GALAPAGOS",
+        "GUAYAS"
+      ]
+    }
+  }
+}

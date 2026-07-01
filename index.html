@@ -688,6 +688,45 @@ select,input{
 .docseg-foot{color:#66798a;font-size:12px;text-align:right}
 @media(max-width:980px){.docseg-kpis,.docseg-layout,.docseg-status-grid,.docseg-provinces{grid-template-columns:1fr}.docseg-head{flex-direction:column}.docseg-barline{grid-template-columns:1fr}}
 
+
+/* MODULO RIESGO ZONAL ENOS CZ5 · v0.5.0 · Entramado de datos desde planes firmados */
+.riskz-modebar{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.riskz-mode{border:1px solid var(--borde);background:#fff;color:var(--azul3);border-radius:15px;padding:12px;text-align:left;font-weight:900;cursor:pointer;box-shadow:0 8px 18px rgba(10,53,85,.06)}
+.riskz-mode span{display:block;color:var(--muted);font-size:11px;line-height:1.25;margin-top:5px;font-weight:800}
+.riskz-mode.active{background:var(--azul3);color:#fff;border-color:var(--azul3)}
+.riskz-mode.active span{color:#d9ecfa}
+.riskz-source{border:1px solid #f1cf85;background:#fff8e8;color:#634000;border-radius:16px;padding:14px;font-size:13px;line-height:1.38}
+.riskz-source strong{display:block;color:#4e3300;margin-bottom:6px}
+.riskz-province-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:12px}
+.riskz-province-btn{border:1px solid var(--borde);border-radius:15px;background:#fff;padding:12px;text-align:left;cursor:pointer;box-shadow:0 8px 18px rgba(10,53,85,.06)}
+.riskz-province-btn strong{display:block;color:var(--azul3);font-size:15px;margin-bottom:5px}
+.riskz-province-btn span{display:block;color:var(--muted);font-size:12px;line-height:1.25}
+.riskz-province-btn.active{border-color:var(--rojo2);box-shadow:0 0 0 3px rgba(216,58,46,.08)}
+.riskz-exec-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.riskz-exec-card{border:1px solid var(--borde);border-radius:14px;background:#f7fbff;padding:12px}
+.riskz-exec-card strong{display:block;color:var(--azul3);font-size:13px;margin-bottom:6px}
+.riskz-exec-card span{display:block;color:var(--muted);font-size:12px;line-height:1.32}
+.riskz-map-placeholder{height:420px;border:1px solid #c8dff0;border-radius:14px;background:radial-gradient(circle at 25% 35%, rgba(46,139,87,.20) 0 8%, transparent 9%),radial-gradient(circle at 55% 48%, rgba(242,184,75,.24) 0 10%, transparent 11%),radial-gradient(circle at 80% 65%, rgba(216,58,46,.18) 0 7%, transparent 8%),linear-gradient(145deg,#e9f6ff,#f9fdff);position:relative;overflow:hidden;display:grid;place-items:center;text-align:center;padding:22px;color:var(--muted)}
+.riskz-map-placeholder b{display:block;color:var(--azul3);font-size:18px;margin-bottom:7px}
+.riskz-map-pin{position:absolute;width:18px;height:18px;border-radius:999px;background:var(--rojo);border:3px solid #fff;box-shadow:0 6px 14px rgba(0,0,0,.18);cursor:pointer}
+.riskz-map-pin[data-provincia="BOLIVAR"]{left:55%;top:27%;background:var(--ambar)}
+.riskz-map-pin[data-provincia="GUAYAS"]{left:38%;top:55%;background:var(--rojo)}
+.riskz-map-pin[data-provincia="LOS_RIOS"]{left:49%;top:43%;background:var(--azul2)}
+.riskz-map-pin[data-provincia="SANTA_ELENA"]{left:22%;top:66%;background:var(--verde)}
+.riskz-map-pin[data-provincia="GALAPAGOS"]{left:15%;top:22%;background:#744bc2}
+.riskz-pipeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.riskz-pipe{border:1px solid var(--borde);border-radius:14px;background:#fff;padding:12px}
+.riskz-pipe b{display:block;color:var(--azul3);font-size:13px;margin-bottom:6px}
+.riskz-pipe span{display:block;color:var(--muted);font-size:12px;line-height:1.32}
+@media(max-width:980px){.riskz-modebar,.riskz-province-grid,.riskz-exec-grid,.riskz-pipeline{grid-template-columns:1fr}.riskz-map-placeholder{height:320px}}
+
+
+/* MODULO RIESGO ZONAL ENOS CZ5 · v0.5.1 · Cartografía provincial conectada */
+.riskz-map-tools{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px}
+.riskz-map-tools .btn{font-size:12px;padding:9px 11px}
+.riskz-map-active{outline:3px solid rgba(216,58,46,.18)}
+.riskz-layer-note{font-size:12px;color:var(--muted);line-height:1.3}
+
 </style>
 </head>
 <body>
@@ -857,17 +896,31 @@ select,input{
       </div>
 
 
+
       <div id="riesgozonal" class="tab-content">
-        <h2>Análisis de riesgo zonal ENOS CZ5</h2>
-        <p>Módulo conectado a la API de riesgo cantonal. Permite revisar riesgo general, brechas, amenazas, vulnerabilidad, capacidad de respuesta y elementos críticos expuestos desde la matriz maestra.</p>
+        <h2>Análisis de riesgo zonal ENOS 2026 · CZ5</h2>
+        <p>Módulo estratégico de lectura territorial para la Coordinación Zonal 5. La fuente primaria serán los planes de acción firmados por los alcaldes/GAD; desde allí se estructurarán riesgos, brechas, acciones de respuesta, necesidades de fortalecimiento y seguimiento.</p>
 
         <div class="riskz-shell">
           <div class="riskz-head">
             <div>
-              <h3>Lectura territorial por semáforo</h3>
-              <p>Use los botones temáticos para cambiar la variable de análisis. Al seleccionar un cantón en el mapa se abre la lectura técnica resumida y la ficha completa.</p>
+              <h3>Entramado de datos para riesgo, respuesta, fortalecimiento y monitoreo</h3>
+              <p>Esta versión conecta la capa provincial CZ5 en el mapa interno sin romper la arquitectura base. La capa cantonal y los elementos operativos se activarán cuando se cargue el GeoJSON cantonal real y la extracción normalizada de los PDF firmados.</p>
             </div>
-            <div id="riskzStatus" class="riskz-status warn">Sin consultar</div>
+            <div id="riskzStatus" class="riskz-status warn">v0.5.1 · Cartografía provincial</div>
+          </div>
+
+          <div class="riskz-source">
+            <strong>Fuente primaria de análisis</strong>
+            Planes de Acción Territorial ENOS 2026-2027 firmados por alcaldes/GAD. Cada PDF debe convertirse en una ficha estructurada por cantón: amenaza, exposición, vulnerabilidad, brechas, acciones, responsables, plazos, recursos, capacidades, monitoreo y necesidades de asistencia técnica.
+          </div>
+
+          <div class="riskz-modebar">
+            <button class="riskz-mode active" type="button" data-componente="RESUMEN">Resumen ejecutivo<span>Lectura zonal para autoridad y priorización.</span></button>
+            <button class="riskz-mode" type="button" data-componente="ANALISIS">Análisis<span>Amenazas, exposición, vulnerabilidad y brechas.</span></button>
+            <button class="riskz-mode" type="button" data-componente="RESPUESTA">Respuesta<span>Acciones operativas, rutas, recursos y COE.</span></button>
+            <button class="riskz-mode" type="button" data-componente="FORTALECIMIENTO">Fortalecimiento<span>Asistencia técnica, capacitación y protocolos.</span></button>
+            <button class="riskz-mode" type="button" data-componente="MONITOREO">Monitoreo<span>Seguimiento, alertas, evidencias y avance.</span></button>
           </div>
 
           <div class="riskz-themebar">
@@ -875,46 +928,57 @@ select,input{
             <button class="riskz-theme" type="button" data-tema="BRECHAS">Brechas</button>
             <button class="riskz-theme" type="button" data-tema="AMENAZAS">Amenazas</button>
             <button class="riskz-theme" type="button" data-tema="VULNERABILIDAD">Vulnerabilidad</button>
-            <button class="riskz-theme" type="button" data-tema="CAPACIDAD">Capacidad</button>
-            <button class="riskz-theme" type="button" data-tema="ELEMENTOS_EXPOSTOS">Elementos expuestos</button>
+            <button class="riskz-theme" type="button" data-tema="RESPUESTA">Respuesta</button>
+            <button class="riskz-theme" type="button" data-tema="FORTALECIMIENTO">Fortalecimiento</button>
+            <button class="riskz-theme" type="button" data-tema="MONITOREO">Monitoreo</button>
           </div>
 
           <div class="riskz-kpis">
-            <div class="riskz-card"><small>Total GAD</small><strong id="riskzKpiTotal">—</strong></div>
+            <div class="riskz-card"><small>Total GAD CZ5</small><strong id="riskzKpiTotal">—</strong></div>
             <div class="riskz-card"><small>Riesgo alto</small><strong id="riskzKpiAlto">—</strong></div>
             <div class="riskz-card"><small>Riesgo medio</small><strong id="riskzKpiMedio">—</strong></div>
             <div class="riskz-card"><small>Riesgo bajo</small><strong id="riskzKpiBajo">—</strong></div>
-            <div class="riskz-card"><small>Prom. brechas</small><strong id="riskzKpiBrechas">—</strong></div>
-            <div class="riskz-card"><small>Prom. amenaza</small><strong id="riskzKpiAmenaza">—</strong></div>
+            <div class="riskz-card"><small>Brechas críticas</small><strong id="riskzKpiBrechas">—</strong></div>
+            <div class="riskz-card"><small>Amenazas prioritarias</small><strong id="riskzKpiAmenaza">—</strong></div>
           </div>
 
           <div class="riskz-layout">
             <div class="riskz-mapbox">
               <div class="riskz-title">
-                <div><h3>Mapa interactivo Zona 5</h3><p id="riskzTemaLabel">Tema activo: Riesgo general</p></div>
-                <div class="riskz-legend"><span><i class="riskz-dot riskz-verde"></i>Bajo</span><span><i class="riskz-dot riskz-amarillo"></i>Medio</span><span><i class="riskz-dot riskz-rojo"></i>Alto</span><span><i class="riskz-dot riskz-sindato"></i>Sin dato</span></div>
+                <div><h3>Mapa estratégico Zona 5</h3><p id="riskzTemaLabel">Tema activo: Riesgo general</p></div>
+                <div class="riskz-legend"><span><i class="riskz-dot riskz-verde"></i>Bajo</span><span><i class="riskz-dot riskz-amarillo"></i>Medio</span><span><i class="riskz-dot riskz-rojo"></i>Alto</span><span><i class="riskz-dot riskz-sindato"></i>Pendiente</span></div>
+              </div>
+              <div class="riskz-map-tools">
+                <button class="btn soft" type="button" onclick="RiskZonalCZ5.setLayerMode('PROVINCIAS')">Provincias</button>
+                <button class="btn white" type="button" onclick="RiskZonalCZ5.setLayerMode('CANTONES')">Cantones</button>
+                <button class="btn white" type="button" onclick="RiskZonalCZ5.setLayerMode('ELEMENTOS')">Elementos</button>
+                <button class="btn white" type="button" onclick="RiskZonalCZ5.zoomAll()">Ver toda CZ5</button>
+                <button class="btn green" type="button" onclick="RiskZonalCZ5.openArcGIS()">Abrir ArcGIS Online</button>
               </div>
               <div id="riskzMap"></div>
-              <div class="footer-note" id="riskzMapNote">Pendiente de carga.</div>
+              <div class="riskz-province-grid" id="riskzProvinceGrid"></div>
+              <div class="footer-note" id="riskzMapNote">Modo arquitectura: pendiente carga de extracción PDF y conexión final de datos.</div>
             </div>
 
             <aside class="riskz-panel" id="riskzDetailPanel">
-              <h3>Seleccione un cantón</h3>
-              <p class="muted-text">Toque un punto o polígono del mapa para ver la lectura técnica del territorio.</p>
+              <h3>Lectura técnica inicial</h3>
+              <p class="muted-text">Seleccione un componente, un tema o una provincia para ver qué información debe mostrarse en el módulo.</p>
             </aside>
           </div>
 
           <div class="riskz-tablebox">
-            <div class="riskz-title"><div><h3>Ranking cantonal del tema seleccionado</h3><p>Orden descendente por puntaje.</p></div></div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Provincia</th><th>GAD / Cantón</th><th>Tema</th><th>Puntaje</th><th>Semáforo</th><th>Descripción</th><th>Acción</th></tr></thead>
-                <tbody id="riskzRankingBody"><tr><td colspan="7">Abra el módulo para cargar la información de riesgo.</td></tr></tbody>
-              </table>
+            <div class="riskz-title"><div><h3>Resumen ejecutivo por componente</h3><p>Sin tabla cantonal larga. Este bloque ordena qué debe extraerse de los planes firmados y qué salida verá la Coordinación Zonal.</p></div></div>
+            <div class="riskz-exec-grid" id="riskzExecGrid"></div>
+            <div class="riskz-pipeline">
+              <div class="riskz-pipe"><b>1. PDF firmado</b><span>Plan oficial por cantón/GAD como fuente primaria y trazable.</span></div>
+              <div class="riskz-pipe"><b>2. Ficha estructurada</b><span>Extracción normalizada: amenazas, brechas, acciones, responsables y plazos.</span></div>
+              <div class="riskz-pipe"><b>3. Semáforo territorial</b><span>Puntajes por riesgo, brechas, respuesta, fortalecimiento y monitoreo.</span></div>
+              <div class="riskz-pipe"><b>4. Acompañamiento CZ5</b><span>Agenda de asistencia técnica, seguimiento y decisiones ejecutivas.</span></div>
             </div>
           </div>
         </div>
       </div>
+
 
     </section>
   </section>
@@ -2021,48 +2085,81 @@ document.addEventListener('DOMContentLoaded', function(){
   renderSeguimientoDocumentalEstrategico();
 });
 
-// MODULO RIESGO ZONAL ENOS CZ5 · Integración 20260630
-const RIESGO_API_URL = 'https://script.google.com/macros/s/AKfycbw9pDFZv6HBseCNILV90w8XfZL043inXnG0kvXDdgXl35N2vdKYIrYGh5HgAsXjfRbxEA/exec';
-let RIESGO_API_TOKEN = 'CAMBIAR_TOKEN_AQUI'; // Cambiar por token vigente antes de publicar.
 
+// MODULO RIESGO ZONAL ENOS CZ5 · v0.5.0 · Entramado de datos desde planes firmados
 const RiskZonalCZ5 = (function(){
   let initialized = false;
+  let data = null;
+  let activeComponente = 'RESUMEN';
+  let activeTema = 'RIESGO_GENERAL';
+  let activeProvincia = '';
+  let layerMode = 'PROVINCIAS';
   let map = null;
-  let markerLayer = null;
-  let geoLayer = null;
-  let currentTema = 'RIESGO_GENERAL';
-  let currentItems = [];
-  const labels = {
-    RIESGO_GENERAL:'Riesgo general',
-    BRECHAS:'Brechas',
-    AMENAZAS:'Amenazas',
-    VULNERABILIDAD:'Vulnerabilidad',
-    CAPACIDAD:'Capacidad',
-    ELEMENTOS_EXPOSTOS:'Elementos expuestos'
-  };
-  const colores = {VERDE:'#2e8b57', AMARILLO:'#f2b84b', ROJO:'#d83a2e', SIN_DATO:'#9aa7b2'};
+  let provinceLayer = null;
+  let cantonLayer = null;
+  let elementsLayer = null;
+  let provinceGeo = null;
+  let cantonGeo = null;
+  let elementsGeo = null;
+  const defaultView = [-1.85, -81.1];
 
-  function init(){
-    if(initialized){ setTimeout(function(){ if(map) map.invalidateSize(); }, 150); return; }
+  async function init(){
+    if(initialized){ render(); refreshMapSize(); return; }
     initialized = true;
-    bindThemeButtons();
+    bindEvents();
+    await loadData();
     initMap();
-    cargarResumen();
-    cargarTema(currentTema);
+    await loadCartography();
+    render();
+    renderMapLayers();
   }
 
-  function reload(){
-    cargarResumen();
-    cargarTema(currentTema);
+  async function loadData(){
+    try{
+      const response = await fetch('data/riesgo_zonal_arquitectura_v0.5.1.json', {cache:'no-store'});
+      if(!response.ok) throw new Error('No se pudo cargar data/riesgo_zonal_arquitectura_v0.5.1.json');
+      data = await response.json();
+      setStatus('v0.5.1 · Datos y cartografía base cargados', 'ok');
+    }catch(e){
+      data = fallbackData();
+      setStatus('Modo respaldo: ' + (e.message || e), 'warn');
+    }
   }
 
-  function bindThemeButtons(){
+  async function loadCartography(){
+    const carto = (data && data.cartografia) ? data.cartografia : {};
+    try{ provinceGeo = await fetchJson(carto.provincias_geojson || 'assets/data/provincias_zonal5_simplificado.geojson'); }
+    catch(e){ setStatus('No se pudo cargar GeoJSON provincial: '+(e.message || e), 'warn'); }
+    try{ cantonGeo = await fetchJson(carto.cantones_geojson || 'assets/data/cantones_zonal5.geojson'); }
+    catch(e){ cantonGeo = {type:'FeatureCollection', features:[], metadata:{status:'pendiente'}}; }
+    try{ elementsGeo = await fetchJson(carto.elementos_operativos_geojson || 'assets/data/elementos_operativos_enos_v0.5.1.geojson'); }
+    catch(e){ elementsGeo = {type:'FeatureCollection', features:[], metadata:{status:'pendiente'}}; }
+  }
+
+  async function fetchJson(url){
+    const response = await fetch(url, {cache:'no-store'});
+    if(!response.ok) throw new Error('HTTP '+response.status+' al cargar '+url);
+    return await response.json();
+  }
+
+  function bindEvents(){
+    document.querySelectorAll('.riskz-mode').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        document.querySelectorAll('.riskz-mode').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        activeComponente = btn.dataset.componente || 'RESUMEN';
+        renderPanel();
+      });
+    });
     document.querySelectorAll('.riskz-theme').forEach(function(btn){
       btn.addEventListener('click', function(){
         document.querySelectorAll('.riskz-theme').forEach(function(b){ b.classList.remove('active'); });
         btn.classList.add('active');
-        currentTema = btn.dataset.tema || 'RIESGO_GENERAL';
-        cargarTema(currentTema);
+        activeTema = btn.dataset.tema || 'RIESGO_GENERAL';
+        const tema = findTema(activeTema);
+        setText('riskzTemaLabel', 'Tema activo: ' + (tema ? tema.nombre : activeTema));
+        renderPanel();
+        restyleLayers();
       });
     });
   }
@@ -2070,201 +2167,259 @@ const RiskZonalCZ5 = (function(){
   function initMap(){
     const el = document.getElementById('riskzMap');
     if(!el || !window.L) return;
-    map = L.map('riskzMap', {zoomControl:true, attributionControl:true}).setView([-1.85, -79.8], 7);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:19, attribution:'&copy; OpenStreetMap'}).addTo(map);
-    markerLayer = L.layerGroup().addTo(map);
-    fetch('assets/data/zonas_cantones.geojson', {cache:'no-store'})
-      .then(function(r){ return r.ok ? r.json() : null; })
-      .then(function(g){
-        if(!g || !g.features || !g.features.length) return;
-        geoLayer = L.geoJSON(g, {style:estiloFeature, onEachFeature:onEachFeature}).addTo(map);
-        try{ map.fitBounds(geoLayer.getBounds(), {padding:[18,18]}); }catch(e){}
-      })
-      .catch(function(){});
-    setTimeout(function(){ if(map) map.invalidateSize(); }, 300);
+    if(map) return;
+    el.innerHTML = '';
+    map = L.map('riskzMap', {zoomControl:true, attributionControl:true}).setView(defaultView, 6);
+    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:19, attribution:'&copy; OpenStreetMap'});
+    const gray = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {maxZoom:16, attribution:'Tiles &copy; Esri'});
+    osm.addTo(map);
+    L.control.layers({'OpenStreetMap':osm, 'Gris claro Esri':gray}, {}, {collapsed:true}).addTo(map);
+    setTimeout(refreshMapSize, 300);
   }
 
-  async function api(vista, params){
-    if(!RIESGO_API_TOKEN || RIESGO_API_TOKEN === 'CAMBIAR_TOKEN_AQUI'){
-      throw new Error('Falta configurar RIESGO_API_TOKEN dentro del index.html.');
+  function render(){
+    if(!data) return;
+    const k = data.kpis || {};
+    setText('riskzKpiTotal', k.total_gad || '—');
+    setText('riskzKpiAlto', k.riesgo_alto || '—');
+    setText('riskzKpiMedio', k.riesgo_medio || '—');
+    setText('riskzKpiBajo', k.riesgo_bajo || '—');
+    setText('riskzKpiBrechas', k.brechas_criticas || '—');
+    setText('riskzKpiAmenaza', k.amenazas_prioritarias || '—');
+    renderProvincias();
+    renderExecGrid();
+    renderPanel();
+    updateMapNote();
+  }
+
+  function renderMapLayers(){
+    if(!map || !window.L) return;
+    if(provinceLayer){ map.removeLayer(provinceLayer); provinceLayer = null; }
+    if(cantonLayer){ map.removeLayer(cantonLayer); cantonLayer = null; }
+    if(elementsLayer){ map.removeLayer(elementsLayer); elementsLayer = null; }
+
+    if(provinceGeo && provinceGeo.features && provinceGeo.features.length){
+      provinceLayer = L.geoJSON(provinceGeo, {style:styleProvince, onEachFeature:onEachProvince}).addTo(map);
     }
-    const url = new URL(RIESGO_API_URL);
-    url.searchParams.set('token', RIESGO_API_TOKEN);
-    url.searchParams.set('vista', vista);
-    Object.keys(params || {}).forEach(function(k){ if(params[k] !== undefined && params[k] !== null && params[k] !== '') url.searchParams.set(k, params[k]); });
-    const r = await fetch(url.toString(), {method:'GET', cache:'no-store'});
-    if(!r.ok) throw new Error('HTTP '+r.status+' consultando '+vista);
-    const data = await r.json();
-    if(!data || data.ok === false) throw new Error((data && (data.mensaje || data.error)) || 'Respuesta no válida de '+vista);
-    return data;
-  }
-
-  async function cargarResumen(){
-    try{
-      setStatus('Consultando resumen de riesgo...', 'warn');
-      const data = await api('riesgo_resumen', {});
-      const r = data.resumen_riesgo || data.resumen || data;
-      setText('riskzKpiTotal', val(r,'total_gad,total,total_cantones') || 0);
-      setText('riskzKpiAlto', val(r,'riesgo_alto,alto,total_alto') || 0);
-      setText('riskzKpiMedio', val(r,'riesgo_medio,medio,total_medio') || 0);
-      setText('riskzKpiBajo', val(r,'riesgo_bajo,bajo,total_bajo') || 0);
-      setText('riskzKpiBrechas', formatNum(val(r,'promedio_brechas,prom_brechas')));
-      setText('riskzKpiAmenaza', formatNum(val(r,'promedio_amenaza,prom_amenaza')));
-      setStatus('Resumen de riesgo conectado', 'ok');
-    }catch(e){ setStatus(e.message || e, 'bad'); }
-  }
-
-  async function cargarTema(tema){
-    try{
-      setStatus('Consultando tema: '+(labels[tema] || tema)+'...', 'warn');
-      let data;
-      if(tema === 'RIESGO_GENERAL'){
-        data = await api('riesgo_cantones', {});
-        currentItems = normalizarListaGeneral(data.cantones || data.detalle || data.riesgo || []);
-      }else{
-        data = await api('riesgo_tema', {tema:tema});
-        currentItems = normalizarListaTema(data.cantones || [], tema);
-      }
-      document.getElementById('riskzTemaLabel').textContent = 'Tema activo: '+(labels[tema] || tema);
-      actualizarMapa(currentItems);
-      renderRanking(currentItems, tema);
-      setStatus('Tema cargado: '+(labels[tema] || tema)+' · '+currentItems.length+' registros', 'ok');
-    }catch(e){
-      setStatus(e.message || e, 'bad');
-      const body = document.getElementById('riskzRankingBody');
-      if(body) body.innerHTML = '<tr><td colspan="7">'+escapeHtml(e.message || e)+'</td></tr>';
+    if(cantonGeo && cantonGeo.features && cantonGeo.features.length){
+      cantonLayer = L.geoJSON(cantonGeo, {style:styleCanton, onEachFeature:onEachCanton});
+      if(layerMode === 'CANTONES') cantonLayer.addTo(map);
     }
+    if(elementsGeo && elementsGeo.features && elementsGeo.features.length){
+      elementsLayer = L.geoJSON(elementsGeo, {style:styleElement, pointToLayer:pointElement, onEachFeature:onEachElement});
+      if(layerMode === 'ELEMENTOS') elementsLayer.addTo(map);
+    }
+    zoomAll();
+    updateMapNote();
   }
 
-  function normalizarListaGeneral(lista){
-    return (lista || []).map(function(x){
-      return {
-        id_canton: val(x,'id_canton,ID_CANTON'), provincia: val(x,'provincia,PROVINCIA'), canton: val(x,'canton,CANTON,gad_canton'), tipo_gad: val(x,'tipo_gad,TIPO_GAD'),
-        lat_centro: val(x,'lat_centro,LAT_CENTRO,lat'), lon_centro: val(x,'lon_centro,LON_CENTRO,lon,lng'),
-        tema:'RIESGO_GENERAL', puntaje: val(x,'puntaje_riesgo,puntaje_riesgo_general,puntaje'), semaforo: val(x,'semaforo_riesgo,semaforo'),
-        descripcion_tema: val(x,'nivel_riesgo_general,observacion_tecnica,descripcion_tema')
-      };
+  function setLayerMode(mode){
+    layerMode = mode || 'PROVINCIAS';
+    if(!map) return;
+    if(provinceLayer && map.hasLayer(provinceLayer)) map.removeLayer(provinceLayer);
+    if(cantonLayer && map.hasLayer(cantonLayer)) map.removeLayer(cantonLayer);
+    if(elementsLayer && map.hasLayer(elementsLayer)) map.removeLayer(elementsLayer);
+
+    if(layerMode === 'PROVINCIAS' && provinceLayer) provinceLayer.addTo(map);
+    if(layerMode === 'CANTONES'){
+      if(cantonLayer && cantonGeo && cantonGeo.features && cantonGeo.features.length) cantonLayer.addTo(map);
+      else setStatus('Capa cantonal pendiente: el GeoJSON cargado no contiene cantones.', 'warn');
+    }
+    if(layerMode === 'ELEMENTOS'){
+      if(elementsLayer && elementsGeo && elementsGeo.features && elementsGeo.features.length) elementsLayer.addTo(map);
+      else setStatus('Capa de elementos preparada, sin puntos/líneas/polígonos extraídos todavía.', 'warn');
+    }
+    document.querySelectorAll('.riskz-map-tools .btn').forEach(function(btn){ btn.classList.remove('riskz-map-active'); });
+    updateMapNote();
+    zoomAll();
+  }
+
+  function onEachProvince(feature, layer){
+    const props = feature.properties || {};
+    const id = props.provincia_id || norm(props.DPA_DESPRO || props.provincia || '');
+    const nombre = props.provincia || props.DPA_DESPRO || id;
+    layer.bindTooltip(nombre, {sticky:true});
+    layer.on('click', function(){ selectProvincia(id, layer); });
+    layer.on('mouseover', function(){ layer.setStyle({weight:3}); });
+    layer.on('mouseout', function(){ restyleLayers(); });
+  }
+
+  function onEachCanton(feature, layer){
+    const props = feature.properties || {};
+    const nombre = props.canton || props.DPA_DESCAN || props.CANTON || props.DPA_DESPRO || 'Territorio';
+    layer.bindTooltip(nombre, {sticky:true});
+    layer.on('click', function(){
+      const provId = norm(props.provincia || props.DPA_DESPRO || props.PROVINCIA || '');
+      if(provId) selectProvincia(provId);
     });
   }
 
-  function normalizarListaTema(lista, tema){
-    return (lista || []).map(function(x){
-      return {
-        id_canton: val(x,'id_canton,ID_CANTON'), provincia: val(x,'provincia,PROVINCIA'), canton: val(x,'canton,CANTON,gad_canton'), tipo_gad: val(x,'tipo_gad,TIPO_GAD'),
-        lat_centro: val(x,'lat_centro,LAT_CENTRO,lat'), lon_centro: val(x,'lon_centro,LON_CENTRO,lon,lng'),
-        tema: tema, puntaje: val(x,'puntaje,puntaje_tema'), semaforo: val(x,'semaforo,semaforo_tema'), descripcion_tema: val(x,'descripcion_tema,descripcion,detalle')
-      };
-    });
+  function onEachElement(feature, layer){
+    const p = feature.properties || {};
+    const label = p.nombre || p.tipo_elemento || 'Elemento operativo';
+    layer.bindPopup('<strong>'+escapeHtmlLocal(label)+'</strong><br>'+escapeHtmlLocal(p.descripcion || '')+'<br><span style="font-size:11px;color:#4d6173">'+escapeHtmlLocal([p.provincia,p.canton,p.componente].filter(Boolean).join(' · '))+'</span>');
   }
 
-  function actualizarMapa(items){
-    if(markerLayer) markerLayer.clearLayers();
-    const index = {};
-    items.forEach(function(item){ index[norm(item.id_canton || (item.provincia+'_'+item.canton))] = item; });
-    if(geoLayer){
-      geoLayer.eachLayer(function(layer){
-        const props = layer.feature && layer.feature.properties ? layer.feature.properties : {};
-        const id = props.ID_CANTON || props.id_canton || props.ID || props.codigo || '';
-        const item = index[norm(id)];
-        layer.setStyle({color:'#344054', weight:1, fillColor:color(item ? item.semaforo : 'SIN_DATO'), fillOpacity:.72});
-        layer.off('click');
-        layer.on('click', function(){ if(item) mostrarDetalle(item); });
-        layer.bindTooltip(item ? ((item.provincia || '')+' · '+(item.canton || '')) : (id || 'Sin ID_CANTON'), {sticky:true});
-      });
-    }
-    const bounds = [];
-    items.forEach(function(item){
-      const lat = Number(item.lat_centro), lon = Number(item.lon_centro);
-      if(Number.isFinite(lat) && Number.isFinite(lon) && markerLayer && window.L){
-        const m = L.circleMarker([lat, lon], {radius:8, color:'#344054', weight:1, fillColor:color(item.semaforo), fillOpacity:.88});
-        m.bindTooltip((item.provincia || '')+' · '+(item.canton || ''));
-        m.on('click', function(){ mostrarDetalle(item); });
-        m.addTo(markerLayer);
-        bounds.push([lat, lon]);
-      }
-    });
-    if(map){
-      setTimeout(function(){ map.invalidateSize(); }, 100);
-      if(bounds.length && !geoLayer){ try{ map.fitBounds(bounds, {padding:[20,20]}); }catch(e){} }
-    }
-    const note = document.getElementById('riskzMapNote');
-    if(note) note.textContent = 'Registros cargados: '+items.length+'. Marcadores con coordenadas: '+bounds.length+'.';
+  function pointElement(feature, latlng){
+    return L.circleMarker(latlng, {radius:7, color:'#344054', weight:1, fillColor:colorBySemaforo((feature.properties || {}).semaforo), fillOpacity:.85});
   }
 
-  function renderRanking(items, tema){
-    const body = document.getElementById('riskzRankingBody');
-    if(!body) return;
-    const sorted = (items || []).slice().sort(function(a,b){ return Number(b.puntaje || 0) - Number(a.puntaje || 0); });
-    if(!sorted.length){ body.innerHTML = '<tr><td colspan="7">Sin registros para este tema.</td></tr>'; return; }
-    body.innerHTML = sorted.slice(0,100).map(function(item){
-      return '<tr><td>'+escapeHtml(item.provincia)+'</td><td>'+escapeHtml(item.canton)+'</td><td>'+escapeHtml(labels[tema] || tema)+'</td><td>'+formatNum(item.puntaje)+'</td><td>'+badge(item.semaforo)+'</td><td>'+escapeHtml(item.descripcion_tema || '')+'</td><td><button class="btn soft" onclick="RiskZonalCZ5.verFicha(\''+escapeAttr(item.id_canton || '')+'\')">Ver ficha</button></td></tr>';
+  function styleProvince(feature){
+    const props = feature.properties || {};
+    const id = props.provincia_id || norm(props.DPA_DESPRO || props.provincia || '');
+    const prov = findProvincia(id);
+    return {color: activeProvincia === id ? '#d83a2e' : '#344054', weight: activeProvincia === id ? 3 : 1.3, fillColor: colorByEstado(prov ? prov.estado : ''), fillOpacity:.68};
+  }
+  function styleCanton(feature){ return {color:'#344054', weight:1, fillColor:colorBySemaforo((feature.properties || {}).semaforo || 'PENDIENTE'), fillOpacity:.58}; }
+  function styleElement(feature){ return {color:colorBySemaforo((feature.properties || {}).semaforo), weight:4, opacity:.9, fillOpacity:.25}; }
+
+  function restyleLayers(){
+    if(provinceLayer) provinceLayer.setStyle(styleProvince);
+    if(cantonLayer) cantonLayer.setStyle(styleCanton);
+    if(elementsLayer) elementsLayer.setStyle(styleElement);
+  }
+
+  function renderProvincias(){
+    const grid = document.getElementById('riskzProvinceGrid');
+    if(!grid) return;
+    const provincias = data.provincias || [];
+    grid.innerHTML = provincias.map(function(p){
+      const active = p.id === activeProvincia ? ' active' : '';
+      return '<button class="riskz-province-btn'+active+'" type="button" onclick="RiskZonalCZ5.selectProvincia(\''+escapeAttrLocal(p.id)+'\')"><strong>'+escapeHtmlLocal(p.nombre)+'</strong><span>'+escapeHtmlLocal(p.cantones_estimados)+' cantones · '+escapeHtmlLocal(p.estado)+'</span></button>';
     }).join('');
   }
 
-  function mostrarDetalle(item){
+  function renderExecGrid(){
+    const grid = document.getElementById('riskzExecGrid');
+    if(!grid) return;
+    const comps = (data.componentes || []).filter(function(c){ return c.id !== 'RESUMEN'; });
+    grid.innerHTML = comps.map(function(c){
+      return '<div class="riskz-exec-card"><strong>'+escapeHtmlLocal(c.nombre)+'</strong><span>'+escapeHtmlLocal(c.salida || c.descripcion)+'</span></div>';
+    }).join('');
+  }
+
+  function renderPanel(){
     const panel = document.getElementById('riskzDetailPanel');
-    if(!panel) return;
-    panel.innerHTML = '<h3>'+escapeHtml(item.canton || 'GAD')+'</h3><p class="muted-text">'+escapeHtml(item.provincia || '')+' · '+escapeHtml(item.tipo_gad || '')+'</p><div class="riskz-detail-grid">'
-      + detalleItem('Tema activo', labels[item.tema] || item.tema)
-      + detalleItem('Puntaje del tema', formatNum(item.puntaje))
-      + '<div class="riskz-detail-item"><span>Semáforo del tema</span><p>'+badge(item.semaforo)+'</p></div>'
-      + detalleItem('Descripción', item.descripcion_tema || 'Sin dato')
-      + detalleItem('ID cantón', item.id_canton || '')
-      + '</div><div class="riskz-actions"><button class="btn primary" onclick="RiskZonalCZ5.verFicha(\''+escapeAttr(item.id_canton || '')+'\')">Ver ficha completa</button></div>';
+    if(!panel || !data) return;
+    const comp = findComponente(activeComponente) || (data.componentes || [])[0];
+    const tema = findTema(activeTema);
+    const prov = activeProvincia ? findProvincia(activeProvincia) : null;
+    const carto = data.cartografia || {};
+    const datos = comp && comp.datos_clave ? comp.datos_clave : [];
+    let html = '<h3>'+escapeHtmlLocal(comp ? comp.nombre : 'Lectura técnica')+'</h3>';
+    html += '<p class="muted-text">'+escapeHtmlLocal(comp ? comp.descripcion : data.lectura_base)+'</p>';
+    html += '<div class="riskz-detail-grid">';
+    html += detailItem('Tema activo', tema ? tema.nombre : activeTema);
+    html += detailItem('Qué debe mostrar', tema ? tema.descripcion : 'Lectura temática pendiente de configurar.');
+    html += detailItem('Datos clave', datos.length ? datos.join(' · ') : 'Pendiente');
+    html += detailItem('Salida esperada', comp ? comp.salida : 'Ficha ejecutiva territorial');
+    if(prov){
+      html += detailItem('Provincia seleccionada', prov.nombre + ' · ' + prov.cantones_estimados + ' cantones');
+      html += detailItem('Lectura provincial', prov.lectura);
+      html += detailItem('Estado de datos', prov.estado);
+    }else{
+      html += detailItem('Provincia seleccionada', 'Seleccione una provincia en el mapa o en los botones inferiores.');
+    }
+    html += detailItem('Cartografía interna', 'Provincias: '+(carto.estado_provincias || 'pendiente')+' · Cantones: '+(carto.estado_cantones || 'pendiente')+' · Elementos: '+(carto.estado_elementos || 'pendiente'));
+    html += '</div>';
+    html += '<div class="riskz-actions"><button class="btn primary" type="button" onclick="RiskZonalCZ5.showSchema()">Ver estructura de datos requerida</button><button class="btn green" type="button" onclick="RiskZonalCZ5.openArcGIS()">Abrir ArcGIS Online</button></div>';
+    panel.innerHTML = html;
+    updateMapNote();
   }
 
-  async function verFicha(idCanton){
-    if(!idCanton){ return; }
-    try{
-      setStatus('Consultando ficha: '+idCanton+'...', 'warn');
-      const data = await api('riesgo_detalle', {id_canton:idCanton});
-      const raw = Array.isArray(data.detalle) ? data.detalle[0] : data.detalle;
-      const item = raw || {};
-      const panel = document.getElementById('riskzDetailPanel');
-      if(!panel) return;
-      panel.innerHTML = '<h3>'+escapeHtml(val(item,'canton,CANTON') || idCanton)+'</h3><p class="muted-text">'+escapeHtml(val(item,'provincia,PROVINCIA') || '')+' · '+escapeHtml(val(item,'tipo_gad,TIPO_GAD') || '')+'</p><div class="riskz-detail-grid">'
-        + detalleItem('Nivel de riesgo', val(item,'nivel_riesgo_general,NIVEL_RIESGO_GENERAL'))
-        + detalleItem('Semáforo', val(item,'semaforo_riesgo,SEMAFORO_RIESGO'))
-        + detalleItem('Puntaje riesgo', val(item,'puntaje_riesgo,PUNTAJE_RIESGO'))
-        + detalleItem('Brecha principal', val(item,'brecha_principal,BRECHA_PRINCIPAL'))
-        + detalleItem('Amenaza principal', val(item,'amenaza_principal,AMENAZA_PRINCIPAL'))
-        + detalleItem('Vulnerabilidad institucional', val(item,'vulnerabilidad_institucional,VULNERABILIDAD_INSTITUCIONAL'))
-        + detalleItem('Capacidad de respuesta', val(item,'capacidad_respuesta,CAPACIDAD_RESPUESTA'))
-        + detalleItem('Elementos críticos expuestos', val(item,'elementos_criticos_expuestos,ELEMENTOS_CRITICOS_EXPOSTOS'))
-        + detalleItem('Acciones corto plazo', val(item,'acciones_corto_plazo,ACCIONES_CORTO_PLAZO'))
-        + detalleItem('Acciones mediano plazo', val(item,'acciones_mediano_plazo,ACCIONES_MEDIANO_PLAZO'))
-        + detalleItem('Acciones largo plazo', val(item,'acciones_largo_plazo,ACCIONES_LARGO_PLAZO'))
-        + enlaceItem('Informe', val(item,'enlace_informe,ENLACE_INFORME'))
-        + enlaceItem('Cartografía', val(item,'enlace_cartografia,ENLACE_CARTOGRAFIA'))
-        + '</div>';
-      setStatus('Ficha cargada: '+idCanton, 'ok');
-    }catch(e){ setStatus(e.message || e, 'bad'); }
+  function selectProvincia(id, layer){
+    activeProvincia = id || '';
+    renderProvincias();
+    renderPanel();
+    restyleLayers();
+    if(layer && map){ try{ map.fitBounds(layer.getBounds(), {padding:[24,24]}); }catch(e){} }
+    else zoomToProvincia(id);
   }
 
-  function onEachFeature(feature, layer){
-    layer.on('click', function(){
-      const props = feature.properties || {};
-      const id = props.ID_CANTON || props.id_canton || props.ID || props.codigo || '';
-      const item = currentItems.find(function(x){ return norm(x.id_canton) === norm(id); });
-      if(item) mostrarDetalle(item);
+  function zoomToProvincia(id){
+    if(!map || !provinceLayer || !id) return;
+    let target = null;
+    provinceLayer.eachLayer(function(layer){
+      const props = layer.feature && layer.feature.properties ? layer.feature.properties : {};
+      const layerId = props.provincia_id || norm(props.DPA_DESPRO || props.provincia || '');
+      if(layerId === id) target = layer;
     });
+    if(target){ try{ map.fitBounds(target.getBounds(), {padding:[24,24]}); }catch(e){} }
   }
-  function estiloFeature(feature){ return {color:'#344054', weight:1, fillColor:colores.SIN_DATO, fillOpacity:.65}; }
-  function color(s){ const n = norm(s || 'SIN_DATO'); return colores[n] || colores.SIN_DATO; }
-  function badge(s){ const n = norm(s || 'SIN_DATO').toLowerCase(); return '<span class="riskz-badge '+n+'">'+escapeHtml(s || 'SIN_DATO')+'</span>'; }
-  function detalleItem(label, value){ return '<div class="riskz-detail-item"><span>'+escapeHtml(label)+'</span><p>'+escapeHtml(value || 'Sin dato')+'</p></div>'; }
-  function enlaceItem(label, url){ return url ? '<div class="riskz-detail-item"><span>'+escapeHtml(label)+'</span><p><a href="'+escapeAttr(url)+'" target="_blank" rel="noopener">Abrir enlace</a></p></div>' : detalleItem(label, 'Sin enlace'); }
+
+  function zoomAll(){
+    if(!map) return;
+    let target = null;
+    if(layerMode === 'PROVINCIAS' && provinceLayer) target = provinceLayer;
+    if(layerMode === 'CANTONES' && cantonLayer && map.hasLayer(cantonLayer)) target = cantonLayer;
+    if(layerMode === 'ELEMENTOS' && elementsLayer && map.hasLayer(elementsLayer)) target = elementsLayer;
+    try{
+      if(target && target.getBounds && target.getBounds().isValid()) map.fitBounds(target.getBounds(), {padding:[18,18]});
+      else map.setView(defaultView, 6);
+    }catch(e){ map.setView(defaultView, 6); }
+    refreshMapSize();
+  }
+
+  function openArcGIS(){
+    const url = data && data.cartografia ? data.cartografia.arcgis_online_url : '';
+    if(url){ window.open(url, '_blank', 'noopener,noreferrer'); return; }
+    alert('ArcGIS Online todavía no tiene URL configurada en data/riesgo_zonal_arquitectura_v0.5.1.json.');
+  }
+
+  function showSchema(){
+    const panel = document.getElementById('riskzDetailPanel');
+    if(!panel || !data) return;
+    const campos = data.estructura_datos_requerida || [];
+    panel.innerHTML = '<h3>Estructura mínima para conectar el módulo</h3><p class="muted-text">Estos campos deben salir de la revisión de los planes firmados y alimentar la API/base de riesgo cantonal.</p><div class="riskz-detail-grid">'
+      + detailItem('Fuente primaria', data.fuente_primaria || 'Planes firmados')
+      + detailItem('Campos requeridos', campos.join(' · '))
+      + detailItem('Geometrías soportadas', 'Puntos: sitios críticos, alojamientos, infraestructura. Líneas: rutas, tramos de erosión, drenajes. Polígonos: zonas inundables, áreas críticas, sectores expuestos.')
+      + detailItem('Regla de integración', 'Un registro maestro por cantón/GAD, con tablas hijas para sitios críticos, acciones, brechas, responsables, evidencias y geometrías.')
+      + detailItem('Salida de plataforma', 'Mapa por provincia/cantón, semáforos, ficha técnica, resumen ejecutivo por componente y enlace a ArcGIS Online.')
+      + '</div><div class="riskz-actions"><button class="btn white" type="button" onclick="RiskZonalCZ5.renderPanel()">Volver a lectura</button></div>';
+  }
+
+  function updateMapNote(){
+    const note = document.getElementById('riskzMapNote');
+    if(!note) return;
+    const provCount = provinceGeo && provinceGeo.features ? provinceGeo.features.length : 0;
+    const cantonCount = cantonGeo && cantonGeo.features ? cantonGeo.features.length : 0;
+    const elemCount = elementsGeo && elementsGeo.features ? elementsGeo.features.length : 0;
+    const prov = activeProvincia ? findProvincia(activeProvincia) : null;
+    let text = 'Cartografía v0.5.1: provincias conectadas ('+provCount+'). Cantones cargados: '+cantonCount+'. Elementos operativos: '+elemCount+'.';
+    if(prov) text += ' Provincia activa: '+prov.nombre+'.';
+    if(cantonCount === 0) text += ' Capa cantonal pendiente de GeoJSON cantonal real.';
+    note.textContent = text;
+  }
+
+  function colorByEstado(estado){
+    const n = norm(estado);
+    if(n.indexOf('VALIDADO') >= 0 || n.indexOf('CONECTADO') >= 0) return '#2e8b57';
+    if(n.indexOf('PENDIENTE') >= 0 || n.indexOf('EXTRACCION') >= 0) return '#9aa7b2';
+    if(n.indexOf('CRITICO') >= 0 || n.indexOf('ALTO') >= 0) return '#d83a2e';
+    return '#f2b84b';
+  }
+  function colorBySemaforo(s){
+    const n = norm(s);
+    if(n === 'VERDE' || n === 'BAJO') return '#2e8b57';
+    if(n === 'AMARILLO' || n === 'MEDIO') return '#f2b84b';
+    if(n === 'ROJO' || n === 'ALTO') return '#d83a2e';
+    return '#9aa7b2';
+  }
+
+  function findComponente(id){ return (data.componentes || []).find(function(x){ return x.id === id; }); }
+  function findTema(id){ return (data.temas || []).find(function(x){ return x.id === id; }); }
+  function findProvincia(id){ return (data.provincias || []).find(function(x){ return x.id === id; }); }
+  function detailItem(label, value){ return '<div class="riskz-detail-item"><span>'+escapeHtmlLocal(label)+'</span><p>'+escapeHtmlLocal(value || 'Pendiente')+'</p></div>'; }
   function setStatus(msg, tipo){ const el = document.getElementById('riskzStatus'); if(!el) return; el.textContent = msg; el.className = 'riskz-status '+(tipo || 'warn'); }
   function setText(id, value){ const el = document.getElementById(id); if(el) el.textContent = value; }
-  function val(obj, keys){
-    if(!obj) return '';
-    return String(keys).split(',').map(function(k){ return k.trim(); }).reduce(function(found,k){ return found !== '' && found !== undefined && found !== null ? found : obj[k]; }, '');
-  }
-  function formatNum(v){ if(v === '' || v === null || v === undefined) return '—'; const n = Number(v); return Number.isFinite(n) ? String(Math.round(n * 10) / 10) : String(v); }
+  function refreshMapSize(){ if(map) setTimeout(function(){ map.invalidateSize(); }, 120); }
   function norm(v){ return String(v || '').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/Ñ/g,'N').replace(/\s+/g,'_').replace(/[^A-Z0-9_]/g,'').replace(/_+/g,'_'); }
-  function escapeHtml(v){ return String(v === undefined || v === null ? '' : v).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
-  function escapeAttr(v){ return escapeHtml(v).replace(/`/g,'&#096;'); }
-  return {init:init, reload:reload, verFicha:verFicha};
+  function escapeHtmlLocal(v){ return String(v === undefined || v === null ? '' : v).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
+  function escapeAttrLocal(v){ return escapeHtmlLocal(v).replace(/`/g,'&#096;'); }
+  function fallbackData(){ return {kpis:{total_gad:51,riesgo_alto:'—',riesgo_medio:'—',riesgo_bajo:'—',brechas_criticas:'Pend.',amenazas_prioritarias:'Pend.'}, componentes:[{id:'RESUMEN',nombre:'Resumen ejecutivo',descripcion:'Modo respaldo sin JSON.',datos_clave:['riesgo','brechas','acciones'],salida:'Ficha ejecutiva'}], temas:[{id:'RIESGO_GENERAL',nombre:'Riesgo general',descripcion:'Pendiente'}], provincias:[], cartografia:{estado_provincias:'pendiente',estado_cantones:'pendiente',estado_elementos:'pendiente'}}; }
+
+  return {init:init, selectProvincia:selectProvincia, showSchema:showSchema, renderPanel:renderPanel, setLayerMode:setLayerMode, zoomAll:zoomAll, openArcGIS:openArcGIS};
 })();
 
 (function(){

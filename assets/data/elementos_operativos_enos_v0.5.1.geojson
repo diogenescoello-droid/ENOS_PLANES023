@@ -1,0 +1,32 @@
+{
+  "type": "FeatureCollection",
+  "name": "elementos_operativos_enos_v051",
+  "features": [],
+  "metadata": {
+    "version": "v0.5.1",
+    "status": "estructura_preparada",
+    "accepted_geometry_types": [
+      "Point",
+      "LineString",
+      "Polygon",
+      "MultiPoint",
+      "MultiLineString",
+      "MultiPolygon"
+    ],
+    "properties_required": [
+      "id",
+      "tipo_elemento",
+      "componente",
+      "tema",
+      "provincia",
+      "canton",
+      "nombre",
+      "descripcion",
+      "fuente_pdf",
+      "semaforo",
+      "responsable",
+      "plazo",
+      "estado"
+    ]
+  }
+}
