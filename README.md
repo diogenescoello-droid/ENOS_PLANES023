@@ -1,7 +1,9 @@
-# SNGR-CZ5-ENOS v0.6.0
+# SNGR-CZ5-ENOS v0.6.1
 
-Versión de transición desde prototipo/demo hacia base documental real. Incluye plataforma `index.html`, cartografía provincial/cantonal, fichas cantonales preliminares desde PDF/DOCX digitalizados y reporte de avance.
+Versión de integración del bloque **Fortalecimiento / Sensibilización ENOS** en la ficha cantonal dinámica del módulo de riesgo zonal.
 
-Abrir: `index.html`.
+## Uso
+Abrir `index.html`, ir al módulo **6. Riesgo zonal**, seleccionar un cantón y luego presionar el componente o tema **Fortalecimiento**. El panel derecho despliega el estado de sensibilización, campos requeridos por el departamento de Fortalecimiento, acceso al Kobo y vínculo relativo al plan cantonal.
 
-Los datos deben validarse técnicamente antes de considerarse oficiales.
+## Estado
+Base PDF preliminar + estructura de seguimiento de sensibilización. Los registros reales de Kobo están pendientes de conexión.
