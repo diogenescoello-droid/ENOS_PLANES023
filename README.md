@@ -1,23 +1,24 @@
-# SNGR-CZ5-ENOS v0.5.3
+# SNGR-CZ5-ENOS v0.5.5
 
-Entrega correctiva cartográfica.
+Actualización cartográfica sobre la arquitectura base de la plataforma.
 
-## Corrección principal
+## Cambio principal
 
-Esta versión fuerza el módulo **6. Riesgo zonal** a trabajar con cartografía local y respaldo interno. Ya no depende de `RIESGO_API_TOKEN`, ni debe mostrar el mensaje de token pendiente.
+Se integró el GeoJSON cantonal real `cantones_zonal5_1.geojson`, reproyectado desde EPSG:3857 a WGS84/EPSG:4326 y simplificado para visualización web.
 
-## Verificación visual
+## Estado de capas
 
-Al abrir el tab **6. Riesgo zonal**, debe verse el texto: **v0.5.3 · Mapa local sin API** o **v0.5.3 · GeoJSON provincial interno activo sin API**.
+- Provincias CZ5: activa.
+- Cantones CZ5: activa, 51 polígonos.
+- Elementos operativos: estructura lista, pendiente de extracción desde PDF firmados.
 
 ## Archivos clave
 
 - `index.html`
-- `data/riesgo_zonal_arquitectura_v0.5.3.json`
-- `assets/data/provincias_zonal5_wgs84_v0.5.3.geojson`
-- `assets/data/cantones_zonal5_pendiente_v0.5.3.geojson`
-- `assets/data/elementos_operativos_enos_v0.5.3.geojson`
+- `assets/data/cantones_zonal5_wgs84_v0.5.5.geojson`
+- `data/riesgo_zonal_arquitectura_v0.5.5.json`
+- `REPORTE_AVANCE_v0.5.5.md`
 
-## Nota operativa
+## Nota
 
-Si todavía aparece `Falta configurar RIESGO_API_TOKEN`, se está abriendo una versión anterior o una copia cacheada del `index.html`. Extraer esta carpeta completa y abrir el `index.html` ubicado dentro de `SNGR-CZ5-ENOS_v0.5.3`.
+El mapa no usa token/API. La capa cantonal sirve como selector territorial. Los semáforos siguen pendientes hasta cargar datos técnicos extraídos de planes firmados.

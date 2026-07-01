@@ -1,0 +1,2 @@
+codigo_plan,provincia,canton,tipo_geometria,tipo_elemento,nombre,componente,tema,semaforo,descripcion,coordenadas_geojson,fuente_pdf,pagina_pdf,responsable,estado_seguimiento
+ENOS-2026-EJEMPLO,Guayas,Milagro,Point,sitio_critico,Ejemplo sin activar,ANALISIS,AMENAZAS,PENDIENTE,Registro de ejemplo para estructura; no cargar como dato real.,"{""type"":""Point"",""coordinates"":[-79.6,-2.1]}",Plan firmado,12,GAD / CZ5,pendiente
