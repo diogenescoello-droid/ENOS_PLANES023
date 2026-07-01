@@ -1,0 +1,71 @@
+{
+  "version": "v0.6.1",
+  "nombre": "Seguimiento de las Estrategias de Sensibilización a la población por el Evento el Niño 2026-2027",
+  "url_kobo": "https://ee.kobotoolbox.org/x/jk3ofzDd",
+  "proposito": "Alimentar el bloque de Fortalecimiento cuando se seleccione un cantón en el módulo de riesgo zonal.",
+  "campos": [
+    {
+      "bloque": "Identificación territorial",
+      "campos": [
+        "nivel_gad",
+        "provincia",
+        "canton",
+        "responsable_registro"
+      ]
+    },
+    {
+      "bloque": "Sensibilización ENOS",
+      "campos": [
+        "acciones_minimas_sensibilizacion",
+        "tematicas_campania",
+        "publico_objetivo",
+        "sector_comunidad_recinto",
+        "ubicacion_geopoint"
+      ]
+    },
+    {
+      "bloque": "Comités Comunitarios de Gestión de Riesgos",
+      "campos": [
+        "comite_comunitario_conformado",
+        "representante_comite",
+        "telefono_representante"
+      ]
+    },
+    {
+      "bloque": "Difusión y ejecución",
+      "campos": [
+        "canales_difusion",
+        "estado_ejecucion"
+      ]
+    }
+  ],
+  "catalogos": {
+    "tematicas_campania": [
+      "Qué hacer antes, durante y después de un evento",
+      "Rutas seguras",
+      "Puntos de encuentro",
+      "Medidas de evacuación",
+      "Protección de personas vulnerables",
+      "Reducción de riesgos en el hogar (Plan Familiar de emergencias)"
+    ],
+    "publico_objetivo": [
+      "Población en zona inundable",
+      "Niñez y adolescencia",
+      "Adultos mayores",
+      "Personas con discapacidad",
+      "Agricultores y pescadores"
+    ],
+    "canales_difusion": [
+      "Radio local",
+      "Perifoneo",
+      "Redes sociales institucionales",
+      "Medios de comunicación locales",
+      "Líderes comunitarios y brigadas territoriales"
+    ],
+    "estado_ejecucion": [
+      "Planificado",
+      "En curso",
+      "Finalizado"
+    ]
+  }
+}

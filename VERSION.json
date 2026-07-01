@@ -1,6 +1,6 @@
 {
-  "version": "0.5.11",
-  "estado": "ficha_cantonal_dinamica_demo",
+  "version": "v0.6.2",
+  "nombre": "Ficha cantonal por enfoque departamental",
   "fecha": "2026-07-01",
-  "base": "index.html arquitectura existente"
+  "cambio_tipo": "C - módulo sin cambio de arquitectura base"
 }

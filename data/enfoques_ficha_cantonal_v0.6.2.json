@@ -1,0 +1,59 @@
+{
+  "version": "v0.6.2",
+  "objetivo": "Definir qué campos despliega la ficha cantonal según enfoque departamental.",
+  "enfoques": {
+    "ANALISIS": {
+      "pregunta_guia": "¿Qué amenaza, exposición, vulnerabilidad y brechas técnicas justifican la prioridad del cantón?",
+      "campos": [
+        "riesgo_general.semaforo",
+        "riesgo_general.lectura",
+        "amenazas",
+        "brechas",
+        "vulnerabilidad",
+        "estado_extraccion",
+        "fuente",
+        "archivo_plan_principal"
+      ]
+    },
+    "FORTALECIMIENTO": {
+      "pregunta_guia": "¿Qué acciones de sensibilización, organización comunitaria y acompañamiento deben verificarse con el GAD?",
+      "campos": [
+        "fortalecimiento_sensibilizacion.estado_registro",
+        "acciones_minimas_sensibilizacion",
+        "tematicas_campania/tematicas_esperadas",
+        "publico_objetivo/publico_objetivo_esperado",
+        "sectores_sensibilizados",
+        "ubicaciones_georreferenciadas",
+        "comite_comunitario_gestion_riesgos",
+        "representante_comite",
+        "telefono_representante",
+        "canales_difusion/canales_esperados",
+        "estado_ejecucion",
+        "siguiente_accion_cz5",
+        "enlace_plan_publico/enlace_plan_relativo"
+      ]
+    },
+    "RESPUESTA": {
+      "pregunta_guia": "¿Qué capacidades y acciones operativas están planteadas para preparación/respuesta?",
+      "campos": [
+        "respuesta",
+        "acciones_prioritarias",
+        "elementos_esperados",
+        "elementos_operativos_visibles",
+        "brechas",
+        "fuente"
+      ]
+    },
+    "MONITOREO": {
+      "pregunta_guia": "¿Qué seguimiento, reportes, evidencias y alertas deben actualizarse?",
+      "campos": [
+        "monitoreo",
+        "estado_validacion",
+        "estado_documental",
+        "porcentaje_concordancia",
+        "condicion_tecnica",
+        "fuente"
+      ]
+    }
+  }
+}
