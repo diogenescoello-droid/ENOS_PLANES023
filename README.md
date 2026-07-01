@@ -1,19 +1,20 @@
-# SNGR-CZ5-ENOS v0.5.1
+# SNGR-CZ5-ENOS v0.5.2
 
-Versión de integración cartográfica provincial para el módulo 6. Riesgo zonal.
+Actualización cartográfica del módulo 6: Riesgo zonal.
 
-Esta entrega mantiene la arquitectura de la plataforma y reemplaza el mapa simulado por un mapa Leaflet conectado a GeoJSON provincial CZ5. La capa cantonal queda preparada, pero no activada, porque el archivo cargado como cantonal contiene polígonos provinciales.
+Esta versión corrige la proyección de la capa provincial CZ5, elimina la dependencia temporal de API/token y mantiene la plataforma funcionando como tablero ejecutivo sobre la arquitectura base.
 
-## Archivos principales
+## Uso
 
-- `index.html`: plataforma actualizada.
-- `data/riesgo_zonal_arquitectura_v0.5.1.json`: contrato de datos y configuración cartográfica.
-- `assets/data/provincias_zonal5_simplificado.geojson`: capa provincial conectada.
-- `assets/data/cantones_zonal5.geojson`: capa cantonal pendiente.
-- `assets/data/elementos_operativos_enos_v0.5.1.geojson`: estructura para puntos, líneas y polígonos.
-- `docs/DICCIONARIO_CARTOGRAFICO_v0.5.1.md`: campos y uso esperado.
-- `REPORTE_AVANCE_v0.5.1.md`: reporte técnico de avance.
+Abrir `index.html` desde servidor local, GitHub Pages, intranet o entorno que permita cargar archivos JSON/GeoJSON. Si se abre como archivo local (`file://`), algunos navegadores pueden bloquear `fetch()`.
 
-## Nota de publicación
+## Estado de capas
 
-Para que `fetch()` lea correctamente los archivos JSON/GeoJSON, publicar la carpeta completa en un servidor web, GitHub Pages, intranet o alojamiento equivalente. Abrir el HTML directamente como archivo local puede bloquear lecturas por seguridad del navegador.
+- Provincias CZ5: conectado en WGS84/EPSG:4326.
+- Cantones CZ5: pendiente de GeoJSON cantonal real.
+- Elementos operativos: estructura preparada para puntos, líneas y polígonos.
+- ArcGIS Online: botón preparado, URL pendiente.
+
+## Nota técnica
+
+Los GeoJSON originales entregados estaban en coordenadas métricas compatibles con EPSG:3857. Fueron reproyectados a WGS84/EPSG:4326 para funcionar correctamente con Leaflet.

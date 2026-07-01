@@ -1,0 +1,9 @@
+{
+  "type": "FeatureCollection",
+  "name": "cantones_zonal5_pendiente_v0.5.2",
+  "features": [],
+  "metadata": {
+    "estado": "pendiente",
+    "observacion": "El archivo cantonal entregado contiene 5 polígonos provinciales; se requiere GeoJSON cantonal real en WGS84/EPSG:4326."
+  }
+}

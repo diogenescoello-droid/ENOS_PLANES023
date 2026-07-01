@@ -721,7 +721,7 @@ select,input{
 @media(max-width:980px){.riskz-modebar,.riskz-province-grid,.riskz-exec-grid,.riskz-pipeline{grid-template-columns:1fr}.riskz-map-placeholder{height:320px}}
 
 
-/* MODULO RIESGO ZONAL ENOS CZ5 · v0.5.1 · Cartografía provincial conectada */
+/* MODULO RIESGO ZONAL ENOS CZ5 · v0.5.2 · Mapa local WGS84 conectada */
 .riskz-map-tools{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px}
 .riskz-map-tools .btn{font-size:12px;padding:9px 11px}
 .riskz-map-active{outline:3px solid rgba(216,58,46,.18)}
@@ -905,14 +905,14 @@ select,input{
           <div class="riskz-head">
             <div>
               <h3>Entramado de datos para riesgo, respuesta, fortalecimiento y monitoreo</h3>
-              <p>Esta versión conecta la capa provincial CZ5 en el mapa interno sin romper la arquitectura base. La capa cantonal y los elementos operativos se activarán cuando se cargue el GeoJSON cantonal real y la extracción normalizada de los PDF firmados.</p>
+              <p>Esta versión corrige la cartografía provincial a WGS84/EPSG:4326, elimina la dependencia temporal de API/token y deja el mapa como selector territorial ejecutivo. La capa cantonal y los elementos operativos se activarán cuando se cargue el GeoJSON cantonal real y la extracción normalizada de los PDF firmados.</p>
             </div>
-            <div id="riskzStatus" class="riskz-status warn">v0.5.1 · Cartografía provincial</div>
+            <div id="riskzStatus" class="riskz-status warn">v0.5.2 · Mapa local WGS84</div>
           </div>
 
           <div class="riskz-source">
             <strong>Fuente primaria de análisis</strong>
-            Planes de Acción Territorial ENOS 2026-2027 firmados por alcaldes/GAD. Cada PDF debe convertirse en una ficha estructurada por cantón: amenaza, exposición, vulnerabilidad, brechas, acciones, responsables, plazos, recursos, capacidades, monitoreo y necesidades de asistencia técnica.
+            Planes de Acción Territorial ENOS 2026-2027 firmados por alcaldes/GAD. Cada PDF debe convertirse en una ficha estructurada por cantón: amenaza, exposición, vulnerabilidad, brechas, acciones, responsables, plazos, recursos, capacidades, monitoreo y necesidades de asistencia técnica. La cartografía provincial queda cargada localmente; no requiere token de API.
           </div>
 
           <div class="riskz-modebar">
@@ -953,6 +953,8 @@ select,input{
                 <button class="btn white" type="button" onclick="RiskZonalCZ5.setLayerMode('CANTONES')">Cantones</button>
                 <button class="btn white" type="button" onclick="RiskZonalCZ5.setLayerMode('ELEMENTOS')">Elementos</button>
                 <button class="btn white" type="button" onclick="RiskZonalCZ5.zoomAll()">Ver toda CZ5</button>
+                <button class="btn white" type="button" onclick="RiskZonalCZ5.zoomContinental()">Continental</button>
+                <button class="btn white" type="button" onclick="RiskZonalCZ5.selectProvincia('GALAPAGOS')">Galápagos</button>
                 <button class="btn green" type="button" onclick="RiskZonalCZ5.openArcGIS()">Abrir ArcGIS Online</button>
               </div>
               <div id="riskzMap"></div>
@@ -2086,7 +2088,7 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 
-// MODULO RIESGO ZONAL ENOS CZ5 · v0.5.0 · Entramado de datos desde planes firmados
+// MODULO RIESGO ZONAL ENOS CZ5 · v0.5.2 · Cartografía WGS84 sin token/API
 const RiskZonalCZ5 = (function(){
   let initialized = false;
   let data = null;
@@ -2116,13 +2118,13 @@ const RiskZonalCZ5 = (function(){
 
   async function loadData(){
     try{
-      const response = await fetch('data/riesgo_zonal_arquitectura_v0.5.1.json', {cache:'no-store'});
-      if(!response.ok) throw new Error('No se pudo cargar data/riesgo_zonal_arquitectura_v0.5.1.json');
+      const response = await fetch('data/riesgo_zonal_arquitectura_v0.5.2.json', {cache:'no-store'});
+      if(!response.ok) throw new Error('No se pudo cargar data/riesgo_zonal_arquitectura_v0.5.2.json');
       data = await response.json();
-      setStatus('v0.5.1 · Datos y cartografía base cargados', 'ok');
+      setStatus('v0.5.2 · Mapa provincial local cargado', 'ok');
     }catch(e){
       data = fallbackData();
-      setStatus('Modo respaldo: ' + (e.message || e), 'warn');
+      setStatus('Modo respaldo local: ' + (e.message || e), 'warn');
     }
   }
 
@@ -2132,7 +2134,7 @@ const RiskZonalCZ5 = (function(){
     catch(e){ setStatus('No se pudo cargar GeoJSON provincial: '+(e.message || e), 'warn'); }
     try{ cantonGeo = await fetchJson(carto.cantones_geojson || 'assets/data/cantones_zonal5.geojson'); }
     catch(e){ cantonGeo = {type:'FeatureCollection', features:[], metadata:{status:'pendiente'}}; }
-    try{ elementsGeo = await fetchJson(carto.elementos_operativos_geojson || 'assets/data/elementos_operativos_enos_v0.5.1.geojson'); }
+    try{ elementsGeo = await fetchJson(carto.elementos_operativos_geojson || 'assets/data/elementos_operativos_enos_v0.5.2.geojson'); }
     catch(e){ elementsGeo = {type:'FeatureCollection', features:[], metadata:{status:'pendiente'}}; }
   }
 
@@ -2210,11 +2212,13 @@ const RiskZonalCZ5 = (function(){
       if(layerMode === 'ELEMENTOS') elementsLayer.addTo(map);
     }
     zoomAll();
+    marcarModoCapa();
     updateMapNote();
   }
 
   function setLayerMode(mode){
     layerMode = mode || 'PROVINCIAS';
+    marcarModoCapa();
     if(!map) return;
     if(provinceLayer && map.hasLayer(provinceLayer)) map.removeLayer(provinceLayer);
     if(cantonLayer && map.hasLayer(cantonLayer)) map.removeLayer(cantonLayer);
@@ -2229,9 +2233,32 @@ const RiskZonalCZ5 = (function(){
       if(elementsLayer && elementsGeo && elementsGeo.features && elementsGeo.features.length) elementsLayer.addTo(map);
       else setStatus('Capa de elementos preparada, sin puntos/líneas/polígonos extraídos todavía.', 'warn');
     }
-    document.querySelectorAll('.riskz-map-tools .btn').forEach(function(btn){ btn.classList.remove('riskz-map-active'); });
+    marcarModoCapa();
     updateMapNote();
     zoomAll();
+  }
+
+  function marcarModoCapa(){
+    document.querySelectorAll('.riskz-map-tools .btn').forEach(function(btn){ btn.classList.remove('riskz-map-active'); });
+    const labels = {PROVINCIAS:'Provincias', CANTONES:'Cantones', ELEMENTOS:'Elementos'};
+    document.querySelectorAll('.riskz-map-tools .btn').forEach(function(btn){
+      if(btn.textContent.trim() === labels[layerMode]) btn.classList.add('riskz-map-active');
+    });
+  }
+
+  function zoomContinental(){
+    if(!map || !provinceLayer){ if(map) map.setView([-1.75, -79.7], 7); return; }
+    const layers=[];
+    provinceLayer.eachLayer(function(layer){
+      const props = layer.feature && layer.feature.properties ? layer.feature.properties : {};
+      const id = props.provincia_id || norm(props.DPA_DESPRO || props.provincia || '');
+      if(id !== 'GALAPAGOS') layers.push(layer);
+    });
+    try{
+      const group = L.featureGroup(layers);
+      map.fitBounds(group.getBounds(), {padding:[22,22]});
+    }catch(e){ map.setView([-1.75, -79.7], 7); }
+    refreshMapSize();
   }
 
   function onEachProvince(feature, layer){
@@ -2363,7 +2390,7 @@ const RiskZonalCZ5 = (function(){
   function openArcGIS(){
     const url = data && data.cartografia ? data.cartografia.arcgis_online_url : '';
     if(url){ window.open(url, '_blank', 'noopener,noreferrer'); return; }
-    alert('ArcGIS Online todavía no tiene URL configurada en data/riesgo_zonal_arquitectura_v0.5.1.json.');
+    alert('ArcGIS Online todavía no tiene URL configurada en data/riesgo_zonal_arquitectura_v0.5.2.json.');
   }
 
   function showSchema(){
@@ -2386,7 +2413,7 @@ const RiskZonalCZ5 = (function(){
     const cantonCount = cantonGeo && cantonGeo.features ? cantonGeo.features.length : 0;
     const elemCount = elementsGeo && elementsGeo.features ? elementsGeo.features.length : 0;
     const prov = activeProvincia ? findProvincia(activeProvincia) : null;
-    let text = 'Cartografía v0.5.1: provincias conectadas ('+provCount+'). Cantones cargados: '+cantonCount+'. Elementos operativos: '+elemCount+'.';
+    let text = 'Cartografía v0.5.2: provincias conectadas ('+provCount+'). Cantones cargados: '+cantonCount+'. Elementos operativos: '+elemCount+'.';
     if(prov) text += ' Provincia activa: '+prov.nombre+'.';
     if(cantonCount === 0) text += ' Capa cantonal pendiente de GeoJSON cantonal real.';
     note.textContent = text;
@@ -2419,7 +2446,7 @@ const RiskZonalCZ5 = (function(){
   function escapeAttrLocal(v){ return escapeHtmlLocal(v).replace(/`/g,'&#096;'); }
   function fallbackData(){ return {kpis:{total_gad:51,riesgo_alto:'—',riesgo_medio:'—',riesgo_bajo:'—',brechas_criticas:'Pend.',amenazas_prioritarias:'Pend.'}, componentes:[{id:'RESUMEN',nombre:'Resumen ejecutivo',descripcion:'Modo respaldo sin JSON.',datos_clave:['riesgo','brechas','acciones'],salida:'Ficha ejecutiva'}], temas:[{id:'RIESGO_GENERAL',nombre:'Riesgo general',descripcion:'Pendiente'}], provincias:[], cartografia:{estado_provincias:'pendiente',estado_cantones:'pendiente',estado_elementos:'pendiente'}}; }
 
-  return {init:init, selectProvincia:selectProvincia, showSchema:showSchema, renderPanel:renderPanel, setLayerMode:setLayerMode, zoomAll:zoomAll, openArcGIS:openArcGIS};
+  return {init:init, selectProvincia:selectProvincia, showSchema:showSchema, renderPanel:renderPanel, setLayerMode:setLayerMode, zoomAll:zoomAll, zoomContinental:zoomContinental, openArcGIS:openArcGIS};
 })();
 
 (function(){
