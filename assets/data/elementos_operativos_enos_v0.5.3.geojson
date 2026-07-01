@@ -1,0 +1,10 @@
+{
+  "type": "FeatureCollection",
+  "name": "elementos_operativos_enos_v0.5.3",
+  "features": [],
+  "metadata": {
+    "estado": "estructura_preparada_sin_datos",
+    "geometrias": "Point LineString Polygon MultiPolygon",
+    "fuente": "Pendiente extracción de planes firmados"
+  }
+}

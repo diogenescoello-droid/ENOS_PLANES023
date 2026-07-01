@@ -1,20 +1,23 @@
-# SNGR-CZ5-ENOS v0.5.2
+# SNGR-CZ5-ENOS v0.5.3
 
-Actualización cartográfica del módulo 6: Riesgo zonal.
+Entrega correctiva cartográfica.
 
-Esta versión corrige la proyección de la capa provincial CZ5, elimina la dependencia temporal de API/token y mantiene la plataforma funcionando como tablero ejecutivo sobre la arquitectura base.
+## Corrección principal
 
-## Uso
+Esta versión fuerza el módulo **6. Riesgo zonal** a trabajar con cartografía local y respaldo interno. Ya no depende de `RIESGO_API_TOKEN`, ni debe mostrar el mensaje de token pendiente.
 
-Abrir `index.html` desde servidor local, GitHub Pages, intranet o entorno que permita cargar archivos JSON/GeoJSON. Si se abre como archivo local (`file://`), algunos navegadores pueden bloquear `fetch()`.
+## Verificación visual
 
-## Estado de capas
+Al abrir el tab **6. Riesgo zonal**, debe verse el texto: **v0.5.3 · Mapa local sin API** o **v0.5.3 · GeoJSON provincial interno activo sin API**.
 
-- Provincias CZ5: conectado en WGS84/EPSG:4326.
-- Cantones CZ5: pendiente de GeoJSON cantonal real.
-- Elementos operativos: estructura preparada para puntos, líneas y polígonos.
-- ArcGIS Online: botón preparado, URL pendiente.
+## Archivos clave
 
-## Nota técnica
+- `index.html`
+- `data/riesgo_zonal_arquitectura_v0.5.3.json`
+- `assets/data/provincias_zonal5_wgs84_v0.5.3.geojson`
+- `assets/data/cantones_zonal5_pendiente_v0.5.3.geojson`
+- `assets/data/elementos_operativos_enos_v0.5.3.geojson`
 
-Los GeoJSON originales entregados estaban en coordenadas métricas compatibles con EPSG:3857. Fueron reproyectados a WGS84/EPSG:4326 para funcionar correctamente con Leaflet.
+## Nota operativa
+
+Si todavía aparece `Falta configurar RIESGO_API_TOKEN`, se está abriendo una versión anterior o una copia cacheada del `index.html`. Extraer esta carpeta completa y abrir el `index.html` ubicado dentro de `SNGR-CZ5-ENOS_v0.5.3`.
