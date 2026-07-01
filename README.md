@@ -1,24 +1,25 @@
-# SNGR-CZ5-ENOS v0.5.5
+# SNGR-CZ5-ENOS v0.5.6
 
-Actualización cartográfica sobre la arquitectura base de la plataforma.
+Versión de corrección cartográfica puntual para el módulo **6. Riesgo zonal**.
 
-## Cambio principal
+Esta entrega mantiene la arquitectura base de la plataforma y corrige el comportamiento de la capa cantonal. La vista inicial del mapa ahora abre directamente en modo **Cantones**, con 51 polígonos cantonales de la Zona 5 visibles y las provincias como contorno de apoyo.
 
-Se integró el GeoJSON cantonal real `cantones_zonal5_1.geojson`, reproyectado desde EPSG:3857 a WGS84/EPSG:4326 y simplificado para visualización web.
+## Cómo probar
 
-## Estado de capas
+1. Descomprimir `SNGR-CZ5-ENOS_v0.5.6.zip`.
+2. Abrir `index.html`.
+3. Ir a **6. Riesgo zonal**.
+4. La capa **Cantones** debe aparecer activa por defecto.
+5. Al seleccionar un cantón, el panel derecho debe mostrar la selección territorial.
+6. El botón **Provincias** debe volver a la vista provincial.
 
-- Provincias CZ5: activa.
-- Cantones CZ5: activa, 51 polígonos.
-- Elementos operativos: estructura lista, pendiente de extracción desde PDF firmados.
+## Estado de datos
 
-## Archivos clave
-
-- `index.html`
-- `assets/data/cantones_zonal5_wgs84_v0.5.5.geojson`
-- `data/riesgo_zonal_arquitectura_v0.5.5.json`
-- `REPORTE_AVANCE_v0.5.5.md`
+- Provincias: conectado.
+- Cantones: conectado y visible por defecto.
+- Elementos operativos: pendiente de extracción desde PDF firmados.
+- Semáforos de riesgo: pendientes de matriz analítica.
 
 ## Nota
 
-El mapa no usa token/API. La capa cantonal sirve como selector territorial. Los semáforos siguen pendientes hasta cargar datos técnicos extraídos de planes firmados.
+Si no se visualiza la capa cantonal, abrir desde una carpeta limpia y verificar que se esté usando exactamente `SNGR-CZ5-ENOS_v0.5.6/index.html`, no una versión cacheada anterior.
