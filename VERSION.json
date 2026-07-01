@@ -1,9 +1,7 @@
 {
-  "project": "SNGR-CZ5-ENOS",
-  "version": "v0.4.0",
-  "date": "2026-06-30",
-  "base": "index.html cargado por el usuario",
-  "change_type": "B/C - ajuste visual/contenido dentro de módulo existente sin cambio de arquitectura",
-  "main_file": "index.html",
-  "status": "Entregado para revisión"
+  "version": "v0.5.7",
+  "fecha": "2026-07-01",
+  "estado": "en_revision",
+  "tipo_cambio": "C - modulo sin cambio de arquitectura base",
+  "descripcion": "Activa Elementos operativos con capa demostrativa de puntos, lineas y poligonos, ficha tecnica y semaforizacion."
 }

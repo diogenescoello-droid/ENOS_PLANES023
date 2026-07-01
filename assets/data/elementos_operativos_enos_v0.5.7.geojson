@@ -1,0 +1,167 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "version": "v0.5.7",
+    "estado": "muestra_tecnica_operativa_activa",
+    "fuente": "Capa demostrativa para validar puntos, líneas y polígonos antes de conectar Kobo, PDF firmados o ArcGIS Online.",
+    "advertencia": "No usar como dato oficial. Reemplazar por elementos reales extraídos de Kobo/geopoint/geotrace/geoshape, planes firmados o geodatabase institucional.",
+    "geometrias_soportadas": ["Point", "LineString", "Polygon", "MultiPoint", "MultiLineString", "MultiPolygon"],
+    "uso": "Sitios críticos, infraestructura expuesta, rutas, tramos, zonas inundables, acciones priorizadas y evidencias de monitoreo."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [-79.593, -2.134]},
+      "properties": {
+        "id_elemento": "DEMO_GUAYAS_MILAGRO_PTO_001",
+        "provincia": "Guayas",
+        "canton": "Milagro",
+        "categoria_id": "SITIO_CRITICO",
+        "categoria": "Sitio crítico",
+        "subcategoria": "Inundación recurrente",
+        "componente": "Análisis",
+        "amenaza": "Inundación por acumulación de aguas lluvias",
+        "semaforo": "ROJO",
+        "prioridad": "Alta",
+        "nombre": "Punto crítico urbano demostrativo",
+        "descripcion": "Ejemplo de punto tipo Kobo geopoint para validar ficha técnica, semaforización y selección en mapa.",
+        "accion_requerida": "Verificar drenaje, limpieza preventiva y priorizar inspección antes del periodo lluvioso.",
+        "responsable": "GAD Municipal / Obras Públicas",
+        "estado": "Pendiente de verificación oficial",
+        "fuente": "Muestra técnica v0.5.7"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [-79.487, -1.802]},
+      "properties": {
+        "id_elemento": "DEMO_LOSRIOS_BABAHOYO_INF_001",
+        "provincia": "Los Ríos",
+        "canton": "Babahoyo",
+        "categoria_id": "INFRAESTRUCTURA",
+        "categoria": "Infraestructura expuesta",
+        "subcategoria": "Equipamiento esencial",
+        "componente": "Análisis",
+        "amenaza": "Inundación / aislamiento funcional",
+        "semaforo": "AMARILLO",
+        "prioridad": "Media",
+        "nombre": "Infraestructura esencial demostrativa",
+        "descripcion": "Ejemplo de infraestructura expuesta para validar popup y panel lateral.",
+        "accion_requerida": "Confirmar cota, accesos, continuidad operativa y medidas de protección.",
+        "responsable": "GAD / Institución sectorial",
+        "estado": "Pendiente de validación",
+        "fuente": "Muestra técnica v0.5.7"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "LineString", "coordinates": [[-79.560, -1.835], [-79.535, -1.815], [-79.510, -1.795]]},
+      "properties": {
+        "id_elemento": "DEMO_LOSRIOS_BABAHOYO_RUTA_001",
+        "provincia": "Los Ríos",
+        "canton": "Babahoyo",
+        "categoria_id": "RESPUESTA",
+        "categoria": "Respuesta operativa",
+        "subcategoria": "Ruta de evacuación",
+        "componente": "Respuesta",
+        "amenaza": "Inundación fluvial",
+        "semaforo": "VERDE",
+        "prioridad": "Operativa",
+        "nombre": "Ruta de evacuación demostrativa",
+        "descripcion": "Ejemplo de línea tipo Kobo geotrace para rutas, vías críticas o tramos afectados.",
+        "accion_requerida": "Verificar transitabilidad, señalización y puntos de encuentro asociados.",
+        "responsable": "GAD / CTE / Policía / Obras Públicas",
+        "estado": "Por verificar en campo",
+        "fuente": "Muestra técnica v0.5.7"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "LineString", "coordinates": [[-79.075, -1.595], [-79.055, -1.615], [-79.034, -1.635], [-79.012, -1.650]]},
+      "properties": {
+        "id_elemento": "DEMO_BOLIVAR_GUARANDA_TRAMO_001",
+        "provincia": "Bolívar",
+        "canton": "Guaranda",
+        "categoria_id": "SITIO_CRITICO",
+        "categoria": "Sitio crítico",
+        "subcategoria": "Tramo con erosión o inestabilidad",
+        "componente": "Análisis",
+        "amenaza": "Erosión hídrica / movimientos en masa",
+        "semaforo": "ROJO",
+        "prioridad": "Alta",
+        "nombre": "Tramo crítico demostrativo",
+        "descripcion": "Ejemplo de línea para registrar cauces, escarpes, vías afectadas o tramos con socavación.",
+        "accion_requerida": "Inspección técnica, priorización de estabilización y monitoreo visual.",
+        "responsable": "GAD / MTOP / Equipo técnico CZ5",
+        "estado": "Pendiente de inspección",
+        "fuente": "Muestra técnica v0.5.7"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "Polygon", "coordinates": [[[-79.640, -2.175], [-79.605, -2.175], [-79.600, -2.145], [-79.635, -2.135], [-79.660, -2.155], [-79.640, -2.175]]]},
+      "properties": {
+        "id_elemento": "DEMO_GUAYAS_MILAGRO_POL_001",
+        "provincia": "Guayas",
+        "canton": "Milagro",
+        "categoria_id": "ACCION_PRIORIZADA",
+        "categoria": "Acción priorizada",
+        "subcategoria": "Zona de limpieza y drenaje",
+        "componente": "Fortalecimiento",
+        "amenaza": "Inundación urbana",
+        "semaforo": "AMARILLO",
+        "prioridad": "Media-alta",
+        "nombre": "Zona priorizada demostrativa",
+        "descripcion": "Ejemplo de polígono tipo Kobo geoshape para sectores expuestos o áreas de intervención.",
+        "accion_requerida": "Definir responsable, plazo, evidencia y seguimiento mensual de la intervención.",
+        "responsable": "GAD Municipal / Dirección de Obras Públicas",
+        "estado": "Pendiente de programación",
+        "fuente": "Muestra técnica v0.5.7"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "Polygon", "coordinates": [[[-80.870, -2.230], [-80.840, -2.235], [-80.828, -2.260], [-80.852, -2.285], [-80.885, -2.265], [-80.870, -2.230]]]},
+      "properties": {
+        "id_elemento": "DEMO_SANTAELENA_SE_POL_001",
+        "provincia": "Santa Elena",
+        "canton": "Santa Elena",
+        "categoria_id": "MONITOREO",
+        "categoria": "Monitoreo y evidencias",
+        "subcategoria": "Área de seguimiento",
+        "componente": "Monitoreo",
+        "amenaza": "Escorrentía / afectación vial",
+        "semaforo": "AMARILLO",
+        "prioridad": "Seguimiento",
+        "nombre": "Área de monitoreo demostrativa",
+        "descripcion": "Ejemplo de polígono para seguimiento mensual, evidencias o alertas territoriales.",
+        "accion_requerida": "Registrar evidencia mensual, responsable y estado de avance.",
+        "responsable": "GAD / CZ5",
+        "estado": "Pendiente de evidencia",
+        "fuente": "Muestra técnica v0.5.7"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [-90.312, -0.745]},
+      "properties": {
+        "id_elemento": "DEMO_GALAPAGOS_SC_AT_001",
+        "provincia": "Galápagos",
+        "canton": "San Cristóbal",
+        "categoria_id": "RESPUESTA",
+        "categoria": "Respuesta operativa",
+        "subcategoria": "Punto seguro / alojamiento",
+        "componente": "Respuesta",
+        "amenaza": "Aislamiento logístico / evento hidrometeorológico",
+        "semaforo": "VERDE",
+        "prioridad": "Operativa",
+        "nombre": "Punto seguro demostrativo insular",
+        "descripcion": "Ejemplo de punto para validar respuesta operativa en territorio insular.",
+        "accion_requerida": "Verificar capacidad, accesibilidad, responsable y abastecimiento.",
+        "responsable": "GAD / COE Cantonal / CZ5",
+        "estado": "Por validar",
+        "fuente": "Muestra técnica v0.5.7"
+      }
+    }
+  ]
+}
