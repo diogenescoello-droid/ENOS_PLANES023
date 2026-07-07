@@ -1,7 +1,18 @@
-# SNGR-CZ5-ENOS v0.6.2
+# SNGR-CZ5-ENOS v0.8.2
 
-Actualización de ficha cantonal dinámica por enfoque departamental.
+Versión de simplificación UX del módulo Riesgo Zonal. Mantiene el acceso institucional de v0.8.1 y optimiza la lectura inicial mediante preguntas, comentarios breves y flujo guiado por perfil.
 
-La arquitectura base de la plataforma se mantiene. Se ajusta el módulo Riesgo zonal para que, al seleccionar un cantón, el panel derecho no muestre siempre los mismos campos: cambia según Resumen ejecutivo, Análisis, Respuesta, Fortalecimiento o Monitoreo.
+## Archivos principales
 
-Fortalecimiento se alinea al formulario de sensibilización ENOS: acciones mínimas, temáticas, público objetivo, sectores, ubicación, comités comunitarios, canales y estado de ejecución.
+- `index.html`
+- `REPORTE_AVANCE_v0.8.2.md`
+- `docs/GUIA_SIMPLIFICACION_UX_v0.8.2.md`
+- `docs/BIBLIOTECA_TECNICA_v0.8.2.md`
+
+## Cambios clave
+
+- Menos texto visible.
+- Más preguntas orientadoras.
+- Ayudas cortas por botón.
+- Trazabilidad técnica colapsada.
+- Vista GAD más simple.
