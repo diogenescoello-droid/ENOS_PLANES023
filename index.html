@@ -792,20 +792,10 @@ select,input{
 .access-change-panel{margin-top:12px;border:1px dashed #bcdcf2;background:#f7fbff;border-radius:14px;padding:12px;display:none}.access-change-panel.show{display:block}.access-change-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.access-change-panel .access-field input{width:100%;border:1px solid #bfdbfe;border-radius:12px;padding:11px 13px;font-size:14px;background:white}.access-area-note{margin-top:10px;font-size:12px;color:#486174;line-height:1.35}.analysis-area-focus .role-panel{display:none}.analysis-area-focus .divider{display:none}.analysis-area-focus .tab[data-access-locked="1"]{opacity:.42;filter:grayscale(.35);pointer-events:none}.access-secondary-link{border:0;background:transparent;color:#0b5f95;font-weight:900;text-decoration:underline;cursor:pointer;padding:8px 4px}
 @media(max-width:860px){.access-change-grid{grid-template-columns:1fr}}
 
-
-/* v0.8.2 · Corrección, monitor de conexión y flujo guiado por perfil */
-.v081-monitor{border:1px solid #cfe1ef;background:#f8fcff;border-radius:16px;padding:12px;margin:12px 0;box-shadow:0 8px 18px rgba(10,53,85,.05)}
-.v081-monitor h3{margin:0 0 6px;color:var(--azul3);font-size:15px}.v081-monitor p{margin:0 0 10px;color:var(--muted);font-size:12px;line-height:1.4}
-.v081-monitor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}.v081-monitor-item{border:1px solid #dceaf3;border-radius:12px;background:#fff;padding:9px}.v081-monitor-item strong{display:block;color:var(--azul3);font-size:12px}.v081-monitor-item span{display:block;margin-top:4px;color:var(--muted);font-size:11px;line-height:1.3}.v081-monitor-item.ok{border-color:#bfe5ca;background:#f3fbf6}.v081-monitor-item.warn{border-color:#f1d28b;background:#fffaf0}.v081-monitor-item.bad{border-color:#f2c2c2;background:#fff5f5}
-.riskz-profile-guide{display:none;margin:0 0 12px;border:1px solid #bcdcf2;background:linear-gradient(180deg,#f7fbff,#fff);border-left:6px solid #0b70b7;border-radius:16px;padding:12px}.riskz-profile-guide.show{display:block}.riskz-profile-guide h3{margin:0;color:var(--azul3);font-size:16px}.riskz-profile-guide p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.4}.riskz-guide-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.riskz-guide-actions .btn{font-size:12px;padding:8px 10px}.riskz-ficha-prompt{border:1px solid #bfe5ca;background:#f2fbf6;border-radius:14px;padding:10px;margin-top:10px}.riskz-ficha-prompt strong{color:#1f6b43}.riskz-ficha-prompt p{margin:5px 0 0;color:var(--muted);font-size:12px}.biblioteca-alert{border:1px solid #f1d28b;background:#fff8e6;border-radius:14px;padding:12px;color:#6c4a00;font-size:13px;line-height:1.45;margin-top:10px}
-body.riskz-view-gad .riskz-map-tools button:nth-child(1),body.riskz-view-gad .riskz-map-tools button:nth-child(4),body.riskz-view-gad .riskz-map-tools button:nth-child(5),body.riskz-view-gad .riskz-map-tools button:nth-child(6),body.riskz-view-gad .riskz-map-tools button:nth-child(7){display:none!important}
-body.riskz-view-gad .riskz-source{display:none}
-@media(max-width:920px){.v081-monitor-grid{grid-template-columns:1fr}.riskz-guide-actions{display:grid;grid-template-columns:1fr}}
-
 </style>
 <style>
 
-/* v0.8.2 · Solicitud pública de usuario institucional con validación manual */
+/* v0.7.8 · Solicitud pública de usuario institucional con validación manual */
 .user-request-entry{margin:14px 0 16px;padding:14px;border:1px solid #cfe4f5;border-radius:16px;background:linear-gradient(180deg,#f8fcff,#fff);display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
 .user-request-entry h3{margin:0;color:var(--azul3);font-size:16px}
 .user-request-entry p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.35}
@@ -817,43 +807,6 @@ body.riskz-view-gad .riskz-source{display:none}
 .user-request-body{padding:18px 20px 20px}.user-request-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.user-request-field{display:flex;flex-direction:column;gap:6px}.user-request-field label{font-size:12px;color:var(--azul3);font-weight:900}.user-request-field input,.user-request-field select,.user-request-field textarea{border:1px solid var(--borde);border-radius:12px;padding:10px 11px;font:inherit;min-height:42px;background:#fff}.user-request-field textarea{min-height:86px;resize:vertical}.user-request-wide{grid-column:1/-1}.user-request-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}.user-request-note{margin-top:12px;padding:12px;border:1px solid #f1d28b;background:#fff8e6;border-radius:14px;color:#6c4a00;font-size:12px;line-height:1.45}.user-request-result{display:none;margin-top:14px;border:1px solid #cfe4f5;background:#f8fcff;border-radius:16px;padding:14px}.user-request-result.show{display:block}.user-request-result code{display:inline-block;background:#eef6fc;border:1px solid #d5e9f6;border-radius:8px;padding:3px 6px;font-weight:900}.user-request-tray{display:none;margin-top:14px;border:1px dashed #bcdcf2;border-radius:16px;padding:12px;background:#fbfdff}.user-request-tray.show{display:block}.user-request-item{border:1px solid #dceaf3;border-radius:13px;padding:10px;margin-top:9px;background:#fff}.user-request-item strong{color:var(--azul3)}.user-request-small{font-size:12px;color:var(--muted);line-height:1.4}.user-request-status{display:inline-flex;align-items:center;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:900;border:1px solid #f1d28b;color:#8a5a00;background:#fff8e6}.user-request-status.ok{border-color:#bfe5ca;color:#217347;background:#e3f7ec}.user-request-status.reject{border-color:#f2c2c2;color:#983333;background:#fff0f0}
 @media(max-width:920px){.user-request-grid{grid-template-columns:1fr}.user-request-entry{grid-template-columns:1fr}.user-request-head{grid-template-columns:1fr}}
 
-/* v0.8.2 · Fase institucional: solicitudes aprobadas + backend listo */
-.v080-banner{margin:0 0 16px;padding:14px;border:1px solid #bcdcf2;border-left:6px solid #0b70b7;border-radius:16px;background:linear-gradient(180deg,#f7fbff,#fff);display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
-.v080-banner h3{margin:0;color:var(--azul3);font-size:16px}.v080-banner p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.35}.v080-banner .v080-tag{border:1px solid #bcdcf2;background:#e8f5ff;border-radius:999px;padding:7px 10px;font-weight:900;color:#0b3553;font-size:12px;white-space:nowrap}
-.v080-backend-pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #d5e9f6;background:#f8fcff;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:900;color:#0b3553;margin-top:6px}
-.access-note.backend-ready{background:#eefaf4;border-color:#bfe5ca;color:#1f6b43}
-@media(max-width:860px){.v080-banner{grid-template-columns:1fr}.v080-banner .v080-tag{justify-self:start}}
-
-
-
-/* v0.8.2 · Corrección, monitor de conexión y flujo guiado por perfil */
-.v081-monitor{border:1px solid #cfe1ef;background:#f8fcff;border-radius:16px;padding:12px;margin:12px 0;box-shadow:0 8px 18px rgba(10,53,85,.05)}
-.v081-monitor h3{margin:0 0 6px;color:var(--azul3);font-size:15px}.v081-monitor p{margin:0 0 10px;color:var(--muted);font-size:12px;line-height:1.4}
-.v081-monitor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}.v081-monitor-item{border:1px solid #dceaf3;border-radius:12px;background:#fff;padding:9px}.v081-monitor-item strong{display:block;color:var(--azul3);font-size:12px}.v081-monitor-item span{display:block;margin-top:4px;color:var(--muted);font-size:11px;line-height:1.3}.v081-monitor-item.ok{border-color:#bfe5ca;background:#f3fbf6}.v081-monitor-item.warn{border-color:#f1d28b;background:#fffaf0}.v081-monitor-item.bad{border-color:#f2c2c2;background:#fff5f5}
-.riskz-profile-guide{display:none;margin:0 0 12px;border:1px solid #bcdcf2;background:linear-gradient(180deg,#f7fbff,#fff);border-left:6px solid #0b70b7;border-radius:16px;padding:12px}.riskz-profile-guide.show{display:block}.riskz-profile-guide h3{margin:0;color:var(--azul3);font-size:16px}.riskz-profile-guide p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.4}.riskz-guide-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.riskz-guide-actions .btn{font-size:12px;padding:8px 10px}.riskz-ficha-prompt{border:1px solid #bfe5ca;background:#f2fbf6;border-radius:14px;padding:10px;margin-top:10px}.riskz-ficha-prompt strong{color:#1f6b43}.riskz-ficha-prompt p{margin:5px 0 0;color:var(--muted);font-size:12px}.biblioteca-alert{border:1px solid #f1d28b;background:#fff8e6;border-radius:14px;padding:12px;color:#6c4a00;font-size:13px;line-height:1.45;margin-top:10px}
-body.riskz-view-gad .riskz-map-tools button:nth-child(1),body.riskz-view-gad .riskz-map-tools button:nth-child(4),body.riskz-view-gad .riskz-map-tools button:nth-child(5),body.riskz-view-gad .riskz-map-tools button:nth-child(6),body.riskz-view-gad .riskz-map-tools button:nth-child(7){display:none!important}
-body.riskz-view-gad .riskz-source{display:none}
-@media(max-width:920px){.v081-monitor-grid{grid-template-columns:1fr}.riskz-guide-actions{display:grid;grid-template-columns:1fr}}
-
-
-
-/* v0.8.2 · Simplificación UX por preguntas y comentarios breves */
-.riskz-v082 h2{margin:0;color:var(--azul3);font-size:24px;letter-spacing:.2px}
-.riskz-intro-compact{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;margin:0 0 14px;border:1px solid #d7e8f6;background:linear-gradient(180deg,#ffffff,#f8fcff);border-radius:18px;padding:14px 16px;box-shadow:0 10px 24px rgba(10,53,85,.05)}
-.riskz-intro-compact p{margin:6px 0 0;color:#3e5368;font-size:14px;line-height:1.35}.riskz-intro-tag{border:1px solid #bcdcf2;background:#e8f5ff;color:#0b3553;border-radius:999px;padding:8px 11px;font-weight:900;font-size:12px;white-space:nowrap}
-.riskz-kicker,.riskz-step{display:inline-flex;align-items:center;width:max-content;border:1px solid #bcdcf2;background:#f2f9ff;color:#0b5f95;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}.riskz-step{background:#eefaf4;border-color:#bfe5ca;color:#1f6b43}
-.riskz-question-card{border-left-width:0!important;border:1px solid #cfe4f5!important;background:linear-gradient(180deg,#fbfdff,#fff)!important;border-radius:18px!important;padding:14px!important;box-shadow:0 8px 18px rgba(10,53,85,.04)}
-.riskz-question-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.riskz-question-head h3{margin:0;color:var(--azul3);font-size:17px}.riskz-compact-note{margin:8px 0 0!important;color:#526577!important;font-size:12px!important;line-height:1.35!important}
-.riskz-guided-row{margin-top:10px!important}.riskz-mini-chip{background:#fff!important;border-color:#d5e9f6!important;padding:7px 10px!important;font-size:12px!important}.riskz-mini-chip strong{color:#0b3553}
-.riskz-profile-guide p{font-size:13px!important;color:#43586c!important}.riskz-guide-actions{margin-top:12px!important}.riskz-guide-actions .btn{border-radius:12px!important;font-size:13px!important;padding:10px 13px!important}
-.riskz-quickhelp{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}.riskz-help-card{border:1px solid #dbeaf5;background:#fff;border-radius:13px;padding:10px;min-height:74px}.riskz-help-card strong{display:block;color:#003b63;font-size:12px;margin-bottom:4px}.riskz-help-card span{display:block;color:#526577;font-size:11px;line-height:1.3}
-.riskz-howto{margin-top:12px;border:1px dashed #cfe1ef;border-radius:13px;padding:9px 11px;background:#fbfdff}.riskz-howto summary{cursor:pointer;color:#0b5f95;font-weight:900;font-size:12px}.riskz-howto ol{margin:8px 0 0 18px;color:#526577;font-size:12px;line-height:1.5;padding:0}
-.riskz-data-head{align-items:center}.riskz-data-head p{max-width:760px;font-size:13px!important;line-height:1.4!important;color:#526577!important}.riskz-data-pills{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0}.riskz-data-pills span{border:1px solid #d5e9f6;background:#fff;border-radius:999px;padding:6px 9px;font-size:12px;font-weight:900;color:#0b3553}
-.riskz-source-compact{padding:0!important;overflow:hidden}.riskz-source-compact summary{cursor:pointer;padding:12px 14px;font-weight:900;color:#4e3300}.riskz-source-compact p{margin:0;padding:0 14px 14px;color:#634000;font-size:12px;line-height:1.45}
-body.riskz-view-gad .riskz-mode span,body.riskz-view-gad .riskz-themebar{display:none!important}body.riskz-view-gad .riskz-modebar{grid-template-columns:repeat(3,1fr)}
-@media(max-width:980px){.riskz-intro-compact{grid-template-columns:1fr}.riskz-intro-tag{justify-self:start}.riskz-quickhelp{grid-template-columns:1fr 1fr}.riskz-data-head{grid-template-columns:1fr}.riskz-modebar{grid-template-columns:1fr 1fr!important}}
-@media(max-width:640px){.riskz-quickhelp{grid-template-columns:1fr}.riskz-modebar{grid-template-columns:1fr!important}}
-
 </style>
 </head>
 <body>
@@ -863,17 +816,17 @@ body.riskz-view-gad .riskz-mode span,body.riskz-view-gad .riskz-themebar{display
     <div class="access-head">
       <div>
         <h2>Acceso a Dashboard y Riesgo Zonal · ENOS CZ5</h2>
-        <p>La plataforma inicia en acceso libre. Para Dashboard y Riesgo Zonal valide correo institucional y _ID F01. La base F01 interna opera con credenciales en hash y, en paralelo, se habilita el flujo v0.8.2 para solicitudes aprobadas manualmente con código institucional. El sistema asigna perfil, organización y territorio autorizado.</p>
+        <p>La plataforma inicia en acceso libre. Para Dashboard y Riesgo Zonal valide correo institucional y _ID F01. La base F01 interna fue incorporada como credenciales en hash; el sistema asigna perfil, organización y territorio autorizado.</p>
       </div>
-      <div class="access-version">v0.8.2</div>
+      <div class="access-version">v0.7.8</div>
     </div>
     <div class="access-body">
       <div class="access-grid access-grid-simple">
         <div class="access-field"><label>Correo institucional</label><input id="accessEmail" type="email" autocomplete="username" placeholder="nombre.apellido@institucion.gob.ec"></div>
-        <div class="access-field"><label>_ID F01 / código institucional / contraseña</label><input id="accessIdF01" type="password" autocomplete="current-password" placeholder="_ID F01, código institucional aprobado o contraseña"></div>
+        <div class="access-field"><label>_ID F01 / contraseña</label><input id="accessIdF01" type="password" inputmode="numeric" autocomplete="current-password" placeholder="_ID registrado en F01 o contraseña actual"></div>
       </div>
       <div id="accessRoleHelp" class="access-role-help">
-        El acceso se resuelve desde F01: correo + _ID → perfil, organización, provincia y cantón autorizado. La base v0.8.2 contiene usuarios F01 importados con hashes; no se publican correos ni _ID en texto plano. Dashboard y Riesgo Zonal requieren credenciales. Puede ingresar con correo + _ID F01, contraseña ya cambiada o código institucional aprobado desde una solicitud manual.
+        El acceso se resuelve desde F01: correo + _ID → perfil, organización, provincia y cantón autorizado. La base v0.7.8 contiene usuarios F01 importados con hashes; no se publican correos ni _ID en texto plano. Dashboard y Riesgo Zonal requieren credenciales. Si no cuenta con usuario, puede solicitar creación de acceso institucional.
       </div>
       <div id="accessError" class="access-error" style="display:none"></div>
       <div class="access-actions">
@@ -891,7 +844,7 @@ body.riskz-view-gad .riskz-mode span,body.riskz-view-gad .riskz-themebar{display
         </div>
         <div class="access-actions" style="margin-top:10px"><button class="btn primary" type="button" onclick="AccessCZ5.changePassword()">Guardar contraseña</button><button class="btn white" type="button" onclick="AccessCZ5.togglePasswordChange(false)">Cancelar</button></div>
       </div>
-      <div class="access-note backend-ready"><strong>Nota de seguridad:</strong> esta versión valida el flujo F01 con control visual y hashes SHA-256. No publica _ID en texto plano, pero GitHub Pages sigue siendo estático; no es seguridad real. En producción, el _ID y la contraseña deben validarse en Apps Script, Firebase, Supabase o backend institucional; el navegador solo debe recibir la sesión autorizada.</div>
+      <div class="access-note"><strong>Nota de seguridad:</strong> esta versión valida el flujo F01 con control visual y hashes SHA-256. No publica _ID en texto plano, pero GitHub Pages sigue siendo estático; no es seguridad real. En producción, el _ID y la contraseña deben validarse en Apps Script, Firebase, Supabase o backend institucional; el navegador solo debe recibir la sesión autorizada.</div>
     </div>
   </div>
 </div>
@@ -932,15 +885,6 @@ body.riskz-view-gad .riskz-mode span,body.riskz-view-gad .riskz-themebar{display
         <article class="role" onclick="selectActor('GT', this)"><div class="badge">GT</div><h3>Grupos de Trabajo - Soporte Operativo</h3><p>Brindan soporte logístico, seguridad y control, movilización de recursos, telecomunicaciones, abastecimiento y apoyo de primera respuesta.</p><small>Uso recomendado para Fuerzas Armadas, Policía Nacional, Bomberos, ECU 911, ANT, Cruz Roja, MSP y grupos voluntarios.</small></article>
         <article class="role" onclick="selectActor('CZ5', this)"><div class="badge">CZ5</div><h3>Coordinación Zonal 5 SNGR</h3><p>Consolida, verifica, controla calidad, genera paquetes GPT, monitorea el total de planes y mantiene trazabilidad zonal.</p><small>Uso recomendado para seguimiento integral, suficiencia técnica, consolidación, generación de planes y control del ciclo.</small></article>
       </div>
-    </div>
-
-    <div class="v080-banner">
-      <div>
-        <h3>v0.8.2 · Fase institucional de acceso y gobernanza de información</h3>
-        <p>La plataforma abre en modo público para formularios, prompt, chat institucional y bibliografía. Dashboard y Riesgo Zonal se protegen con F01 o con usuarios aprobados manualmente. Las solicitudes aprobadas generan código institucional y pueden activar acceso de prueba.</p>
-        <span class="v080-backend-pill">Backend preparado: Apps Script / Firebase / Supabase</span>
-      </div>
-      <div class="v080-tag">Acceso gobernado</div>
     </div>
 
     <div class="divider"></div>
@@ -991,17 +935,6 @@ body.riskz-view-gad .riskz-mode span,body.riskz-view-gad .riskz-themebar{display
             <div class="inputline"><label>Casos encontrados por territorio o institución</label><select id="promptCaseSelect"><option value="">Actualice el dashboard para cargar casos disponibles.</option></select></div>
             <div class="actions"><button class="btn red" onclick="actualizarBaseF01F07()">Actualizar base F01-F07</button><button class="btn soft" onclick="verCasosDashboard()">Ver casos</button><button class="btn primary" onclick="generarPromptGPT()">Generar y copiar prompt</button><button class="btn white" onclick="cargarUltimoPrompt()">Cargar último prompt</button><button class="btn white" onclick="limpiarPrompt()">Limpiar prompt</button></div>
             <div id="promptStatus" class="status" style="display:none"><span class="dot"></span><span id="promptStatusText"></span></div>
-
-            <div id="connectionMonitor" class="v081-monitor">
-              <h3>Monitor de conexión v0.8.2</h3>
-              <p>Control rápido para saber si la plataforma está operando con índice Apps Script, backend institucional o modo local/hash. Si el índice no responde, el módulo Prompt usa modo degradado con la ficha territorial disponible.</p>
-              <div class="actions"><button class="btn white" type="button" onclick="ConnectionMonitorCZ5.run()">Probar conexión</button><button class="btn soft" type="button" onclick="ConnectionMonitorCZ5.localMode()">Ver modo local</button></div>
-              <div class="v081-monitor-grid" id="connectionMonitorGrid">
-                <div class="v081-monitor-item warn"><strong>Índice F01-F07</strong><span>Pendiente de prueba.</span></div>
-                <div class="v081-monitor-item warn"><strong>Backend acceso</strong><span>Pendiente de prueba.</span></div>
-                <div class="v081-monitor-item ok"><strong>F01 hash local</strong><span>Disponible para piloto interno.</span></div>
-              </div>
-            </div>
             <div class="inputline"><label>Prompt GPT generado</label><textarea id="promptOutput" placeholder="Aquí aparecerá el prompt técnico generado."></textarea></div>
             <div class="actions"><button class="btn primary" onclick="copiarPromptActual()">Copiar prompt</button><button class="btn green" onclick="abrirGPTInstitucional()">Ingresar al GPT institucional</button></div>
           </div>
@@ -1032,9 +965,9 @@ body.riskz-view-gad .riskz-mode span,body.riskz-view-gad .riskz-themebar{display
             <h2>Bibliografía e insumos de apoyo</h2>
             <p>Acceso directo a normativa, lineamientos, cartografía, fuentes institucionales y respaldos técnicos que acompañan la construcción del plan.</p>
             <div class="repo"><div class="step"><strong>Cartografía</strong><p>F03 alimenta mapas, capas, fuentes, formatos y limitaciones.</p></div><div class="step"><strong>Insumos técnicos</strong><p>F01-F06 consolidan amenazas, infraestructura, acciones y capacidades.</p></div><div class="step"><strong>Seguimiento</strong><p>F07 documenta avance mensual, evidencias y escalamiento.</p></div></div>
-            <div class="actions"><button class="btn white" type="button" onclick="BibliotecaCZ5.abrirNormativa()">Abrir normativa y lineamientos</button></div><div id="bibliotecaMensaje" class="biblioteca-alert" style="display:none"></div>
+            <div class="actions"><button class="btn white">Abrir normativa y lineamientos</button></div>
           </div>
-          <div class="info-card"><h3>Repositorio técnico</h3><p>Este botón abre directamente la carpeta oficial de Drive con normativa, lineamientos e insumos de apoyo para la elaboración del plan.</p><button class="btn green" type="button" onclick="BibliotecaCZ5.abrirDrive()">Abrir carpeta Drive</button><div class="note" style="margin-top:13px">El cierre práctico del ciclo se realiza mediante descarga directa del plan desde el GPT. La biblioteca queda como repositorio de consulta técnica.</div></div>
+          <div class="info-card"><h3>Repositorio técnico</h3><p>Este botón abre directamente la carpeta oficial de Drive con normativa, lineamientos e insumos de apoyo para la elaboración del plan.</p><button class="btn green">Abrir carpeta Drive</button><div class="note" style="margin-top:13px">El cierre práctico del ciclo se realiza mediante descarga directa del plan desde el GPT. La biblioteca queda como repositorio de consulta técnica.</div></div>
         </div>
       </div>
 
@@ -1113,65 +1046,29 @@ body.riskz-view-gad .riskz-mode span,body.riskz-view-gad .riskz-themebar{display
 
 
 
-      <div id="riesgozonal" class="tab-content riskz-v082">
-        <div class="riskz-intro-compact">
-          <div>
-            <span class="riskz-kicker">Riesgo zonal · ENOS 2026</span>
-            <h2>Análisis de riesgo zonal · CZ5</h2>
-            <p>Consulta tu territorio, revisa brechas y define la siguiente acción.</p>
-          </div>
-          <div class="riskz-intro-tag">v0.8.2 · vista guiada</div>
-        </div>
+      <div id="riesgozonal" class="tab-content">
+        <h2>Análisis de riesgo zonal ENOS 2026 · CZ5</h2>
+        <p>Módulo estratégico de lectura territorial para la Coordinación Zonal 5. En esta versión el mapa funciona localmente con GeoJSON provincial y cantonal CZ5; no usa API ni token. La fuente primaria del análisis serán los planes de acción firmados por alcaldes/GAD.</p>
 
         <div class="riskz-shell">
 
-          <div id="riskzGovernanceBanner" class="riskz-governance-banner riskz-question-card">
-            <div class="riskz-question-head">
-              <span class="riskz-step">Tu acceso</span>
-              <h3>¿Qué acceso tengo?</h3>
-            </div>
+          <div id="riskzGovernanceBanner" class="riskz-governance-banner">
+            <strong>Vista gobernada por perfil.</strong> La información visible se ajusta al rol institucional, alcance territorial y finalidad de uso. Esta versión aplica control visual; la protección real de datos se implementará en backend/autenticación.
             <div class="riskz-guided-row" id="riskzGuidedChips"></div>
-            <p class="riskz-compact-note">La plataforma ajusta territorio y herramientas según tu perfil autorizado.</p>
           </div>
 
-          <div id="riskzProfileGuide" class="riskz-profile-guide riskz-question-card">
-            <div class="riskz-question-head">
-              <span class="riskz-step">Paso 1</span>
-              <h3>¿Qué quieres hacer ahora?</h3>
-            </div>
-            <p id="riskzProfileGuideText">Elige una acción. La vista se mantiene dentro de tu alcance autorizado.</p>
-            <div class="riskz-guide-actions" id="riskzProfileGuideActions"></div>
-            <div class="riskz-quickhelp" id="riskzQuickHelpCards"></div>
-            <details class="riskz-howto">
-              <summary>¿Cómo usar esta vista?</summary>
-              <ol>
-                <li>Revisa el territorio autorizado.</li>
-                <li>Consulta brechas y tareas pendientes.</li>
-                <li>Actualiza formularios si falta información.</li>
-                <li>Genera un prompt para preparar informe, asesoría o seguimiento.</li>
-              </ol>
-            </details>
-          </div>
-
-          <div class="riskz-head riskz-data-head">
+          <div class="riskz-head">
             <div>
-              <span class="riskz-step">Fuente del dato</span>
-              <h3>¿De dónde salen los datos?</h3>
-              <div class="riskz-data-pills">
-                <span>Planes firmados</span>
-                <span>Kobo</span>
-                <span>F03 cartográfico</span>
-                <span>Validación CZ5</span>
-              </div>
-              <p>Lectura preliminar para priorizar asistencia técnica. Los resultados deben validarse antes de decisiones formales.</p>
+              <h3>Entramado de datos para riesgo, respuesta, fortalecimiento y monitoreo</h3>
+              <p>Esta versión activa ficha cantonal dinámica: al tocar una provincia o cantón se recalculan los indicadores superiores y el panel derecho cambia según el tema activo. Si se enciende Elementos operativos, la capa se filtra por el territorio seleccionado. Los valores provienen de extracción automática inicial desde PDF/DOCX digitalizados y deben validarse técnicamente por CZ5.</p>
             </div>
-            <div id="riskzStatus" class="riskz-status warn">v0.8.2 · vista guiada por preguntas</div>
+            <div id="riskzStatus" class="riskz-status warn">v0.7.5 · plataforma libre + módulos protegidos</div>
           </div>
 
-          <details class="riskz-source riskz-source-compact">
-            <summary>Ver trazabilidad técnica</summary>
-            <p>Cartografía local sin API/token. Capas provinciales, cantonales y elementos F03 con control de encendido/apagado; selección territorial con KPI contextual, ficha cantonal dinámica, semáforos preliminares y enlace relativo al plan cantonal. En Análisis se refuerza F03: puntos/geopoint, líneas/geotrace y polígonos/geoshape para sitios críticos, tramos, rutas, drenajes y zonas de afectación. Kobo Análisis de Riesgo queda conectado para registrar asesorías técnicas; F03 mantiene geometrías y Respuesta/Fortalecimiento sus formularios específicos.</p>
-          </details>
+          <div class="riskz-source">
+            <strong>Fuente primaria de análisis · versión visible v0.7.5</strong>
+            Cartografía local sin API/token. Capas provinciales, cantonales y elementos F03 con control de encendido/apagado; selección territorial con KPI contextual, ficha cantonal dinámica, semáforos preliminares y enlace relativo al plan cantonal. En Análisis se refuerza F03: puntos/geopoint, líneas/geotrace y polígonos/geoshape para sitios críticos, tramos, rutas, drenajes y zonas de afectación. Kobo Análisis de Riesgo queda conectado para registrar asesorías técnicas; F03 mantiene geometrías y Respuesta/Fortalecimiento sus formularios específicos.
+          </div>
 
           <div class="riskz-modebar">
             <button class="riskz-mode active" type="button" data-componente="RESUMEN">Resumen ejecutivo<span>Lectura zonal para autoridad y priorización.</span></button>
@@ -1228,17 +1125,17 @@ body.riskz-view-gad .riskz-mode span,body.riskz-view-gad .riskz-themebar{display
               </div>
               <div id="riskzMap"></div>
               <div class="riskz-province-grid" id="riskzProvinceGrid"></div>
-              <div class="footer-note" id="riskzMapNote">v0.8.2: plataforma abierta para formularios, prompts y chat institucional. Dashboard y Riesgo Zonal requieren correo + _ID F01.</div>
+              <div class="footer-note" id="riskzMapNote">v0.7.5: plataforma abierta para formularios, prompts y chat institucional. Dashboard y Riesgo Zonal requieren correo + _ID F01.</div>
             </div>
 
             <aside class="riskz-panel" id="riskzDetailPanel">
-              <h3>¿Qué debo revisar?</h3>
-              <p class="muted-text">Seleccione territorio o use el flujo guiado. La ficha mostrará brechas, acciones sugeridas, formularios y trazabilidad disponible.</p>
+              <h3>Lectura técnica inicial</h3>
+              <p class="muted-text">Seleccione un componente, un tema o una provincia. La vista cantonal queda activa por defecto. Seleccione un cantón para abrir la lectura territorial; los semáforos cantonales se activarán cuando se incorporen datos extraídos de los PDF firmados.</p>
             </aside>
           </div>
 
           <div class="riskz-tablebox">
-            <div class="riskz-title"><div><h3>¿Qué resume cada componente?</h3><p>Lectura corta para saber qué falta, quién debe actuar y cómo preparar el siguiente corte.</p></div></div>
+            <div class="riskz-title"><div><h3>Resumen ejecutivo por componente</h3><p>Sin tabla cantonal larga. Este bloque ordena qué debe extraerse de los planes firmados y qué salida verá la Coordinación Zonal.</p></div></div>
             <div class="riskz-exec-grid" id="riskzExecGrid"></div>
             <div class="riskz-pipeline">
               <div class="riskz-pipe"><b>1. PDF firmado</b><span>Plan oficial por cantón/GAD como fuente primaria y trazable.</span></div>
@@ -1581,88 +1478,7 @@ function construirPromptDesdeRespuestaIndice(codigoCaso, response){
     ].join(String.fromCharCode(10));
   }
 
-  
-throw new Error('Apps Script respondió, pero no devolvió prompt ni paquete GPT.');
-}
-
-function construirPromptLocalBasico(codigoCaso, motivo, fichaContexto){
-  let session = null;
-  try{ session = window.AccessCZ5 && AccessCZ5.current ? AccessCZ5.current() : null; }catch(e){}
-  const contexto = fichaContexto || {};
-  const ficha = contexto.ficha || null;
-  const control = {
-    codigo_caso: codigoCaso || 'SIN_CODIGO',
-    modo: 'DEGRADADO_LOCAL_v0.8.2',
-    motivo: motivo || 'Índice no disponible',
-    usuario: session ? {perfil:session.roleKey, provincia:session.provincia, canton:session.canton, origen:session.origen} : 'sin sesión',
-    actor_plataforma: obtenerActorPlataforma(),
-    enfoque: contexto.enfoque || '',
-    tema: contexto.tema || '',
-    alcance: contexto.alcance || ''
-  };
-  const fichaResumen = ficha ? {
-    provincia: ficha.provincia,
-    canton: ficha.canton,
-    codigo_dpa: ficha.codigo_dpa,
-    estado_documental: ficha.estado_documental,
-    estado_validacion: ficha.estado_validacion,
-    porcentaje_concordancia: ficha.porcentaje_concordancia,
-    condicion_tecnica: ficha.condicion_tecnica,
-    riesgo_general: ficha.riesgo_general,
-    amenazas: ficha.amenazas,
-    brechas: ficha.brechas,
-    vulnerabilidad: ficha.vulnerabilidad,
-    respuesta: ficha.respuesta,
-    fortalecimiento: ficha.fortalecimiento,
-    monitoreo: ficha.monitoreo,
-    acciones_prioritarias: ficha.acciones_prioritarias,
-    fuente: ficha.fuente,
-    archivo_plan_principal: ficha.archivo_plan_principal
-  } : {observacion:'No hay ficha cantonal cargada en el contexto local.'};
-  return [
-    'INSTRUCCIÓN PARA GPT · ENOS ZONA 5:',
-    'Actúa como consultor técnico de gestión de riesgos para la Coordinación Zonal 5 de la SNGR.',
-    '',
-    'Usa el siguiente PAQUETE LOCAL como insumo preliminar. Declara explícitamente las limitaciones cuando falte F01-F07, Kobo, evidencias, cartografía validada o plan legalizado.',
-    '',
-    'OBJETIVO:',
-    'Generar una asesoría territorial accionable para cerrar brechas del cantón/enfoque seleccionado, con tareas, responsables sugeridos, evidencias requeridas y seguimiento mensual.',
-    '',
-    'DATOS DE CONTROL:',
-    JSON.stringify(control, null, 2),
-    '',
-    'FICHA / CONTEXTO LOCAL DISPONIBLE:',
-    JSON.stringify(fichaResumen, null, 2),
-    '',
-    'SALIDA ESPERADA:',
-    '1. Resumen ejecutivo de la situación.',
-    '2. Brechas críticas priorizadas.',
-    '3. Acciones correctivas inmediatas por enfoque.',
-    '4. Información faltante que debe solicitarse al GAD o institución.',
-    '5. Recomendaciones de seguimiento mensual.',
-    '6. Advertencia de calidad del dato y trazabilidad.'
-  ].join(String.fromCharCode(10));
-}
-
-function generarPromptDegradado(codigoCaso, motivo, fichaContexto){
-  const output = document.getElementById('promptOutput');
-  const prompt = construirPromptLocalBasico(codigoCaso, motivo, fichaContexto || {});
-  if(output) output.value = prompt;
-  try { localStorage.setItem('ENOS_ULTIMO_PROMPT_GPT', prompt); } catch(e) {}
-  copiarTextoSeguro(prompt);
-  setPromptStatus('Modo degradado activo: prompt generado con información local disponible. Motivo: ' + (motivo || 'sin conexión'), false);
-  return prompt;
-}
-
-function generarPromptDesdeFichaRiesgo(ficha, enfoque, tema, alcance){
-  const codigo = ficha && (ficha.codigo_dpa || ficha.canton) ? ('FICHA_RIESGO_' + (ficha.codigo_dpa || ficha.canton)) : 'FICHA_RIESGO_LOCAL';
-  const prompt = generarPromptDegradado(codigo, 'Generado desde ficha cantonal de Riesgo Zonal v0.8.2', {ficha:ficha, enfoque:enfoque, tema:tema, alcance:alcance});
-  const tab = Array.from(document.querySelectorAll('.tab')).find(b => /Generar prompt/i.test(b.textContent||''));
-  if(tab) openTab('actualizar', tab);
-  const input = document.getElementById('codigoCasoInput');
-  if(input) input.value = codigo;
-  setTimeout(function(){ const out=document.getElementById('promptOutput'); if(out) out.scrollIntoView({behavior:'smooth',block:'center'}); },120);
-  return prompt;
+  throw new Error('Apps Script respondió, pero no devolvió prompt ni paquete GPT.');
 }
 
 async function generarPromptGPT(){
@@ -1690,7 +1506,7 @@ async function generarPromptGPT(){
     if(!response || response.ok === false){
       const msg = (response && (response.message || response.error)) || 'No se encontró el caso o Apps Script no devolvió respuesta válida.';
       setPromptStatus(msg, false);
-      generarPromptDegradado(codigo, msg);
+      if(output) output.value = 'NO SE GENERÓ PROMPT.\n\n' + msg + '\n\nCódigo buscado: ' + codigo + '\n\nRevise que el caso exista en INDICE_MEMORIA_ENOS y que el Web App esté implementado como nueva versión.';
       return;
     }
 
@@ -1711,7 +1527,7 @@ async function generarPromptGPT(){
   }catch(error){
     const msg = error && error.message ? error.message : String(error);
     setPromptStatus('Error consultando índice: ' + msg, false);
-    generarPromptDegradado(codigo, msg);
+    if(output) output.value = 'NO SE GENERÓ PROMPT.\n\nError consultando Apps Script / INDICE_MEMORIA_ENOS:\n' + msg + '\n\nCódigo buscado: ' + codigo;
   }
 }
 
@@ -3573,7 +3389,7 @@ const RiskZonalCZ5 = (function(){
       + temaDetalleHtml(ficha, amenazas, brechas)
       + trazabilidadDatoHtml(ficha)
       + planLinkHtml(ficha)
-      + '<div class="riskz-ficha-prompt"><strong>Asesoría GPT desde ficha cantonal</strong><p>Genera un prompt con la lectura visible del cantón, brechas, acciones y trazabilidad. Funciona aunque el índice Apps Script no responda.</p></div><div class="riskz-actions"><button class="btn primary" type="button" onclick="RiskZonalCZ5.generatePromptFromCurrentFicha()">Generar prompt desde esta ficha</button><button class="btn primary" type="button" onclick="RiskZonalCZ5.ensureElementsForSelection()">Ver elementos de este cantón</button><button class="btn green" type="button" onclick="RiskZonalCZ5.openAnalisisKobo()">Abrir Kobo Análisis</button><button class="btn green" type="button" onclick="RiskZonalCZ5.openF03Kobo()">Abrir Kobo F03</button><button class="btn white" type="button" onclick="RiskZonalCZ5.showAnalisisSchema()">Ver estructura Análisis/F03</button></div>';
+      + '<div class="riskz-actions"><button class="btn primary" type="button" onclick="RiskZonalCZ5.ensureElementsForSelection()">Ver elementos de este cantón</button><button class="btn white" type="button" onclick="RiskZonalCZ5.showAnalisisSchema()">Ver estructura Análisis/F03</button><button class="btn green" type="button" onclick="RiskZonalCZ5.openAnalisisKobo()">Abrir Kobo Análisis</button><button class="btn green" type="button" onclick="RiskZonalCZ5.openF03Kobo()">Abrir Kobo F03</button><button class="btn green" type="button" onclick="RiskZonalCZ5.openArcGIS()">Abrir ArcGIS Online</button></div>';
   }
 
   function renderFichaProvinciaPanel(){
@@ -3929,43 +3745,6 @@ const RiskZonalCZ5 = (function(){
   }
 
 
-
-  function generatePromptFromCurrentFicha(){
-    const ficha = getActiveFicha();
-    const alcance = getScopeLabel();
-    if(typeof generarPromptDesdeFichaRiesgo === 'function'){
-      generarPromptDesdeFichaRiesgo(ficha, activeComponente, activeTema, alcance);
-      setStatus('v0.8.2 · Prompt generado desde ficha territorial local', 'ok');
-      return;
-    }
-    alert('El generador de prompt local no está disponible.');
-  }
-
-  function guidedAction(action){
-    if(action === 'MI_CANTON'){
-      renderPanel(); updateKpisForSelection(); updateMapNote(); setStatus('v0.8.2 · Vista Mi cantón aplicada', 'ok'); return;
-    }
-    if(action === 'BRECHAS'){
-      activeComponente = 'ANALISIS'; activeTema = 'BRECHAS';
-      document.querySelectorAll('.riskz-mode').forEach(function(b){ b.classList.toggle('active', b.dataset.componente === 'ANALISIS'); });
-      document.querySelectorAll('.riskz-theme').forEach(function(b){ b.classList.toggle('active', b.dataset.tema === 'BRECHAS'); });
-      updateKpisForSelection(); renderPanel(); setStatus('v0.8.2 · Brechas priorizadas para el alcance autorizado', 'ok'); return;
-    }
-    if(action === 'TAREAS'){
-      activeComponente = 'FORTALECIMIENTO'; activeTema = 'FORTALECIMIENTO';
-      document.querySelectorAll('.riskz-mode').forEach(function(b){ b.classList.toggle('active', b.dataset.componente === 'FORTALECIMIENTO'); });
-      document.querySelectorAll('.riskz-theme').forEach(function(b){ b.classList.toggle('active', b.dataset.tema === 'FORTALECIMIENTO'); });
-      updateKpisForSelection(); renderPanel(); setStatus('v0.8.2 · Tareas y acompañamiento para siguiente corte', 'ok'); return;
-    }
-    if(action === 'PROMPT'){
-      generatePromptFromCurrentFicha(); return;
-    }
-    if(action === 'FORMULARIOS'){
-      const tab = Array.from(document.querySelectorAll('.tab')).find(b => /Formularios/i.test(b.textContent||''));
-      if(tab && typeof openTab === 'function') openTab('datos', tab); return;
-    }
-  }
-
   function updateKpiLabelsAnalisis(){
     setText('riskzKpiAltoLabel', 'Riesgo preliminar');
     setText('riskzKpiMedioLabel', 'Amenazas');
@@ -4007,7 +3786,7 @@ const RiskZonalCZ5 = (function(){
     setText('riskzKpiAmenazaLabel', 'Último corte');
   }
 
-  return {init:init, selectProvincia:selectProvincia, clearSelection:clearSelection, showSchema:showSchema, renderPanel:renderPanel, setLayerMode:setLayerMode, setElementFilter:setElementFilter, ensureElementsForSelection:ensureElementsForSelection, zoomAll:zoomAll, zoomContinental:zoomContinental, openArcGIS:openArcGIS, openAnalisisKobo:openAnalisisKobo, openRespuestaKobo:openRespuestaKobo, showRespuestaSchema:showRespuestaSchema, showFortalecimientoSchema:showFortalecimientoSchema, openF03Kobo:openF03Kobo, showAnalisisSchema:showAnalisisSchema, generatePromptFromCurrentFicha:generatePromptFromCurrentFicha, guidedAction:guidedAction, applyTerritoryScope:applyTerritoryScope, setAccessScope:setAccessScope, renderPanel:renderPanel};
+  return {init:init, selectProvincia:selectProvincia, clearSelection:clearSelection, showSchema:showSchema, renderPanel:renderPanel, setLayerMode:setLayerMode, setElementFilter:setElementFilter, ensureElementsForSelection:ensureElementsForSelection, zoomAll:zoomAll, zoomContinental:zoomContinental, openArcGIS:openArcGIS, openAnalisisKobo:openAnalisisKobo, openRespuestaKobo:openRespuestaKobo, showRespuestaSchema:showRespuestaSchema, showFortalecimientoSchema:showFortalecimientoSchema, openF03Kobo:openF03Kobo, showAnalisisSchema:showAnalisisSchema, applyTerritoryScope:applyTerritoryScope, setAccessScope:setAccessScope, renderPanel:renderPanel};
 })();
 
 (function(){
@@ -4021,67 +3800,10 @@ const RiskZonalCZ5 = (function(){
 </script>
 
 
-
-
 <script>
-/* v0.8.2 · Biblioteca técnica y monitor de conexión */
-const BIBLIOTECA_CZ5_CONFIG = {
-  normativa_local: 'docs/BIBLIOTECA_TECNICA_v0.8.2.md',
-  drive_url: '',
-  mensaje_drive: 'Repositorio Drive pendiente de configurar. Coloque la URL oficial en BIBLIOTECA_CZ5_CONFIG.drive_url antes de la publicación institucional.'
-};
-const BibliotecaCZ5 = (function(){
-  function msg(t){ const el=document.getElementById('bibliotecaMensaje'); if(el){ el.style.display='block'; el.textContent=t; } else alert(t); }
-  function abrirNormativa(){ window.open(BIBLIOTECA_CZ5_CONFIG.normativa_local, '_blank', 'noopener,noreferrer'); }
-  function abrirDrive(){ if(BIBLIOTECA_CZ5_CONFIG.drive_url){ window.open(BIBLIOTECA_CZ5_CONFIG.drive_url, '_blank', 'noopener,noreferrer'); } else { msg(BIBLIOTECA_CZ5_CONFIG.mensaje_drive); } }
-  return {abrirNormativa, abrirDrive};
-})();
-const ConnectionMonitorCZ5 = (function(){
-  function item(label, text, cls){ return '<div class="v081-monitor-item '+(cls||'warn')+'"><strong>'+label+'</strong><span>'+text+'</span></div>'; }
-  function render(items){ const grid=document.getElementById('connectionMonitorGrid'); if(grid) grid.innerHTML=items.join(''); }
-  function backendState(){
-    try{
-      const cfg = window.ENOS_CZ5_BACKEND_CONFIG || {};
-      if(cfg.apps_script_url && /^https?:\/\//i.test(cfg.apps_script_url)) return item('Backend acceso', 'URL configurada. Listo para validación servidor.', 'ok');
-      return item('Backend acceso', 'Sin URL backend. La plataforma opera con hash local para piloto.', 'warn');
-    }catch(e){ return item('Backend acceso', 'No se pudo leer configuración backend.', 'bad'); }
-  }
-  async function run(){
-    render([item('Índice F01-F07','Probando Apps Script...', 'warn'), backendState(), item('F01 hash local','Disponible como respaldo interno.', 'ok')]);
-    let idx;
-    try{ const r = await jsonpENOS('indexHealth', {}); idx = (r && r.ok) ? item('Índice F01-F07','Conexión OK · '+(r.spreadsheet_name||'Spreadsheet conectado'), 'ok') : item('Índice F01-F07','Respuesta no válida del índice.', 'bad'); }
-    catch(e){ idx = item('Índice F01-F07','Sin conexión o sin permiso: '+(e.message||e)+'. Prompt usará modo degradado.', 'warn'); }
-    render([idx, backendState(), item('F01 hash local','Usuarios F01 en hash disponibles para piloto interno. No sustituye backend seguro.', 'ok')]);
-  }
-  function localMode(){ render([item('Índice F01-F07','Modo local/degradado disponible para generar prompt básico.', 'warn'), backendState(), item('F01 hash local','Activo para acceso interno piloto.', 'ok')]); }
-  return {run, localMode};
-})();
-</script>
-
-<script>
-/* v0.8.2 · Configuración de backend institucional.
-   Mantener apps_script_url vacío para operar en modo local/hash.
-   Cuando se despliegue Apps Script, colocar aquí la URL del Web App. */
-const ENOS_CZ5_BACKEND_CONFIG = {
-  version: 'v0.8.2',
-  mode: 'local_hash_fallback',
-  apps_script_url: '',
-  timeout_ms: 12000,
-  actions: {
-    validate_login: 'validate_login',
-    change_password: 'change_password',
-    create_request: 'create_user_request',
-    approve_request: 'approve_user_request',
-    reject_request: 'reject_user_request',
-    list_requests: 'list_user_requests'
-  }
-};
-</script>
-
-<script>
-/* v0.8.2 · Acceso F01 hash + solicitudes aprobadas manualmente */
+/* v0.7.8 · Cuentas demo por jerarquía para pruebas */
 const ACCESS_CZ5_CONFIG = {
-  version:'v0.8.2',
+  version:'v0.7.8',
   organizaciones:[
     {id:'SNGR_CZ5', nombre:'SNGR · Coordinación Zonal 5'},
     {id:'AME', nombre:'AME / delegado provincial'},
@@ -4106,8 +3828,8 @@ const ACCESS_CZ5_CONFIG = {
 const AccessCZ5 = (function(){
 
   const ACCESS_CZ5_TEST_USERS = [];
-  const storageKey = 'enos_cz5_access_v080';
-  const passwordOverrideKey = 'enos_cz5_password_overrides_v080';
+  const storageKey = 'enos_cz5_access_v076';
+  const passwordOverrideKey = 'enos_cz5_password_overrides_v076';
   let pendingProtectedTab = null;
   function protectedTab(id){ return id === 'dashboard' || id === 'riesgozonal'; }
   function byId(id){ return document.getElementById(id); }
@@ -4137,7 +3859,7 @@ const AccessCZ5 = (function(){
       const cantName = cantones(user.provincia).find(x=>x.id===user.canton)?.nombre || '';
       help.innerHTML = '<strong>'+safe(user.nombre || user.nombre_publico || 'Usuario F01')+'</strong><br>Perfil F01: '+p.nombre+' · Nivel '+p.nivel+'<br>Alcance: '+(cantName?cantName+' · '+provName:provName)+'<br><span class="muted-text">'+p.permiso+'</span>';
     } else {
-      help.innerHTML = 'El acceso se resuelve desde F01: correo + _ID → perfil, organización, provincia y cantón autorizado. La base v0.8.2 contiene usuarios F01 importados con hashes; no se publican correos ni _ID en texto plano. Dashboard y Riesgo Zonal requieren credenciales. Puede ingresar con correo + _ID F01, contraseña ya cambiada o código institucional aprobado desde una solicitud manual.';
+      help.innerHTML = 'El acceso se resuelve desde F01: correo + _ID → perfil, organización, provincia y cantón autorizado. La base v0.7.8 contiene usuarios F01 importados con hashes; no se publican correos ni _ID en texto plano. Dashboard y Riesgo Zonal requieren credenciales. Si no cuenta con usuario, puede solicitar creación de acceso institucional.';
     }
   }
   async function sha256(text){
@@ -4154,45 +3876,6 @@ const AccessCZ5 = (function(){
       (u.correo_sha256 && u.correo_sha256===emailHash) ||
       (u.correo && normEmail(u.correo)===e)
     ) || null;
-  }
-  function backendEnabled(){
-    try{
-      return !!(window.ENOS_CZ5_BACKEND_CONFIG && ENOS_CZ5_BACKEND_CONFIG.apps_script_url && /^https?:\/\//i.test(ENOS_CZ5_BACKEND_CONFIG.apps_script_url));
-    }catch(e){ return false; }
-  }
-  async function backendAction(action, payload){
-    if(!backendEnabled()) return null;
-    const cfg = window.ENOS_CZ5_BACKEND_CONFIG;
-    const body = JSON.stringify({action:action, payload:payload || {}, source:'index_v0.8.2'});
-    const ctrl = new AbortController();
-    const timeout = setTimeout(function(){ try{ctrl.abort();}catch(e){} }, cfg.timeout_ms || 12000);
-    try{
-      const res = await fetch(cfg.apps_script_url, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:body, signal:ctrl.signal});
-      clearTimeout(timeout);
-      return await res.json();
-    }catch(e){ clearTimeout(timeout); return {ok:false, error:String(e && e.message || e), backend_failed:true}; }
-  }
-  function requestRecords(){ try{return JSON.parse(localStorage.getItem('enos_cz5_user_requests_v080')||'[]')||[];}catch(e){return [];} }
-  function requestApprovals(){ try{return JSON.parse(localStorage.getItem('enos_cz5_user_request_approvals_v080')||'{}')||{};}catch(e){return {};} }
-  function roleFromRequest(req){
-    const t=String(req && req.tipo_actor || '').toUpperCase();
-    if(t.indexOf('GAD')>=0) return 'GAD_CANTONAL';
-    if(t.indexOf('AME')>=0) return 'AME_PROVINCIAL';
-    if(t.indexOf('SNGR')>=0) return 'ANALISIS_CZ5';
-    if(t.indexOf('MTT')>=0) return 'CONSULTA_RESTRINGIDA';
-    return 'CONSULTA_RESTRINGIDA';
-  }
-  function findApprovedRequestUser(email, credential){
-    const e=normEmail(email), c=String(credential||'').trim();
-    if(!e || !c) return null;
-    const recs=requestRecords(); const apps=requestApprovals();
-    for(const req of recs){
-      const app=apps[req.codigo_solicitud] || {};
-      if(normEmail(req.correo)===e && app.estado==='aprobado' && String(app.codigo_institucional||'').trim()===c){
-        return {roleKey:roleFromRequest(req), provincia:req.provincia||app.provincia||'', canton:req.canton||app.canton||'', organizacion:req.tipo_actor||req.institucion||'SOLICITUD_APROBADA', nombre:req.nombre||e, nombre_publico:req.nombre||e, perfil:'Solicitud aprobada', estado:'activo', origen:'SOLICITUD_APROBADA', codigo_solicitud:req.codigo_solicitud, modulo_solicitado:req.modulo_solicitado||app.modulo||''};
-      }
-    }
-    return null;
   }
   async function findF01User(email, credential){
     const demoUser = ACCESS_CZ5_TEST_USERS.find(u => normEmail(u.correo) === normEmail(email) && String(u.password) === String(credential));
@@ -4226,18 +3909,14 @@ const AccessCZ5 = (function(){
     setError('');
     const email=normEmail((byId('accessEmail')||{}).value || '');
     const credential=String((byId('accessIdF01')||{}).value || '').trim();
-    if(!email || !credential){ setError('Ingrese correo institucional y _ID F01, código institucional aprobado o contraseña vigente.'); return; }
+    if(!email || !credential){ setError('Ingrese correo institucional y _ID F01 o contraseña vigente.'); return; }
     if(!/^\S+@\S+\.\S+$/.test(email)){ setError('El usuario debe ser un correo institucional válido.'); return; }
-    let user=null;
-    const backendLogin = await backendAction((window.ENOS_CZ5_BACKEND_CONFIG&&ENOS_CZ5_BACKEND_CONFIG.actions&&ENOS_CZ5_BACKEND_CONFIG.actions.validate_login)||'validate_login', {email:email, credential:credential});
-    if(backendLogin && backendLogin.ok && backendLogin.user){ user = backendLogin.user; user.origen = 'BACKEND'; }
-    if(!user) user=await findF01User(email, credential);
-    if(!user) user=findApprovedRequestUser(email, credential);
+    const user=await findF01User(email, credential);
     if(!user){
-      setError('Correo, _ID F01, código institucional o contraseña no validado. Verifique la credencial interna o apruebe la solicitud de usuario antes de ingresar.');
+      setError('Correo o _ID F01/contraseña no validado. La base F01 v0.7.8 contiene usuarios importados con hashes. Si el registro real es nuevo, actualice la base F01 o conecte Apps Script/Firebase.');
       return;
     }
-    const session={roleKey:user.roleKey||'CONSULTA_RESTRINGIDA', provincia:user.provincia||'', canton:user.canton||'', org:user.organizacion||'CONSULTA', user:email, nombre:user.nombre||user.nombre_publico||email, origen:user.origen||'F01', ts:new Date().toISOString()};
+    const session={roleKey:user.roleKey||'CONSULTA_RESTRINGIDA', provincia:user.provincia||'', canton:user.canton||'', org:user.organizacion||'CONSULTA', user:email, nombre:user.nombre||user.nombre_publico||email, origen:'F01', ts:new Date().toISOString()};
     localStorage.setItem(storageKey, JSON.stringify(session));
     hideLogin(); apply(session); openProtectedTarget();
   }
@@ -4261,15 +3940,8 @@ const AccessCZ5 = (function(){
     if(!email || !current || !next || !next2){ setError('Complete correo, credencial vigente y nueva contraseña.'); return; }
     if(next.length < 8){ setError('La nueva contraseña debe tener al menos 8 caracteres.'); return; }
     if(next !== next2){ setError('La confirmación de contraseña no coincide.'); return; }
-    const backendChange = await backendAction((window.ENOS_CZ5_BACKEND_CONFIG&&ENOS_CZ5_BACKEND_CONFIG.actions&&ENOS_CZ5_BACKEND_CONFIG.actions.change_password)||'change_password', {email:email, current:current, next:next});
-    if(backendChange && backendChange.ok){
-      if(byId('accessIdF01')) byId('accessIdF01').value=next;
-      togglePasswordChange(false); setError('');
-      const ok=byId('accessRoleHelp'); if(ok) ok.innerHTML = '<strong>Contraseña actualizada en backend institucional.</strong>';
-      return;
-    }
-    const user=await findF01User(email, current) || findApprovedRequestUser(email, current);
-    if(!user){ setError('No se pudo validar el _ID F01, código institucional o contraseña vigente para ese correo.'); return; }
+    const user=await findF01User(email, current);
+    if(!user){ setError('No se pudo validar el _ID F01 o contraseña vigente para ese correo.'); return; }
     const overrides=passwordOverrides();
     overrides[normEmail(email)]={password_sha256:await sha256(next), changed_at:new Date().toISOString(), source:'local_demo_v0.7.5'};
     savePasswordOverrides(overrides);
@@ -4339,36 +4011,14 @@ const AccessCZ5 = (function(){
     applyDashboardScope(session);
   }
   function applyRiskGovernance(session){
-    document.body.classList.remove('riskz-view-gad','riskz-view-provincial','riskz-view-zonal');
-    const guide=byId('riskzProfileGuide'); const guideText=byId('riskzProfileGuideText'); const guideActions=byId('riskzProfileGuideActions'); const quickHelp=byId('riskzQuickHelpCards');
     if(!session){
-      if(guide) guide.classList.remove('show');
       if(window.RiskZonalCZ5 && typeof RiskZonalCZ5.setAccessScope === 'function') setTimeout(()=>RiskZonalCZ5.setAccessScope(null), 120);
       return;
     }
     const p=roleInfo(session); if(!p) return;
-    if(session.roleKey === 'GAD_CANTONAL') document.body.classList.add('riskz-view-gad');
-    else if(session.roleKey === 'AME_PROVINCIAL') document.body.classList.add('riskz-view-provincial');
-    else document.body.classList.add('riskz-view-zonal');
-    if(guide && guideText && guideActions){
-      guide.classList.add('show');
-      if(session.roleKey === 'GAD_CANTONAL'){
-        guideText.textContent = 'Empieza por tu cantón. La plataforma te mostrará brechas, tareas y formularios útiles para el siguiente corte.';
-        guideActions.innerHTML = '<button class="btn primary" type="button" onclick="RiskZonalCZ5.guidedAction(\'MI_CANTON\')">Mi cantón</button><button class="btn white" type="button" onclick="RiskZonalCZ5.guidedAction(\'BRECHAS\')">Brechas</button><button class="btn white" type="button" onclick="RiskZonalCZ5.guidedAction(\'TAREAS\')">Qué debo hacer</button><button class="btn green" type="button" onclick="RiskZonalCZ5.guidedAction(\'FORMULARIOS\')">Formularios</button><button class="btn primary" type="button" onclick="RiskZonalCZ5.guidedAction(\'PROMPT\')">Generar prompt</button>';
-        if(quickHelp) quickHelp.innerHTML = '<div class="riskz-help-card"><strong>Mi cantón</strong><span>Consulta solo tu territorio autorizado.</span></div><div class="riskz-help-card"><strong>Brechas</strong><span>Identifica lo que falta corregir.</span></div><div class="riskz-help-card"><strong>Qué debo hacer</strong><span>Prioriza acciones del siguiente corte.</span></div><div class="riskz-help-card"><strong>Formularios</strong><span>Actualiza datos oficiales.</span></div><div class="riskz-help-card"><strong>Prompt</strong><span>Prepara informe o asesoría con ChatGPT.</span></div>';
-      }else if(session.roleKey === 'AME_PROVINCIAL'){
-        guideText.textContent = 'Revisa la provincia asignada, ubica cantones con brechas y genera una síntesis para coordinación.';
-        guideActions.innerHTML = '<button class="btn primary" type="button" onclick="RiskZonalCZ5.guidedAction(\'MI_CANTON\')">Mi provincia</button><button class="btn white" type="button" onclick="RiskZonalCZ5.guidedAction(\'BRECHAS\')">Brechas provinciales</button><button class="btn primary" type="button" onclick="RiskZonalCZ5.guidedAction(\'PROMPT\')">Generar prompt</button>';
-        if(quickHelp) quickHelp.innerHTML = '<div class="riskz-help-card"><strong>Mi provincia</strong><span>Vista agregada del territorio autorizado.</span></div><div class="riskz-help-card"><strong>Brechas</strong><span>Patrones que se repiten entre cantones.</span></div><div class="riskz-help-card"><strong>Prompt</strong><span>Síntesis para reunión o seguimiento.</span></div>';
-      }else{
-        guideText.textContent = 'Usa la vista CZ5 para priorizar brechas, F03 y decisiones de acompañamiento técnico.';
-        guideActions.innerHTML = '<button class="btn primary" type="button" onclick="RiskZonalCZ5.guidedAction(\'BRECHAS\')">Brechas CZ5</button><button class="btn white" type="button" onclick="RiskZonalCZ5.ensureElementsForSelection()">F03 / elementos</button><button class="btn primary" type="button" onclick="RiskZonalCZ5.guidedAction(\'PROMPT\')">Generar prompt</button>';
-        if(quickHelp) quickHelp.innerHTML = '<div class="riskz-help-card"><strong>Brechas CZ5</strong><span>Detecta prioridad territorial.</span></div><div class="riskz-help-card"><strong>F03</strong><span>Revisa puntos, líneas y polígonos.</span></div><div class="riskz-help-card"><strong>Prompt</strong><span>Genera briefing o estrategia técnica.</span></div>';
-      }
-    }
     const banner=byId('riskzGovernanceBanner'); const chips=byId('riskzGuidedChips');
     if(banner) banner.classList.add('show');
-    if(chips) chips.innerHTML = '<span class="riskz-mini-chip"><strong>Perfil:</strong> '+p.nombre+'</span><span class="riskz-mini-chip"><strong>Territorio:</strong> '+p.scope+'</span><span class="riskz-mini-chip"><strong>Acceso:</strong> F01 / solicitud aprobada</span>';
+    if(chips) chips.innerHTML = '<span class="riskz-mini-chip">Perfil: '+p.nombre+'</span><span class="riskz-mini-chip">Alcance: '+p.scope+'</span><span class="riskz-mini-chip">Modo: F01 visual v0.7.5</span>';
     document.querySelectorAll('.riskz-mode').forEach(btn=>{
       const allowed=p.componentes.includes(btn.dataset.componente);
       if(!allowed){ btn.setAttribute('hidden-by-role','1'); }
@@ -4419,10 +4069,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 <script>
-/* v0.8.2 · Solicitud de usuario institucional con validación manual previa */
+/* v0.7.8 · Solicitud de usuario institucional con validación manual previa */
 const UserRequestCZ5 = (function(){
-  const storageKey = 'enos_cz5_user_requests_v080';
-  const approvedKey = 'enos_cz5_user_request_approvals_v080';
+  const storageKey = 'enos_cz5_user_requests_v078';
+  const approvedKey = 'enos_cz5_user_request_approvals_v078';
   function byId(id){ return document.getElementById(id); }
   function safe(v){ return String(v===undefined||v===null?'':v); }
   function norm(v){ return safe(v).trim(); }
@@ -4447,7 +4097,7 @@ const UserRequestCZ5 = (function(){
       <div class="user-request-card">
         <div class="user-request-head">
           <div><h2>Crear solicitud de usuario institucional</h2><p>Registre los datos mínimos del actor. El sistema genera un código de solicitud. La asignación del código institucional de acceso queda pendiente hasta validación manual de CZ5/AME o responsable autorizado.</p></div>
-          <div class="user-request-version">v0.8.2</div>
+          <div class="user-request-version">v0.7.8</div>
         </div>
         <div class="user-request-body">
           <div class="user-request-grid">
@@ -4510,7 +4160,7 @@ const UserRequestCZ5 = (function(){
     const el=byId('userRequestResult'); if(!el) return;
     el.classList.add('show');
     const suggested=institutionalCode(req);
-    el.innerHTML = `<strong>Solicitud generada</strong><br><span class="user-request-small">Código de solicitud:</span> <code>${req.codigo_solicitud}</code><br><span class="user-request-small">Estado:</span> <span class="user-request-status">Pendiente de validación manual</span><br><span class="user-request-small">Código institucional sugerido para aprobación manual:</span> <code>${suggested}</code><div class="user-request-actions"><button class="btn white" type="button" onclick="UserRequestCZ5.copyRequest('${req.codigo_solicitud}')">Copiar ficha</button><button class="btn white" type="button" onclick="UserRequestCZ5.copyReceivedEmail('${req.codigo_solicitud}')">Copiar correo de recepción</button><button class="btn white" type="button" onclick="UserRequestCZ5.mailReceived('${req.codigo_solicitud}')">Abrir correo</button></div><div class="user-request-small">El código institucional sugerido queda pendiente hasta aprobación manual. Al aprobarlo, el correo podrá ingresar con ese código en esta instancia local.</div>`;
+    el.innerHTML = `<strong>Solicitud generada</strong><br><span class="user-request-small">Código de solicitud:</span> <code>${req.codigo_solicitud}</code><br><span class="user-request-small">Estado:</span> <span class="user-request-status">Pendiente de validación manual</span><br><span class="user-request-small">Código institucional sugerido para aprobación manual:</span> <code>${suggested}</code><div class="user-request-actions"><button class="btn white" type="button" onclick="UserRequestCZ5.copyRequest('${req.codigo_solicitud}')">Copiar ficha</button><button class="btn white" type="button" onclick="UserRequestCZ5.copyReceivedEmail('${req.codigo_solicitud}')">Copiar correo de recepción</button><button class="btn white" type="button" onclick="UserRequestCZ5.mailReceived('${req.codigo_solicitud}')">Abrir correo</button></div><div class="user-request-small">El código institucional sugerido no queda activo automáticamente. Debe ser validado y confirmado manualmente.</div>`;
   }
   function createRequest(){
     ensureModal(); const req=collect(); const err=validate(req); if(err){ alert(err); return; }
@@ -4536,13 +4186,13 @@ const UserRequestCZ5 = (function(){
     const tray=byId('userRequestTray'); if(!tray) return; if(show!==false) tray.classList.add('show');
     const arr=records(); const app=approvals();
     if(!arr.length){ tray.innerHTML='<strong>Bandeja local</strong><p class="user-request-small">No hay solicitudes guardadas en este navegador.</p>'; return; }
-    tray.innerHTML='<strong>Bandeja local de solicitudes</strong><p class="user-request-small">Esta bandeja vive solo en este navegador. En v0.8.2, una solicitud aprobada queda activa localmente: el usuario puede ingresar con correo + código institucional. Para producción, conecte Apps Script/backend.</p>'+arr.map(r=>{
+    tray.innerHTML='<strong>Bandeja local de solicitudes</strong><p class="user-request-small">Esta bandeja vive solo en este navegador. Exporte el JSON para revisión institucional o conéctelo a Apps Script/backend.</p>'+arr.map(r=>{
       const a=app[r.codigo_solicitud]||{}; const cls=a.estado==='aprobado'?'ok':(a.estado==='rechazado'?'reject':''); const st=a.estado||'pendiente_validacion';
-      return `<div class="user-request-item"><strong>${safe(r.nombre)}</strong> · ${safe(r.institucion)}<br><span class="user-request-small">${safe(r.correo)} · ${safe(r.provincia_nombre)} ${r.canton_nombre?'· '+safe(r.canton_nombre):''}</span><br><code>${safe(r.codigo_solicitud)}</code> <span class="user-request-status ${cls}">${safe(st)}</span>${a.codigo_institucional?'<br><span class="user-request-small">Código institucional: <code>'+safe(a.codigo_institucional)+'</code></span>':''}<div class="user-request-actions"><button class="btn white" type="button" onclick="UserRequestCZ5.copyRequest('${r.codigo_solicitud}')">Copiar ficha</button><button class="btn white" type="button" onclick="UserRequestCZ5.approve('${r.codigo_solicitud}')">Aprobar, activar código y copiar correo</button><button class="btn white" type="button" onclick="UserRequestCZ5.reject('${r.codigo_solicitud}')">Rechazar</button></div></div>`;
+      return `<div class="user-request-item"><strong>${safe(r.nombre)}</strong> · ${safe(r.institucion)}<br><span class="user-request-small">${safe(r.correo)} · ${safe(r.provincia_nombre)} ${r.canton_nombre?'· '+safe(r.canton_nombre):''}</span><br><code>${safe(r.codigo_solicitud)}</code> <span class="user-request-status ${cls}">${safe(st)}</span>${a.codigo_institucional?'<br><span class="user-request-small">Código institucional: <code>'+safe(a.codigo_institucional)+'</code></span>':''}<div class="user-request-actions"><button class="btn white" type="button" onclick="UserRequestCZ5.copyRequest('${r.codigo_solicitud}')">Copiar ficha</button><button class="btn white" type="button" onclick="UserRequestCZ5.approve('${r.codigo_solicitud}')">Aprobar y copiar correo</button><button class="btn white" type="button" onclick="UserRequestCZ5.reject('${r.codigo_solicitud}')">Rechazar</button></div></div>`;
     }).join('');
   }
   function toggleTray(){ ensureModal(); const tray=byId('userRequestTray'); if(!tray) return; const show=!tray.classList.contains('show'); tray.classList.toggle('show', show); if(show) renderTray(true); }
-  function exportJSON(){ const payload={version:'v0.8.2', generado:new Date().toISOString(), solicitudes:records(), aprobaciones:approvals()}; const blob=new Blob([JSON.stringify(payload,null,2)], {type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='solicitudes_usuario_enos_cz5_v0.8.2.json'; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},400); }
+  function exportJSON(){ const payload={version:'v0.7.8', generado:new Date().toISOString(), solicitudes:records(), aprobaciones:approvals()}; const blob=new Blob([JSON.stringify(payload,null,2)], {type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='solicitudes_usuario_enos_cz5_v0.7.8.json'; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},400); }
   function injectButtons(){
     ensureModal();
     const accessActions=document.querySelector('#accessShell .access-actions');
